@@ -1,8 +1,5 @@
 import { BlogPost } from "@/components/BlogCard";
-
-// Replace with your actual Ghost Content API key
-const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface GhostPost {
   id: string;
@@ -34,15 +31,24 @@ export const fetchPosts = async (
   limit: number = 20
 ): Promise<GhostResponse> => {
   try {
-    const response = await fetch(
-      `${GHOST_API_URL}/posts/?key=${GHOST_API_KEY}&limit=${limit}&page=${page}&include=tags,authors&fields=id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time`
-    );
+    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+      body: {
+        endpoint: '/posts/',
+        params: {
+          limit: limit.toString(),
+          page: page.toString(),
+          include: 'tags,authors',
+          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time'
+        }
+      }
+    });
 
-    if (!response.ok) {
-      throw new Error(`Ghost API error: ${response.statusText}`);
+    if (error) {
+      console.error("Error fetching Ghost posts:", error);
+      throw error;
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error("Error fetching Ghost posts:", error);
     return {
@@ -61,15 +67,20 @@ export const fetchPosts = async (
 
 export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> => {
   try {
-    const response = await fetch(
-      `${GHOST_API_URL}/posts/slug/${slug}/?key=${GHOST_API_KEY}&include=tags,authors`
-    );
+    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+      body: {
+        endpoint: `/posts/slug/${slug}/`,
+        params: {
+          include: 'tags,authors'
+        }
+      }
+    });
 
-    if (!response.ok) {
-      throw new Error(`Ghost API error: ${response.statusText}`);
+    if (error) {
+      console.error("Error fetching Ghost post:", error);
+      throw error;
     }
 
-    const data = await response.json();
     return data.posts[0];
   } catch (error) {
     console.error("Error fetching Ghost post:", error);
