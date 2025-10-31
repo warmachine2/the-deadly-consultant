@@ -2,7 +2,7 @@ import { BlogPost } from "@/components/BlogCard";
 
 // Replace with your actual Ghost Content API key
 const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "a864dbac3bd190d7bf4c2f852a";
+const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
 
 export interface GhostPost {
   id: string;
