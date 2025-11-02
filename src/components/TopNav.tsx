@@ -25,9 +25,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             className="md:hidden p-2 rounded-lg hover:bg-white/20 transition-colors"
             aria-label="Toggle menu"
           >
-            <Menu className="w-6 h-6 text-primary" />
+            <Menu className="w-6 h-6 text-foreground" />
           </button>
-          <h1 className="text-xl md:text-2xl font-bold text-primary">
+          <h1 className="text-xl md:text-2xl font-bold text-foreground">
             The Deadly Consultant
           </h1>
         </div>
@@ -35,13 +35,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         {/* Center Search - Desktop */}
         <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary/60" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search posts..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 glass rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-primary/50"
+              className="w-full pl-10 pr-4 py-2 glass rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 placeholder:text-muted-foreground"
             />
           </div>
         </div>
@@ -52,19 +52,19 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all"
             aria-label="Home"
           >
-            <Home className="w-5 h-5 text-primary" />
+            <Home className="w-5 h-5 text-accent" />
           </button>
           <button
             className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all"
             aria-label="Settings"
           >
-            <Settings className="w-5 h-5 text-primary" />
+            <Settings className="w-5 h-5 text-accent" />
           </button>
           <button
             className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all"
             aria-label="Profile"
           >
-            <User className="w-5 h-5 text-primary" />
+            <User className="w-5 h-5 text-accent" />
           </button>
         </div>
       </div>
@@ -72,13 +72,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
       {/* Mobile Search */}
       <div className="md:hidden px-4 pb-3">
         <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary/60" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search posts..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="w-full pl-10 pr-4 py-2 glass rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-primary/50"
+            className="w-full pl-10 pr-4 py-2 glass rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 placeholder:text-muted-foreground"
           />
         </div>
       </div>

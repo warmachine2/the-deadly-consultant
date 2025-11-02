@@ -27,7 +27,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           className="sticky top-4 right-4 float-right p-2 rounded-lg hover:bg-white/20 transition-colors z-10"
           aria-label="Close modal"
         >
-          <X className="w-6 h-6 text-primary" />
+          <X className="w-6 h-6 text-foreground" />
         </button>
 
         {/* Featured Image */}
@@ -45,7 +45,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         {/* Content */}
         <div className="p-6 md:p-10">
           {/* Meta info */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/60 mb-4">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
               <span>
@@ -63,7 +63,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-5xl font-bold text-primary mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
             {post.title}
           </h1>
 
@@ -73,7 +73,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
               {post.tags.map((tag) => (
                 <span
                   key={tag.name}
-                  className="glass px-3 py-1.5 rounded-full text-sm text-primary/80"
+                  className="glass px-3 py-1.5 rounded-full text-sm text-accent/90 italic"
                 >
                   {tag.name}
                 </span>
@@ -82,25 +82,25 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           )}
 
           {/* Excerpt */}
-          <p className="text-lg text-foreground/80 mb-6 leading-relaxed">
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
             {post.excerpt}
           </p>
 
           {/* Full Content */}
           {fullContent ? (
             <div
-              className="prose prose-lg max-w-none text-foreground/90"
+              className="prose prose-lg max-w-none text-foreground"
               dangerouslySetInnerHTML={{ __html: fullContent }}
             />
           ) : (
             <div className="glass-subtle rounded-2xl p-8 text-center">
-              <p className="text-foreground/70">
+              <p className="text-muted-foreground">
                 Full content loading... Visit{" "}
                 <a
                   href={`https://thedeadlyconsultant.com/${post.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary hover:text-accent underline"
+                  className="text-accent hover:text-accent/80 underline"
                 >
                   the original post
                 </a>{" "}

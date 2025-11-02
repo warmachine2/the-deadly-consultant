@@ -148,7 +148,7 @@ const Index = () => {
           <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                <Loader2 className="w-8 h-8 text-accent animate-spin" />
               </div>
             ) : (
               <>
@@ -164,7 +164,7 @@ const Index = () => {
 
                 {filteredPosts.length === 0 && !loading && (
                   <div className="glass-strong rounded-3xl p-12 text-center">
-                    <p className="text-xl text-foreground/70">
+                    <p className="text-xl text-muted-foreground">
                       No posts found. Try adjusting your filters.
                     </p>
                   </div>
@@ -172,7 +172,7 @@ const Index = () => {
 
                 {loading && posts.length > 0 && (
                   <div className="flex justify-center mt-8">
-                    <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                    <Loader2 className="w-6 h-6 text-accent animate-spin" />
                   </div>
                 )}
               </>
@@ -195,7 +195,7 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="glass-strong rounded-t-3xl mt-12 py-6 px-6">
-        <div className="max-w-7xl mx-auto text-center text-sm text-foreground/60">
+        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
         </div>
       </footer>

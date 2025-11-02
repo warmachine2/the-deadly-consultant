@@ -49,16 +49,16 @@ const Sidebar = ({
           className="md:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-white/20"
           aria-label="Close sidebar"
         >
-          <X className="w-5 h-5 text-primary" />
+          <X className="w-5 h-5 text-foreground" />
         </button>
 
-        <h2 className="text-lg font-bold text-primary mb-6">Filters</h2>
+        <h2 className="text-lg font-bold text-foreground mb-6">Filters</h2>
 
         {/* Categories */}
         <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-semibold text-primary"
+            className="flex items-center justify-between w-full mb-3 text-sm font-semibold text-foreground"
           >
             Categories
             <ChevronDown
@@ -77,8 +77,8 @@ const Sidebar = ({
                     w-full text-left px-3 py-2 rounded-lg text-sm transition-all
                     ${
                       selectedCategory === category
-                        ? "glass-strong text-primary font-medium"
-                        : "hover:bg-white/10 text-foreground/70"
+                        ? "glass-strong text-accent font-medium"
+                        : "hover:bg-white/10 text-muted-foreground"
                     }
                   `}
                 >
@@ -93,7 +93,7 @@ const Sidebar = ({
         <div>
           <button
             onClick={() => setShowTags(!showTags)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-semibold text-primary"
+            className="flex items-center justify-between w-full mb-3 text-sm font-semibold text-foreground"
           >
             Tags
             <ChevronDown
@@ -109,11 +109,11 @@ const Sidebar = ({
                   key={tag}
                   onClick={() => onTagToggle(tag)}
                   className={`
-                    px-3 py-1.5 rounded-full text-xs font-medium transition-all
+                    px-3 py-1.5 rounded-full text-xs font-medium italic transition-all
                     ${
                       selectedTags.includes(tag)
-                        ? "glass-strong text-primary hover-glow"
-                        : "glass text-foreground/70 hover:bg-white/20"
+                        ? "glass-strong text-accent hover-glow"
+                        : "glass text-muted-foreground hover:bg-white/20"
                     }
                   `}
                 >

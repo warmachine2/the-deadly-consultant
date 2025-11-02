@@ -40,11 +40,11 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="text-xl font-bold text-primary mb-2 line-clamp-2 group-hover:text-accent transition-colors">
+        <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2 group-hover:text-accent transition-colors">
           {post.title}
         </h3>
         
-        <p className="text-foreground/70 text-sm mb-4 line-clamp-2">
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
           {post.excerpt}
         </p>
 
@@ -54,7 +54,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
             {post.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag.name}
-                className="glass-subtle px-2 py-1 rounded-full text-xs text-primary/80"
+                className="glass-subtle px-2 py-1 rounded-full text-xs text-accent/90 italic"
               >
                 {tag.name}
               </span>
@@ -63,12 +63,12 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-sm text-foreground/60">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
             <span>{post.reading_time || 5} min</span>
           </div>
-          <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+          <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
         </div>
       </div>
     </article>
