@@ -32,9 +32,9 @@ All colors MUST be HSL.
     --muted: 222 15% 20%;
     --muted-foreground: 217 10% 58%;
 
-    /* Accent - Muted purple glow */
-    --accent: 244 47% 40%;
-    --accent-foreground: 210 40% 90%;
+    /* Accent - White */
+    --accent: 0 0% 100%;
+    --accent-foreground: 222 15% 12%;
 
     /* Destructive */
     --destructive: 0 84% 60%;
@@ -43,7 +43,7 @@ All colors MUST be HSL.
     /* Borders - Subtle white */
     --border: 0 0% 100%;
     --input: 222 15% 20%;
-    --ring: 244 47% 40%;
+    --ring: 0 0% 100%;
 
     --radius: 1.25rem;
 
@@ -63,16 +63,16 @@ All colors MUST be HSL.
     /* Shadows */
     --shadow-glass: 0 8px 32px hsla(0, 0%, 0%, 0.3);
     --shadow-glass-hover: 0 12px 48px hsla(0, 0%, 0%, 0.4);
-    --shadow-glow: 0 0 20px hsla(244, 47%, 40%, 0.3);
+    --shadow-glow: 0 0 20px hsla(0, 0%, 100%, 0.3);
 
     --sidebar-background: 222 15% 15%;
     --sidebar-foreground: 210 40% 90%;
-    --sidebar-primary: 244 47% 40%;
-    --sidebar-primary-foreground: 210 40% 90%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 222 15% 12%;
     --sidebar-accent: 222 15% 20%;
     --sidebar-accent-foreground: 210 40% 90%;
     --sidebar-border: 0 0% 100%;
-    --sidebar-ring: 244 47% 40%;
+    --sidebar-ring: 0 0% 100%;
   }
 
 }
@@ -122,10 +122,10 @@ All colors MUST be HSL.
     transform: translateY(-4px) scale(1.02);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4), 0 0 20px hsla(244, 47%, 40%, 0.3);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4), 0 0 20px hsla(0, 0%, 100%, 0.3);
   }
   
   .hover-glow:hover {
-    box-shadow: 0 0 20px hsla(244, 47%, 40%, 0.3);
+    box-shadow: 0 0 20px hsla(0, 0%, 100%, 0.3);
   }
 }
