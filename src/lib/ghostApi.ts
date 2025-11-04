@@ -39,7 +39,6 @@ export const fetchPosts = async (
           limit: limit.toString(),
           page: page.toString(),
           include: 'tags,authors',
-          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time',
           formats: 'html,markdown'
         }
       }
