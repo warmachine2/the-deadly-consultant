@@ -106,14 +106,11 @@ const Index = () => {
     setSelectedPost(post);
     setModalOpen(true);
     
-    // Fetch full content
+    // Fetch full content (prefer Markdown)
     try {
       const fullPost = await fetchPostBySlug(post.slug);
-      if (fullPost?.markdown) {
-        setFullContent(fullPost.markdown);
-      } else if (fullPost?.html) {
-        setFullContent(fullPost.html);
-      }
+      const content = fullPost?.markdown || fullPost?.html || "";
+      setFullContent(content);
     } catch (error) {
       console.error("Error fetching full post:", error);
     }

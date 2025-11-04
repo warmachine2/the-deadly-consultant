@@ -90,7 +90,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
           {/* Full Content */}
           {fullContent ? (
-            <div className="max-h-[70vh] overflow-auto markdown prose prose-invert max-w-none text-sm leading-relaxed prose-headings:font-play prose-headings:font-bold prose-headings:text-[#E5E7EB] prose-p:text-[#E5E7EB] prose-strong:glass-strong prose-code:bg-[#1E1E1E] prose-code:rounded prose-code:px-2 prose-code:py-1 prose-pre:bg-[#1E1E1E] prose-pre:rounded-xl prose-pre:p-4 prose-ul:text-[#9CA3AF] prose-ol:text-[#9CA3AF] prose-li:text-[#E5E7EB] prose-a:text-accent prose-a:hover:text-accent/80">
+            <div className="p-6 overflow-auto max-h-[70vh] markdown prose prose-invert max-w-none text-sm leading-relaxed prose-headings:font-play prose-headings:font-bold prose-headings:text-[#E5E7EB] prose-p:text-[#E5E7EB] prose-strong:font-bold prose-strong:text-[#F3F4F6] prose-code:bg-[#1E1E1E] prose-code:rounded prose-code:px-2 prose-code:py-1 prose-code:text-[#E5E7EB] prose-pre:bg-[#1E1E1E] prose-pre:rounded-xl prose-pre:p-4 prose-pre:overflow-x-auto prose-ul:text-[#9CA3AF] prose-ol:text-[#9CA3AF] prose-li:text-[#E5E7EB] prose-a:text-accent prose-a:hover:text-accent/80 prose-a:underline prose-blockquote:border-l-accent prose-blockquote:text-[#9CA3AF] prose-img:rounded-xl">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {fullContent}
               </ReactMarkdown>
