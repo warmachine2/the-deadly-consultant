@@ -110,6 +110,7 @@ const Index = () => {
     try {
       const fullPost = await fetchPostBySlug(post.slug);
       const content = fullPost?.markdown || fullPost?.html || "";
+      console.log("Post content length:", content.length);
       setFullContent(content);
     } catch (error) {
       console.error("Error fetching full post:", error);
