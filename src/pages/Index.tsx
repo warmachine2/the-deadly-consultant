@@ -109,9 +109,7 @@ const Index = () => {
     // Fetch full content
     try {
       const fullPost = await fetchPostBySlug(post.slug);
-      if (fullPost?.markdown) {
-        setFullContent(fullPost.markdown);
-      } else if (fullPost?.html) {
+      if (fullPost?.html) {
         setFullContent(fullPost.html);
       }
     } catch (error) {
