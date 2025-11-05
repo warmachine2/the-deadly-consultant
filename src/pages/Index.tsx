@@ -196,5 +196,8 @@ const Index = () => {
         fullContent={fullContent}
       />
 
-      {/* Footer */}
-      <footer class
+    </div>
+  );
+};
+
+export default Index;
