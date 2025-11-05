@@ -74,18 +74,11 @@ const Index = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 100 &&
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
         !loading &&
         hasMore
       ) {
-        const nextPage = page + 1;
-        setPage(nextPage);
-        fetchPosts(nextPage, 20).then((response) => {
-          const newPosts = response.posts.map(transformGhostPost);
-          setPosts((prev) => [...prev, ...newPosts]);
-          setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
-        });
+        loadMorePosts();
       }
     };
 
@@ -93,85 +86,119 @@ const Index = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, hasMore, page]);
 
-  const handlePostClick = useCallback(async (post: BlogPost) => {
+  const loadMorePosts = async () => {
+    setLoading(true);
+    try {
+      const nextPage = page + 1;
+      const response = await fetchPosts(nextPage, 20);
+      const transformedPosts = response.posts.map(transformGhostPost);
+      setPosts((prev) => [...prev, ...transformedPosts]);
+      setPage(nextPage);
+      setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
+    } catch (error) {
+      console.error("Error loading more posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePostClick = async (post: BlogPost) => {
     setSelectedPost(post);
     setModalOpen(true);
-    setFullContent("");
-
+    
+    // Fetch full content
     try {
       const fullPost = await fetchPostBySlug(post.slug);
-      if (fullPost) {
-        const content = fullPost.markdown || fullPost.html || "";
-        setFullContent(content);
+      if (fullPost?.html) {
+        setFullContent(fullPost.html);
       }
     } catch (error) {
       console.error("Error fetching full post:", error);
     }
-  }, []);
+  };
 
-  const handleTagToggle = (tagName: string) => {
+  const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) =>
-      prev.includes(tagName)
-        ? prev.filter((t) => t !== tagName)
-        : [...prev, tagName]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   };
 
-  const allTags = Array.from(
-    new Set(posts.flatMap((post) => post.tags?.map((tag) => tag.name) || []))
-  );
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-      <HeroSection
-        searchQuery={searchQuery}
+    <div className="min-h-screen">
+      <TopNav
         onSearchChange={setSearchQuery}
+        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
       />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3">
-            {loading && posts.length === 0 ? (
-              <div className="flex justify-center items-center h-64">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredPosts.map((post) => (
-                  <BlogCard
-                    key={post.id}
-                    post={post}
-                    onClick={() => handlePostClick(post)}
-                  />
-                ))}
-              </div>
-            )}
-            {loading && posts.length > 0 && (
-              <div className="flex justify-center items-center py-8">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
-              </div>
-            )}
-          </div>
+      <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
+        <HeroSection />
 
+        <div className="flex gap-6 relative">
+          {/* Sidebar */}
           <Sidebar
-            tags={allTags}
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
             selectedTags={selectedTags}
             onTagToggle={handleTagToggle}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
           />
+
+          {/* Main Content */}
+          <main className="flex-1 min-w-0">
+            {loading && posts.length === 0 ? (
+              <div className="flex justify-center items-center min-h-[400px]">
+                <Loader2 className="w-8 h-8 text-accent animate-spin" />
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPosts.map((post) => (
+                    <BlogCard
+                      key={post.id}
+                      post={post}
+                      onClick={() => handlePostClick(post)}
+                    />
+                  ))}
+                </div>
+
+                {filteredPosts.length === 0 && !loading && (
+                  <div className="glass-strong rounded-3xl p-12 text-center">
+                    <p className="text-xl text-muted-foreground">
+                      No posts found. Try adjusting your filters.
+                    </p>
+                  </div>
+                )}
+
+                {loading && posts.length > 0 && (
+                  <div className="flex justify-center mt-8">
+                    <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                  </div>
+                )}
+              </>
+            )}
+          </main>
         </div>
       </div>
 
+      {/* Post Modal */}
       <PostModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
         post={selectedPost}
+        isOpen={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+          setSelectedPost(null);
+          setFullContent("");
+        }}
         fullContent={fullContent}
       />
+
+      {/* Footer */}
+      <footer className="glass-strong rounded-t-3xl mt-12 py-6 px-6">
+        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
+          <p>© 2025 The Deadly Consultant. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };

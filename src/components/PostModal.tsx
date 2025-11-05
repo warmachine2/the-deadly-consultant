@@ -1,8 +1,5 @@
 import { X, Clock, Calendar } from "lucide-react";
 import { BlogPost } from "./BlogCard";
-// NEW: For Markdown rendering (preserves formatting)
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -17,7 +14,10 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-md" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/30 backdrop-blur-md"
+        onClick={onClose}
+      />
 
       {/* Modal */}
       <div className="relative glass-strong rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-fade-in">
@@ -33,7 +33,11 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         {/* Featured Image */}
         {post.feature_image && (
           <div className="relative h-64 md:h-96 overflow-hidden rounded-t-3xl">
-            <img src={post.feature_image} alt={post.title} className="w-full h-full object-cover" />
+            <img
+              src={post.feature_image}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           </div>
         )}
@@ -59,13 +63,18 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+            {post.title}
+          </h1>
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag) => (
-                <span key={tag.name} className="glass px-3 py-1.5 rounded-full text-sm text-accent/90 italic">
+                <span
+                  key={tag.name}
+                  className="glass px-3 py-1.5 rounded-full text-sm text-accent/90 italic"
+                >
                   {tag.name}
                 </span>
               ))}
@@ -73,14 +82,16 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           )}
 
           {/* Excerpt */}
-          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{post.excerpt}</p>
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            {post.excerpt}
+          </p>
 
-          {/* Full Content - FIXED: ReactMarkdown for Markdown, fallback to HTML */}
+          {/* Full Content */}
           {fullContent ? (
-            // INJECTION: Render Markdown (preserves formatting); fallback if HTML
-            <div className="prose prose-invert max-w-none text-sm leading-relaxed prose-headings:font-play prose-headings:font-bold prose-headings:text-[#E5E7EB] prose-p:text-[#E5E7EB] prose-strong:font-bold prose-strong:text-[#F3F4F6] prose-code:bg-[#1E1E1E] prose-code:rounded prose-code:px-2 prose-code:py-1 prose-code:text-[#E5E7EB] prose-pre:bg-[#1E1E1E] prose-pre:rounded-xl prose-pre:p-4 prose-pre:overflow-auto prose-ul:text-[#9CA3AF] prose-ol:text-[#9CA3AF] prose-li:text-[#E5E7EB] prose-a:text-accent prose-a:hover:text-accent/80 prose-a:underline prose-blockquote:border-l-accent prose-blockquote:text-[#9CA3AF] prose-img:rounded-xl prose-table:border prose-table:text-[#E5E7EB]">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{fullContent}</ReactMarkdown>
-            </div>
+            <div
+              className="prose prose-lg max-w-none text-foreground"
+              dangerouslySetInnerHTML={{ __html: fullContent }}
+            />
           ) : (
             <div className="glass-subtle rounded-2xl p-8 text-center">
               <p className="text-muted-foreground">
