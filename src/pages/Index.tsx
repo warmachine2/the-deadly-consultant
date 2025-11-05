@@ -6,6 +6,8 @@ import BlogCard, { BlogPost } from "@/components/BlogCard";
 import PostModal from "@/components/PostModal";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2 } from "lucide-react";
+import RoadmapCard from "@/components/RoadmapCard";
+
 
 const Index = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -200,6 +202,14 @@ const Index = () => {
         </div>
       </footer>
     </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <RoadmapCard /> {/* Prominent teaser tile */}
+  {filteredPosts.map((post) => (
+    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
+  ))}
+</div>
+  
   );
 };
 
