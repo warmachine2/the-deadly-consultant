@@ -25,24 +25,24 @@ const RoadmapPage = () => {
   };
 
   const filterSmallVideos = (html: string): string => {
-    if (!html) return '';
-    
+    if (!html) return "";
+
     // Remove small images/thumbnails (< 300px)
     let filtered = html.replace(/<img[^>]*width="?(\d+)"?[^>]*>/gi, (match, width) => {
       const w = parseInt(width);
-      return w < 300 ? '' : match;
+      return w < 300 ? "" : match;
     });
-    
+
     // Remove small iframes/embeds (< 400px)
     filtered = filtered.replace(/<iframe[^>]*>/gi, (match) => {
       const widthMatch = match.match(/width="?(\d+)"?/i);
       if (widthMatch) {
         const w = parseInt(widthMatch[1]);
-        return w < 400 ? '' : match;
+        return w < 400 ? "" : match;
       }
       return match;
     });
-    
+
     return filtered;
   };
 
@@ -57,14 +57,12 @@ const RoadmapPage = () => {
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
-      
+
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
-        {/* Hero Section */}
+        {/* Hero Section - FIXED: Removed h1 heading */}
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
-              {loading ? "Loading..." : pageContent?.title || "2026 BI-FinTech Consulting Roadmap"}
-            </h1>
+            {/* REMOVED: The h1 with dynamic title - Now just subtitle */}
             <p className="text-lg md:text-xl text-muted-foreground mb-6">
               Your complete guide to becoming a 10k/mo+ consultant
             </p>
@@ -108,7 +106,7 @@ const RoadmapPage = () => {
                 .prose iframe:is([width="100"], [width="120"], [width="150"], [width="200"], [width="250"], [width="300"], [width="350"]) {
                   display: none !important;
                 }
-                .prose .kg-card:has(img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="50"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"])) {
+                .prose .kg-card:has(img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="5"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"])) {
                   display: none !important;
                 }
               `}</style>
@@ -120,9 +118,7 @@ const RoadmapPage = () => {
 
             {/* CTA Section */}
             <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-                Ready to Get Started?
-              </h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
@@ -136,18 +132,12 @@ const RoadmapPage = () => {
           </>
         ) : (
           <div className="glass rounded-3xl p-12 text-center">
-            <p className="text-muted-foreground">
-              Content not available. Please check back later.
-            </p>
+            <p className="text-muted-foreground">Content not available. Please check back later.</p>
           </div>
         )}
       </main>
 
-      <EmailCaptureModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSubmit={handleEmailSubmit}
-      />
+      <EmailCaptureModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleEmailSubmit} />
     </div>
   );
 };
