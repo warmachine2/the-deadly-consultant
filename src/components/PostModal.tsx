@@ -89,7 +89,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           {/* Full Content */}
           {fullContent ? (
             <div
-              className="prose prose-lg max-w-none text-foreground"
+              className="prose prose-invert prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: fullContent }}
             />
           ) : (
