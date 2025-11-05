@@ -6,7 +6,6 @@ export interface GhostPost {
   title: string;
   slug: string;
   html?: string;
-  markdown?: string;
   feature_image?: string;
   excerpt?: string;
   custom_excerpt?: string;
@@ -39,7 +38,7 @@ export const fetchPosts = async (
           limit: limit.toString(),
           page: page.toString(),
           include: 'tags,authors',
-          formats: 'markdown'
+          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time'
         }
       }
     });
@@ -72,8 +71,7 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
       body: {
         endpoint: `/posts/slug/${slug}/`,
         params: {
-          include: 'tags,authors',
-          formats: 'markdown'
+          include: 'tags,authors'
         }
       }
     });
