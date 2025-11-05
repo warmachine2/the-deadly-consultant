@@ -68,9 +68,11 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Home">
             <Home className="w-5 h-5 text-accent" />
           </button>
-          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Settings">
-            <Settings className="w-5 h-5 text-accent" />
-          </button>
+          <Link to="/">
+            <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Settings">
+              <Settings className="w-5 h-5 text-accent" />
+            </button>
+          </Link>
           <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Profile">
             <User className="w-5 h-5 text-accent" />
           </button>
