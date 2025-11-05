@@ -1,5 +1,7 @@
 import { X, Clock, Calendar } from "lucide-react";
 import { BlogPost } from "./BlogCard";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -14,7 +16,10 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-md" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/30 backdrop-blur-md"
+        onClick={onClose}
+      />
 
       {/* Modal */}
       <div className="relative glass-strong rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-fade-in">
@@ -30,7 +35,11 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         {/* Featured Image */}
         {post.feature_image && (
           <div className="relative h-64 md:h-96 overflow-hidden rounded-t-3xl">
-            <img src={post.feature_image} alt={post.title} className="w-full h-full object-cover" />
+            <img
+              src={post.feature_image}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           </div>
         )}
@@ -45,7 +54,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
                 {new Date(post.published_at).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
-                  day: "numeric", // FIXED: Changed from "day" to "numeric"
+                  day: "numeric",
                 })}
               </span>
             </div>
@@ -56,13 +65,18 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+            {post.title}
+          </h1>
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag) => (
-                <span key={tag.name} className="glass px-3 py-1.5 rounded-full text-sm text-accent/90 italic">
+                <span
+                  key={tag.name}
+                  className="glass px-3 py-1.5 rounded-full text-sm text-accent/90 italic"
+                >
                   {tag.name}
                 </span>
               ))}
@@ -70,12 +84,14 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           )}
 
           {/* Excerpt */}
-          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{post.excerpt}</p>
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            {post.excerpt}
+          </p>
 
           {/* Full Content */}
           {fullContent ? (
             <div
-              className="prose prose-invert prose-lg max-w-none overflow-auto max-h-[70vh] p-4 leading-relaxed"
+              className="prose prose-lg max-w-none text-foreground markdown-content"
               dangerouslySetInnerHTML={{ __html: fullContent }}
             />
           ) : (

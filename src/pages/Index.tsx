@@ -67,9 +67,6 @@ const Index = () => {
       );
     }
 
-    // INJECTION: Filter out the specific roadmap post by slug
-    filtered = filtered.filter((post) => post.slug !== '2026-bi-fintech-consulting-roadmap-pdf-unlock');
-
     setFilteredPosts(filtered);
   }, [searchQuery, selectedTags, selectedCategory, posts]);
 
@@ -196,6 +193,12 @@ const Index = () => {
         fullContent={fullContent}
       />
 
+      {/* Footer */}
+      <footer className="glass-strong rounded-t-3xl mt-12 py-6 px-6">
+        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
+          <p>© 2025 The Deadly Consultant. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
