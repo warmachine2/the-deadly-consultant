@@ -4,18 +4,19 @@ import { useState } from "react";
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  tags: string[];
   selectedTags: string[];
   onTagToggle: (tag: string) => void;
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
 }
 
-const tags = ["PMP Certs", "AI-Proof", "Tools", "Career Pivot", "BI Analytics", "FinTech"];
 const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
 
 const Sidebar = ({
   isOpen,
   onClose,
+  tags,
   selectedTags,
   onTagToggle,
   selectedCategory,

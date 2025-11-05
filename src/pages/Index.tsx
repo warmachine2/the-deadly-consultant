@@ -72,4 +72,108 @@ const Index = () => {
 
   // Infinite scroll
   useEffect(() => {
-    const handleScroll
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 100 &&
+        !loading &&
+        hasMore
+      ) {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchPosts(nextPage, 20).then((response) => {
+          const newPosts = response.posts.map(transformGhostPost);
+          setPosts((prev) => [...prev, ...newPosts]);
+          setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
+        });
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, hasMore, page]);
+
+  const handlePostClick = useCallback(async (post: BlogPost) => {
+    setSelectedPost(post);
+    setModalOpen(true);
+    setFullContent("");
+
+    try {
+      const fullPost = await fetchPostBySlug(post.slug);
+      if (fullPost) {
+        const content = fullPost.markdown || fullPost.html || "";
+        setFullContent(content);
+      }
+    } catch (error) {
+      console.error("Error fetching full post:", error);
+    }
+  }, []);
+
+  const handleTagToggle = (tagName: string) => {
+    setSelectedTags((prev) =>
+      prev.includes(tagName)
+        ? prev.filter((t) => t !== tagName)
+        : [...prev, tagName]
+    );
+  };
+
+  const allTags = Array.from(
+    new Set(posts.flatMap((post) => post.tags?.map((tag) => tag.name) || []))
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <TopNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <HeroSection
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3">
+            {loading && posts.length === 0 ? (
+              <div className="flex justify-center items-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {filteredPosts.map((post) => (
+                  <BlogCard
+                    key={post.id}
+                    post={post}
+                    onClick={() => handlePostClick(post)}
+                  />
+                ))}
+              </div>
+            )}
+            {loading && posts.length > 0 && (
+              <div className="flex justify-center items-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            )}
+          </div>
+
+          <Sidebar
+            tags={allTags}
+            selectedTags={selectedTags}
+            onTagToggle={handleTagToggle}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+          />
+        </div>
+      </div>
+
+      <PostModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        post={selectedPost}
+        fullContent={fullContent}
+      />
+    </div>
+  );
+};
+
+export default Index;
