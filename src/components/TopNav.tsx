@@ -1,5 +1,6 @@
 import { Search, Home, Settings, User, Menu } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface TopNavProps {
   onSearchChange: (query: string) => void;
@@ -27,23 +28,25 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           >
             <Menu className="w-6 h-6 text-foreground" />
           </button>
-          <h1
-            className="text-xl md:text-2xl font-bold text-foreground"
-            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
-          >
-            The{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #04c3fc 0%, #ffffff 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
+          <Link to="/">
+            <h1
+              className="text-xl md:text-2xl font-bold text-foreground cursor-pointer hover:opacity-90 transition-opacity"
+              style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
             >
-              Deadly
-            </span>{" "}
-            Consultant
-          </h1>
+              The{" "}
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #04c3fc 0%, #ffffff 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Deadly
+              </span>{" "}
+              Consultant
+            </h1>
+          </Link>
         </div>
 
         {/* Center Search - Desktop */}
