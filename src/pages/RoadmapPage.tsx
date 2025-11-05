@@ -1,147 +1,101 @@
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
-import TopNav from "@/components/TopNav";
-import EmailCaptureModal from "@/components/EmailCaptureModal";
 
-const RoadmapPage = () => {
+const RoadmapCard = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const loadPage = async () => {
       setLoading(true);
-      const content = await fetchPageBySlug("2026-bi-fintech-consulting-roadmap-pdf-unlock");
-      setPageContent(content);
-      setLoading(false);
+      try {
+        const content = await fetchPageBySlug("2026-bi-fintech-consulting-roadmap-pdf-unlock");
+        setPageContent(content);
+      } catch (error) {
+        console.error("Error loading roadmap teaser:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     loadPage();
   }, []);
 
+  // Extract YouTube URL and derive thumbnail
   const extractYoutubeUrl = (html: string): string | null => {
     const iframeMatch = html.match(/<iframe[^>]+src="([^"]+youtube[^"]+)"/i);
     return iframeMatch ? iframeMatch[1] : null;
   };
 
-  const filterSmallVideos = (html: string): string => {
-    if (!html) return "";
-
-    // Remove small images/thumbnails (< 300px)
-    let filtered = html.replace(/<img[^>]*width="?(\d+)"?[^>]*>/gi, (match, width) => {
-      const w = parseInt(width);
-      return w < 300 ? "" : match;
-    });
-
-    // Remove small iframes/embeds (< 400px)
-    filtered = filtered.replace(/<iframe[^>]*>/gi, (match) => {
-      const widthMatch = match.match(/width="?(\d+)"?/i);
-      if (widthMatch) {
-        const w = parseInt(widthMatch[1]);
-        return w < 400 ? "" : match;
-      }
-      return match;
-    });
-
-    return filtered;
-  };
-
-  const handleEmailSubmit = (data: { name: string; email: string }) => {
-    console.log("Email captured:", data);
-    setModalOpen(false);
-    // Placeholder for future backend integration
+  const getYoutubeThumbnail = (url: string): string => {
+    const videoIdMatch = url.match(/(?:\/embed\/|v=)([^&\n?#]+)/);
+    const videoId = videoIdMatch ? videoIdMatch[1] : null;
+    return videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : "";
   };
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
+  const thumbnail = youtubeUrl ? getYoutubeThumbnail(youtubeUrl) : "";
+
+  // Teaser data (dynamic from fetched content)
+  const teaser = {
+    title: pageContent?.title || "2026 BI-FinTech Roadmap – Unlock Your $10k/mo Pivot",
+    excerpt: pageContent?.excerpt || "Stuck grinding $3k-$4k/mo despite your engineering skills? AI’s eating jobs—pivot to BI-FinTech PM roles for $17k/mo+ remote freedom. Get the cracked blueprint: mindset, hybrid PM, vendor-grade tools, and certs (PMP, PSM, AZ305).",
+  };
+
+  if (loading) {
+    return (
+      <article className="glass rounded-2xl overflow-hidden hover-lift col-span-full md:col-span-1 animate-pulse">
+        <div className="h-48 bg-muted" />
+        <div className="p-5 space-y-2">
+          <div className="h-6 bg-muted rounded" />
+          <div className="h-4 bg-muted rounded w-3/4" />
+          <div className="h-10 bg-muted rounded" />
+        </div>
+      </article>
+    );
+  }
 
   return (
-    <div className="min-h-screen">
-      <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
+    <article className="glass rounded-2xl overflow-hidden hover-lift cursor-pointer group col-span-full md:col-span-1">
+      {/* Dynamic Thumbnail from YouTube */}
+      {thumbnail ? (
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={thumbnail}
+            alt={teaser.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        </div>
+      ) : (
+        <div className="h-48 bg-gradient-to-br from-primary/30 to-accent/30 flex items-center justify-center">
+          <span className="text-4xl">🚀</span> {/* Fallback if no video */}
+        </div>
+      )}
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
-        {/* Hero Section */}
-        <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
-              {pageContent?.title || ""} {/* FIXED: Removed fallback title—now empty if no dynamic title */}
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-6">
-              Your complete guide to becoming a 10k/mo+ consultant
-            </p>
-          </div>
-        </section>
+      {/* Content (Teaser Only – ~half the full page) */}
+      <div className="p-5">
+        <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1 group-hover:text-accent transition-colors">
+          {teaser.title}
+        </h3>
+        
+        <p className="text-muted-foreground text-sm mb-6 line-clamp-3">
+          {teaser.excerpt}
+        </p>
 
-        {loading ? (
-          <div className="glass rounded-3xl p-12 text-center">
-            <div className="animate-pulse text-muted-foreground">Loading content...</div>
-          </div>
-        ) : pageContent ? (
-          <>
-            {/* YouTube Video */}
-            {youtubeUrl && (
-              <section className="mb-8">
-                <div className="glass rounded-3xl p-6">
-                  <div className="relative w-full pb-[56.25%]">
-                    <iframe
-                      className="absolute top-0 left-0 w-full h-full rounded-2xl"
-                      src={youtubeUrl}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* Content */}
-            <section className="glass rounded-3xl p-8 md:p-12 mb-8">
-              <style>{`
-                .prose img[width] {
-                  max-width: 100%;
-                }
-                .prose img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="50"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"]) {
-                  display: none !important;
-                }
-                .prose iframe[width] {
-                  min-width: 100%;
-                }
-                .prose iframe:is([width="100"], [width="120"], [width="150"], [width="200"], [width="250"], [width="300"], [width="350"]) {
-                  display: none !important;
-                }
-                .prose .kg-card:has(img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="50"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"])) {
-                  display: none !important;
-                }
-              `}</style>
-              <div
-                className="prose prose-invert prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: filterSmallVideos(pageContent.html || "") }}
-              />
-            </section>
-
-            {/* CTA Section */}
-            <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
-              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
-              </p>
-              <button
-                onClick={() => setModalOpen(true)}
-                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
-              >
-                Get Your Free Roadmap PDF
-              </button>
-            </section>
-          </>
-        ) : (
-          <div className="glass rounded-3xl p-12 text-center">
-            <p className="text-muted-foreground">Content not available. Please check back later.</p>
-          </div>
-        )}
-      </main>
-
-      <EmailCaptureModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleEmailSubmit} />
-    </div>
+        {/* CTA Button: Plain red, enticing link to full page */}
+        <Link
+          to="/2026-bi-fintech-consulting-roadmap-pdf-unlock"
+          className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 shadow-lg group-hover:shadow-glow-pulse"
+        >
+          Unlock Full Roadmap
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
+    </article>
   );
 };
 
-export default RoadmapPage;
+export default RoadmapCard;
