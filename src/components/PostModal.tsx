@@ -57,37 +57,36 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         )}
         {/* Full Content – Custom styles for large video fit */}
         <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8">
-          {/* Standard <style> tag for global overrides (no 'jsx' attribute) */}
+          {/* Standard <style> tag for global overrides – simplified for display */}
           <style>{`
             .prose iframe {
               width: 100% !important;
               height: auto !important;
-              min-height: 500px !important; /* Taller base height for videos */
-              aspect-ratio: 16/9 !important; /* Keep wide but allow taller scaling */
+              min-height: 600px !important; /* Taller base height for videos – increased for better fit */
+              max-height: 80vh !important; /* Cap to modal height */
+              aspect-ratio: 16/9 !important;
               border-radius: 12px !important;
               display: block !important;
               margin: 1rem auto !important;
             }
-            .prose .video-container, .prose iframe[src*="youtube"], .prose iframe[src*="vimeo"] {
-              position: relative;
-              width: 100%;
-              padding-bottom: 56.25%; /* 16:9 aspect; reduce to 40% for even taller if needed */
-              height: 0;
-              overflow: hidden;
+            .prose iframe[src*="youtube"], .prose iframe[src*="vimeo"] {
+              position: relative !important;
+              width: 100% !important;
+              height: 100% !important;
+              min-height: 600px !important; /* Enforce taller min-height */
+              top: 0 !important;
+              left: 0 !important;
             }
-            .prose .video-container iframe, .prose iframe[src*="youtube"], .prose iframe[src*="vimeo"] {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              min-height: 500px; /* Enforce taller min-height */
+            /* Remove any conflicting wrappers that hide content */
+            .prose .video-container, .prose div:has(iframe) {
+              position: relative !important;
+              width: 100% !important;
+              height: auto !important;
+              padding-bottom: 0 !important; /* Disable padding trick to avoid height:0 */
+              overflow: visible !important;
             }
           `}</style>
-          <div
-            className="video-wrapper" // Wrapper for responsive video
-            dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }}
-          />
+          <div dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }} />
         </div>
         <div className="flex justify-end mt-6 p-6 md:p-8">
           {" "}
