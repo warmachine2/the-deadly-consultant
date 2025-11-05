@@ -55,6 +55,22 @@ const RoadmapPage = () => {
           </div>
         ) : pageContent ? (
           <>
+            {/* YouTube Video */}
+            {youtubeUrl && (
+              <section className="mb-8">
+                <div className="glass rounded-3xl p-6">
+                  <div className="relative w-full pb-[56.25%]">
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full rounded-2xl"
+                      src={youtubeUrl}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              </section>
+            )}
+
             {/* Content */}
             <section className="glass rounded-3xl p-8 md:p-12 mb-8">
               <div
