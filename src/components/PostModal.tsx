@@ -1,5 +1,7 @@
 import { X, Clock, Calendar } from "lucide-react";
 import { BlogPost } from "./BlogCard";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -88,10 +90,11 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
           {/* Full Content */}
           {fullContent ? (
-            <div
-              className="prose prose-lg max-w-none text-foreground"
-              dangerouslySetInnerHTML={{ __html: fullContent }}
-            />
+            <div className="prose prose-lg max-w-none text-foreground markdown-content">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {fullContent}
+              </ReactMarkdown>
+            </div>
           ) : (
             <div className="glass-subtle rounded-2xl p-8 text-center">
               <p className="text-muted-foreground">
