@@ -1,7 +1,5 @@
 import { X, Clock, Calendar } from "lucide-react";
 import { BlogPost } from "./BlogCard";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -89,16 +87,15 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </p>
 
           {/* Full Content */}
-          {fullContent && fullContent.length > 0 ? (
-            <div className="p-6 overflow-auto max-h-[70vh] markdown prose prose-invert max-w-none text-sm leading-relaxed prose-headings:font-play prose-headings:font-bold prose-headings:text-[#E5E7EB] prose-p:text-[#E5E7EB] prose-strong:font-bold prose-strong:text-[#F3F4F6] prose-code:bg-[#1E1E1E] prose-code:rounded prose-code:px-2 prose-code:py-1 prose-code:text-[#E5E7EB] prose-pre:bg-[#1E1E1E] prose-pre:rounded-xl prose-pre:p-4 prose-pre:overflow-x-auto prose-ul:text-[#9CA3AF] prose-ol:text-[#9CA3AF] prose-li:text-[#E5E7EB] prose-a:text-accent prose-a:hover:text-accent/80 prose-a:underline prose-blockquote:border-l-accent prose-blockquote:text-[#9CA3AF] prose-img:rounded-xl">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {fullContent}
-              </ReactMarkdown>
-            </div>
+          {fullContent ? (
+            <div
+              className="prose prose-lg max-w-none text-foreground"
+              dangerouslySetInnerHTML={{ __html: fullContent }}
+            />
           ) : (
             <div className="glass-subtle rounded-2xl p-8 text-center">
               <p className="text-muted-foreground">
-                Content loading or visit{" "}
+                Full content loading... Visit{" "}
                 <a
                   href={`https://thedeadlyconsultant.com/${post.slug}`}
                   target="_blank"

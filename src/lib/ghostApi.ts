@@ -1,14 +1,11 @@
 import { BlogPost } from "@/components/BlogCard";
-
-const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface GhostPost {
   id: string;
   title: string;
   slug: string;
   html?: string;
-  markdown?: string;
   feature_image?: string;
   excerpt?: string;
   custom_excerpt?: string;
@@ -34,29 +31,26 @@ export const fetchPosts = async (
   limit: number = 20
 ): Promise<GhostResponse> => {
   try {
-    const params = new URLSearchParams({
-      key: GHOST_API_KEY,
-      formats: 'markdown',
-      limit: limit.toString(),
-      page: page.toString(),
-      include: 'tags,authors'
+    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+      body: {
+        endpoint: '/posts/',
+        params: {
+          limit: limit.toString(),
+          page: page.toString(),
+          include: 'tags,authors',
+          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time'
+        }
+      }
     });
-    
-    const url = `${GHOST_API_URL}/posts/?${params.toString()}`;
-    console.log('Direct fetch URL:', url);
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      console.error('Direct fetch error:', response.status, response.statusText);
-      throw new Error(`Ghost API error: ${response.statusText}`);
+
+    if (error) {
+      console.error("Error fetching Ghost posts:", error);
+      throw error;
     }
-    
-    const data = await response.json();
-    console.log("Response posts length:", data?.posts?.length || 0);
+
     return data;
   } catch (error) {
-    console.error("Direct fetch error:", error);
+    console.error("Error fetching Ghost posts:", error);
     return {
       posts: [],
       meta: {
@@ -73,28 +67,23 @@ export const fetchPosts = async (
 
 export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> => {
   try {
-    const params = new URLSearchParams({
-      key: GHOST_API_KEY,
-      formats: 'markdown',
-      include: 'tags,authors'
+    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+      body: {
+        endpoint: `/posts/slug/${slug}/`,
+        params: {
+          include: 'tags,authors'
+        }
+      }
     });
-    
-    const url = `${GHOST_API_URL}/posts/slug/${slug}/?${params.toString()}`;
-    console.log("Direct fetch URL:", url);
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      console.error('Direct fetch error:', response.status, response.statusText);
-      throw new Error(`Ghost API error: ${response.statusText}`);
+
+    if (error) {
+      console.error("Error fetching Ghost post:", error);
+      throw error;
     }
-    
-    const data = await response.json();
-    const post = data.posts[0];
-    console.log("Post fetched, has markdown:", !!post?.markdown, "has html:", !!post?.html);
-    return post;
+
+    return data.posts[0];
   } catch (error) {
-    console.error("Direct fetch error:", error);
+    console.error("Error fetching Ghost post:", error);
     return null;
   }
 };
