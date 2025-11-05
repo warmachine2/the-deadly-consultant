@@ -55,8 +55,39 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
             ))}
           </div>
         )}
-        <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:min-h-[400px]">
-          <div dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }} />
+        {/* Full Content – Custom styles for large video fit */}
+        <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8">
+          {/* Standard <style> tag for global overrides (no 'jsx' attribute) */}
+          <style>{`
+            .prose iframe {
+              width: 100% !important;
+              height: auto !important;
+              min-height: 500px !important; /* Taller base height for videos */
+              aspect-ratio: 16/9 !important; /* Keep wide but allow taller scaling */
+              border-radius: 12px !important;
+              display: block !important;
+              margin: 1rem auto !important;
+            }
+            .prose .video-container, .prose iframe[src*="youtube"], .prose iframe[src*="vimeo"] {
+              position: relative;
+              width: 100%;
+              padding-bottom: 56.25%; /* 16:9 aspect; reduce to 40% for even taller if needed */
+              height: 0;
+              overflow: hidden;
+            }
+            .prose .video-container iframe, .prose iframe[src*="youtube"], .prose iframe[src*="vimeo"] {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              min-height: 500px; /* Enforce taller min-height */
+            }
+          `}</style>
+          <div
+            className="video-wrapper" // Wrapper for responsive video
+            dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }}
+          />
         </div>
         <div className="flex justify-end mt-6 p-6 md:p-8">
           {" "}
