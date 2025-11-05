@@ -5,14 +5,11 @@ interface PostModalProps {
   post: BlogPost | null;
   isOpen: boolean;
   onClose: () => void;
-  fullContent?: string; // This is your post body (HTML/Markdown)
+  fullContent?: string;
 }
 
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   if (!isOpen || !post) return null;
-
-  // LOG: Debug if content is empty
-  console.log("PostModal fullContent:", { length: fullContent?.length || 0, hasContent: !!fullContent });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -48,7 +45,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
                 {new Date(post.published_at).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
-                  day: "day",
+                  day: "numeric", // FIXED: Changed from "day" to "numeric"
                 })}
               </span>
             </div>
@@ -75,15 +72,12 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           {/* Excerpt */}
           <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{post.excerpt}</p>
 
-          {/* Full Content - FIXED: Styled HTML for spacing/headings/lists (like Markdown) */}
+          {/* Full Content */}
           {fullContent ? (
-            <div className="prose prose-invert prose-lg max-w-none overflow-auto max-h-[70vh] p-4 leading-relaxed">
-              {/* INJECTION: Tailwind prose classes for perfect spacing/headings/lists */}
-              <div
-                className="prose prose-invert prose-strong:font-bold prose-strong:text-[#F3F4F6] prose-headings:font-play prose-headings:text-[#E5E7EB] prose-headings:font-bold prose-p:text-[#E5E7EB] prose-p:mb-4 prose-code:bg-[#1E1E1E] prose-code:rounded prose-code:px-2 prose-code:py-1 prose-code:text-[#E5E7EB] prose-pre:bg-[#1E1E1E] prose-pre:rounded-xl prose-pre:p-4 prose-pre:overflow-auto prose-ul:text-[#9CA3AF] prose-ol:text-[#9CA3AF] prose-li:text-[#E5E7EB] prose-li:mb-1 prose-a:text-accent prose-a:hover:text-accent/80 prose-a:underline prose-blockquote:border-l-accent prose-blockquote:text-[#9CA3AF] prose-img:rounded-xl prose-table:border prose-table:text-[#E5E7EB] prose-table:mb-4"
-                dangerouslySetInnerHTML={{ __html: fullContent }}
-              />
-            </div>
+            <div
+              className="prose prose-invert prose-lg max-w-none overflow-auto max-h-[70vh] p-4 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: fullContent }}
+            />
           ) : (
             <div className="glass-subtle rounded-2xl p-8 text-center">
               <p className="text-muted-foreground">
