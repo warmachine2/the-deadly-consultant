@@ -55,37 +55,8 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
             ))}
           </div>
         )}
-        {/* Full Content – Custom styles for large video fit */}
-        <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8">
-          {/* Inline styles to enlarge iframes (YouTube embeds) */}
-          <style jsx>{`
-            .prose iframe {
-              width: 100% !important;
-              height: 100% !important;
-              min-height: 400px !important; /* Base large height; adjust as needed */
-              aspect-ratio: 16/9 !important; /* Responsive 16:9 for videos */
-              border-radius: 12px !important; /* Rounded corners */
-            }
-            .prose .video-container {
-              position: relative;
-              width: 100%;
-              padding-bottom: 56.25%; /* 16:9 aspect */
-              height: 0;
-              overflow: hidden;
-              margin-bottom: 2rem;
-            }
-            .prose .video-container iframe {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-            }
-          `}</style>
-          <div
-            className="video-wrapper" // Wrapper for responsive video
-            dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }}
-          />
+        <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:min-h-[400px]">
+          <div dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }} />
         </div>
         <div className="flex justify-end mt-6 p-6 md:p-8">
           {" "}
