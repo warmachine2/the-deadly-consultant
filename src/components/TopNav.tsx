@@ -27,22 +27,8 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           >
             <Menu className="w-6 h-6 text-foreground" />
           </button>
-          <h1
-            className="text-xl md:text-2xl font-bold text-foreground"
-            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
-          >
-            The{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #007bff 0%, #28a745 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              Deadly
-            </span>{" "}
-            Consultant
+          <h1 className="text-xl md:text-2xl font-bold text-foreground" style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))' }}>
+            The <span style={{ background: 'linear-gradient(135deg, #04c3fc 0%, #fc04d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Deadly</span> Consultant
           </h1>
         </div>
 
@@ -62,13 +48,22 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
         {/* Right Icons */}
         <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Home">
+          <button
+            className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all"
+            aria-label="Home"
+          >
             <Home className="w-5 h-5 text-accent" />
           </button>
-          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Settings">
+          <button
+            className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all"
+            aria-label="Settings"
+          >
             <Settings className="w-5 h-5 text-accent" />
           </button>
-          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Profile">
+          <button
+            className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all"
+            aria-label="Profile"
+          >
             <User className="w-5 h-5 text-accent" />
           </button>
         </div>
