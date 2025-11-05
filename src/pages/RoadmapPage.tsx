@@ -65,9 +65,6 @@ const RoadmapPage = () => {
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
               {loading ? "Loading..." : pageContent?.title || "2026 BI-FinTech Consulting Roadmap"}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-6">
-              Your complete guide to becoming a 10k/mo+ consultant
-            </p>
           </div>
         </section>
 
