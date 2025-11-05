@@ -65,14 +65,16 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
         {/* Right Icons */}
         <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Home">
-            <Home className="w-5 h-5 text-accent" />
-          </button>
+          {/* Fixed: Wrapped Home button in Link to "/" for navigation to homepage */}
           <Link to="/">
-            <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Settings">
-              <Settings className="w-5 h-5 text-accent" />
+            <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Home">
+              <Home className="w-5 h-5 text-accent" />
             </button>
           </Link>
+          {/* Settings button now without Link – can add functionality later (e.g., onClick for modal) */}
+          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Settings">
+            <Settings className="w-5 h-5 text-accent" />
+          </button>
           <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Profile">
             <User className="w-5 h-5 text-accent" />
           </button>
