@@ -1,5 +1,7 @@
 import { BlogPost } from "@/components/BlogCard";
-import { supabase } from "@/integrations/supabase/client";
+
+const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
+const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
 
 export interface GhostPost {
   id: string;
@@ -32,26 +34,29 @@ export const fetchPosts = async (
   limit: number = 20
 ): Promise<GhostResponse> => {
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
-      body: {
-        endpoint: '/posts/',
-        params: {
-          limit: limit.toString(),
-          page: page.toString(),
-          include: 'tags,authors',
-          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time,html'
-        }
-      }
+    const params = new URLSearchParams({
+      key: GHOST_API_KEY,
+      formats: 'markdown',
+      limit: limit.toString(),
+      page: page.toString(),
+      include: 'tags,authors'
     });
-
-    if (error) {
-      console.error("Error fetching Ghost posts:", error);
-      throw error;
+    
+    const url = `${GHOST_API_URL}/posts/?${params.toString()}`;
+    console.log('Direct fetch URL:', url);
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      console.error('Direct fetch error:', response.status, response.statusText);
+      throw new Error(`Ghost API error: ${response.statusText}`);
     }
-
+    
+    const data = await response.json();
+    console.log("Response posts length:", data?.posts?.length || 0);
     return data;
   } catch (error) {
-    console.error("Error fetching Ghost posts:", error);
+    console.error("Direct fetch error:", error);
     return {
       posts: [],
       meta: {
@@ -68,24 +73,28 @@ export const fetchPosts = async (
 
 export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> => {
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
-      body: {
-        endpoint: `/posts/slug/${slug}/`,
-        params: {
-          include: 'tags,authors',
-          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time,html,tags'
-        }
-      }
+    const params = new URLSearchParams({
+      key: GHOST_API_KEY,
+      formats: 'markdown',
+      include: 'tags,authors'
     });
-
-    if (error) {
-      console.error("Error fetching Ghost post:", error);
-      throw error;
+    
+    const url = `${GHOST_API_URL}/posts/slug/${slug}/?${params.toString()}`;
+    console.log("Direct fetch URL:", url);
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      console.error('Direct fetch error:', response.status, response.statusText);
+      throw new Error(`Ghost API error: ${response.statusText}`);
     }
-
-    return data.posts[0];
+    
+    const data = await response.json();
+    const post = data.posts[0];
+    console.log("Post fetched, has markdown:", !!post?.markdown, "has html:", !!post?.html);
+    return post;
   } catch (error) {
-    console.error("Error fetching Ghost post:", error);
+    console.error("Direct fetch error:", error);
     return null;
   }
 };
