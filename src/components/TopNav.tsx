@@ -27,9 +27,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           >
             <Menu className="w-6 h-6 text-foreground" />
           </button>
-         <h1 className="text-xl md:text-2xl font-bold text-foreground" style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))' }}>
-  The <span style={{ background: 'linear-gradient(135deg, #04c3fc 0%, #ffffff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Deadly</span> Consultant
-</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-foreground" style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))' }}>
+            The <span style={{ background: 'linear-gradient(135deg, #04c3fc 0%, #fc04d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Deadly</span> Consultant
+          </h1>
         </div>
 
         {/* Center Search - Desktop */}
