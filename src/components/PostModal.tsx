@@ -90,11 +90,10 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
           {/* Full Content */}
           {fullContent ? (
-            <div className="prose prose-lg max-w-none text-foreground markdown-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {fullContent}
-              </ReactMarkdown>
-            </div>
+            <div
+              className="prose prose-lg max-w-none text-foreground markdown-content"
+              dangerouslySetInnerHTML={{ __html: fullContent }}
+            />
           ) : (
             <div className="glass-subtle rounded-2xl p-8 text-center">
               <p className="text-muted-foreground">

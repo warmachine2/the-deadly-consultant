@@ -39,7 +39,7 @@ export const fetchPosts = async (
           limit: limit.toString(),
           page: page.toString(),
           include: 'tags,authors',
-          formats: 'html,markdown'
+          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time,html'
         }
       }
     });
@@ -73,7 +73,7 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
         endpoint: `/posts/slug/${slug}/`,
         params: {
           include: 'tags,authors',
-          formats: 'html,markdown'
+          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time,html,tags'
         }
       }
     });
