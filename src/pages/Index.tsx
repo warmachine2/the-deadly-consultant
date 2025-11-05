@@ -1,18 +1,3 @@
-// At top of pages/Index.tsx
-import Header from "@/components/Header";
-
-// In the return JSX
-export default function Index() {
-  return (
-    <div className="min-h-screen">
-      {" "}
-      {/* Or your existing wrapper */}
-      <Header />
-      {/* Your existing page content below */}
-    </div>
-  );
-}
-
 import { useState, useEffect, useCallback } from "react";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
@@ -21,6 +6,29 @@ import BlogCard, { BlogPost } from "@/components/BlogCard";
 import PostModal from "@/components/PostModal";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2 } from "lucide-react";
+
+import * as React from "react";
+import Header from "@/components/Header"; // This now resolves!
+
+// Your existing imports (e.g., if you have any UI components)
+import { Button } from "@/components/ui/button"; // Example – add if needed
+
+export default function Index() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header /> {/* Sticky nav at top */}
+      <main className="flex-1 container mx-auto px-4 py-8">
+        {/* Your existing Index page content goes here */}
+        {/* Example placeholder – replace with your actual hero, sections, etc. */}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Welcome to The Deadly Consultant</h1>
+          <p className="text-lg mb-8">Unlock your BI-FinTech career path.</p>
+          {/* If you have a hero button or other elements, add them here */}
+        </div>
+      </main>
+    </div>
+  );
+}
 
 const Index = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
