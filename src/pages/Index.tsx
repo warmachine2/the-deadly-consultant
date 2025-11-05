@@ -4,15 +4,13 @@ import HeroSection from "@/components/HeroSection";
 import Sidebar from "@/components/Sidebar";
 import BlogCard, { BlogPost } from "@/components/BlogCard";
 import PostModal from "@/components/PostModal";
-import { fetchPosts, fetchPages, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
+import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [pages, setPages] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [pagesLoading, setPagesLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
@@ -40,23 +38,6 @@ const Index = () => {
       }
     };
     loadPosts();
-  }, []);
-
-  // Fetch pages
-  useEffect(() => {
-    const loadPages = async () => {
-      setPagesLoading(true);
-      try {
-        const response = await fetchPages(1, 20);
-        const transformedPages = response.pages.map(transformGhostPost);
-        setPages(transformedPages);
-      } catch (error) {
-        console.error("Error loading pages:", error);
-      } finally {
-        setPagesLoading(false);
-      }
-    };
-    loadPages();
   }, []);
 
   // Filter posts
@@ -151,28 +132,6 @@ const Index = () => {
 
       <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
         <HeroSection />
-
-        {/* Featured Pages Section */}
-        {pagesLoading ? (
-          <div className="flex justify-center items-center min-h-[200px] mb-8">
-            <Loader2 className="w-8 h-8 text-accent animate-spin" />
-          </div>
-        ) : pages.length > 0 ? (
-          <section className="mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
-              Featured Resources
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pages.map((page) => (
-                <BlogCard
-                  key={page.id}
-                  post={page}
-                  onClick={() => handlePostClick(page)}
-                />
-              ))}
-            </div>
-          </section>
-        ) : null}
 
         <div className="flex gap-6 relative">
           {/* Sidebar */}
