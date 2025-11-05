@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Header } from "@/Header";
+import { useState, useEffect, useCallback } from "react";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
 import Sidebar from "@/components/Sidebar";
@@ -50,18 +49,22 @@ const Index = () => {
       filtered = filtered.filter(
         (post) =>
           post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()),
+          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     // Tag filter
     if (selectedTags.length > 0) {
-      filtered = filtered.filter((post) => post.tags?.some((tag) => selectedTags.includes(tag.name)));
+      filtered = filtered.filter((post) =>
+        post.tags?.some((tag) => selectedTags.includes(tag.name))
+      );
     }
 
     // Category filter (simplified - you can enhance this)
     if (selectedCategory !== "All Posts") {
-      filtered = filtered.filter((post) => post.tags?.some((tag) => tag.name === selectedCategory));
+      filtered = filtered.filter((post) =>
+        post.tags?.some((tag) => tag.name === selectedCategory)
+      );
     }
 
     setFilteredPosts(filtered);
@@ -70,7 +73,11 @@ const Index = () => {
   // Infinite scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading && hasMore) {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+        !loading &&
+        hasMore
+      ) {
         loadMorePosts();
       }
     };
@@ -98,7 +105,7 @@ const Index = () => {
   const handlePostClick = async (post: BlogPost) => {
     setSelectedPost(post);
     setModalOpen(true);
-
+    
     // Fetch full content
     try {
       const fullPost = await fetchPostBySlug(post.slug);
@@ -111,18 +118,21 @@ const Index = () => {
   };
 
   const handleTagToggle = (tag: string) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
   };
 
   return (
     <div className="min-h-screen">
-      <Header /> {/* Injected: Sticky header with logo and Roadmap CTA button */}
-      {/* Optional: If you want TopNav below Header (e.g., secondary search bar), uncomment below */}
-      {/* <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} /> */}
+      <TopNav
+        onSearchChange={setSearchQuery}
+        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+      />
+
       <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
-        {" "}
-        {/* Padding accounts for sticky Header height */}
         <HeroSection />
+
         <div className="flex gap-6 relative">
           {/* Sidebar */}
           <Sidebar
@@ -144,13 +154,19 @@ const Index = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
+                    <BlogCard
+                      key={post.id}
+                      post={post}
+                      onClick={() => handlePostClick(post)}
+                    />
                   ))}
                 </div>
 
                 {filteredPosts.length === 0 && !loading && (
                   <div className="glass-strong rounded-3xl p-12 text-center">
-                    <p className="text-xl text-muted-foreground">No posts found. Try adjusting your filters.</p>
+                    <p className="text-xl text-muted-foreground">
+                      No posts found. Try adjusting your filters.
+                    </p>
                   </div>
                 )}
 
@@ -164,6 +180,7 @@ const Index = () => {
           </main>
         </div>
       </div>
+
       {/* Post Modal */}
       <PostModal
         post={selectedPost}
@@ -175,6 +192,7 @@ const Index = () => {
         }}
         fullContent={fullContent}
       />
+
       {/* Footer */}
       <footer className="glass-strong rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
