@@ -24,6 +24,28 @@ const RoadmapPage = () => {
     return iframeMatch ? iframeMatch[1] : null;
   };
 
+  const filterSmallVideos = (html: string): string => {
+    if (!html) return '';
+    
+    // Remove small images/thumbnails (< 300px)
+    let filtered = html.replace(/<img[^>]*width="?(\d+)"?[^>]*>/gi, (match, width) => {
+      const w = parseInt(width);
+      return w < 300 ? '' : match;
+    });
+    
+    // Remove small iframes/embeds (< 400px)
+    filtered = filtered.replace(/<iframe[^>]*>/gi, (match) => {
+      const widthMatch = match.match(/width="?(\d+)"?/i);
+      if (widthMatch) {
+        const w = parseInt(widthMatch[1]);
+        return w < 400 ? '' : match;
+      }
+      return match;
+    });
+    
+    return filtered;
+  };
+
   const handleEmailSubmit = (data: { name: string; email: string }) => {
     console.log("Email captured:", data);
     setModalOpen(false);
@@ -73,9 +95,26 @@ const RoadmapPage = () => {
 
             {/* Content */}
             <section className="glass rounded-3xl p-8 md:p-12 mb-8">
+              <style>{`
+                .prose img[width] {
+                  max-width: 100%;
+                }
+                .prose img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="50"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"]) {
+                  display: none !important;
+                }
+                .prose iframe[width] {
+                  min-width: 100%;
+                }
+                .prose iframe:is([width="100"], [width="120"], [width="150"], [width="200"], [width="250"], [width="300"], [width="350"]) {
+                  display: none !important;
+                }
+                .prose .kg-card:has(img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="50"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"])) {
+                  display: none !important;
+                }
+              `}</style>
               <div
                 className="prose prose-invert prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: pageContent.html || "" }}
+                dangerouslySetInnerHTML={{ __html: filterSmallVideos(pageContent.html || "") }}
               />
             </section>
 
