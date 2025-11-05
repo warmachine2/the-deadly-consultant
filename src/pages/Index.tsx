@@ -40,31 +40,30 @@ const Index = () => {
     loadPosts();
   }, []);
 
-  // Filter posts
+  // Filter posts - INJECTION: Added exclusion for "2026 BI-FinTech PM Consulting Roadmap"
   useEffect(() => {
     let filtered = [...posts];
+
+    // NEW: Exclude the specific roadmap post
+    filtered = filtered.filter((post) => !post.title.toLowerCase().includes("2026 bi-fintech pm consulting roadmap"));
 
     // Search filter
     if (searchQuery) {
       filtered = filtered.filter(
         (post) =>
           post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
     // Tag filter
     if (selectedTags.length > 0) {
-      filtered = filtered.filter((post) =>
-        post.tags?.some((tag) => selectedTags.includes(tag.name))
-      );
+      filtered = filtered.filter((post) => post.tags?.some((tag) => selectedTags.includes(tag.name)));
     }
 
     // Category filter (simplified - you can enhance this)
     if (selectedCategory !== "All Posts") {
-      filtered = filtered.filter((post) =>
-        post.tags?.some((tag) => tag.name === selectedCategory)
-      );
+      filtered = filtered.filter((post) => post.tags?.some((tag) => tag.name === selectedCategory));
     }
 
     setFilteredPosts(filtered);
@@ -73,11 +72,7 @@ const Index = () => {
   // Infinite scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
-        !loading &&
-        hasMore
-      ) {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading && hasMore) {
         loadMorePosts();
       }
     };
@@ -105,7 +100,7 @@ const Index = () => {
   const handlePostClick = async (post: BlogPost) => {
     setSelectedPost(post);
     setModalOpen(true);
-    
+
     // Fetch full content
     try {
       const fullPost = await fetchPostBySlug(post.slug);
@@ -118,17 +113,12 @@ const Index = () => {
   };
 
   const handleTagToggle = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
+    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
   };
 
   return (
     <div className="min-h-screen">
-      <TopNav
-        onSearchChange={setSearchQuery}
-        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-      />
+      <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
         <HeroSection />
@@ -154,19 +144,13 @@ const Index = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredPosts.map((post) => (
-                    <BlogCard
-                      key={post.id}
-                      post={post}
-                      onClick={() => handlePostClick(post)}
-                    />
+                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
                   ))}
                 </div>
 
                 {filteredPosts.length === 0 && !loading && (
                   <div className="glass-strong rounded-3xl p-12 text-center">
-                    <p className="text-xl text-muted-foreground">
-                      No posts found. Try adjusting your filters.
-                    </p>
+                    <p className="text-xl text-muted-foreground">No posts found. Try adjusting your filters.</p>
                   </div>
                 )}
 
@@ -184,7 +168,7 @@ const Index = () => {
       {/* Post Modal */}
       <PostModal
         post={selectedPost}
-        isOpen={modalOpen}
+        isOpen={modalPost}
         onClose={() => {
           setModalOpen(false);
           setSelectedPost(null);
