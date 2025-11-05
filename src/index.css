@@ -30,7 +30,7 @@ All colors MUST be HSL.
 
     /* Muted - Mid charcoal */
     --muted: 0 0% 20%;
-    --muted-foreground: 214 14% 65%;
+    --muted-foreground: 214 14% 80%;
 
     /* Accent - White */
     --accent: 0 0% 100%;
