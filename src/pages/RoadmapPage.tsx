@@ -78,12 +78,12 @@ const RoadmapPage = () => {
   `;
 
   return (
-    <div className="min-h-screen bg-gray-900"> {/* Dark bg */}
-      <TopNav />
+    <div className="min-h-screen bg-gray-900">
+      <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-xl font-bold text-white mb-4">Unlock Your $10k/mo Pivot</h1> <!-- Shorter title -->
+            <h1 className="text-3xl md:text-xl font-bold text-white mb-4">Unlock Your $10k/mo Pivot</h1>
             <p className="text-lg text-gray-400 mb-6">Your complete guide to becoming a 10k/mo+ consultant</p>
           </div>
         </section>
