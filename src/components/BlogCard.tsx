@@ -33,18 +33,18 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
         <div className="flex-1 relative overflow-hidden min-h-[200px]"> {/* Flex-grow for full fit; min-h ensures min size */}
           <div className="relative w-full h-full">
             <iframe
-              src={`${videoSrc}?rel=0`} {/* Clean embed params */}
+              src={`${videoSrc}?rel=0`}
               className="absolute top-0 left-0 w-full h-full rounded-t-2xl"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title={post.title}
-              loading="lazy" // Lazy load for perf
+              loading="lazy"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" /> {/* Darker overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         </div>
       ) : post.feature_image ? (
-        <div className="relative flex-1 min-h-[200px] overflow-hidden"> {/* Match video sizing for consistency */}
+        <div className="relative flex-1 min-h-[200px] overflow-hidden">
           <img
             src={post.feature_image}
             alt={post.title}
@@ -58,20 +58,19 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
         </div>
       )}
 
-      {/* Content – Compressed to make room for dominant video */}
-      <div className="p-3 md:p-4 flex-shrink-0"> {/* Reduced padding; flex-shrink to hug bottom */}
-        <h3 className="text-lg md:text-xl font-bold text-foreground mb-1 line-clamp-1 group-hover:text-accent transition-colors"> {/* Tighter clamp/line for space */}
+      <div className="p-3 md:p-4 flex-shrink-0">
+        <h3 className="text-lg md:text-xl font-bold text-foreground mb-1 line-clamp-1 group-hover:text-accent transition-colors">
           {post.title}
         </h3>
         
-        <p className="text-muted-foreground text-xs md:text-sm mb-2 line-clamp-1"> {/* Shorter excerpt for video focus */}
+        <p className="text-muted-foreground text-xs md:text-sm mb-2 line-clamp-1">
           {post.excerpt}
         </p>
 
-        {/* Tags – Optional, smaller */}
+        
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2">
-            {post.tags.slice(0, 2).map((tag) => ( {/* Limit to 2 for space */}
+            {post.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag.name}
                 className="glass-subtle px-1.5 py-0.5 rounded-full text-xs text-accent/90 italic"
@@ -82,7 +81,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
           </div>
         )}
 
-        {/* Footer – Compact */}
+        
         <div className="flex items-center justify-between text-xs md:text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Clock className="w-3 h-3 md:w-4 md:h-4" />
