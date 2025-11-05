@@ -9,6 +9,7 @@ export interface BlogPost {
   published_at: string;
   tags?: Array<{ name: string }>;
   slug: string;
+  html?: string; // Added: For video detection/embed
 }
 
 interface BlogCardProps {
@@ -17,13 +18,30 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, onClick }: BlogCardProps) => {
+  // Detect if post has embedded video (YouTube/Vimeo iframe in html)
+  const hasVideo = post.html && post.html.match(/<iframe[^>]+src=(["'])[^"]*(youtube|vimeo)\.com[^>]*\1/i);
+  const videoSrc = hasVideo ? post.html.match(/<iframe[^>]+src=(["'])[^>]*\1/)?.[0]?.match(/src=(["'])[^>]*\1/)?.[0]?.replace(/src=["']|["']/g, '') : null;
+
   return (
     <article
       onClick={onClick}
       className="glass rounded-2xl overflow-hidden hover-lift cursor-pointer group"
     >
-      {/* Image */}
-      {post.feature_image ? (
+      {/* Video Embed or Image – Full fit for video */}
+      {hasVideo && videoSrc ? (
+        <div className="relative h-64 overflow-hidden"> {/* Increased height for full fit */}
+          <div className="relative w-full pb-[56.25%]"> {/* 16:9 responsive aspect */}
+            <iframe
+              src={videoSrc}
+              className="absolute top-0 left-0 w-full h-full rounded-t-2xl"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title={post.title}
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" /> {/* Overlay for readability */}
+        </div>
+      ) : post.feature_image ? (
         <div className="relative h-48 overflow-hidden">
           <img
             src={post.feature_image}
@@ -38,8 +56,8 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
         </div>
       )}
 
-      {/* Content */}
-      <div className="p-5">
+      {/* Content – Slightly reduced padding for video-dominant cards */}
+      <div className="p-3 md:p-5"> {/* Adjusted p- for balance with taller video */}
         <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2 group-hover:text-accent transition-colors">
           {post.title}
         </h3>
