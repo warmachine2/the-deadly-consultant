@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header"; // Added: Our new sticky header with CTA button
+import TopNav from "@/components/TopNav"; // Kept: If you want to retain TopNav below Header, uncomment and add back – but Header replaces it for simplicity
 import HeroSection from "@/components/HeroSection";
 import Sidebar from "@/components/Sidebar";
 import BlogCard, { BlogPost } from "@/components/BlogCard";
@@ -115,10 +116,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Header /> {/* Injected: Replaces TopNav – sticky header with logo and Roadmap CTA button */}
+      <Header /> {/* Injected: Sticky header with logo and Roadmap CTA button */}
+      {/* Optional: If you want TopNav below Header (e.g., secondary search bar), uncomment below */}
+      {/* <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} /> */}
       <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
         {" "}
-        {/* Kept existing padding for content below header */}
+        {/* Padding accounts for sticky Header height */}
         <HeroSection />
         <div className="flex gap-6 relative">
           {/* Sidebar */}
