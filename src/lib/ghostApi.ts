@@ -26,6 +26,18 @@ export interface GhostResponse {
   };
 }
 
+export interface GhostPagesResponse {
+  pages: GhostPost[];
+  meta: {
+    pagination: {
+      page: number;
+      limit: number;
+      pages: number;
+      total: number;
+    };
+  };
+}
+
 export const fetchPosts = async (
   page: number = 1,
   limit: number = 20
@@ -85,6 +97,45 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
   } catch (error) {
     console.error("Error fetching Ghost post:", error);
     return null;
+  }
+};
+
+export const fetchPages = async (
+  page: number = 1,
+  limit: number = 20
+): Promise<GhostPagesResponse> => {
+  try {
+    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+      body: {
+        endpoint: '/pages/',
+        params: {
+          limit: limit.toString(),
+          page: page.toString(),
+          include: 'tags,authors',
+          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time'
+        }
+      }
+    });
+
+    if (error) {
+      console.error("Error fetching Ghost pages:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching Ghost pages:", error);
+    return {
+      pages: [],
+      meta: {
+        pagination: {
+          page: 1,
+          limit: 20,
+          pages: 0,
+          total: 0,
+        },
+      },
+    };
   }
 };
 
