@@ -110,7 +110,11 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: transparent;
+    background: url('/overlay-mesh.png');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: screen;
+    opacity: 0.65;
     z-index: -1;
   }
 }
