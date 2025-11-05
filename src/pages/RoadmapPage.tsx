@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Added: For return links
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
-import { Button } from "@/components/ui/button"; // Added: For styled buttons
-import { ChevronLeft, Home } from "lucide-react"; // Added: Icons for return/home
-import { cn } from "@/lib/utils"; // Added: Utility for class merging
 
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
@@ -62,45 +58,7 @@ const RoadmapPage = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
-      {/* Injected: Banner with "Return to Main Page" button (branded with "The Deadly Consultant") and Home button */}
-      <div className="sticky top-0 z-40 bg-gradient-to-r from-gray-900/95 to-purple-900/95 backdrop-blur border-b border-white/10">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between max-w-5xl">
-          {/* Primary Return Button: Branded with text and left arrow */}
-          <Link to="/" className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "gap-2 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:backdrop-blur-sm hover:animate-glow-pulse transition-all duration-300",
-                "font-bold tracking-tight",
-              )}
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span className="text-lg" style={{ fontFamily: "Play, sans-serif" }}>
-                The Deadly Consultant
-              </span>
-            </Button>
-          </Link>
-
-          {/* Secondary Home Button: Quick icon-only for main page */}
-          <Link to="/">
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "gap-1 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:backdrop-blur-sm hover:animate-glow-pulse transition-all duration-300",
-              )}
-            >
-              <Home className="h-4 w-4" />
-              <span className="hidden sm:inline">Home</span>
-            </Button>
-          </Link>
-        </div>
-      </div>
-
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
-        {" "}
-        {/* Adjusted mt-24 to account for TopNav + banner height */}
         {/* Hero Section */}
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
           <div className="max-w-4xl mx-auto text-center">
@@ -112,6 +70,7 @@ const RoadmapPage = () => {
             </p>
           </div>
         </section>
+
         {loading ? (
           <div className="glass rounded-3xl p-12 text-center">
             <div className="animate-pulse text-muted-foreground">Loading content...</div>
