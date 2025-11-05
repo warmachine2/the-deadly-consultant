@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Header from "@/components/Header"; // Added: Our new sticky header with CTA button
-import TopNav from "@/components/TopNav"; // Kept: If you want to retain TopNav below Header, uncomment and add back – but Header replaces it for simplicity
+import { Header } from "@/Header";
+import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
 import Sidebar from "@/components/Sidebar";
 import BlogCard, { BlogPost } from "@/components/BlogCard";
