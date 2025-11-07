@@ -2,12 +2,23 @@ import { useState, useEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
-import EmailCaptureModal from "@/components/EmailCaptureModal";
 
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
+
+  // Load ConvertKit FormKit script (matches your domain)
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://bifintechconsulting.com/fkd.js";
+    script.async = true;
+    document.head.appendChild(script);
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const loadPage = async () => {
@@ -27,13 +38,11 @@ const RoadmapPage = () => {
   const filterSmallVideos = (html: string): string => {
     if (!html) return "";
 
-    // Remove small images/thumbnails (< 300px)
     let filtered = html.replace(/<img[^>]*width="?(\d+)"?[^>]*>/gi, (match, width) => {
       const w = parseInt(width);
       return w < 300 ? "" : match;
     });
 
-    // Remove small iframes/embeds (< 400px)
     filtered = filtered.replace(/<iframe[^>]*>/gi, (match) => {
       const widthMatch = match.match(/width="?(\d+)"?/i);
       if (widthMatch) {
@@ -44,12 +53,6 @@ const RoadmapPage = () => {
     });
 
     return filtered;
-  };
-
-  const handleEmailSubmit = (data: { name: string; email: string }) => {
-    console.log("Email captured:", data);
-    setModalOpen(false);
-    // Placeholder for future backend integration
   };
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
@@ -63,7 +66,7 @@ const RoadmapPage = () => {
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
-              {pageContent?.title || ""} {/* FIXED: Removed fallback title—now empty if no dynamic title */}
+              {pageContent?.title || ""}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-6">
               Your complete guide to becoming a 10k/mo+ consultant
@@ -118,18 +121,20 @@ const RoadmapPage = () => {
               />
             </section>
 
-            {/* CTA Section */}
+            {/* CTA Section – ConvertKit Modal Toggle */}
             <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
-              <button
-                onClick={() => setModalOpen(true)}
-                className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
+              {/* Exact ConvertKit toggle link you provided – styled as button */}
+              <a
+                data-formkit-toggle="fbd8fa5d1b"
+                href="https://bifintechconsulting.com/roadmap-signup"
+                className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
                 Get Your Free Roadmap PDF
-              </button>
+              </a>
             </section>
           </>
         ) : (
@@ -138,8 +143,6 @@ const RoadmapPage = () => {
           </div>
         )}
       </main>
-
-      <EmailCaptureModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleEmailSubmit} />
     </div>
   );
 };
