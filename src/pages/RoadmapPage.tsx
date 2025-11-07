@@ -3,15 +3,6 @@ import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
 
-// Extend Window type for ConvertKit's formkit (fixes TS errors)
-declare global {
-  interface Window {
-    formkit?: {
-      show: (formId: string) => void;
-    };
-  }
-}
-
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
@@ -142,8 +133,7 @@ const RoadmapPage = () => {
               `}</style>
               <div
                 className="prose prose-invert prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: filterSmallVideos(page
-Content.html || "") }}
+                dangerouslySetInnerHTML={{ __html: filterSmallVideos(pageContent.html || "") }}
               />
             </section>
 
