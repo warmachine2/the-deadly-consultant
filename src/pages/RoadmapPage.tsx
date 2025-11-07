@@ -7,12 +7,23 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load ConvertKit FormKit script (matches your domain)
+  // Load ConvertKit FormKit script + Auto-show modal on page load
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://bifintechconsulting.com/fkd.js";
     script.async = true;
     document.head.appendChild(script);
+
+    // Auto-show modal once script is loaded
+    script.onload = () => {
+      // Small delay to ensure FormKit is ready
+      setTimeout(() => {
+        if (window.formkit) {
+          window.formkit.show("fbd8fa5d1b");
+        }
+      }, 500);
+    };
+
     return () => {
       if (document.head.contains(script)) {
         document.head.removeChild(script);
@@ -121,13 +132,13 @@ const RoadmapPage = () => {
               />
             </section>
 
-            {/* CTA Section – ConvertKit Modal Toggle */}
+            {/* CTA Section – Optional fallback trigger (modal already auto-shows) */}
             <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
-              {/* Exact ConvertKit toggle link you provided – styled as button */}
+              {/* Fallback button if user closes modal and wants to re-open */}
               <a
                 data-formkit-toggle="fbd8fa5d1b"
                 href="https://bifintechconsulting.com/roadmap-signup"
