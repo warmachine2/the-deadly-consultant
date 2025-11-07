@@ -19,9 +19,10 @@ const RoadmapPage = () => {
     const maxAttempts = 100; // 10 seconds max
     const interval = setInterval(() => {
       attempts++;
-      if (window.formkit && typeof window.formkit.show === "function") {
+      const w = window as any;
+      if (w.formkit && typeof w.formkit.show === "function") {
         clearInterval(interval);
-        window.formkit.show("fbd8fa5d1b"); // Instant popup
+        w.formkit.show("fbd8fa5d1b"); // Instant popup
       } else if (attempts >= maxAttempts) {
         clearInterval(interval);
         console.warn("ConvertKit modal failed to load after 10s");
