@@ -7,21 +7,21 @@ import { ChevronLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 
-// Load ConvertKit FormKit script (only once)
-useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://bifintechconsulting.com/fkd.js";
-  script.setAttribute("data-formkit-account", "bifintechconsulting.com"); // Your account
-  script.async = true;
-  document.head.appendChild(script);
-  return () => {
-    document.head.removeChild(script);
-  };
-}, []);
-
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Load ConvertKit FormKit script (only once)
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://bifintechconsulting.com/fkd.js";
+    script.setAttribute("data-formkit-account", "bifintechconsulting.com");
+    script.async = true;
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     const loadPage = async () => {
