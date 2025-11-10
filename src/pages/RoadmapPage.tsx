@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
@@ -6,8 +6,9 @@ import TopNav from "@/components/TopNav";
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const shownRef = useRef(false);
 
-  // Load official ConvertKit script + Auto-show modal when ready
+  // Load official ConvertKit script + Auto-show modal when ready (only once)
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
@@ -21,9 +22,10 @@ const RoadmapPage = () => {
     const interval = setInterval(() => {
       attempts++;
       const w = window as any;
-      if (w.formkit && typeof w.formkit.show === "function") {
+      if (w.formkit && typeof w.formkit.show === "function" && !shownRef.current) {
         clearInterval(interval);
-        console.log("ConvertKit ready – showing popup");
+        shownRef.current = true;
+        console.log("ConvertKit ready – showing popup (once)");
         w.formkit.show("fbd8fa5d1b"); // Instant popup
       } else if (attempts >= maxAttempts) {
         clearInterval(interval);
