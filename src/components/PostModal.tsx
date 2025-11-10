@@ -13,6 +13,38 @@ interface PostModalProps {
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   if (!post) return null;
 
+  // Function to wrap iframes in glass frame similar to roadmap.tsx
+  const wrapIframesInGlass = (html: string): string => {
+    if (!html) return "";
+
+    // Regex to match iframe tags (basic, assumes standard YouTube embeds)
+    return html.replace(/<iframe([^>]*)>(?:<\/iframe>)?/gi, (match, attributes) => {
+      // Extract src if present (for YouTube validation)
+      const srcMatch = attributes.match(/src="([^"]+)"/i);
+      const src = srcMatch ? srcMatch[1] : null;
+      if (!src || (!src.includes("youtube.com") && !src.includes("youtu.be"))) {
+        // If not YouTube, wrap simply with rounded-xl (fallback)
+        return `<div class="glass rounded-3xl p-6 mb-6"><div class="relative w-full pb-[56.25%]">${match}</div></div>`;
+      }
+
+      // For YouTube: Wrap in responsive glass container
+      return `
+        <div class="glass rounded-3xl p-6 mb-6">
+          <div class="relative w-full pb-[56.25%]">
+            <iframe
+              ${attributes}
+              class="absolute top-0 left-0 w-full h-full rounded-2xl"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      `;
+    });
+  };
+
+  const processedContent = wrapIframesInGlass(fullContent || post.excerpt);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto glass-strong p-0">
@@ -56,7 +88,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
         )}
         <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:min-h-[400px]">
-          <div dangerouslySetInnerHTML={{ __html: fullContent || post.excerpt }} />
+          <div dangerouslySetInnerHTML={{ __html: processedContent }} />
         </div>
         <div className="flex justify-end mt-6 p-6 md:p-8">
           {" "}
