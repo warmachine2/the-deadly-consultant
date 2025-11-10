@@ -7,18 +7,30 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const shownRef = useRef(false);
+  const scriptRef = useRef<HTMLScriptElement | null>(null);
 
-  // Load official ConvertKit script + Auto-show modal when ready (only once)
+  // Load official ConvertKit script + Auto-show modal when ready (only once, with extra guards)
   useEffect(() => {
-    // Global flag to prevent multi-mount issues (e.g., dev mode)
-    if ((window as any).__convertKitShown) return;
+    // Global flag to prevent multi-mount issues (e.g., dev mode or StrictMode)
+    if ((window as any).__convertKitShown) {
+      console.log("ConvertKit already shown – skipping load");
+      return;
+    }
     (window as any).__convertKitShown = true;
 
-    const script = document.createElement("script");
-    script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
-    script.async = true;
-    script.setAttribute("data-uid", "fbd8fa5d1b");
-    document.head.appendChild(script);
+    // Check if script already exists to avoid duplicates
+    const existingScript = document.querySelector('script[src*="kit.com/fbd8fa5d1b"]');
+    if (existingScript) {
+      console.log("ConvertKit script already loaded – skipping append");
+      // Poll anyway, in case it's partial
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
+      script.async = true;
+      script.setAttribute("data-uid", "fbd8fa5d1b");
+      document.head.appendChild(script);
+      scriptRef.current = script;
+    }
 
     // Poll for window.formkit (reliable across load times)
     let attempts = 0;
@@ -28,24 +40,28 @@ const RoadmapPage = () => {
       const w = window as any;
       if (w.formkit && typeof w.formkit.show === "function" && !shownRef.current) {
         clearInterval(interval);
-        // Debounce show with 1s delay for stability
+        // Increased debounce to 2s for better isolation from any internal ConvertKit queuing
         setTimeout(() => {
           if (!shownRef.current) {
             shownRef.current = true;
-            console.log("ConvertKit ready – showing popup (once, debounced)");
-            w.formkit.show("fbd8fa5d1b");
+            console.log("ConvertKit ready – showing popup (guarded + debounced 2s)");
+            try {
+              w.formkit.show("fbd8fa5d1b");
+            } catch (e) {
+              console.error("Error showing ConvertKit modal:", e);
+            }
           }
-        }, 1000);
+        }, 2000); // Bumped to 2s for extra safety
       } else if (attempts >= maxAttempts) {
         clearInterval(interval);
         console.error("ConvertKit failed to load after 20s – check script src or network");
       }
-    }, 100);
+    }, 150); // Slightly slower poll (150ms) to reduce overlap risk
 
     return () => {
       clearInterval(interval);
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
+      if (scriptRef.current && document.head.contains(scriptRef.current)) {
+        document.head.removeChild(scriptRef.current);
       }
       // Cleanup global flag on unmount (rare, but safe)
       delete (window as any).__convertKitShown;
