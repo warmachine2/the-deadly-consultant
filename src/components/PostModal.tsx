@@ -19,7 +19,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
     // Regex to match full <iframe>...</iframe> (handles self-closing or explicit close)
     const iframeRegex = /<iframe\b[^<]*(?:[^<]*?<\/iframe>)?(?:<[^<]*>)?/gi;
-    let processed = html;
+    let processed = "";
     let lastIndex = 0;
 
     // Find all matches and build the output
@@ -37,7 +37,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
       let replacement;
       if (src && (src.includes("youtube.com") || src.includes("youtu.be"))) {
-        // YouTube: Responsive glass wrapper like roadmap.tsx
+        // YouTube: Responsive glass wrapper like roadmap.tsx – applied to all, but "top" one will appear first
         replacement = `
           <div class="glass rounded-3xl p-6 mb-6">
             <div class="relative w-full pb-[56.25%]">
@@ -70,9 +70,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   const originalContent = fullContent || post.excerpt;
   const processedContent = wrapIframesInGlass(originalContent);
 
-  // Debug log (remove after testing)
-  console.log("Original:", originalContent);
-  console.log("Processed:", processedContent);
+  // If there's a "top video" (first iframe in content), it's now wrapped – no separate handling needed
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -81,7 +79,9 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           <DialogTitle className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</DialogTitle>
         </DialogHeader>
         {post.feature_image && (
-          <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-0">
+          <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
+            {" "}
+            {/* Added mb-6 for consistency */}
             <img src={post.feature_image} alt={post.title} className="w-full h-full object-cover" />
           </div>
         )}
