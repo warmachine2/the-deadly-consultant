@@ -13,58 +13,79 @@ interface PostModalProps {
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   if (!post) return null;
 
-  // Function to wrap iframes in glass frame similar to roadmap.tsx
+  // Improved function to wrap iframes in glass frame (preserves all other content)
   const wrapIframesInGlass = (html: string): string => {
     if (!html) return "";
 
-    // Regex to match iframe tags (basic, assumes standard YouTube embeds)
-    return html.replace(/<iframe([^>]*)>(?:<\/iframe>)?/gi, (match, attributes) => {
-      // Extract src if present (for YouTube validation)
+    // Regex to match full <iframe>...</iframe> (handles self-closing or explicit close)
+    const iframeRegex = /<iframe\b[^<]*(?:[^<]*?<\/iframe>)?(?:<[^<]*>)?/gi;
+    let processed = html;
+    let lastIndex = 0;
+
+    // Find all matches and build the output
+    let match;
+    while ((match = iframeRegex.exec(html)) !== null) {
+      // Preserve content before this iframe
+      const before = html.substring(lastIndex, match.index);
+      lastIndex = iframeRegex.lastIndex;
+
+      // Extract attributes for the iframe
+      const iframeMatch = match[0].match(/<iframe([^>]*)>/i);
+      const attributes = iframeMatch ? iframeMatch[1] : "";
       const srcMatch = attributes.match(/src="([^"]+)"/i);
       const src = srcMatch ? srcMatch[1] : null;
-      if (!src || (!src.includes("youtube.com") && !src.includes("youtu.be"))) {
-        // If not YouTube, wrap simply with rounded-xl (fallback)
-        return `<div class="glass rounded-3xl p-6 mb-6"><div class="relative w-full pb-[56.25%]">${match}</div></div>`;
+
+      let replacement;
+      if (src && (src.includes("youtube.com") || src.includes("youtu.be"))) {
+        // YouTube: Responsive glass wrapper like roadmap.tsx
+        replacement = `
+          <div class="glass rounded-3xl p-6 mb-6">
+            <div class="relative w-full pb-[56.25%]">
+              <iframe
+                ${attributes}
+                class="absolute top-0 left-0 w-full h-full rounded-2xl"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        `;
+      } else if (src) {
+        // Non-YouTube iframe: Simple rounded wrapper
+        replacement = `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match[0]}</div>`;
+      } else {
+        // Invalid iframe: Just wrap as-is
+        replacement = `<div class="glass rounded-3xl p-6 mb-6">${match[0]}</div>`;
       }
 
-      // For YouTube: Wrap in responsive glass container
-      return `
-        <div class="glass rounded-3xl p-6 mb-6">
-          <div class="relative w-full pb-[56.25%]">
-            <iframe
-              ${attributes}
-              class="absolute top-0 left-0 w-full h-full rounded-2xl"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      `;
-    });
+      processed += before + replacement;
+    }
+
+    // Add the remaining content after the last match
+    processed += html.substring(lastIndex);
+
+    return processed;
   };
 
-  const processedContent = wrapIframesInGlass(fullContent || post.excerpt);
+  const originalContent = fullContent || post.excerpt;
+  const processedContent = wrapIframesInGlass(originalContent);
+
+  // Debug log (remove after testing)
+  console.log("Original:", originalContent);
+  console.log("Processed:", processedContent);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto glass-strong p-0">
-        {" "}
-        {/* Increased max-w and max-h; removed default padding for full fit */}
         <DialogHeader className="p-6 md:p-8">
-          {" "}
-          {/* Padded header */}
           <DialogTitle className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</DialogTitle>
         </DialogHeader>
         {post.feature_image && (
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-0">
-            {" "}
-            {/* Removed mb for seamless flow */}
             <img src={post.feature_image} alt={post.title} className="w-full h-full object-cover" />
           </div>
         )}
         <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground p-6 md:p-8">
-          {" "}
-          {/* Added padding to meta */}
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
             <span>{new Date(post.published_at).toLocaleDateString()}</span>
@@ -78,8 +99,6 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         </div>
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6 p-6 md:p-8">
-            {" "}
-            {/* Added padding to tags */}
             {post.tags.map((tag) => (
               <span key={tag.name} className="glass-subtle px-3 py-1 rounded-full text-sm text-accent/90">
                 {tag.name}
@@ -91,8 +110,6 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           <div dangerouslySetInnerHTML={{ __html: processedContent }} />
         </div>
         <div className="flex justify-end mt-6 p-6 md:p-8">
-          {" "}
-          {/* Added padding to footer */}
           <Button onClick={onClose} variant="outline">
             Close
           </Button>
