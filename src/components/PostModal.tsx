@@ -13,39 +13,32 @@ interface PostModalProps {
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   if (!post) return null;
 
-  // Simplified and safer function using string.replace to wrap iframes (preserves all text/content)
+  // Even safer function: Precise regex for standard iframe tags, proper HTML closing
   const wrapIframesInGlass = (html: string): string => {
     if (!html) return html;
 
-    // Regex to match full <iframe>...</iframe> tags (non-greedy, handles common embeds)
-    const iframeRegex = /<iframe\b[^>]*>.*?<\/iframe>/gis;
+    // More precise regex: Matches <iframe attrs></iframe> or <iframe attrs />
+    // Non-greedy inner content (usually empty for embeds)
+    const iframeRegex = /<iframe\b[^>]*>(?:[^<]*|<\/iframe>|<\/>)/gis;
 
     return html.replace(iframeRegex, (match) => {
-      // Extract attributes and src
-      const iframeOpenMatch = match.match(/<iframe([^>]*)>/i);
-      const attributes = iframeOpenMatch ? iframeOpenMatch[1] : "";
-      const srcMatch = attributes.match(/src="([^"]+)"/i);
+      // Extract attributes from the opening tag
+      const openTagMatch = match.match(/<iframe([^>\/>]*)>/i);
+      const attributes = openTagMatch ? openTagMatch[1] : "";
+      const srcMatch = attributes.match(/src\s*=\s*"([^"]+)"/i);
       const src = srcMatch ? srcMatch[1] : null;
 
+      // Close any open tag if needed, but focus on replacement
+      const fullMatch = match.replace(/<\/iframe>$|\/>$/i, ""); // Clean closing for extraction
+
       if (src && (src.includes("youtube.com") || src.includes("youtu.be"))) {
-        // YouTube: Responsive glass wrapper like roadmap.tsx
-        return `
-          <div class="glass rounded-3xl p-6 mb-6">
-            <div class="relative w-full pb-[56.25%]">
-              <iframe
-                ${attributes}
-                class="absolute top-0 left-0 w-full h-full rounded-2xl"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        `.trim();
+        // YouTube: Responsive glass wrapper – use proper </iframe> closing for valid HTML
+        return `<div class="glass rounded-3xl p-6 mb-6"><div class="relative w-full pb-[56.25%]"><iframe ${attributes} class="absolute top-0 left-0 w-full h-full rounded-2xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div></div>`;
       } else if (src) {
-        // Non-YouTube: Simple glass wrapper
+        // Non-YouTube: Simple glass wrapper around original match
         return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
       } else {
-        // Fallback wrap
+        // Fallback: Wrap original
         return `<div class="glass rounded-3xl p-6 mb-6">${match}</div>`;
       }
     });
@@ -54,11 +47,15 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   const originalContent = fullContent || post.excerpt;
   const processedContent = wrapIframesInGlass(originalContent);
 
-  // Debug log (remove after testing to confirm text is preserved)
-  console.log("Original length:", originalContent.length);
-  console.log("Processed length:", processedContent.length);
-  if (processedContent.length < originalContent.length / 2) {
-    console.warn("Potential content loss detected!");
+  // Enhanced debug: Log snippets to spot issues (remove after fix confirmed)
+  console.log("Original snippet:", originalContent.substring(0, 200) + "...");
+  console.log("Processed snippet:", processedContent.substring(0, 200) + "...");
+  console.log("Original length:", originalContent.length, "Processed length:", processedContent.length);
+
+  // Temporary fallback: If processed is much shorter, use original (for testing)
+  const contentToRender = processedContent.length < originalContent.length * 0.8 ? originalContent : processedContent;
+  if (processedContent.length < originalContent.length * 0.8) {
+    console.error("Content loss detected – using original as fallback!");
   }
 
   return (
@@ -94,7 +91,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
         )}
         <div className="prose prose-invert max-w-none mb-6 p-6 md:p-8 [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:min-h-[400px]">
-          <div dangerouslySetInnerHTML={{ __html: processedContent }} />
+          <div dangerouslySetInnerHTML={{ __html: contentToRender }} />
         </div>
         <div className="flex justify-end mt-6 p-6 md:p-8">
           <Button onClick={onClose} variant="outline">
