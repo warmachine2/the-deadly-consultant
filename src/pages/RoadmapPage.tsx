@@ -7,25 +7,27 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load ConvertKit script + Auto-show modal when ready
+  // Load official ConvertKit script + Auto-show modal when ready
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://bifintechconsulting.com/fkd.js";
+    script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
     script.async = true;
+    script.setAttribute("data-uid", "fbd8fa5d1b");
     document.head.appendChild(script);
 
     // Poll for window.formkit (reliable across load times)
     let attempts = 0;
-    const maxAttempts = 100; // 10 seconds max
+    const maxAttempts = 200; // 20 seconds max
     const interval = setInterval(() => {
       attempts++;
       const w = window as any;
       if (w.formkit && typeof w.formkit.show === "function") {
         clearInterval(interval);
+        console.log("ConvertKit ready – showing popup");
         w.formkit.show("fbd8fa5d1b"); // Instant popup
       } else if (attempts >= maxAttempts) {
         clearInterval(interval);
-        console.warn("ConvertKit modal failed to load after 10s");
+        console.error("ConvertKit failed to load after 20s – check script src or network");
       }
     }, 100);
 
