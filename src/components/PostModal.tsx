@@ -13,32 +13,23 @@ interface PostModalProps {
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   if (!post) return null;
 
-  // Improved function to wrap iframes in glass frame (preserves all other content)
+  // Simplified and safer function using string.replace to wrap iframes (preserves all text/content)
   const wrapIframesInGlass = (html: string): string => {
-    if (!html) return "";
+    if (!html) return html;
 
-    // Regex to match full <iframe>...</iframe> (handles self-closing or explicit close)
-    const iframeRegex = /<iframe\b[^<]*(?:[^<]*?<\/iframe>)?(?:<[^<]*>)?/gi;
-    let processed = "";
-    let lastIndex = 0;
+    // Regex to match full <iframe>...</iframe> tags (non-greedy, handles common embeds)
+    const iframeRegex = /<iframe\b[^>]*>.*?<\/iframe>/gis;
 
-    // Find all matches and build the output
-    let match;
-    while ((match = iframeRegex.exec(html)) !== null) {
-      // Preserve content before this iframe
-      const before = html.substring(lastIndex, match.index);
-      lastIndex = iframeRegex.lastIndex;
-
-      // Extract attributes for the iframe
-      const iframeMatch = match[0].match(/<iframe([^>]*)>/i);
-      const attributes = iframeMatch ? iframeMatch[1] : "";
+    return html.replace(iframeRegex, (match) => {
+      // Extract attributes and src
+      const iframeOpenMatch = match.match(/<iframe([^>]*)>/i);
+      const attributes = iframeOpenMatch ? iframeOpenMatch[1] : "";
       const srcMatch = attributes.match(/src="([^"]+)"/i);
       const src = srcMatch ? srcMatch[1] : null;
 
-      let replacement;
       if (src && (src.includes("youtube.com") || src.includes("youtu.be"))) {
-        // YouTube: Responsive glass wrapper like roadmap.tsx – applied to all, but "top" one will appear first
-        replacement = `
+        // YouTube: Responsive glass wrapper like roadmap.tsx
+        return `
           <div class="glass rounded-3xl p-6 mb-6">
             <div class="relative w-full pb-[56.25%]">
               <iframe
@@ -49,28 +40,26 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
               />
             </div>
           </div>
-        `;
+        `.trim();
       } else if (src) {
-        // Non-YouTube iframe: Simple rounded wrapper
-        replacement = `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match[0]}</div>`;
+        // Non-YouTube: Simple glass wrapper
+        return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
       } else {
-        // Invalid iframe: Just wrap as-is
-        replacement = `<div class="glass rounded-3xl p-6 mb-6">${match[0]}</div>`;
+        // Fallback wrap
+        return `<div class="glass rounded-3xl p-6 mb-6">${match}</div>`;
       }
-
-      processed += before + replacement;
-    }
-
-    // Add the remaining content after the last match
-    processed += html.substring(lastIndex);
-
-    return processed;
+    });
   };
 
   const originalContent = fullContent || post.excerpt;
   const processedContent = wrapIframesInGlass(originalContent);
 
-  // If there's a "top video" (first iframe in content), it's now wrapped – no separate handling needed
+  // Debug log (remove after testing to confirm text is preserved)
+  console.log("Original length:", originalContent.length);
+  console.log("Processed length:", processedContent.length);
+  if (processedContent.length < originalContent.length / 2) {
+    console.warn("Potential content loss detected!");
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -80,8 +69,6 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         </DialogHeader>
         {post.feature_image && (
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
-            {" "}
-            {/* Added mb-6 for consistency */}
             <img src={post.feature_image} alt={post.title} className="w-full h-full object-cover" />
           </div>
         )}
