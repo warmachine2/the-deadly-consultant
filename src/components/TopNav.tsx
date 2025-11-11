@@ -93,7 +93,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <SignupButton
               formId="fbd8fa5d1b"
               fallbackHref="https://bifintechconsulting.com/case-study-signup"
-              className="px-2 py-1 text-xs md:px-6 md:py-2.5" // Smaller padding on mobile for visibility
+              className="px-3 py-2 md:px-6 md:py-2.5 text-sm md:text-base font-semibold"
             />
           </div>
         </div>
