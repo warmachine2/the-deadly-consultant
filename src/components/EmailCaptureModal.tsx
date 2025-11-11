@@ -73,20 +73,10 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
           <X className="w-6 h-6" />
         </button>
 
-        {/* Modal content - Updated to match photo with logo */}
+        {/* Modal content - Updated to match photo with favicon logo */}
         <div className="text-center mb-6">
-          {/* Injected Logo - Matches photo's black icon above title */}
-          <div className="mx-auto mb-4 w-12 h-12 flex items-center justify-center bg-black rounded-full">
-            <svg viewBox="0 0 48 48" className="w-8 h-8 text-white">
-              {/* Custom SVG for "LQ" or stylized logo - adjust path if you have exact SVG */}
-              <path
-                d="M12 8 L12 40 M12 8 L40 8 M36 40 L36 8 M12 24 L40 24 M24 12 L24 36"
-                stroke="white"
-                strokeWidth="4"
-                fill="none"
-              />
-            </svg>
-          </div>
+          {/* Injected Favicon as Logo */}
+          <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="mx-auto mb-4 w-12 h-12" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">The Deadly Consultant</h2>
         </div>
 
