@@ -37,70 +37,82 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
   };
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md h-full overflow-y-auto"
-      onClick={handleBackdropClick}
-      style={{ alignItems: "center", justifyContent: "center" }}
-    >
-      <div className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200 mx-auto my-auto transform translate-y-0 !mt-0 !mb-0">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Close modal"
+    <>
+      {/* Full-screen overlay to block nav interactions */}
+      <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md" />
+
+      {/* Centered modal container */}
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-y-auto">
+        <div
+          className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
+          style={{
+            // Force absolute centering
+            position: "relative",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            margin: "auto",
+          }}
         >
-          <X className="w-6 h-6" />
-        </button>
-
-        {/* Modal content - Updated to match photo */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">The Deadly Consultant</h2>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full p-3 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-              aria-label="Name"
-            />
-          </div>
-
-          <div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full p-3 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-              aria-label="Email"
-            />
-          </div>
-
+          {/* Close button */}
           <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={onClose}
+            className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Close modal"
           >
-            {isSubmitting ? "Submitting..." : "Sign up"}
+            <X className="w-6 h-6" />
           </button>
-        </form>
 
-        <p className="text-xs text-muted-foreground text-center mt-4">
-          Already a member?{" "}
-          <a href="/signin" className="text-accent hover:underline">
-            Sign in
-          </a>
-        </p>
+          {/* Modal content - Updated to match photo */}
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">The Deadly Consultant</h2>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full p-3 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                aria-label="Name"
+              />
+            </div>
+
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full p-3 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                aria-label="Email"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Submitting..." : "Sign up"}
+            </button>
+          </form>
+
+          <p className="text-xs text-muted-foreground text-center mt-4">
+            Already a member?{" "}
+            <a href="/signin" className="text-accent hover:underline">
+              Sign in
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
