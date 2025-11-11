@@ -11,27 +11,42 @@ const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => 
     <a
       data-formkit-toggle={formId}
       href={fallbackHref}
-      className="relative px-4 py-2 md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base whitespace-nowrap transition-all hover-glow group"
+      className="relative inline-flex items-center justify-center px-8 py-3 font-bold text-lg whitespace-nowrap transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 cursor-pointer overflow-hidden group"
       style={{
-        background: "linear-gradient(135deg, rgba(4, 195, 252, 0.1) 0%, rgba(8, 145, 212, 0.1) 100%)",
+        // Glassmorphism: Semi-transparent dark bg with blur
+        background: "rgba(0, 0, 0, 0.8)",
+        backdropFilter: "blur(10px)",
         border: "2px solid transparent",
-        backgroundImage: "linear-gradient(hsl(var(--background)), hsl(var(--background))), linear-gradient(135deg, #04c3fc 0%, #0891d4 100%)",
-        backgroundOrigin: "border-box",
-        backgroundClip: "padding-box, border-box",
-        boxShadow: "0 0 15px rgba(4, 195, 252, 0.3)",
+        backgroundClip: "padding-box",
+        borderRadius: "12px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)", // Subtle outer shadow for depth
       }}
     >
-      <span
-        className="relative z-10"
-        style={{
-          background: "linear-gradient(135deg, #04c3fc 0%, #ffffff 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
+      {/* Gradient stroke/outline via pseudo-element (purple to magenta, like photo) */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-purple-500 via-purple-600 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ 
+          zIndex: -1, 
+          borderRadius: "12px",
+          border: "2px solid transparent",
+          backgroundClip: "border-box",
         }}
-      >
-        {children}
-      </span>
+      />
+      
+      {/* Text layer (white, bold, on top) */}
+      <span className="relative z-10 text-white">{children}</span>
+      
+      {/* Hover glow effect (matching gradient colors) */}
+      <style jsx>{`
+        a:hover {
+          box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), 0 0 40px rgba(236, 72, 153, 0.3);
+          animation: glow-pulse 1s ease-in-out infinite alternate;
+        }
+        @keyframes glow-pulse {
+          from { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), 0 0 40px rgba(236, 72, 153, 0.3); }
+          to { box-shadow: 0 0 30px rgba(139, 92, 246, 0.8), 0 0 50px rgba(236, 72, 153, 0.5); }
+        }
+      `}</style>
     </a>
   );
 };
