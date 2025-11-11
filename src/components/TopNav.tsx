@@ -84,11 +84,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
             {/* Injected: New CTA Button with Gradient Outline & Glow */}
             <SignupButton
-              formId="fbd8fa5d1b" // Your ConvertKit form ID
-              fallbackHref="https://bifintechconsulting.com/case-study-signup" // Customize fallback
-            >
-              Free Case Study
-            </SignupButton>
+              formId="fbd8fa5d1b"
+              fallbackHref="https://bifintechconsulting.com/case-study-signup"
+            />
           </div>
         </div>
 
