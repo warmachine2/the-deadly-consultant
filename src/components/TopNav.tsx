@@ -1,6 +1,7 @@
 import { Search, Home, Menu, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import SignupButton from "@/components/SignupButton"; // Adjust path if needed (e.g., create the file)
 
 interface TopNavProps {
   onSearchChange: (query: string) => void;
@@ -19,7 +20,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   };
 
   if (isHomepage) {
-    // Homepage variant: search on left, roadmap CTA button
+    // Homepage variant: search on left, roadmap CTA button + new signup button
     return (
       <nav className="fixed top-0 left-0 right-0 z-50 glass-strong">
         <div className="flex items-center justify-between h-16 px-4 md:px-6">
@@ -67,18 +68,28 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </div>
           </div>
 
-          {/* Right: CTA Button */}
-          <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
-            <button
-              className="px-4 py-2 md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base text-white hover-glow transition-all whitespace-nowrap"
-              style={{
-                background: "linear-gradient(135deg, #04c3fc 0%, #0891d4 100%)",
-                boxShadow: "0 0 20px rgba(4, 195, 252, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)",
-              }}
+          {/* Right: Roadmap Button + Injected Signup Button */}
+          <div className="flex items-center gap-2">
+            <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
+              <button
+                className="px-4 py-2 md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base text-white hover-glow transition-all whitespace-nowrap"
+                style={{
+                  background: "linear-gradient(135deg, #04c3fc 0%, #0891d4 100%)",
+                  boxShadow: "0 0 20px rgba(4, 195, 252, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)",
+                }}
+              >
+                Free $10k/mo+ Roadmap
+              </button>
+            </Link>
+
+            {/* Injected: New CTA Button with Gradient Outline & Glow */}
+            <SignupButton
+              formId="fbd8fa5d1b" // Your ConvertKit form ID
+              fallbackHref="https://bifintechconsulting.com/case-study-signup" // Customize fallback
             >
-              Free $10k/mo+ Roadmap
-            </button>
-          </Link>
+              Free Case Study
+            </SignupButton>
+          </div>
         </div>
 
         {/* Mobile Search */}
