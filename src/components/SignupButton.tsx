@@ -13,13 +13,11 @@ const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => 
       href={fallbackHref}
       className="relative inline-flex items-center justify-center px-8 py-3 font-bold text-lg whitespace-nowrap transition-all duration-500 ease-in-out hover:scale-105 active:scale-95 cursor-pointer overflow-hidden group"
       style={{
-        // Glassmorphism: Dark semi-transparent bg with frost blur
-        background: "rgba(0, 0, 0, 0.6)",
-        backdropFilter: "blur(20px) saturate(180%)", // Frosted glass effect
+        // Solid black inside
+        background: "#000000",
         border: "2px solid transparent",
         backgroundClip: "padding-box",
-        borderRadius: "16px", // Rounded like photo
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.37)", // Inner depth
+        borderRadius: "16px",
         color: "#FFFFFF", // White text
       }}
     >
@@ -37,6 +35,19 @@ const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => 
       {/* Text layer (white bold, on top) */}
       <span className="relative z-10">{children}</span>
 
+      {/* Hover glow effect (matching gradient colors) */}
+      <style jsx>{`
+        a:hover {
+          box-shadow: 
+            0 0 20px rgba(139, 92, 246, 0.6), 
+            0 0 40px rgba(236, 72, 153, 0.4);
+          animation: glow-pulse 1s ease-in-out infinite alternate;
+        }
+        @keyframes glow-pulse {
+          from { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), 0 0 40px rgba(236, 72, 153, 0.4); }
+          to { box-shadow: 0 0 30px rgba(139, 92, 246, 0.8), 0 0 50px rgba(236, 72, 153, 0.5); }
+        }
+      `}</style>
     </a>
   );
 };
