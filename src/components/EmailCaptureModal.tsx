@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { X } from "lucide-react";
 
 interface EmailCaptureModalProps {
@@ -10,6 +10,18 @@ interface EmailCaptureModalProps {
 const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Lock body scroll when open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -38,11 +50,20 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
 
   return (
     <div
-      className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-y-auto"
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md h-screen overflow-hidden"
       onClick={handleBackdropClick}
       style={{ alignItems: "center", justifyContent: "center" }}
     >
-      <div className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200 my-auto">
+      <div
+        className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 10001,
+        }}
+      >
         {/* Close button */}
         <button
           onClick={onClose}
