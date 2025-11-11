@@ -8,5 +8,6 @@ declare global {
       show?: (formId: string) => void;
       // You can extend with more methods if needed (e.g., hide, close)
     };
+    popupLocked?: boolean;
   }
 }

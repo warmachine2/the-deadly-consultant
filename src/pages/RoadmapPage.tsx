@@ -11,12 +11,13 @@ const RoadmapPage = () => {
 
   // Load ConvertKit script + Show modal ONLY ONCE (strong lock for live sites)
   useEffect(() => {
+    const w = window as any;
     // Lock: If already shown, skip everything
-    if (window.popupLocked) {
+    if (w.popupLocked) {
       console.log("Popup already locked – skipping");
       return;
     }
-    window.popupLocked = true; // Global lock – blocks doubles forever on this page
+    w.popupLocked = true; // Global lock – blocks doubles forever on this page
 
     // Check for existing script to avoid duplicates
     const existingScript = document.querySelector('script[src*="kit.com/fbd8fa5d1b"]');
@@ -63,7 +64,8 @@ const RoadmapPage = () => {
         document.head.removeChild(scriptRef.current);
       }
       // Unlock on leave (for other pages)
-      window.popupLocked = false;
+      const w = window as any;
+      w.popupLocked = false;
     };
   }, []);
 
