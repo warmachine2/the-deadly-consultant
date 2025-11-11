@@ -37,23 +37,14 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
   };
 
   return (
-    <>
-      {/* Full-screen overlay to block nav interactions */}
-      <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md" />
-
-      {/* Centered modal container */}
-      <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-y-auto">
-        <div
-          className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
-          style={{
-            // Force absolute centering
-            position: "relative",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            margin: "auto",
-          }}
-        >
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-y-auto"
+      onClick={handleBackdropClick}
+      style={{ alignItems: "center", justifyContent: "center" }}
+    >
+      {/* Full viewport height to force centering */}
+      <div className="h-full flex items-center justify-center">
+        <div className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200 mx-auto my-auto transform translate-y-0">
           {/* Close button */}
           <button
             onClick={onClose}
@@ -112,7 +103,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
