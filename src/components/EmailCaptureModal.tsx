@@ -16,7 +16,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
@@ -38,11 +38,11 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-y-auto"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md min-h-screen overflow-y-auto"
       onClick={handleBackdropClick}
-      style={{ alignItems: 'center', justifyContent: 'center' }}
+      style={{ alignItems: "center", justifyContent: "center" }}
     >
-      <div className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200 my-auto">
+      <div className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200 mx-auto my-auto transform translate-y-0">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -54,9 +54,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
 
         {/* Modal content */}
         <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-            Get Your Free Roadmap
-          </h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Get Your Free Roadmap</h2>
           <p className="text-muted-foreground">
             Enter your details to receive the 2026 BI-FinTech Consulting Roadmap PDF
           </p>
@@ -75,7 +73,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
               aria-label="Your name"
             />
           </div>
-          
+
           <div>
             <input
               type="email"
