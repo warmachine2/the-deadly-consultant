@@ -37,30 +37,6 @@ const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => 
       {/* Text layer (white bold, on top) */}
       <span className="relative z-10">{children}</span>
 
-      {/* Glowing effect: Pulsing purple-pink glow on hover (video-style bloom) */}
-      <style jsx>{`
-        a:hover {
-          box-shadow: 
-            0 0 20px rgba(139, 92, 246, 0.6), 
-            0 0 40px rgba(236, 72, 153, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2); /* Inner light for glass shine */
-          animation: glow-bloom 1.5s ease-in-out infinite alternate;
-        }
-        @keyframes glow-bloom {
-          from { 
-            box-shadow: 
-              0 0 20px rgba(139, 92, 246, 0.6), 
-              0 0 40px rgba(236, 72, 153, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2);
-          }
-          to { 
-            box-shadow: 
-              0 0 30px rgba(139, 92, 246, 0.8), 
-              0 0 60px rgba(236, 72, 153, 0.6),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
-          }
-        }
-      `}</style>
     </a>
   );
 };
