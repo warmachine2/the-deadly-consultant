@@ -1,37 +1,62 @@
-import { ReactNode } from "react";
+import React from "react";
 
 interface SignupButtonProps {
-  formId: string;
-  fallbackHref: string;
-  children: ReactNode;
+  onClick?: () => void;
+  formId?: string;
+  fallbackHref?: string;
+  children?: React.ReactNode;
 }
 
-const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => {
+const SignupButton: React.FC<SignupButtonProps> = ({
+  onClick,
+  formId = "fbd8fa5d1b",
+  fallbackHref = "https://bifintechconsulting.com/roadmap-signup",
+  children = "Get Your Free Case Study Now",
+}) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onClick) {
+      onClick();
+    } else if (typeof window !== "undefined") {
+      const w = window as any;
+      if (w.formkit && typeof w.formkit.show === "function") {
+        w.formkit.show(formId);
+      } else {
+        window.location.href = fallbackHref;
+      }
+    }
+  };
+
   return (
     <a
       data-formkit-toggle={formId}
       href={fallbackHref}
-      className="relative px-4 py-2 md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base whitespace-nowrap transition-all hover-glow group"
+      onClick={handleClick}
+      className="inline-block relative bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-500 ease-in-out hover:scale-105 shadow-lg hover:shadow-xl active:scale-95 cursor-pointer transform overflow-hidden group"
       style={{
-        background: "linear-gradient(135deg, rgba(4, 195, 252, 0.1) 0%, rgba(8, 145, 212, 0.1) 100%)",
+        // Gradient outline via pseudo-element (Tailwind + inline for precision)
         border: "2px solid transparent",
-        backgroundImage: "linear-gradient(hsl(var(--background)), hsl(var(--background))), linear-gradient(135deg, #04c3fc 0%, #0891d4 100%)",
-        backgroundOrigin: "border-box",
-        backgroundClip: "padding-box, border-box",
-        boxShadow: "0 0 15px rgba(4, 195, 252, 0.3)",
+        backgroundClip: "padding-box",
       }}
     >
-      <span
-        className="relative z-10"
-        style={{
-          background: "linear-gradient(135deg, #04c3fc 0%, #ffffff 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-        }}
-      >
-        {children}
-      </span>
+      {/* Gradient border pseudo */}
+      <div
+        className="absolute inset-0 rounded-xl bg-gradient-to-r from-red-500 via-red-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ zIndex: -1 }}
+      />
+      <span className="relative z-10">{children}</span>
+
+      {/* Glow on hover */}
+      <style jsx>{`
+        a:hover {
+          box-shadow: 0 0 20px rgba(220, 38, 38, 0.6), 0 0 40px rgba(220, 38, 38, 0.3);
+          animation: glow-pulse 1s ease-in-out infinite alternate;
+        }
+        @keyframes glow-pulse {
+          from { box-shadow: 0 0 20px rgba(220, 38, 38, 0.6), 0 0 40px rgba(220, 38, 38, 0.3); }
+          to { box-shadow: 0 0 30px rgba(220, 38, 38, 0.8), 0 0 50px rgba(220, 38, 38, 0.5); }
+        }
+      `}</style>
     </a>
   );
 };
