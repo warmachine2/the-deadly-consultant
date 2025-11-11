@@ -54,10 +54,13 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
       onClick={handleBackdropClick}
       style={{ alignItems: "center", justifyContent: "center" }}
     >
-      {/* Enhanced blurry backdrop */}
+      {/* Enhanced blurry backdrop - Full screen, strong blur */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-2xl -webkit-backdrop-filter: blur(32px)"
-        style={{ zIndex: 10000 }}
+        className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-3xl"
+        style={{
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
+        }}
       />
 
       <div
