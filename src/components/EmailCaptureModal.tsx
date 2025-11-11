@@ -50,10 +50,16 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
 
   return (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md h-screen overflow-hidden"
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-hidden"
       onClick={handleBackdropClick}
       style={{ alignItems: "center", justifyContent: "center" }}
     >
+      {/* Enhanced blurry backdrop */}
+      <div
+        className="fixed inset-0 bg-black/80 backdrop-blur-2xl -webkit-backdrop-filter: blur(32px)"
+        style={{ zIndex: 10000 }}
+      />
+
       <div
         className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
         style={{
@@ -73,10 +79,8 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
           <X className="w-6 h-6" />
         </button>
 
-        {/* Modal content - Updated to match photo with favicon logo */}
+        {/* Modal content */}
         <div className="text-center mb-6">
-          {/* Injected Favicon as Logo */}
-          <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="mx-auto mb-4 w-12 h-12" />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">The Deadly Consultant</h2>
         </div>
 
