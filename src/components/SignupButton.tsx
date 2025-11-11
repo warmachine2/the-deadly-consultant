@@ -11,7 +11,7 @@ const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => 
     <a
       data-formkit-toggle={formId}
       href={fallbackHref}
-      className="relative inline-flex items-center justify-center px-8 py-3 font-bold text-lg whitespace-nowrap transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 cursor-pointer overflow-hidden group"
+      className="relative inline-flex items-center justify-center px-8 py-3 font-bold text-lg whitespace-nowrap transition-all duration-300 ease-in-out hover:scale-105 hover:animate-glow-pulse active:scale-95 cursor-pointer overflow-hidden group"
       style={{
         // Glassmorphism: Semi-transparent dark bg with blur
         background: "rgba(0, 0, 0, 0.8)",
@@ -35,18 +35,6 @@ const SignupButton = ({ formId, fallbackHref, children }: SignupButtonProps) => 
       
       {/* Text layer (white, bold, on top) */}
       <span className="relative z-10 text-white">{children}</span>
-      
-      {/* Hover glow effect (matching gradient colors) */}
-      <style jsx>{`
-        a:hover {
-          box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), 0 0 40px rgba(236, 72, 153, 0.3);
-          animation: glow-pulse 1s ease-in-out infinite alternate;
-        }
-        @keyframes glow-pulse {
-          from { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), 0 0 40px rgba(236, 72, 153, 0.3); }
-          to { box-shadow: 0 0 30px rgba(139, 92, 246, 0.8), 0 0 50px rgba(236, 72, 153, 0.5); }
-        }
-      `}</style>
     </a>
   );
 };
