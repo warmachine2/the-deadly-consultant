@@ -1,1 +1,4 @@
 project_id = "pzqcszrqxlfizitndftb"
+
+[functions.fetch-ghost-posts]
+verify_jwt = false
