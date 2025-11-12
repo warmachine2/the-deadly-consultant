@@ -20,14 +20,19 @@ serve(async (req) => {
     
     console.log('Fetching from Ghost API:', { endpoint, params });
     
-    // Build query string
+    // Build query string with cache-buster
     const queryParams = new URLSearchParams({
       key: GHOST_API_KEY,
-      ...params
+      ...params,
     });
+    // Add cache-buster to avoid CDN/stale caches
+    queryParams.set('t', Date.now().toString());
     
     const url = `${GHOST_API_URL}${endpoint}?${queryParams.toString()}`;
     console.log('Full URL:', url);
+    
+    // Gentle delay to reduce rate-limit bursts
+    await new Promise((r) => setTimeout(r, 1000));
     
     const response = await fetch(url);
     

@@ -71,10 +71,26 @@ const RoadmapPage = () => {
 
   useEffect(() => {
     const loadPage = async () => {
-      setLoading(true);
-      const content = await fetchPageBySlug("2026-bi-fintech-consulting-roadmap-pdf-unlock");
-      setPageContent(content);
-      setLoading(false);
+      const cacheKey = 'ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock';
+      // Try cache first to avoid flicker on re-mounts
+      try {
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) {
+          setPageContent(JSON.parse(cached));
+          setLoading(false);
+        }
+      } catch {}
+
+      // Fetch fresh content in background (no loading flicker)
+      try {
+        const content = await fetchPageBySlug('2026-bi-fintech-consulting-roadmap-pdf-unlock');
+        if (content) {
+          setPageContent(content);
+          setLoading(false);
+        }
+      } catch (e) {
+        console.error('Roadmap fetch failed:', e);
+      }
     };
     loadPage();
   }, []);
