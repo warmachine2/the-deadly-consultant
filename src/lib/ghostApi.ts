@@ -1,5 +1,7 @@
 import { BlogPost } from "@/components/BlogCard";
-import { supabase } from "@/integrations/supabase/client";
+
+const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
+const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
 
 export interface GhostPost {
   id: string;
@@ -31,23 +33,21 @@ export const fetchPosts = async (
   limit: number = 20
 ): Promise<GhostResponse> => {
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
-      body: {
-        endpoint: '/posts/',
-        params: {
-          limit: limit.toString(),
-          page: page.toString(),
-          include: 'tags,authors',
-          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time'
-        }
-      }
+    const queryParams = new URLSearchParams({
+      key: GHOST_API_KEY,
+      limit: limit.toString(),
+      page: page.toString(),
+      include: 'tags,authors',
+      fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time'
     });
 
-    if (error) {
-      console.error("Error fetching Ghost posts:", error);
-      throw error;
+    const response = await fetch(`${GHOST_API_URL}/posts/?${queryParams.toString()}`);
+
+    if (!response.ok) {
+      throw new Error(`Ghost API error: ${response.statusText}`);
     }
 
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("Error fetching Ghost posts:", error);
@@ -67,20 +67,18 @@ export const fetchPosts = async (
 
 export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> => {
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
-      body: {
-        endpoint: `/posts/slug/${slug}/`,
-        params: {
-          include: 'tags,authors'
-        }
-      }
+    const queryParams = new URLSearchParams({
+      key: GHOST_API_KEY,
+      include: 'tags,authors'
     });
 
-    if (error) {
-      console.error("Error fetching Ghost post:", error);
-      throw error;
+    const response = await fetch(`${GHOST_API_URL}/posts/slug/${slug}/?${queryParams.toString()}`);
+
+    if (!response.ok) {
+      throw new Error(`Ghost API error: ${response.statusText}`);
     }
 
+    const data = await response.json();
     return data.posts[0];
   } catch (error) {
     console.error("Error fetching Ghost post:", error);
@@ -90,20 +88,18 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
 
 export const fetchPageBySlug = async (slug: string): Promise<GhostPost | null> => {
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
-      body: {
-        endpoint: `/pages/slug/${slug}/`,
-        params: {
-          include: 'tags,authors'
-        }
-      }
+    const queryParams = new URLSearchParams({
+      key: GHOST_API_KEY,
+      include: 'tags,authors'
     });
 
-    if (error) {
-      console.error("Error fetching Ghost page:", error);
-      throw error;
+    const response = await fetch(`${GHOST_API_URL}/pages/slug/${slug}/?${queryParams.toString()}`);
+
+    if (!response.ok) {
+      throw new Error(`Ghost API error: ${response.statusText}`);
     }
 
+    const data = await response.json();
     return data.pages[0];
   } catch (error) {
     console.error("Error fetching Ghost page:", error);
