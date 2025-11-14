@@ -39,8 +39,8 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
 
   return (
     <>
-      {/* Overlay for mobile */}
-      {isOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
+      {/* Overlay for mobile - starts below topnav */}
+      {isOpen && <div className="fixed top-16 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside
