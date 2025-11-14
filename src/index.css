@@ -97,13 +97,13 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(circle at 15% 25%, hsla(240, 70%, 35%, 0.4) 0%, transparent 50%),
-      radial-gradient(circle at 85% 15%, hsla(220, 80%, 45%, 0.35) 0%, transparent 50%),
-      radial-gradient(circle at 45% 75%, hsla(260, 65%, 40%, 0.3) 0%, transparent 55%),
-      radial-gradient(circle at 90% 80%, hsla(200, 75%, 40%, 0.35) 0%, transparent 50%),
-      radial-gradient(circle at 10% 85%, hsla(280, 60%, 35%, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 60% 40%, hsla(210, 70%, 45%, 0.25) 0%, transparent 60%),
-      linear-gradient(135deg, hsl(230, 50%, 10%) 0%, hsl(245, 45%, 12%) 100%);
+      radial-gradient(circle at 15% 25%, hsla(220, 80%, 45%, 0.5) 0%, transparent 50%),
+      radial-gradient(circle at 85% 15%, hsla(200, 85%, 50%, 0.45) 0%, transparent 50%),
+      radial-gradient(circle at 45% 75%, hsla(240, 70%, 45%, 0.4) 0%, transparent 55%),
+      radial-gradient(circle at 90% 80%, hsla(190, 80%, 50%, 0.45) 0%, transparent 50%),
+      radial-gradient(circle at 10% 85%, hsla(230, 75%, 45%, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, hsla(210, 75%, 50%, 0.35) 0%, transparent 60%),
+      linear-gradient(135deg, hsl(220, 60%, 12%) 0%, hsl(230, 55%, 14%) 100%);
     z-index: -3;
   }
   
@@ -165,53 +165,64 @@ All colors MUST be HSL.
 
   /* Volumetric glass effects */
   .volumetric-glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(20, 40, 80, 0.3);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 2px solid rgba(59, 130, 246, 0.3);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.37),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(59, 130, 246, 0.15),
+      inset 0 2px 4px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 4px rgba(59, 130, 246, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .volumetric-glass:hover {
     transform: translateY(-2px);
     box-shadow: 
-      0 12px 40px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(59, 130, 246, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: rgba(59, 130, 246, 0.2);
+      0 12px 48px rgba(0, 0, 0, 0.6),
+      0 0 60px rgba(59, 130, 246, 0.4),
+      0 0 100px rgba(59, 130, 246, 0.2),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2),
+      inset 0 -2px 4px rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.5);
   }
 
   .volumetric-glass-button {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(20, 40, 80, 0.25);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1.5px solid rgba(59, 130, 246, 0.25);
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(59, 130, 246, 0.1),
+      inset 0 1px 2px rgba(255, 255, 255, 0.12),
+      inset 0 -1px 2px rgba(59, 130, 246, 0.08);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .volumetric-glass-button:hover {
     transform: translateY(-2px);
     box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.35),
-      0 0 20px rgba(59, 130, 246, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: rgba(59, 130, 246, 0.2);
-    background: rgba(255, 255, 255, 0.08);
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(59, 130, 246, 0.35),
+      0 0 50px rgba(59, 130, 246, 0.15),
+      inset 0 1px 3px rgba(255, 255, 255, 0.18),
+      inset 0 -1px 3px rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.4);
+    background: rgba(20, 40, 80, 0.35);
   }
 
   .volumetric-glass-active {
-    background: rgba(59, 130, 246, 0.15);
-    border-color: rgba(59, 130, 246, 0.3);
+    background: rgba(59, 130, 246, 0.25);
+    border-color: rgba(59, 130, 246, 0.5);
     box-shadow: 
-      0 4px 16px rgba(59, 130, 246, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      0 4px 20px rgba(59, 130, 246, 0.4),
+      0 0 40px rgba(59, 130, 246, 0.3),
+      inset 0 1px 3px rgba(255, 255, 255, 0.25),
+      inset 0 -1px 3px rgba(59, 130, 246, 0.2);
   }
+  
   
   /* Prose styling for Ghost content on dark backgrounds */
   .prose {

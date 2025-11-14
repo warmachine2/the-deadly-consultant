@@ -52,17 +52,17 @@ const Sidebar = ({
           <X className="w-5 h-5 text-white" />
         </button>
 
-        <h2 className="text-lg font-bold text-white mb-6 tracking-wide">Filters</h2>
+        <h2 className="text-lg font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">Filters</h2>
 
         {/* Categories */}
         <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide"
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
           >
             Categories
             <ChevronDown
-              className={`w-4 h-4 transition-transform text-blue-400 ${
+              className={`w-4 h-4 transition-transform text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] ${
                 showCategories ? "rotate-180" : ""
               }`}
             />
@@ -93,11 +93,11 @@ const Sidebar = ({
         <div>
           <button
             onClick={() => setShowTags(!showTags)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide"
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
           >
             Tags
             <ChevronDown
-              className={`w-4 h-4 transition-transform text-blue-400 ${
+              className={`w-4 h-4 transition-transform text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] ${
                 showTags ? "rotate-180" : ""
               }`}
             />

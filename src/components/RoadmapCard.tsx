@@ -77,11 +77,11 @@ const RoadmapCard = () => {
 
       {/* Content (Teaser Only – ~half the full page) */}
       <div className="p-5">
-        <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1 group-hover:text-accent transition-colors">
+        <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-cyan-300 group-hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.6)] transition-all">
           {teaser.title}
         </h3>
         
-        <p className="text-muted-foreground text-sm mb-6 line-clamp-3">
+        <p className="text-white/70 text-sm mb-6 line-clamp-3">
           {teaser.excerpt}
         </p>
 

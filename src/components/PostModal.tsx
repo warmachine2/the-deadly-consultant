@@ -65,7 +65,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto volumetric-glass p-0">
         <DialogHeader className="p-6 md:p-8">
-          <DialogTitle className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</DialogTitle>
+          <DialogTitle className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">{post.title}</DialogTitle>
         </DialogHeader>
         {post.feature_image && !imageError ? (
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
@@ -82,7 +82,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
             <span className="text-6xl">📄</span>
           </div>
         ) : null}
-        <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground p-6 md:p-8">
+        <div className="flex flex-wrap gap-4 mb-6 text-sm text-white/70 p-6 md:p-8">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
             <span>{new Date(post.published_at).toLocaleDateString()}</span>
@@ -97,7 +97,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6 p-6 md:p-8">
             {post.tags.map((tag) => (
-              <span key={tag.name} className="glass-subtle px-3 py-1 rounded-full text-sm text-accent/90">
+              <span key={tag.name} className="volumetric-glass-button px-3 py-1.5 rounded-full text-sm text-white/90 font-medium">
                 {tag.name}
               </span>
             ))}
