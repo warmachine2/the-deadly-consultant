@@ -15,31 +15,68 @@ interface PostModalProps {
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   if (!post) return null;
 
-  // Even safer function: Precise regex for standard iframe tags, proper HTML closing
   const wrapIframesInGlass = (html: string): string => {
     if (!html) return html;
 
-    // More precise regex: Matches <iframe attrs></iframe> or <iframe attrs />
-    // Non-greedy inner content (usually empty for embeds)
-    const iframeRegex = /<iframe\b[^>]*>(?:[^<]*|<\/iframe>|<\/>)/gis;
+    const iframeRegex = /<iframe\b[^>]*>(?:.*?)<\/iframe>/gis;
 
     return html.replace(iframeRegex, (match) => {
-      // Extract attributes from the opening tag
-      const openTagMatch = match.match(/<iframe([^>\/>]*)>/i);
+      const openTagMatch = match.match(/<iframe([^>]*)>/i);
       const attributes = openTagMatch ? openTagMatch[1] : "";
       const srcMatch = attributes.match(/src\s*=\s*"([^"]+)"/i);
       const src = srcMatch ? srcMatch[1] : null;
 
-      // Close any open tag if needed, but focus on replacement
-      const fullMatch = match.replace(/<\/iframe>$|\/>$/i, ""); // Clean closing for extraction
-
       if (src && (src.includes("youtube.com") || src.includes("youtu.be"))) {
-        // YouTube: Responsive glass wrapper – use proper </iframe> closing for valid HTML
         return `<div class="glass rounded-3xl p-6 mb-6"><div class="relative w-full pb-[56.25%]"><iframe ${attributes} class="absolute top-0 left-0 w-full h-full rounded-2xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div></div>`;
-      } else if (src) {
-        // Non-YouTube: Simple glass wrapper around original match
-        return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
-      } else {
-        // Fallback: Wrap original
-        return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
       }
+      
+      return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
+    });
+  };
+
+  const processedContent = wrapIframesInGlass(fullContent);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="volumetric-glass max-w-4xl max-h-[90vh] overflow-y-auto hover:transform-none">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+            {post.title}
+          </DialogTitle>
+          <div className="flex items-center gap-4 text-sm text-white/70 mt-2">
+            <div className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(post.published_at).toLocaleDateString()}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Clock className="h-4 w-4" />
+              <span>{post.reading_time} min read</span>
+            </div>
+          </div>
+        </DialogHeader>
+        
+        <div 
+          className="prose prose-invert max-w-none mt-6 text-white/70"
+          dangerouslySetInnerHTML={{ __html: processedContent }}
+        />
+        
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-white/10">
+            {post.tags.map((tag) => (
+              <Button
+                key={tag.name}
+                variant="outline"
+                size="sm"
+                className="volumetric-glass-button text-white/80"
+              >
+                {tag.name}
+              </Button>
+            ))}
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default PostModal;
