@@ -29,7 +29,7 @@ const Sidebar = ({
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
           onClick={onClose}
         />
       )}
@@ -38,7 +38,7 @@ const Sidebar = ({
       <aside
         className={`
           fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
-          w-64 glass-strong rounded-r-3xl md:rounded-3xl p-6
+          w-64 volumetric-glass rounded-r-3xl md:rounded-3xl p-6
           transition-transform duration-300 overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
@@ -46,23 +46,23 @@ const Sidebar = ({
         {/* Close button for mobile */}
         <button
           onClick={onClose}
-          className="md:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-white/20"
+          className="md:hidden absolute top-4 right-4 p-2 rounded-xl volumetric-glass-button"
           aria-label="Close sidebar"
         >
-          <X className="w-5 h-5 text-foreground" />
+          <X className="w-5 h-5 text-white" />
         </button>
 
-        <h2 className="text-lg font-bold text-foreground mb-6">Filters</h2>
+        <h2 className="text-lg font-bold text-white mb-6 tracking-wide">Filters</h2>
 
         {/* Categories */}
         <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-semibold text-foreground"
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide"
           >
             Categories
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
+              className={`w-4 h-4 transition-transform text-blue-400 ${
                 showCategories ? "rotate-180" : ""
               }`}
             />
@@ -74,11 +74,11 @@ const Sidebar = ({
                   key={category}
                   onClick={() => onCategoryChange(category)}
                   className={`
-                    w-full text-left px-3 py-2 rounded-lg text-sm transition-all
+                    w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-all
                     ${
                       selectedCategory === category
-                        ? "glass-strong text-accent font-medium"
-                        : "hover:bg-white/10 text-muted-foreground"
+                        ? "volumetric-glass-active text-white"
+                        : "volumetric-glass-button text-white/80"
                     }
                   `}
                 >
@@ -93,11 +93,11 @@ const Sidebar = ({
         <div>
           <button
             onClick={() => setShowTags(!showTags)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-semibold text-foreground"
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide"
           >
             Tags
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
+              className={`w-4 h-4 transition-transform text-blue-400 ${
                 showTags ? "rotate-180" : ""
               }`}
             />
@@ -112,8 +112,8 @@ const Sidebar = ({
                     px-3 py-1.5 rounded-full text-xs font-medium italic transition-all
                     ${
                       selectedTags.includes(tag)
-                        ? "glass-strong text-accent hover-glow"
-                        : "glass text-muted-foreground hover:bg-white/20"
+                        ? "volumetric-glass-active text-white"
+                        : "volumetric-glass-button text-white/80"
                     }
                   `}
                 >
