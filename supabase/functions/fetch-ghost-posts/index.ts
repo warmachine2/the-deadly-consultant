@@ -31,7 +31,12 @@ serve(async (req) => {
     
     const url = `${GHOST_API_URL}${endpoint}?${queryParams.toString()}`;
     console.log('Full URL:', url);
-    
+
+    if (!GHOST_API_KEY || !GHOST_API_URL) {
+      console.error('Missing Ghost API configuration. URL or KEY not set.');
+      throw new Error('Missing Ghost API configuration. Please set GHOST_CONTENT_API_URL and GHOST_CONTENT_API_KEY secrets.');
+    }
+
     // Gentle delay to reduce rate-limit bursts
     await new Promise((r) => setTimeout(r, 1000));
     
