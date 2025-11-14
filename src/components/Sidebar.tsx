@@ -46,7 +46,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:sticky top-0 md:top-16 left-0 h-full md:h-[calc(100vh-4rem)] z-40
+          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${isOpen ? "visible" : "invisible md:visible"}
