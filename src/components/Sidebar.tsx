@@ -40,13 +40,13 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
   return (
     <>
       {/* Overlay for mobile - starts below topnav */}
-      {isOpen && <div className="fixed top-16 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
+      {isOpen && <div className="fixed top-16 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-sm z-20 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
+          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-30
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${isOpen ? "visible" : "invisible md:visible"}
