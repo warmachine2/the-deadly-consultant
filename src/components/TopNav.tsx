@@ -63,7 +63,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             {/* Desktop Search */}
             <div className="hidden md:flex items-center flex-1 max-w-md ml-4">
               <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
                 <input
                   type="text"
                   placeholder="Search posts..."
@@ -101,7 +101,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         {/* Mobile Search */}
         <div className="md:hidden px-4 pb-3">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
             <input
               type="text"
               placeholder="Search posts..."
