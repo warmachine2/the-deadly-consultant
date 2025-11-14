@@ -49,12 +49,22 @@ export const fetchPosts = async (
       throw error;
     }
 
-    // Cache successful response
-    try {
-      sessionStorage.setItem(cacheKey, JSON.stringify(data));
-    } catch {}
-
-    return data;
+    // Cache successful response only if it has the expected shape
+    const isValid = data && Array.isArray((data as any).posts);
+    if (isValid) {
+      try {
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      } catch {}
+      return data as GhostResponse;
+    } else {
+      console.error('Invalid posts response from backend:', data);
+      return {
+        posts: [],
+        meta: {
+          pagination: { page: 1, limit: limit, pages: 0, total: 0 },
+        },
+      };
+    }
   } catch (error) {
     console.error('Error fetching Ghost posts:', error);
     // Fallback to cache if available
@@ -93,7 +103,7 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
       throw error;
     }
 
-    const post = data.posts[0] || null;
+    const post = (data && Array.isArray((data as any).posts)) ? (data as any).posts[0] || null : null;
     if (post) {
       try {
         sessionStorage.setItem(cacheKey, JSON.stringify(post));
@@ -127,7 +137,7 @@ export const fetchPageBySlug = async (slug: string): Promise<GhostPost | null> =
       throw error;
     }
 
-    const page = data.pages[0] || null;
+    const page = (data && Array.isArray((data as any).pages)) ? (data as any).pages[0] || null : null;
     if (page) {
       try {
         sessionStorage.setItem(cacheKey, JSON.stringify(page));
