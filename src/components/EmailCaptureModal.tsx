@@ -55,7 +55,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
       style={{ alignItems: "center", justifyContent: "center" }}
     >
       <div
-        className="glass-strong rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
+        className="volumetric-glass rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
         style={{
           position: "fixed",
           top: "50%",
@@ -67,7 +67,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
           aria-label="Close modal"
         >
           <X className="w-6 h-6" />
@@ -77,7 +77,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
         <div className="text-center mb-6">
           {/* Injected Favicon as Logo */}
           <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="mx-auto mb-4 w-12 h-12" />
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">The Deadly Consultant</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-wide">The Deadly Consultant</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -89,7 +89,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full p-3 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full p-3 volumetric-glass-button rounded-xl text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               aria-label="Name"
             />
           </div>
@@ -102,7 +102,7 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full p-3 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+              className="w-full p-3 volumetric-glass-button rounded-xl text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               aria-label="Email"
             />
           </div>
@@ -110,15 +110,15 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             {isSubmitting ? "Submitting..." : "Sign up"}
           </button>
         </form>
 
-        <p className="text-xs text-muted-foreground text-center mt-4">
+        <p className="text-xs text-white/70 text-center mt-4">
           Already a member?{" "}
-          <a href="/signin" className="text-accent hover:underline">
+          <a href="/signin" className="text-blue-400 hover:underline">
             Sign in
           </a>
         </p>

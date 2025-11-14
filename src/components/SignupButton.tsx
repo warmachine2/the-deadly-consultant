@@ -33,9 +33,9 @@ const SignupButton = ({ formId, fallbackHref, className = "" }: SignupButtonProp
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className={`relative inline-flex items-center justify-center whitespace-nowrap transition-all duration-300 ease-in-out cursor-pointer rounded-xl bg-background/10 backdrop-blur-md text-foreground border-2 border-accent/50 hover:border-accent hover:shadow-[0_0_25px_hsl(var(--accent)/0.6)] hover:bg-background/20 ${className}`}
+        className={`relative inline-flex items-center justify-center whitespace-nowrap transition-all duration-300 ease-in-out cursor-pointer rounded-xl volumetric-glass-button text-white border-2 border-white/20 hover:border-blue-400/50 hover:shadow-[0_0_25px_rgba(59,130,246,0.4)] ${className}`}
       >
-        <span className="relative z-10">Sign Up</span>
+        <span className="relative z-10 font-semibold">Sign Up</span>
       </button>
 
       <EmailCaptureModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmit} />

@@ -46,7 +46,7 @@ const RoadmapCard = () => {
 
   if (loading) {
     return (
-      <article className="glass rounded-2xl overflow-hidden hover-lift col-span-full md:col-span-1 animate-pulse">
+      <article className="volumetric-glass rounded-2xl overflow-hidden hover-lift col-span-full md:col-span-1 animate-pulse">
         <div className="h-48 bg-muted" />
         <div className="p-5 space-y-2">
           <div className="h-6 bg-muted rounded" />
@@ -58,7 +58,7 @@ const RoadmapCard = () => {
   }
 
   return (
-    <article className="glass rounded-2xl overflow-hidden hover-lift cursor-pointer group col-span-full md:col-span-1">
+    <article className="volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group col-span-full md:col-span-1">
       {/* Dynamic Thumbnail from YouTube */}
       {thumbnail ? (
         <div className="relative h-48 overflow-hidden">

@@ -23,7 +23,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
   return (
     <article
       onClick={onClick}
-      className="glass rounded-2xl overflow-hidden hover-lift cursor-pointer group"
+      className="volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group"
     >
       {/* Image */}
       {post.feature_image && !imageError ? (
@@ -58,7 +58,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
             {post.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag.name}
-                className="glass-subtle px-2 py-1 rounded-full text-xs text-accent/90 italic"
+                className="volumetric-glass-button px-3 py-1 rounded-full text-xs text-white/90 italic font-medium"
               >
                 {tag.name}
               </span>
