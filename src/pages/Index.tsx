@@ -135,9 +135,10 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
+      <div className="pt-24 md:pt-20 px-2 md:px-6 pb-12">
+        {" "}
+        {/* UPDATED: Reduced mobile padding to px-2 for full-width tiles without shrinking */}
         <HeroSection />
-
         <div className="flex gap-6 relative">
           {/* Sidebar */}
           <Sidebar
@@ -157,7 +158,9 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
+                  {" "}
+                  {/* UPDATED: Smaller gap on mobile (gap-4), explicit w-full to prevent shrinking, ensures vertical alignment without compression */}
                   <RoadmapCard /> {/* Prominent teaser tile */}
                   {filteredPosts.map((post) => (
                     <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
