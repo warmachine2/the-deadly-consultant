@@ -135,11 +135,10 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-16 px-0 md:px-6 pb-12">
-        {" "}
-        {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
+      <div className="pt-16 px-0 md:px-6 pb-12"> {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
         <HeroSection />
-        <div className="md:flex gap-6 relative">
+
+        <div className="flex gap-6 relative">
           {/* Sidebar */}
           <Sidebar
             isOpen={sidebarOpen}
@@ -158,12 +157,10 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0">
-                  {" "}
-                  {/* UPDATED: px-0 to eliminate padding and prevent horizontal scroll */}
-                  <RoadmapCard /> {/* Prominent teaser tile */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0"> {/* UPDATED: Added w-full to grid container */}
+                  <RoadmapCard className="w-full h-auto" /> {/* UPDATED: Added w-full h-auto to match BlogCard size */}
                   {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
+                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} className="w-full h-auto" /> {/* UPDATED: Added w-full h-auto */}
                   ))}
                 </div>
 
