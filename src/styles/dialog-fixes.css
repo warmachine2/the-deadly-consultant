@@ -21,3 +21,27 @@
   border-width: 1px !important;
 }
 
+/* NEW: Modal visibility and scroll fixes for shadcn Dialog */
+[data-radix-popper-content-wrapper] {
+  z-index: 60 !important; /* High z-index to layer above other elements */
+}
+
+[data-radix-dialog-content] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important; /* Ensure content scrolls if long */
+  background: hsl(var(--background)) !important; /* Dark mode safe */
+  color: hsl(var(--foreground)) !important;
+}
+
+[data-radix-dialog-overlay] {
+  z-index: 50 !important; /* Backdrop below content but above page */
+  background-color: rgb(0 0 0 / 0.5) !important; /* Ensure darkening works */
+}
+
+/* Dark mode overrides */
+.dark [data-radix-dialog-content] {
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
