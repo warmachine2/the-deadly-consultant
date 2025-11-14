@@ -38,7 +38,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()} className="modal-stable volumetric-glass z-[60] max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-white/15">
+      <DialogContent onInteractOutside={(e) => e.preventDefault()} className="modal-stable volumetric-glass z-[60] w-[92vw] max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-white/15 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-6">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-white">
             {post?.title || ""}
