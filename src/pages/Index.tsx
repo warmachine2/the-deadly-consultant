@@ -138,9 +138,7 @@ const Index = () => {
       <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
         <HeroSection />
 
-        <div className="block md:flex gap-0 md:gap-6 relative">
-          {" "}
-          {/* UPDATED: Block on mobile to prevent flex squeeze, gap-0 on mobile */}
+        <div className="flex gap-6 relative">
           {/* Sidebar */}
           <Sidebar
             isOpen={sidebarOpen}
@@ -150,30 +148,19 @@ const Index = () => {
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
           />
+
           {/* Main Content */}
-          <main className="flex-1 min-w-0 w-full md:w-auto">
-            {" "}
-            {/* UPDATED: w-full on mobile to fill space, md:w-auto for flex */}
+          <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
                 <Loader2 className="w-8 h-8 text-accent animate-spin" />
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full h-auto items-stretch">
-                  {" "}
-                  {/* UPDATED: Smaller gap on mobile, items-stretch for uniform height, w-full h-auto */}
-                  <div className="w-full h-[450px] md:h-auto flex flex-col">
-                    {" "}
-                    {/* UPDATED: Fixed h-[450px] on mobile for uniform tile height, flex-col to stretch content */}
-                    <RoadmapCard /> {/* Prominent teaser tile */}
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <RoadmapCard /> {/* Prominent teaser tile */}
                   {filteredPosts.map((post) => (
-                    <div key={post.id} className="w-full h-[450px] md:h-auto flex flex-col">
-                      {" "}
-                      {/* UPDATED: Fixed h-[450px] on mobile for uniform tile height, flex-col to stretch content */}
-                      <BlogCard post={post} onClick={() => handlePostClick(post)} />
-                    </div>
+                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
                   ))}
                 </div>
 
