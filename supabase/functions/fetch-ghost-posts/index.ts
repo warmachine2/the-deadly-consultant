@@ -23,12 +23,14 @@ serve(async (req) => {
     // Build query string with cache-buster
     const queryParams = new URLSearchParams({
       key: GHOST_API_KEY,
+      formats: 'html,plaintext',
       ...params,
     });
     // Add cache-buster to avoid CDN/stale caches
     queryParams.set('t', Date.now().toString());
     
-    const url = `${GHOST_API_URL}${endpoint}?${queryParams.toString()}`;
+    const baseUrl = `${GHOST_API_URL}${endpoint}`;
+    const url = `${baseUrl}?${queryParams.toString()}`;
     console.log('Full URL:', url);
     
     // Gentle delay to reduce rate-limit bursts
@@ -64,7 +66,12 @@ serve(async (req) => {
       const errorText = await response.text();
       console.error('Ghost API error:', response.status, response.statusText);
       console.error('Error response body:', errorText.substring(0, 500));
-      throw new Error(`Ghost API error: ${response.status} - ${response.statusText}`);
+      // Soft-fail for non-OK responses to prevent blank screens
+      return new Response(JSON.stringify({
+        error: `Ghost API error: ${response.status} - ${response.statusText}`,
+        posts: [],
+        meta: { pagination: { page: 1, limit: 20, pages: 0, total: 0 } },
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, status: 200 });
     }
     
     // Check if response is JSON
@@ -72,7 +79,12 @@ serve(async (req) => {
       const textResponse = await response.text();
       console.error('Non-JSON response received. Content-Type:', contentType);
       console.error('Response body (first 500 chars):', textResponse.substring(0, 500));
-      throw new Error(`Ghost API returned non-JSON response. Content-Type: ${contentType}`);
+      // Soft-fail when HTML or other content is returned
+      return new Response(JSON.stringify({
+        error: `Ghost API returned non-JSON response. Content-Type: ${contentType}`,
+        posts: [],
+        meta: { pagination: { page: 1, limit: 20, pages: 0, total: 0 } },
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, status: 200 });
     }
     
     const data = await response.json();
@@ -84,6 +96,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in fetch-ghost-posts function:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    // Soft-fail: return empty structure with 200 so UI can render gracefully
     return new Response(
       JSON.stringify({ 
         error: errorMessage,
@@ -98,8 +111,8 @@ serve(async (req) => {
         },
       }), 
       {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
       }
     );
   }
