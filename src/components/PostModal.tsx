@@ -58,7 +58,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
     console.error("Content loss detected – using original as fallback!");
   }
 
-  // Injected: Safeguard for image URLs post-domain swap
+  // Injected: Safeguard for image URLs post-domain swap (already good, but with lazy loading)
   const safeFeatureImage = post.feature_image
     ? post.feature_image.startsWith("http")
       ? post.feature_image
@@ -79,7 +79,12 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
               src={safeFeatureImage}
               alt={post.title}
               className="w-full h-full object-cover"
-              onError={(e) => console.error("Image load failed:", safeFeatureImage)}
+              loading="lazy" // Added for better loading
+              onError={(e) => {
+                console.error("Image load failed:", safeFeatureImage);
+                e.currentTarget.style.display = "none"; // Hide broken image
+              }}
+              sizes="(min-width: 768px) 100vw, 50vw" // Responsive sizes
             />
           </div>
         )}
