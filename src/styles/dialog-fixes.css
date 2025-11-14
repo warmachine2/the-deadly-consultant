@@ -12,16 +12,15 @@
   transform: none !important; /* prevent lift that causes cursor re-enter jitter */
 }
 
-/* Extra safety: ensure modal content never transforms or changes border width on hover */
-.modal-stable,
-.modal-stable:hover {
-  transform: none !important;
-  translate: none !important;
-  scale: 1 !important;
-  border-width: 1px !important;
-}
+/* Ensure modal stays centered and doesn't shift on hover */
 .modal-stable {
   will-change: auto;
   transition-property: box-shadow, background-color, border-color, opacity !important;
+}
+.modal-stable:hover {
+  border-width: 1px !important;
+  /* Preserve centering transform, just prevent hover scale/translate changes */
+  translate: -50% -50% !important;
+  scale: 1 !important;
 }
 
