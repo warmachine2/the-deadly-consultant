@@ -1,5 +1,6 @@
 import { X, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -16,6 +17,25 @@ const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
 const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory, onCategoryChange }: SidebarProps) => {
   const [showTags, setShowTags] = useState(true);
   const [showCategories, setShowCategories] = useState(true);
+  const isMobile = useIsMobile();
+  const sidebarRef = useRef<HTMLAsideElement>(null);
+
+  useEffect(() => {
+    if (isOpen && isMobile) {
+      sidebarRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [isOpen, isMobile]);
+
+  useEffect(() => {
+    if (isOpen && isMobile) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, isMobile]);
 
   return (
     <>
@@ -24,6 +44,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
 
       {/* Sidebar */}
       <aside
+        ref={sidebarRef}
         className={`
           fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
           w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
