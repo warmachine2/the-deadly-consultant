@@ -19,17 +19,16 @@ export default function PostModal({
 }: PostModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 glass-effect rounded-3xl">
-        {" "}
-        {/* NEW: Added glass-effect + rounded-3xl for style match */}
+      {/* UPDATED: Matched RoadmapPage panel style - glass-effect, rounded-3xl, p-8, max-w-4xl, mx-auto for centering */}
+      <DialogContent className="max-w-4xl mx-auto max-h-[90vh] overflow-y-auto p-0 glass-effect rounded-3xl">
         <DialogHeader className="p-6 border-b">
           {" "}
-          {/* Border for separation */}
+          {/* Kept light padding for header */}
           <DialogTitle className="text-2xl font-bold">{post?.title || "Loading Post..."}</DialogTitle>
         </DialogHeader>
-        <div className="p-6 prose prose-invert max-w-none">
-          {" "}
-          {/* Tailwind prose for nice Ghost HTML styling */}
+
+        {/* UPDATED: Enhanced prose for bigger videos - arbitrary selectors target iframes (e.g., YouTube embeds) */}
+        <div className="p-8 prose prose-invert max-w-none [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:h-96 [&_iframe]:rounded-lg [&_iframe]:shadow-lg">
           {isLoading ? ( // Loading spinner
             <div className="flex justify-center items-center h-64">
               <Loader2 className="w-8 h-8 animate-spin text-accent" />
@@ -45,6 +44,7 @@ export default function PostModal({
             />
           )}
         </div>
+
         <div className="p-6 pt-0 border-t flex justify-end">
           {" "}
           {/* Footer with close button */}
