@@ -38,7 +38,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   const hasContent = fullContent && fullContent.length > 0;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent className="modal-stable volumetric-glass max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-white/15">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
