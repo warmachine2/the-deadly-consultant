@@ -41,7 +41,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-8 h-8 block md:hidden" />
                 {/* Desktop Text Title */}
                 <h1
-                  className="hidden md:block text-xl md:text-2xl font-bold text-foreground cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap"
+                  className="hidden md:block text-xl md:text-2xl font-bold text-foreground cursor-pointer transition-opacity whitespace-nowrap"
                   style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
                 >
                   The{" "}
@@ -145,7 +145,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
         {/* Right: Home Icon */}
         <Link to="/">
-          <button className="p-2 rounded-lg hover:bg-white/20 hover-glow transition-all" aria-label="Home">
+          <button className="p-2 rounded-lg transition-all" aria-label="Home">
             <Home className="w-5 h-5 text-accent" />
           </button>
         </Link>

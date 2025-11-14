@@ -44,7 +44,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 group-hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.6)] transition-all">
+        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-all">
           {post.title}
         </h3>
         
@@ -72,7 +72,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
             <Clock className="w-4 h-4" />
             <span>{post.reading_time || 5} min</span>
           </div>
-          <ArrowRight className="w-5 h-5 text-cyan-400 group-hover:translate-x-1 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all" />
+          <ArrowRight className="w-5 h-5 text-cyan-400 group-hover:translate-x-1 transition-all" />
         </div>
       </div>
     </article>
