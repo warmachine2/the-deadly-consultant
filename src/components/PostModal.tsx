@@ -63,9 +63,14 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto volumetric-glass p-0 hover:transform-none">
+      <DialogContent
+        className="max-w-6xl max-h-[95vh] overflow-y-auto volumetric-glass p-0"
+        style={{ transform: "none !important" }}
+      >
         <DialogHeader className="p-6 md:p-8">
-          <DialogTitle className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">{post.title}</DialogTitle>
+          <DialogTitle className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+            {post.title}
+          </DialogTitle>
         </DialogHeader>
         {post.feature_image && !imageError ? (
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
@@ -97,7 +102,10 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6 p-6 md:p-8">
             {post.tags.map((tag) => (
-              <span key={tag.name} className="volumetric-glass-button px-3 py-1.5 rounded-full text-sm text-white/90 font-medium">
+              <span
+                key={tag.name}
+                className="volumetric-glass-button px-3 py-1.5 rounded-full text-sm text-white/90 font-medium hover:transform-none"
+              >
                 {tag.name}
               </span>
             ))}
