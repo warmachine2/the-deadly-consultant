@@ -39,14 +39,14 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
 
   return (
     <>
-      {/* Overlay for mobile - starts below topnav */}
-      {isOpen && <div className="fixed top-16 left-0 right-0 bottom-0 bg-black/30 backdrop-blur-sm z-20 md:hidden" onClick={onClose} />}
+      {/* Overlay for mobile */}
+      {isOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-30
+          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${isOpen ? "visible" : "invisible md:visible"}
@@ -61,12 +61,12 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           <X className="w-5 h-5 text-white" />
         </button>
 
-        <h2 className="text-lg font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+        <h2 className="text-lg font-bold text-white mb-2 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
           Filters
         </h2>
 
         {/* Categories */}
-        <div className="mb-6">
+        <div className="mb-2">
           <button
             onClick={() => setShowCategories(!showCategories)}
             className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
