@@ -38,7 +38,7 @@ const Sidebar = ({
       <aside
         className={`
           fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
-          w-64 volumetric-glass rounded-r-3xl md:rounded-3xl p-6
+          w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
@@ -46,7 +46,7 @@ const Sidebar = ({
         {/* Close button for mobile */}
         <button
           onClick={onClose}
-          className="md:hidden absolute top-4 right-4 p-2 rounded-xl volumetric-glass-button"
+          className="md:hidden absolute top-4 right-4 p-4 rounded-2xl volumetric-glass-button"
           aria-label="Close sidebar"
         >
           <X className="w-5 h-5 text-white" />
@@ -68,13 +68,13 @@ const Sidebar = ({
             />
           </button>
           {showCategories && (
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => onCategoryChange(category)}
                   className={`
-                    w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-all
+                    w-full text-left px-4 py-4 rounded-2xl text-sm font-medium transition-all
                     ${
                       selectedCategory === category
                         ? "volumetric-glass-active text-white"
@@ -109,7 +109,7 @@ const Sidebar = ({
                   key={tag}
                   onClick={() => onTagToggle(tag)}
                   className={`
-                    px-3 py-1.5 rounded-full text-xs font-medium italic transition-all
+                    px-4 py-4 rounded-2xl text-xs font-medium italic transition-all
                     ${
                       selectedTags.includes(tag)
                         ? "volumetric-glass-active text-white"
