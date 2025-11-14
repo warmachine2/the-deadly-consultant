@@ -35,6 +35,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
   };
 
   const processedContent = wrapIframesInGlass(fullContent);
+  const hasContent = fullContent && fullContent.length > 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -58,10 +59,16 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
         </DialogHeader>
         
-        <div 
-          className="prose prose-invert max-w-none mt-6 text-white/70"
-          dangerouslySetInnerHTML={{ __html: processedContent }}
-        />
+        {hasContent ? (
+          <div 
+            className="prose prose-invert max-w-none mt-6 text-white/90"
+            dangerouslySetInnerHTML={{ __html: processedContent }}
+          />
+        ) : (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-white/70">Loading content...</div>
+          </div>
+        )}
         
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-white/10">
