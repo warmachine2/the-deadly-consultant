@@ -10,6 +10,7 @@ interface PostModalProps {
   isOpen: boolean;
   onClose: () => void;
   fullContent: string;
+  isLoading?: boolean;
 }
 
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
