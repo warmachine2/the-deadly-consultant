@@ -40,7 +40,13 @@ serve(async (req) => {
     // Gentle delay to reduce rate-limit bursts
     await new Promise((r) => setTimeout(r, 1000));
     
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'LovableCloudGhostProxy/1.0 (+https://lovable.dev)'
+      },
+      redirect: 'follow'
+    });
     
     console.log('Response status:', response.status);
     console.log('Response content-type:', response.headers.get('content-type'));
