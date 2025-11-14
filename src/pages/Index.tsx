@@ -135,10 +135,9 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-16 md:pt-20 px-4 md:px-6 pb-12">
-        {" "}
-        {/* UPDATED: Reduced pt for tiles closer to hero on mobile */}
+      <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
         <HeroSection />
+
         <div className="flex gap-6 relative">
           {/* Sidebar */}
           <Sidebar
