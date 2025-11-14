@@ -34,10 +34,31 @@ serve(async (req) => {
     // Gentle delay to reduce rate-limit bursts
     await new Promise((r) => setTimeout(r, 1000));
     
-    const response = await fetch(url);
+    // Explicitly request JSON and pin API version
+    const reqHeaders = new Headers({
+      'Accept': 'application/json',
+      'Accept-Version': 'v5.0',
+      'User-Agent': 'LovableCloud/1.0 (+https://lovable.dev)'
+    });
+    
+    let response = await fetch(url, { headers: reqHeaders });
     
     console.log('Response status:', response.status);
     console.log('Response content-type:', response.headers.get('content-type'));
+    
+    // If server returns HTML (often a CDN/protection page), retry with explicit version query param
+    let contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('text/html')) {
+      console.warn('HTML received on first attempt, retrying with explicit v=5.0 parameter');
+      const retryParams = new URLSearchParams(queryParams);
+      retryParams.set('v', '5.0');
+      const retryUrl = `${GHOST_API_URL}${endpoint}?${retryParams.toString()}`;
+      console.log('Retry URL:', retryUrl);
+      response = await fetch(retryUrl, { headers: reqHeaders });
+      contentType = response.headers.get('content-type') || '';
+      console.log('Retry status:', response.status);
+      console.log('Retry content-type:', contentType);
+    }
     
     if (!response.ok) {
       const errorText = await response.text();
@@ -47,7 +68,6 @@ serve(async (req) => {
     }
     
     // Check if response is JSON
-    const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
       const textResponse = await response.text();
       console.error('Non-JSON response received. Content-Type:', contentType);
