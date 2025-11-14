@@ -131,12 +131,14 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      {/* UPDATED: Tighter mobile padding - px-2 sm:px-4 for breathing room without overflow */}
-      <div className="pt-24 md:pt-20 px-2 sm:px-4 md:px-6 pb-12">
+      {/* UPDATED: Even tighter mobile padding + reduced pb for more tile space */}
+      <div className="pt-24 md:pt-20 px-2 sm:px-4 md:px-6 pb-8 md:pb-12">
         <HeroSection />
 
-        <div className="flex gap-6 relative">
-          {/* Sidebar */}
+        <div className="relative">
+          {" "}
+          {/* NEW: Relative wrapper for sidebar overlay */}
+          {/* UPDATED: Sidebar as mobile overlay - absolute/full-screen when open, no push */}
           <Sidebar
             isOpen={sidebarOpen}
             onClose={() => setSidebarOpen(false)}
@@ -145,8 +147,7 @@ const Index = () => {
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
           />
-
-          {/* Main Content */}
+          {/* Main Content - unchanged flex-1, but now not pushed by sidebar */}
           <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
@@ -154,13 +155,17 @@ const Index = () => {
               </div>
             ) : (
               <>
-                {/* UPDATED: Responsive grid - smaller gap on mobile, w-full h-auto on cards for stack */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                  <RoadmapCard /> {/* Prominent teaser tile - now responsive */}
+                {/* UPDATED: Bounded cards - max-w-sm mx-auto for mobile centering, tighter gap */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                  <div className="w-full max-w-sm mx-auto h-auto">
+                    {" "}
+                    {/* NEW: Bound RoadmapCard */}
+                    <RoadmapCard />
+                  </div>
                   {filteredPosts.map((post) => (
-                    <div key={post.id} className="w-full h-auto">
+                    <div key={post.id} className="w-full max-w-sm mx-auto h-auto">
                       {" "}
-                      {/* NEW: Wrapper for mobile full-width, auto-height */}
+                      {/* NEW: Bound each BlogCard */}
                       <BlogCard post={post} onClick={() => handlePostClick(post)} />
                     </div>
                   ))}
