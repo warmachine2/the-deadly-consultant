@@ -11,3 +11,17 @@
 [data-radix-portal] .volumetric-glass-button:hover {
   transform: none !important; /* prevent lift that causes cursor re-enter jitter */
 }
+
+/* Extra safety: ensure modal content never transforms or changes border width on hover */
+.modal-stable,
+.modal-stable:hover {
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  border-width: 1px !important;
+}
+.modal-stable {
+  will-change: auto;
+  transition-property: box-shadow, background-color, border-color, opacity !important;
+}
+
