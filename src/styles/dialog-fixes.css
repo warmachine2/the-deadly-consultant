@@ -1,0 +1,13 @@
+/* Dialog-specific fixes to prevent hover-induced jitter on volumetric elements */
+
+/* Disable hover lift/transform for volumetric elements inside portaled dialogs */
+[data-radix-portal] .volumetric-glass,
+[data-radix-portal] .volumetric-glass-button {
+  will-change: auto;
+  transition-property: box-shadow, background-color, border-color, opacity; /* avoid transform transitions */
+}
+
+[data-radix-portal] .volumetric-glass:hover,
+[data-radix-portal] .volumetric-glass-button:hover {
+  transform: none !important; /* prevent lift that causes cursor re-enter jitter */
+}

@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Clock, Calendar } from "lucide-react";
 import { BlogPost } from "@/components/BlogCard";
 import { Button } from "@/components/ui/button";
+import "@/styles/dialog-fixes.css";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -40,4 +41,5 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
       } else {
         // Fallback: Wrap original
-        return `<div class="glass rounded
+        return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
+      }
