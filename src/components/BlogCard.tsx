@@ -23,7 +23,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
   return (
     <article
       onClick={onClick}
-      className="volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group"
+      className="volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group min-w-[320px] max-w-[320px] mx-auto md:min-w-0 md:max-w-none md:mx-0"
     >
       {/* Image */}
       {post.feature_image && !imageError ? (
@@ -47,10 +47,8 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => {
         <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-cyan-300 transition-all">
           {post.title}
         </h3>
-        
-        <p className="text-white/70 text-sm mb-4 line-clamp-2">
-          {post.excerpt}
-        </p>
+
+        <p className="text-white/70 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
