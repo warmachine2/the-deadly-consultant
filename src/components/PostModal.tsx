@@ -19,8 +19,8 @@ export default function PostModal({
 }: PostModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      {/* UPDATED: Force glass override - !bg-transparent punches through shadcn solid bg */}
-      <DialogContent className="max-w-4xl mx-auto max-h-[90vh] overflow-y-auto p-0 !bg-transparent glass-effect rounded-3xl border-border/50">
+      {/* UPDATED: Frosted glass - backdrop-blur-md for strong blur + bg-background/20 for subtle tint */}
+      <DialogContent className="max-w-4xl mx-auto max-h-[90vh] overflow-y-auto p-0 !bg-transparent glass-effect rounded-3xl border-border/50 backdrop-blur-md bg-background/20">
         <DialogHeader className="p-6 border-b">
           {" "}
           {/* Kept light padding for header */}
