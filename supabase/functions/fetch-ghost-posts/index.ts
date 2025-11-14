@@ -7,8 +7,9 @@ const corsHeaders = {
   'Access-Control-Max-Age': '86400',
 };
 
-const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
+const DEFAULT_GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
+const GHOST_API_URL = Deno.env.get("GHOST_CONTENT_API_URL") || DEFAULT_GHOST_API_URL;
+const GHOST_API_KEY = Deno.env.get("GHOST_CONTENT_API_KEY") || "";
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
