@@ -98,15 +98,20 @@ const Index = () => {
   const handlePostClick = async (post: BlogPost) => {
     setSelectedPost(post);
     setModalOpen(true);
+    setFullContent(""); // Reset content
 
     // Fetch full content
     try {
       const fullPost = await fetchPostBySlug(post.slug);
       if (fullPost?.html) {
         setFullContent(fullPost.html);
+      } else {
+        // Fallback to excerpt if no full content
+        setFullContent(`<p>${post.excerpt}</p>`);
       }
     } catch (error) {
       console.error("Error fetching full post:", error);
+      setFullContent(`<p>${post.excerpt}</p>`);
     }
   };
 
