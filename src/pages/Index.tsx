@@ -139,7 +139,7 @@ const Index = () => {
         {" "}
         {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
         <HeroSection />
-        <div className="flex gap-6 relative">
+        <div className="md:flex gap-6 relative">
           {/* Sidebar */}
           <Sidebar
             isOpen={sidebarOpen}
