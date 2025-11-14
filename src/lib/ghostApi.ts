@@ -26,26 +26,23 @@ export interface GhostResponse {
   };
 }
 
-export const fetchPosts = async (
-  page: number = 1,
-  limit: number = 20
-): Promise<GhostResponse> => {
+export const fetchPosts = async (page: number = 1, limit: number = 20): Promise<GhostResponse> => {
   const cacheKey = `ghost:posts:${page}:${limit}`;
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+    const { data, error } = await supabase.functions.invoke("fetch-ghost-posts", {
       body: {
-        endpoint: '/posts/',
+        endpoint: "/posts/",
         params: {
           limit: limit.toString(),
           page: page.toString(),
-          include: 'tags,authors',
-          fields: 'id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time',
+          include: "tags,authors",
+          fields: "id,title,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time",
         },
       },
     });
 
     if (error) {
-      console.error('Error fetching Ghost posts:', error);
+      console.error("Error fetching Ghost posts:", error);
       throw error;
     }
 
@@ -57,7 +54,7 @@ export const fetchPosts = async (
       } catch {}
       return data as GhostResponse;
     } else {
-      console.error('Invalid posts response from backend:', data);
+      console.error("Invalid posts response from backend:", data);
       return {
         posts: [],
         meta: {
@@ -66,7 +63,7 @@ export const fetchPosts = async (
       };
     }
   } catch (error) {
-    console.error('Error fetching Ghost posts:', error);
+    console.error("Error fetching Ghost posts:", error);
     // Fallback to cache if available
     try {
       const cached = sessionStorage.getItem(cacheKey);
@@ -86,24 +83,26 @@ export const fetchPosts = async (
   }
 };
 
+// UPDATED: Added 'fields' param to fetch html and full post details
 export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> => {
   const cacheKey = `ghost:post:${slug}`;
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+    const { data, error } = await supabase.functions.invoke("fetch-ghost-posts", {
       body: {
         endpoint: `/posts/slug/${slug}/`,
         params: {
-          include: 'tags,authors',
+          include: "tags,authors",
+          fields: "id,title,html,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time", // NEW: Include html!
         },
       },
     });
 
     if (error) {
-      console.error('Error fetching Ghost post:', error);
+      console.error("Error fetching Ghost post:", error);
       throw error;
     }
 
-    const post = (data && Array.isArray((data as any).posts)) ? (data as any).posts[0] || null : null;
+    const post = data && Array.isArray((data as any).posts) ? (data as any).posts[0] || null : null;
     if (post) {
       try {
         sessionStorage.setItem(cacheKey, JSON.stringify(post));
@@ -111,7 +110,7 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
     }
     return post;
   } catch (error) {
-    console.error('Error fetching Ghost post:', error);
+    console.error("Error fetching Ghost post:", error);
     try {
       const cached = sessionStorage.getItem(cacheKey);
       if (cached) return JSON.parse(cached);
@@ -123,21 +122,21 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
 export const fetchPageBySlug = async (slug: string): Promise<GhostPost | null> => {
   const cacheKey = `ghost:page:${slug}`;
   try {
-    const { data, error } = await supabase.functions.invoke('fetch-ghost-posts', {
+    const { data, error } = await supabase.functions.invoke("fetch-ghost-posts", {
       body: {
         endpoint: `/pages/slug/${slug}/`,
         params: {
-          include: 'tags,authors',
+          include: "tags,authors",
         },
       },
     });
 
     if (error) {
-      console.error('Error fetching Ghost page:', error);
+      console.error("Error fetching Ghost page:", error);
       throw error;
     }
 
-    const page = (data && Array.isArray((data as any).pages)) ? (data as any).pages[0] || null : null;
+    const page = data && Array.isArray((data as any).pages) ? (data as any).pages[0] || null : null;
     if (page) {
       try {
         sessionStorage.setItem(cacheKey, JSON.stringify(page));
@@ -145,7 +144,7 @@ export const fetchPageBySlug = async (slug: string): Promise<GhostPost | null> =
     }
     return page;
   } catch (error) {
-    console.error('Error fetching Ghost page:', error);
+    console.error("Error fetching Ghost page:", error);
     try {
       const cached = sessionStorage.getItem(cacheKey);
       if (cached) return JSON.parse(cached);
@@ -166,4 +165,3 @@ export const transformGhostPost = (ghostPost: GhostPost): BlogPost => {
     slug: ghostPost.slug,
   };
 };
-
