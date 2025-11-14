@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
   const [showTags, setShowTags] = useState(true);
   const [showCategories, setShowCategories] = useState(true);
   const isMobile = useIsMobile();
-  const sidebarRef = useRef<HTMLAsideElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (isOpen && isMobile) {
