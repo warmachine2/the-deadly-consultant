@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Clock, Calendar } from "lucide-react";
 import { BlogPost } from "@/components/BlogCard";
 import { Button } from "@/components/ui/button";
@@ -38,11 +38,14 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="modal-stable volumetric-glass max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="modal-stable volumetric-glass max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-white/15">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
             {post.title}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {post.excerpt}
+          </DialogDescription>
           <div className="flex items-center gap-4 text-sm text-white/70 mt-2">
             <div className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />

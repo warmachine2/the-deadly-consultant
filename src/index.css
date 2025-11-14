@@ -184,6 +184,13 @@ All colors MUST be HSL.
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Modal variant with better visibility */
+  [data-radix-portal] .volumetric-glass {
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+
   .volumetric-glass::before {
     content: '';
     position: absolute;
