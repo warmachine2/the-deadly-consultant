@@ -96,7 +96,7 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    /* Saved overlay gradients - uncomment to restore:
       radial-gradient(circle at 15% 25%, hsla(220, 80%, 45%, 0.2) 0%, transparent 50%),
       radial-gradient(circle at 85% 15%, hsla(200, 85%, 50%, 0.2) 0%, transparent 50%),
       radial-gradient(circle at 45% 75%, hsla(240, 70%, 45%, 0.15) 0%, transparent 55%),
@@ -104,8 +104,9 @@ All colors MUST be HSL.
       radial-gradient(circle at 10% 85%, hsla(230, 75%, 45%, 0.15) 0%, transparent 50%),
       radial-gradient(circle at 60% 40%, hsla(210, 75%, 50%, 0.15) 0%, transparent 60%),
       linear-gradient(135deg, hsla(220, 60%, 12%, 0.4) 0%, hsla(230, 55%, 14%, 0.4) 100%),
-      url('/background.jpg');
-    background-size: cover, cover, cover, cover, cover, cover, cover, cover;
+    */
+    background: url('/background.jpg');
+    background-size: cover;
     background-position: center;
     background-attachment: fixed;
     z-index: -3;
