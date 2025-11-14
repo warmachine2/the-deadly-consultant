@@ -158,9 +158,17 @@ const Index = () => {
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <RoadmapCard /> {/* Prominent teaser tile */}
+                  <div className="w-full max-w-md mx-auto md:max-w-none md:mx-0">
+                    {" "}
+                    {/* UPDATED: max-w-md mx-auto on mobile for consistent desktop-like width, no shrinking; full on desktop */}
+                    <RoadmapCard /> {/* Prominent teaser tile */}
+                  </div>
                   {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
+                    <div key={post.id} className="w-full max-w-md mx-auto md:max-w-none md:mx-0">
+                      {" "}
+                      {/* UPDATED: max-w-md mx-auto on mobile for consistent desktop-like width, no shrinking; full on desktop */}
+                      <BlogCard post={post} onClick={() => handlePostClick(post)} />
+                    </div>
                   ))}
                 </div>
 
