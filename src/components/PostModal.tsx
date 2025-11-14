@@ -7,7 +7,7 @@ interface PostModalProps {
   isOpen: boolean;
   onClose: () => void;
   fullContent: string;
-  isLoading?: boolean; // NEW: Optional loading state for spinner
+  isLoading?: boolean; // Optional loading state for spinner
 }
 
 export default function PostModal({
@@ -15,13 +15,13 @@ export default function PostModal({
   isOpen,
   onClose,
   fullContent,
-  isLoading = false, // NEW: Default to false
+  isLoading = false, // Default to false
 }: PostModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 glass-effect rounded-3xl">
         {" "}
-        {/* p-0 to avoid extra padding on content */}
+        {/* NEW: Added glass-effect + rounded-3xl for style match */}
         <DialogHeader className="p-6 border-b">
           {" "}
           {/* Border for separation */}
@@ -30,7 +30,7 @@ export default function PostModal({
         <div className="p-6 prose prose-invert max-w-none">
           {" "}
           {/* Tailwind prose for nice Ghost HTML styling */}
-          {isLoading ? ( // NEW: Loading spinner
+          {isLoading ? ( // Loading spinner
             <div className="flex justify-center items-center h-64">
               <Loader2 className="w-8 h-8 animate-spin text-accent" />
               <span className="ml-2 text-muted-foreground">Loading post content...</span>
@@ -40,7 +40,7 @@ export default function PostModal({
               dangerouslySetInnerHTML={{
                 __html:
                   fullContent ||
-                  '<p>No content available. <a href="#" onClick={onClose}>Close and try another post.</a></p>',
+                  '<p>No content available. <a href="#" onClick={(e) => { e.preventDefault(); onClose(); }}>Close and try another post.</a></p>',
               }}
             />
           )}
