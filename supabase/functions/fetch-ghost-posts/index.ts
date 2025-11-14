@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
+const GHOST_API_KEY = "2cd123c73978a865e977713943";
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
