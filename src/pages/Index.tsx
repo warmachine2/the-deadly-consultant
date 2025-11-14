@@ -151,7 +151,9 @@ const Index = () => {
           />
 
           {/* Main Content */}
-          <main className="flex-1 min-w-0">
+          <main className="flex-1 min-w-0 overflow-x-hidden">
+            {" "}
+            {/* UPDATED: Added overflow-x-hidden to prevent horizontal scroll */}
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
                 <Loader2 className="w-8 h-8 text-accent animate-spin" />
