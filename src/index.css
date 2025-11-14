@@ -205,15 +205,15 @@ All colors MUST be HSL.
     transform: translateY(-2px);
     box-shadow: 
       0 6px 24px rgba(0, 0, 0, 0.3),
-      0 0 20px rgba(59, 130, 246, 0.25);
+      0 0 20px rgba(255, 255, 255, 0.3);
   }
 
   .volumetric-glass-active {
-    background: rgba(59, 130, 246, 0.12);
-    border: 1px solid rgba(59, 130, 246, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 1);
     box-shadow: 
-      0 4px 20px rgba(59, 130, 246, 0.3),
-      0 0 20px rgba(59, 130, 246, 0.25);
+      0 4px 20px rgba(255, 255, 255, 0.4),
+      0 0 20px rgba(255, 255, 255, 0.4);
     position: relative;
   }
 
