@@ -148,7 +148,7 @@ const Index = () => {
                 </div>
 
                 {filteredPosts.length === 0 && !loading && (
-                  <div className="glass-strong rounded-3xl p-12 text-center">
+                  <div className="frosted-glass-subtle rounded-3xl p-12 text-center">
                     <p className="text-xl text-muted-foreground">No posts found. Try adjusting your filters.</p>
                   </div>
                 )}
@@ -177,11 +177,22 @@ const Index = () => {
       />
 
       {/* Footer */}
-      <footer className="glass-strong rounded-t-3xl mt-12 py-6 px-6">
+      <footer className="frosted-glass-subtle rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Injected Custom CSS for Reduced Frosted Glass Effect */}
+      <style jsx global>{`
+        .frosted-glass-subtle {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(3px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 
+            0 4px 16px rgba(0, 0, 0, 0.2); /* Reduced bevel/emboss */
+        }
+      `}</style>
     </div>
   );
 };
