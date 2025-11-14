@@ -13,26 +13,14 @@ interface SidebarProps {
 const tags = ["PMP Certs", "AI-Proof", "Tools", "Career Pivot", "BI Analytics", "FinTech"];
 const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
 
-const Sidebar = ({
-  isOpen,
-  onClose,
-  selectedTags,
-  onTagToggle,
-  selectedCategory,
-  onCategoryChange,
-}: SidebarProps) => {
+const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory, onCategoryChange }: SidebarProps) => {
   const [showTags, setShowTags] = useState(true);
   const [showCategories, setShowCategories] = useState(true);
 
   return (
     <>
       {/* Overlay for mobile */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
 
       {/* Sidebar */}
       <aside
@@ -40,7 +28,7 @@ const Sidebar = ({
           fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
           w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
-          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${isOpen ? "visible" : "invisible md:visible"}
         `}
       >
         {/* Close button for mobile */}
@@ -52,7 +40,9 @@ const Sidebar = ({
           <X className="w-5 h-5 text-white" />
         </button>
 
-        <h2 className="text-lg font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">Filters</h2>
+        <h2 className="text-lg font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+          Filters
+        </h2>
 
         {/* Categories */}
         <div className="mb-6">
