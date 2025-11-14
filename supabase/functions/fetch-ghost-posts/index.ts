@@ -36,9 +36,23 @@ serve(async (req) => {
     
     const response = await fetch(url);
     
+    console.log('Response status:', response.status);
+    console.log('Response content-type:', response.headers.get('content-type'));
+    
     if (!response.ok) {
+      const errorText = await response.text();
       console.error('Ghost API error:', response.status, response.statusText);
-      throw new Error(`Ghost API error: ${response.statusText}`);
+      console.error('Error response body:', errorText.substring(0, 500));
+      throw new Error(`Ghost API error: ${response.status} - ${response.statusText}`);
+    }
+    
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const textResponse = await response.text();
+      console.error('Non-JSON response received. Content-Type:', contentType);
+      console.error('Response body (first 500 chars):', textResponse.substring(0, 500));
+      throw new Error(`Ghost API returned non-JSON response. Content-Type: ${contentType}`);
     }
     
     const data = await response.json();
