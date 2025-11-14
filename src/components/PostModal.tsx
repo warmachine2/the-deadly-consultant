@@ -58,15 +58,29 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
     console.error("Content loss detected – using original as fallback!");
   }
 
+  // Injected: Safeguard for image URLs post-domain swap
+  const safeFeatureImage = post.feature_image
+    ? post.feature_image.startsWith("http")
+      ? post.feature_image
+      : `https://app.thedeadlyconsultant.com${post.feature_image}`
+    : null;
+
+  console.log("Feature image URL:", safeFeatureImage); // Debug log
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto glass-strong p-0">
         <DialogHeader className="p-6 md:p-8">
           <DialogTitle className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</DialogTitle>
         </DialogHeader>
-        {post.feature_image && (
+        {safeFeatureImage && (
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
-            <img src={post.feature_image} alt={post.title} className="w-full h-full object-cover" />
+            <img
+              src={safeFeatureImage}
+              alt={post.title}
+              className="w-full h-full object-cover"
+              onError={(e) => console.error("Image load failed:", safeFeatureImage)}
+            />
           </div>
         )}
         <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground p-6 md:p-8">
