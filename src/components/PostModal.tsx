@@ -1,94 +1,61 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Clock, Calendar } from "lucide-react";
-import { BlogPost } from "@/components/BlogCard";
-import { Button } from "@/components/ui/button";
-import "@/styles/dialog-fixes.css";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { BlogPost } from "./BlogCard";
+import { Loader2 } from "lucide-react";
 
 interface PostModalProps {
   post: BlogPost | null;
   isOpen: boolean;
   onClose: () => void;
   fullContent: string;
-  isLoading?: boolean;
+  isLoading?: boolean; // NEW: Optional loading state for spinner
 }
 
-const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
-
-  const wrapIframesInGlass = (html: string): string => {
-    if (!html) return html;
-
-    const iframeRegex = /<iframe\b[^>]*>(?:.*?)<\/iframe>/gis;
-
-    return html.replace(iframeRegex, (match) => {
-      const openTagMatch = match.match(/<iframe([^>]*)>/i);
-      const attributes = openTagMatch ? openTagMatch[1] : "";
-      const srcMatch = attributes.match(/src\s*=\s*"([^"]+)"/i);
-      const src = srcMatch ? srcMatch[1] : null;
-
-      if (src && (src.includes("youtube.com") || src.includes("youtu.be"))) {
-        return `<div class="glass rounded-3xl p-6 mb-6"><div class="relative w-full pb-[56.25%]"><iframe ${attributes} class="absolute top-0 left-0 w-full h-full rounded-2xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe></div></div>`;
-      }
-      
-      return `<div class="glass rounded-3xl p-6 mb-6 rounded-xl overflow-hidden">${match}</div>`;
-    });
-  };
-
-  const processedContent = wrapIframesInGlass(fullContent);
-  const hasContent = fullContent && fullContent.length > 0;
-
+export default function PostModal({
+  post,
+  isOpen,
+  onClose,
+  fullContent,
+  isLoading = false, // NEW: Default to false
+}: PostModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()} className="modal-stable volumetric-glass z-[60] w-[92vw] max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-white/15 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 p-6">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-white">
-            {post?.title || ""}
-          </DialogTitle>
-          <DialogDescription className="sr-only">
-            {post?.excerpt || ""}
-          </DialogDescription>
-          {post && (
-            <div className="flex items-center gap-4 text-sm text-white/70 mt-2">
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>{new Date(post.published_at).toLocaleDateString()}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                <span>{post.reading_time ?? 0} min read</span>
-              </div>
-            </div>
-          )}
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+        {" "}
+        {/* p-0 to avoid extra padding on content */}
+        <DialogHeader className="p-6 border-b">
+          {" "}
+          {/* Border for separation */}
+          <DialogTitle className="text-2xl font-bold">{post?.title || "Loading Post..."}</DialogTitle>
         </DialogHeader>
-        
-        {hasContent ? (
-          <div 
-            className="prose prose-invert max-w-none mt-6 text-white/90"
-            dangerouslySetInnerHTML={{ __html: processedContent }}
-          />
-        ) : (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-white/70">Loading content...</div>
-          </div>
-        )}
-        
-        {post?.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-white/10">
-            {post.tags.map((tag) => (
-              <Button
-                key={tag.name}
-                variant="outline"
-                size="sm"
-                className="volumetric-glass-button text-white/80"
-              >
-                {tag.name}
-              </Button>
-            ))}
-          </div>
-        )}
+        <div className="p-6 prose prose-invert max-w-none">
+          {" "}
+          {/* Tailwind prose for nice Ghost HTML styling */}
+          {isLoading ? ( // NEW: Loading spinner
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="w-8 h-8 animate-spin text-accent" />
+              <span className="ml-2 text-muted-foreground">Loading post content...</span>
+            </div>
+          ) : (
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  fullContent ||
+                  '<p>No content available. <a href="#" onClick={onClose}>Close and try another post.</a></p>',
+              }}
+            />
+          )}
+        </div>
+        <div className="p-6 pt-0 border-t flex justify-end">
+          {" "}
+          {/* Footer with close button */}
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-accent text-accent-foreground rounded-md hover:bg-accent/90 transition-colors"
+          >
+            Close
+          </button>
+        </div>
       </DialogContent>
     </Dialog>
   );
-};
-
-export default PostModal;
+}
