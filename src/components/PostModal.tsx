@@ -18,7 +18,7 @@ export default function PostModal({
   isLoading = false, // NEW: Default to false
 }: PostModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
         {" "}
         {/* p-0 to avoid extra padding on content */}
