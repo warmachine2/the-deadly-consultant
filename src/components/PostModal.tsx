@@ -19,15 +19,15 @@ export default function PostModal({
 }: PostModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      {/* UPDATED: Matched RoadmapPage panel style - glass-effect, rounded-3xl, p-8, max-w-4xl, mx-auto for centering */}
-      <DialogContent className="max-w-4xl mx-auto max-h-[90vh] overflow-y-auto p-0 glass-effect rounded-3xl">
+      {/* UPDATED: Force glass override - !bg-transparent punches through shadcn solid bg */}
+      <DialogContent className="max-w-4xl mx-auto max-h-[90vh] overflow-y-auto p-0 !bg-transparent glass-effect rounded-3xl border-border/50">
         <DialogHeader className="p-6 border-b">
           {" "}
           {/* Kept light padding for header */}
           <DialogTitle className="text-2xl font-bold">{post?.title || "Loading Post..."}</DialogTitle>
         </DialogHeader>
 
-        {/* UPDATED: Enhanced prose for bigger videos - arbitrary selectors target iframes (e.g., YouTube embeds) */}
+        {/* Prose with bigger videos - unchanged */}
         <div className="p-8 prose prose-invert max-w-none [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:h-96 [&_iframe]:rounded-lg [&_iframe]:shadow-lg">
           {isLoading ? ( // Loading spinner
             <div className="flex justify-center items-center h-64">
