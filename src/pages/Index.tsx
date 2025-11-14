@@ -159,14 +159,11 @@ const Index = () => {
             ) : (
               <>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0">
-                  <RoadmapCard className="w-full max-h-64 md:max-h-none overflow-hidden" />
+                  {" "}
+                  {/* UPDATED: Added w-full to grid container */}
+                  <RoadmapCard /> {/* Prominent teaser tile */}
                   {filteredPosts.map((post) => (
-                    <BlogCard
-                      key={post.id}
-                      post={post}
-                      onClick={() => handlePostClick(post)}
-                      className="w-full h-auto"
-                    />
+                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
                   ))}
                 </div>
 
