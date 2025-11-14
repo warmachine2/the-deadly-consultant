@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Clock, Calendar } from "lucide-react";
 import { BlogPost } from "@/components/BlogCard";
@@ -58,14 +59,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
     console.error("Content loss detected – using original as fallback!");
   }
 
-  // Injected: Safeguard for image URLs post-domain swap (already good, but with lazy loading)
-  const safeFeatureImage = post.feature_image
-    ? post.feature_image.startsWith("http")
-      ? post.feature_image
-      : `https://app.thedeadlyconsultant.com${post.feature_image}`
-    : null;
-
-  console.log("Feature image URL:", safeFeatureImage); // Debug log
+  const [imageError, setImageError] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -73,21 +67,21 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
         <DialogHeader className="p-6 md:p-8">
           <DialogTitle className="text-3xl md:text-5xl font-bold text-foreground mb-4">{post.title}</DialogTitle>
         </DialogHeader>
-        {safeFeatureImage && (
+        {post.feature_image && !imageError ? (
           <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
             <img
-              src={safeFeatureImage}
+              src={post.feature_image}
               alt={post.title}
               className="w-full h-full object-cover"
-              loading="lazy" // Added for better loading
-              onError={(e) => {
-                console.error("Image load failed:", safeFeatureImage);
-                e.currentTarget.style.display = "none"; // Hide broken image
-              }}
-              sizes="(min-width: 768px) 100vw, 50vw" // Responsive sizes
+              loading="lazy"
+              onError={() => setImageError(true)}
             />
           </div>
-        )}
+        ) : post.feature_image ? (
+          <div className="h-64 md:h-96 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center rounded-xl mb-6">
+            <span className="text-6xl">📄</span>
+          </div>
+        ) : null}
         <div className="flex flex-wrap gap-4 mb-6 text-sm text-muted-foreground p-6 md:p-8">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />

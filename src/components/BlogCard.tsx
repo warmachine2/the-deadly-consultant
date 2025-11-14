@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Clock, ArrowRight } from "lucide-react";
 
 export interface BlogPost {
@@ -17,18 +18,21 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, onClick }: BlogCardProps) => {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <article
       onClick={onClick}
       className="glass rounded-2xl overflow-hidden hover-lift cursor-pointer group"
     >
       {/* Image */}
-      {post.feature_image ? (
+      {post.feature_image && !imageError ? (
         <div className="relative h-48 overflow-hidden">
           <img
             src={post.feature_image}
             alt={post.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={() => setImageError(true)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
         </div>
