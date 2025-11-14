@@ -15,15 +15,16 @@ export interface BlogPost {
 interface BlogCardProps {
   post: BlogPost;
   onClick: () => void;
+  className?: string;
 }
 
-const BlogCard = ({ post, onClick }: BlogCardProps) => {
+const BlogCard = ({ post, onClick, className }: BlogCardProps) => {
   const [imageError, setImageError] = useState(false);
 
   return (
     <article
       onClick={onClick}
-      className="volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group min-w-[320px] max-w-[320px] mx-auto md:min-w-0 md:max-w-none md:mx-0"
+      className={`volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group min-w-[320px] max-w-[320px] mx-auto md:min-w-0 md:max-w-none md:mx-0 ${className || ""}`}
     >
       {/* Image */}
       {post.feature_image && !imageError ? (
