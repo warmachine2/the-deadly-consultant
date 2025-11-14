@@ -19,7 +19,7 @@ const Index = () => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [fullContent, setFullContent] = useState<string>("");
-  const [modalLoading, setModalLoading] = useState(false); // NEW: Track modal content loading
+  const [modalLoading, setModalLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -96,49 +96,46 @@ const Index = () => {
     }
   };
 
-  // UPDATED: Wrapped in useCallback, added modalLoading, and micro-delay for state sync
   const handlePostClick = useCallback(async (post: BlogPost) => {
     if (!post || !post.slug) {
-      console.warn("Invalid post clicked:", post); // Debug log
+      console.warn("Invalid post clicked:", post);
       return;
     }
     setSelectedPost(post);
     setModalOpen(true);
-    setFullContent(""); // Reset content
-    setModalLoading(true); // NEW: Show loading in modal
+    setFullContent("");
+    setModalLoading(true);
 
-    // Fetch full content with micro-delay to ensure modal state settles
     setTimeout(async () => {
       try {
         const fullPost = await fetchPostBySlug(post.slug);
         if (fullPost?.html) {
           setFullContent(fullPost.html);
         } else {
-          // Fallback to excerpt if no full content
           setFullContent(`<p>${post.excerpt}</p>`);
         }
       } catch (error) {
         console.error("Error fetching full post:", error);
         setFullContent(`<p>${post.excerpt}</p>`);
       } finally {
-        setModalLoading(false); // NEW: Hide loading
+        setModalLoading(false);
       }
-    }, 0); // Zero-delay queue ensures post-modal-open execution
+    }, 0);
   }, []);
 
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
   };
 
-  // UPDATED: Pass modalLoading to PostModal (use it for a spinner if needed)
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
+      {/* UPDATED: Tighter mobile padding - px-0 for full-width tiles */}
+      <div className="pt-16 md:pt-20 px-0 sm:px-2 md:px-6 pb-8 md:pb-12">
         <HeroSection />
 
-        <div className="flex gap-6 relative">
+        <div className="relative">
           {/* Sidebar */}
           <Sidebar
             isOpen={sidebarOpen}
@@ -157,8 +154,9 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <RoadmapCard /> {/* Prominent teaser tile */}
+                {/* UPDATED: Full-width mobile grid - no max-w, smaller gap, full bleed */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6 w-full">
+                  <RoadmapCard /> {/* Prominent teaser tile - full-width on mobile */}
                   {filteredPosts.map((post) => (
                     <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
                   ))}
@@ -181,7 +179,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Post Modal - UPDATED: Pass modalLoading */}
       <PostModal
         post={selectedPost}
         isOpen={modalOpen}
@@ -192,7 +189,7 @@ const Index = () => {
           setModalLoading(false);
         }}
         fullContent={fullContent}
-        isLoading={modalLoading} // NEW: Pass loading state (handle in PostModal if needed)
+        isLoading={modalLoading}
       />
 
       {/* Footer */}
