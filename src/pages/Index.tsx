@@ -139,21 +139,19 @@ const Index = () => {
         {" "}
         {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
         <HeroSection />
-        <div className="flex gap-6 relative">
-          {/* Sidebar */}
-          <Sidebar
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            selectedTags={selectedTags}
-            onTagToggle={handleTagToggle}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          selectedTags={selectedTags}
+          onTagToggle={handleTagToggle}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
+        <div className="relative">
           {/* Main Content */}
-          <main className="flex-1 min-w-0 overflow-x-hidden">
+          <main className="flex-1 min-w-0 md:ml-64">
             {" "}
-            {/* UPDATED: Added overflow-x-hidden to prevent horizontal scroll */}
+            {/* UPDATED: md:ml-64 to shift on desktop */}
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
                 <Loader2 className="w-8 h-8 text-accent animate-spin" />
