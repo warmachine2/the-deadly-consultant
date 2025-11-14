@@ -63,7 +63,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto volumetric-glass p-0">
+      <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto volumetric-glass p-0 hover:transform-none">
         <DialogHeader className="p-6 md:p-8">
           <DialogTitle className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">{post.title}</DialogTitle>
         </DialogHeader>
