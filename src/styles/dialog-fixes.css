@@ -16,10 +16,10 @@
 .modal-stable {
   will-change: auto;
   transition-property: box-shadow, background-color, border-color, opacity !important;
+  transform: translate(-50%, -50%) !important;
 }
 .modal-stable:hover {
   border-width: 1px !important;
-  /* Preserve centering transform, just prevent hover scale changes */
   transform: translate(-50%, -50%) scale(1) !important;
 }
 
