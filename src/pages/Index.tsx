@@ -134,23 +134,24 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        selectedTags={selectedTags}
-        onTagToggle={handleTagToggle}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-      />
 
-      <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
+      <div className="pt-16 px-4 md:px-6 pb-12">
+        {" "}
+        {/* UPDATED: Unified pt-16 for snug fit under nav */}
         <HeroSection />
-
         <div className="flex gap-6 relative">
+          {/* Sidebar */}
+          <Sidebar
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            selectedTags={selectedTags}
+            onTagToggle={handleTagToggle}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
+
           {/* Main Content */}
-          <main className="flex-1 min-w-0 md:ml-64">
-            {" "}
-            {/* ADDED: md:ml-64 to shift main content when sidebar is visible on desktop */}
+          <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
                 <Loader2 className="w-8 h-8 text-accent animate-spin" />
