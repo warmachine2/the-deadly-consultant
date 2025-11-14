@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,87 +10,118 @@ interface SidebarProps {
   onCategoryChange: (category: string) => void;
 }
 
-const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory, onCategoryChange }: SidebarProps) => {
-  // Sample tags/categories - replace with your dynamic ones if needed
-  const tags = ["AI", "FinTech", "Consulting", "Roadmap"];
-  const categories = ["All Posts", "Tutorials", "Case Studies"];
+const tags = ["PMP Certs", "AI-Proof", "Tools", "Career Pivot", "BI Analytics", "FinTech"];
+const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden"; // Prevent body scroll when open
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
+const Sidebar = ({
+  isOpen,
+  onClose,
+  selectedTags,
+  onTagToggle,
+  selectedCategory,
+  onCategoryChange,
+}: SidebarProps) => {
+  const [showTags, setShowTags] = useState(true);
+  const [showCategories, setShowCategories] = useState(true);
 
   return (
     <>
-      {/* Mobile Backdrop */}
+      {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={onClose} // Click outside to close
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
+          onClick={onClose}
         />
       )}
 
-      {/* Sidebar Panel */}
+      {/* Sidebar */}
       <aside
         className={`
-        fixed inset-y-0 left-0 z-50 w-80 bg-background/95 backdrop-blur-md border-r transform 
-        transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-64
-        ${isOpen ? "translate-x-0" : "translate-x-[-100%]"}
-      `}
+          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
+          w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
+          transition-transform duration-300 overflow-y-auto
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        `}
       >
-        <div className="h-full flex flex-col p-4 relative">
-          {" "}
-          {/* NEW: relative for absolute "X" */}
-          {/* UPDATED: "X" Button - absolute top-right, fixed placement, no flex mess */}
+        {/* Close button for mobile */}
+        <button
+          onClick={onClose}
+          className="md:hidden absolute top-4 right-4 p-4 rounded-2xl volumetric-glass-button"
+          aria-label="Close sidebar"
+        >
+          <X className="w-5 h-5 text-white" />
+        </button>
+
+        <h2 className="text-lg font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">Filters</h2>
+
+        {/* Categories */}
+        <div className="mb-6">
           <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full hover:bg-accent/10 lg:hidden z-10"
+            onClick={() => setShowCategories(!showCategories)}
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
           >
-            <X className="w-5 h-5" />
+            Categories
+            <ChevronDown
+              className={`w-4 h-4 transition-transform text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] ${
+                showCategories ? "rotate-180" : ""
+              }`}
+            />
           </button>
-          {/* Header for Desktop */}
-          <div className="lg:mb-4 lg:hidden:hidden">
-            {" "}
-            {/* Hide mobile header since "X" is separate */}
-            <h2 className="text-xl font-bold">Filters</h2>
-          </div>
-          {/* Categories */}
-          <div className="mb-6">
-            <h3 className="font-semibold mb-2">Categories</h3>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => onCategoryChange(cat)}
-                className={`w-full text-left py-2 px-3 rounded-md mb-1 transition-colors ${
-                  selectedCategory === cat ? "bg-accent text-accent-foreground" : "hover:bg-muted"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          {/* Tags */}
-          <div>
-            <h3 className="font-semibold mb-2">Tags</h3>
-            {tags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => onTagToggle(tag)}
-                className={`inline-flex items-center py-1 px-2 mr-2 mb-2 rounded-full text-sm transition-colors ${
-                  selectedTags.includes(tag) ? "bg-accent text-accent-foreground" : "bg-muted hover:bg-accent/10"
-                }`}
-              >
-                {tag}
-                {selectedTags.includes(tag) && <span className="ml-1">✓</span>}
-              </button>
-            ))}
-          </div>
+          {showCategories && (
+            <div className="flex flex-col gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => onCategoryChange(category)}
+                  className={`
+                    w-full text-left px-4 py-4 rounded-2xl text-sm font-medium transition-all
+                    ${
+                      selectedCategory === category
+                        ? "volumetric-glass-active text-white"
+                        : "volumetric-glass-button text-white/80"
+                    }
+                  `}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Tags */}
+        <div>
+          <button
+            onClick={() => setShowTags(!showTags)}
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
+          >
+            Tags
+            <ChevronDown
+              className={`w-4 h-4 transition-transform text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] ${
+                showTags ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {showTags && (
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => onTagToggle(tag)}
+                  className={`
+                    px-4 py-4 rounded-2xl text-xs font-medium italic transition-all
+                    ${
+                      selectedTags.includes(tag)
+                        ? "volumetric-glass-active text-white"
+                        : "volumetric-glass-button text-white/80"
+                    }
+                  `}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </aside>
     </>
