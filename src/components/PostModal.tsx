@@ -13,7 +13,6 @@ interface PostModalProps {
 }
 
 const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
-  if (!post) return null;
 
   const wrapIframesInGlass = (html: string): string => {
     if (!html) return html;
@@ -41,22 +40,24 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent className="modal-stable volumetric-glass max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border-white/15">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-            {post.title}
+          <DialogTitle className="text-2xl font-bold text-white">
+            {post?.title || ""}
           </DialogTitle>
           <DialogDescription className="sr-only">
-            {post.excerpt}
+            {post?.excerpt || ""}
           </DialogDescription>
-          <div className="flex items-center gap-4 text-sm text-white/70 mt-2">
-            <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              <span>{new Date(post.published_at).toLocaleDateString()}</span>
+          {post && (
+            <div className="flex items-center gap-4 text-sm text-white/70 mt-2">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <span>{new Date(post.published_at).toLocaleDateString()}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                <span>{post.reading_time ?? 0} min read</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              <span>{post.reading_time} min read</span>
-            </div>
-          </div>
+          )}
         </DialogHeader>
         
         {hasContent ? (
@@ -70,7 +71,7 @@ const PostModal = ({ post, isOpen, onClose, fullContent }: PostModalProps) => {
           </div>
         )}
         
-        {post.tags && post.tags.length > 0 && (
+        {post?.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-white/10">
             {post.tags.map((tag) => (
               <Button
