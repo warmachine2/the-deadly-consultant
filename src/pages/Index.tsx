@@ -135,9 +135,9 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-16 px-4 md:px-6 pb-12">
+      <div className="pt-16 px-0 md:px-6 pb-12">
         {" "}
-        {/* UPDATED: Unified pt-16 for snug fit under nav */}
+        {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
         <HeroSection />
         <div className="flex gap-6 relative">
           {/* Sidebar */}
@@ -158,7 +158,9 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
+                  {" "}
+                  {/* UPDATED: px-4 on mobile to push content left, md:px-0 for desktop */}
                   <RoadmapCard /> {/* Prominent teaser tile */}
                   {filteredPosts.map((post) => (
                     <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
