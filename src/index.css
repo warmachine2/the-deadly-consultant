@@ -96,20 +96,29 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    /* Saved overlay gradients - uncomment to restore:
-      radial-gradient(circle at 15% 25%, hsla(220, 80%, 45%, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 85% 15%, hsla(200, 85%, 50%, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 45% 75%, hsla(240, 70%, 45%, 0.15) 0%, transparent 55%),
-      radial-gradient(circle at 90% 80%, hsla(190, 80%, 50%, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 10% 85%, hsla(230, 75%, 45%, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 60% 40%, hsla(210, 75%, 50%, 0.15) 0%, transparent 60%),
-      linear-gradient(135deg, hsla(220, 60%, 12%, 0.4) 0%, hsla(230, 55%, 14%, 0.4) 100%),
-    */
     background: url('/optical-fiber-background.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    filter: blur(8px);
     z-index: -3;
+  }
+  
+  /* Floating teal orbs overlay */
+  body > #root::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(20, 184, 166, 0.3) 0%, transparent 25%),
+      radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.25) 0%, transparent 25%),
+      radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.2) 0%, transparent 30%);
+    animation: float-orbs 6s ease-in-out infinite;
+    z-index: -2;
+    pointer-events: none;
   }
   
   body::after {
@@ -123,8 +132,27 @@ All colors MUST be HSL.
       repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px),
       repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px);
     opacity: 0.8;
-    z-index: -2;
+    z-index: -1;
     pointer-events: none;
+  }
+  
+  @keyframes float-orbs {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.3;
+    }
+    25% {
+      transform: translate(20px, -30px) scale(1.1);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translate(-15px, -50px) scale(0.9);
+      opacity: 0.35;
+    }
+    75% {
+      transform: translate(30px, -20px) scale(1.05);
+      opacity: 0.4;
+    }
   }
 }
 
