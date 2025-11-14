@@ -153,7 +153,7 @@ const Index = () => {
                 </div>
 
                 {filteredPosts.length === 0 && !loading && (
-                  <div className="frosted-glass-subtle rounded-3xl p-12 text-center">
+                  <div className="glass-effect rounded-3xl p-12 text-center">
                     <p className="text-xl text-muted-foreground">No posts found. Try adjusting your filters.</p>
                   </div>
                 )}
@@ -182,7 +182,7 @@ const Index = () => {
       />
 
       {/* Footer */}
-      <footer className="frosted-glass-subtle rounded-t-3xl mt-12 py-6 px-6">
+      <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
         </div>
