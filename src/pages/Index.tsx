@@ -158,17 +158,9 @@ const Index = () => {
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div className="w-full min-h-[450px] flex flex-col">
-                    {" "}
-                    {/* UPDATED: Fixed min-h-[450px] to match desktop size, flex-col to stretch content without shrinking */}
-                    <RoadmapCard /> {/* Prominent teaser tile */}
-                  </div>
+                  <RoadmapCard /> {/* Prominent teaser tile */}
                   {filteredPosts.map((post) => (
-                    <div key={post.id} className="w-full min-h-[450px] flex flex-col">
-                      {" "}
-                      {/* UPDATED: Fixed min-h-[450px] to match desktop size, flex-col to stretch content without shrinking */}
-                      <BlogCard post={post} onClick={() => handlePostClick(post)} />
-                    </div>
+                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
                   ))}
                 </div>
 
