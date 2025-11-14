@@ -19,6 +19,7 @@ const Index = () => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [fullContent, setFullContent] = useState<string>("");
+  const [modalLoading, setModalLoading] = useState(false); // NEW: Track modal content loading
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -95,30 +96,41 @@ const Index = () => {
     }
   };
 
-  const handlePostClick = async (post: BlogPost) => {
+  // UPDATED: Wrapped in useCallback, added modalLoading, and micro-delay for state sync
+  const handlePostClick = useCallback(async (post: BlogPost) => {
+    if (!post || !post.slug) {
+      console.warn("Invalid post clicked:", post); // Debug log
+      return;
+    }
     setSelectedPost(post);
     setModalOpen(true);
     setFullContent(""); // Reset content
+    setModalLoading(true); // NEW: Show loading in modal
 
-    // Fetch full content
-    try {
-      const fullPost = await fetchPostBySlug(post.slug);
-      if (fullPost?.html) {
-        setFullContent(fullPost.html);
-      } else {
-        // Fallback to excerpt if no full content
+    // Fetch full content with micro-delay to ensure modal state settles
+    setTimeout(async () => {
+      try {
+        const fullPost = await fetchPostBySlug(post.slug);
+        if (fullPost?.html) {
+          setFullContent(fullPost.html);
+        } else {
+          // Fallback to excerpt if no full content
+          setFullContent(`<p>${post.excerpt}</p>`);
+        }
+      } catch (error) {
+        console.error("Error fetching full post:", error);
         setFullContent(`<p>${post.excerpt}</p>`);
+      } finally {
+        setModalLoading(false); // NEW: Hide loading
       }
-    } catch (error) {
-      console.error("Error fetching full post:", error);
-      setFullContent(`<p>${post.excerpt}</p>`);
-    }
-  };
+    }, 0); // Zero-delay queue ensures post-modal-open execution
+  }, []);
 
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
   };
 
+  // UPDATED: Pass modalLoading to PostModal (use it for a spinner if needed)
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
@@ -169,7 +181,7 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Post Modal */}
+      {/* Post Modal - UPDATED: Pass modalLoading */}
       <PostModal
         post={selectedPost}
         isOpen={modalOpen}
@@ -177,8 +189,10 @@ const Index = () => {
           setModalOpen(false);
           setSelectedPost(null);
           setFullContent("");
+          setModalLoading(false);
         }}
         fullContent={fullContent}
+        isLoading={modalLoading} // NEW: Pass loading state (handle in PostModal if needed)
       />
 
       {/* Footer */}
