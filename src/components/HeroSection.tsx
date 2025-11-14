@@ -1,6 +1,6 @@
 const HeroSection = () => {
   return (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8 hover-lift relative bg-cover bg-center bg-[url('/optical-fiber-background[1].jpg')]">
+    <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8 hover-lift relative bg-cover bg-center bg-[url('/optical-fiber-background.jpg')]">
       {" "}
       {/* UPDATED: Swapped to your new photo name - covers full section, centered */}
       <div className="max-w-4xl mx-auto text-center">
