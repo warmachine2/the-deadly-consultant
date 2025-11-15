@@ -89,7 +89,7 @@ All colors MUST be HSL.
     font-family: 'Play', sans-serif;
   }
   
-  /* Cyberpunk cityscape background with strong blur */
+  /* Mesh gradient background with bokeh highlights */
   body::before {
     content: '';
     position: fixed;
@@ -97,13 +97,12 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/cyberpunk-cityscape.jpg') no-repeat center center fixed;
+    background: url('/gradient-spheres-background.jpg') no-repeat center center fixed;
     background-size: cover;
-    filter: blur(25px);
     z-index: -4;
   }
 
-  /* Bokeh orbs layer - soft glowing spots */
+  /* Bokeh highlights layer */
   body::after {
     content: '';
     position: fixed;
@@ -112,22 +111,23 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background-image: 
-      radial-gradient(circle at 15% 20%, rgba(138, 43, 226, 0.15) 0%, transparent 12%),
-      radial-gradient(circle at 85% 30%, rgba(255, 20, 147, 0.12) 0%, transparent 15%),
-      radial-gradient(circle at 40% 70%, rgba(0, 191, 255, 0.1) 0%, transparent 10%),
-      radial-gradient(circle at 70% 85%, rgba(138, 43, 226, 0.12) 0%, transparent 13%),
-      radial-gradient(circle at 25% 50%, rgba(255, 20, 147, 0.1) 0%, transparent 11%),
-      radial-gradient(circle at 90% 60%, rgba(0, 191, 255, 0.15) 0%, transparent 14%),
-      radial-gradient(circle at 50% 90%, rgba(138, 43, 226, 0.1) 0%, transparent 12%),
-      radial-gradient(circle at 10% 75%, rgba(255, 20, 147, 0.12) 0%, transparent 10%);
-    filter: blur(50px);
-    opacity: 0.6;
+      radial-gradient(circle at 15% 20%, rgba(0, 255, 255, 0.15) 0%, transparent 8%),
+      radial-gradient(circle at 85% 30%, rgba(255, 0, 255, 0.15) 0%, transparent 10%),
+      radial-gradient(circle at 40% 60%, rgba(0, 255, 255, 0.12) 0%, transparent 6%),
+      radial-gradient(circle at 70% 80%, rgba(255, 0, 255, 0.12) 0%, transparent 7%),
+      radial-gradient(circle at 25% 85%, rgba(0, 255, 255, 0.1) 0%, transparent 9%),
+      radial-gradient(circle at 90% 60%, rgba(255, 0, 255, 0.1) 0%, transparent 8%),
+      radial-gradient(circle at 50% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 5%),
+      repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px),
+      repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px);
+    filter: blur(40px);
+    opacity: 0.8;
     z-index: -2;
     pointer-events: none;
     animation: bokeh-float 20s ease-in-out infinite;
   }
 
-  /* Radial mesh gradient overlay from center - teal/purple */
+  /* Mesh blur overlay for fluid motion */
   body > #root::before {
     content: '';
     position: fixed;
@@ -136,11 +136,9 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(ellipse at 50% 50%, rgba(0, 191, 255, 0.25) 0%, transparent 60%),
-      radial-gradient(ellipse at 35% 45%, rgba(138, 43, 226, 0.3) 0%, transparent 55%),
-      radial-gradient(ellipse at 65% 55%, rgba(255, 20, 147, 0.25) 0%, transparent 50%);
-    filter: blur(80px);
-    opacity: 0.5;
+      radial-gradient(ellipse at 30% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(255, 0, 255, 0.08) 0%, transparent 50%);
+    filter: blur(60px);
     z-index: -1;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
