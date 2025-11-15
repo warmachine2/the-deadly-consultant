@@ -208,7 +208,7 @@ const Index = () => {
         </footer>
       </div>
 
-      <style jsx global>{`
+      <style>{`
         .glass-effect {
           background: rgba(255, 255, 255, 0.32);
           border: 1px solid rgba(255, 255, 255, 0.5);
