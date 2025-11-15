@@ -134,7 +134,9 @@ const Index = () => {
   return (
     <>
       <div className="min-h-screen">
-        <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <div className="glass-effect">
+          <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        </div>
 
         <div className="pt-16 px-0 md:px-6 pb-12">
           {" "}
@@ -144,14 +146,26 @@ const Index = () => {
             {" "}
             {/* UPDATED: Added mt-0 to remove vertical space */}
             {/* Sidebar */}
-            <Sidebar
-              isOpen={sidebarOpen}
-              onClose={() => setSidebarOpen(false)}
-              selectedTags={selectedTags}
-              onTagToggle={handleTagToggle}
-              selectedCategory={selectedCategory}
-              onCategoryChange={setSelectedCategory}
-            />
+            <div className="glass-effect md:block hidden">
+              <Sidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+                selectedTags={selectedTags}
+                onTagToggle={handleTagToggle}
+                selectedCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+              />
+            </div>
+            <div className="glass-effect block md:hidden">
+              <Sidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+                selectedTags={selectedTags}
+                onTagToggle={handleTagToggle}
+                selectedCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+              />
+            </div>
             {/* Main Content */}
             <main className="flex-1 min-w-0">
               {loading && posts.length === 0 ? (
@@ -201,9 +215,9 @@ const Index = () => {
         />
 
         {/* Footer */}
-        <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
-          <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
-            <p>© 2025 The Deadly Consultant. All rights reserved.</p>
+        <footer className="rounded-t-3xl mt-12 py-6 px-6">
+          <div className="max-w-7xl mx-auto text-center text-sm">
+            <p className="text-white">© 2025 The Deadly Consultant. All rights reserved.</p>
           </div>
         </footer>
       </div>
