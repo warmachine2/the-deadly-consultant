@@ -97,7 +97,7 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/teal-circuit-bg.jpg') no-repeat center center fixed;
+    background: url('/teal-circuit-bg.png') no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
