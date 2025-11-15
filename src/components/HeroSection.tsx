@@ -14,7 +14,7 @@ const HeroSection = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
           Full Stack Training to Become a 10k/mo+ BI-FinTech PM Consultant
         </h1>
-        <p className="text-lg md:text-xl mb-6 text-[#95DCD9]">
+        <p className="text-lg md:text-xl mb-6 text-[#A0B0C0]">
           Explore career paths, essential tools, and inspiring success stories
         </p>
       </div>
