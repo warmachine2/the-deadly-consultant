@@ -89,7 +89,7 @@ All colors MUST be HSL.
     font-family: 'Play', sans-serif;
   }
   
-  /* Teal bokeh background */
+  /* Neon portal background */
   body::before {
     content: '';
     position: fixed;
@@ -97,12 +97,12 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/teal-bokeh-bg.jpg') no-repeat center center fixed;
+    background: url('/neon-portal-bg.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
 
-  /* Slight gradient mesh overlay for subtle depth */
+  /* Mesh gradient with gaussian blur effect */
   body::after {
     content: '';
     position: fixed;
@@ -111,10 +111,12 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(ellipse at 30% 40%, rgba(0, 120, 120, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 60%, rgba(0, 150, 150, 0.06) 0%, transparent 48%),
-      radial-gradient(ellipse at 50% 80%, rgba(0, 180, 180, 0.05) 0%, transparent 45%);
-    opacity: 0.12;
+      radial-gradient(ellipse at 30% 35%, rgba(255, 0, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 65%, rgba(138, 43, 226, 0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(0, 150, 255, 0.12) 0%, transparent 48%),
+      radial-gradient(ellipse at 40% 75%, rgba(255, 0, 180, 0.14) 0%, transparent 52%);
+    opacity: 0.25;
+    filter: blur(40px);
     z-index: -2;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
