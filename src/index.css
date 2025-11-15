@@ -157,11 +157,11 @@ All colors MUST be HSL.
 
   /* Frosted glass effects */
   .volumetric-glass {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -176,16 +176,16 @@ All colors MUST be HSL.
 
   .volumetric-glass:hover {
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 8px 32px rgba(0, 0, 0, 0.25),
       0 0 20px rgba(59, 130, 246, 0.25);
   }
 
   .volumetric-glass-button {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -194,25 +194,25 @@ All colors MUST be HSL.
   .volumetric-glass-button:hover {
     transform: translateY(-2px);
     box-shadow: 
-      0 6px 24px rgba(0, 0, 0, 0.3),
+      0 6px 24px rgba(0, 0, 0, 0.2),
       0 0 20px rgba(255, 255, 255, 0.3);
   }
 
   .volumetric-glass-active {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 1);
     box-shadow: 
-      0 4px 20px rgba(255, 255, 255, 0.4),
-      0 0 20px rgba(255, 255, 255, 0.4);
+      0 4px 20px rgba(255, 255, 255, 0.3),
+      0 0 20px rgba(255, 255, 255, 0.3);
     position: relative;
   }
 
   
   .frosted-glass-subtle {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(3px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   }
   
   /* Prose styling for Ghost content on dark backgrounds */
