@@ -211,7 +211,7 @@ const Index = () => {
       <style>{`
         .glass-effect {
           background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.18);
+          border: 2px solid rgba(255, 255, 255, 0.8);
           box-shadow: 0 8px 32px 0 rgba(31, 22, 141, 0.37);
           border-radius: 28px;
           backdrop-filter: blur(20px);
