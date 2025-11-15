@@ -81,7 +81,7 @@ const RoadmapCard = ({ className }: { className?: string }) => {
           {teaser.title}
         </h3>
         
-        <p className="text-sm mb-6 line-clamp-3 bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent">
+        <p className="text-sm mb-6 line-clamp-3 text-[#95DCD9]">
           {teaser.excerpt}
         </p>
 
