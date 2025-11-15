@@ -210,12 +210,12 @@ const Index = () => {
 
       <style>{`
         .glass-effect {
-          background: rgba(255, 255, 255, 0.45);
-          border: 1px solid rgba(255, 255, 255, 0.5);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 8px 32px 0 rgba(31, 22, 141, 0.37);
           border-radius: 28px;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
         }
       `}</style>
     </>
