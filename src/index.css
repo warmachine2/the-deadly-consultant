@@ -89,7 +89,7 @@ All colors MUST be HSL.
     font-family: 'Play', sans-serif;
   }
   
-  /* Mesh gradient background with bokeh highlights */
+  /* Tech wave background */
   body::before {
     content: '';
     position: fixed;
@@ -97,12 +97,12 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/gradient-spheres-background.jpg') no-repeat center center fixed;
+    background: url('/tech-background.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
 
-  /* Bokeh highlights layer */
+  /* Subtle mesh gradient overlay */
   body::after {
     content: '';
     position: fixed;
@@ -110,48 +110,17 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-      radial-gradient(circle at 15% 20%, rgba(0, 255, 255, 0.15) 0%, transparent 8%),
-      radial-gradient(circle at 85% 30%, rgba(255, 0, 255, 0.15) 0%, transparent 10%),
-      radial-gradient(circle at 40% 60%, rgba(0, 255, 255, 0.12) 0%, transparent 6%),
-      radial-gradient(circle at 70% 80%, rgba(255, 0, 255, 0.12) 0%, transparent 7%),
-      radial-gradient(circle at 25% 85%, rgba(0, 255, 255, 0.1) 0%, transparent 9%),
-      radial-gradient(circle at 90% 60%, rgba(255, 0, 255, 0.1) 0%, transparent 8%),
-      radial-gradient(circle at 50% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 5%),
-      repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px),
-      repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px);
-    filter: blur(40px);
-    opacity: 0.8;
-    z-index: -2;
-    pointer-events: none;
-    animation: bokeh-float 20s ease-in-out infinite;
-  }
-
-  /* Mesh blur overlay for fluid motion */
-  body > #root::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     background: 
-      radial-gradient(ellipse at 30% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 60%, rgba(255, 0, 255, 0.08) 0%, transparent 50%);
-    filter: blur(60px);
-    z-index: -1;
+      radial-gradient(ellipse at 30% 40%, rgba(0, 255, 255, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(138, 43, 226, 0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 20%, rgba(0, 255, 255, 0.08) 0%, transparent 40%);
+    opacity: 0.15;
+    z-index: -2;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
   }
 
-  @keyframes bokeh-float {
-    0%, 100% {
-      transform: translateY(0) scale(1);
-    }
-    50% {
-      transform: translateY(-20px) scale(1.05);
-    }
-  }
+
 
   @keyframes mesh-float {
     0% {
