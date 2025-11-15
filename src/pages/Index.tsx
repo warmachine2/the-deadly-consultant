@@ -132,80 +132,93 @@ const Index = () => {
 
   // UPDATED: Pass modalLoading to PostModal (use it for a spinner if needed)
   return (
-    <div className="min-h-screen">
-      <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+    <>
+      <div className="min-h-screen">
+        <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-16 px-0 md:px-6 pb-12">
-        {" "}
-        {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
-        <HeroSection />
-        <div className="flex flex-col md:flex-row gap-6 relative mt-0">
+        <div className="pt-16 px-0 md:px-6 pb-12">
           {" "}
-          {/* UPDATED: Added mt-0 to remove vertical space */}
-          {/* Sidebar */}
-          <Sidebar
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            selectedTags={selectedTags}
-            onTagToggle={handleTagToggle}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-          {/* Main Content */}
-          <main className="flex-1 min-w-0">
-            {loading && posts.length === 0 ? (
-              <div className="flex justify-center items-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 text-accent animate-spin" />
-              </div>
-            ) : (
-              <>
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0">
-                  {" "}
-                  {/* UPDATED: Added w-full to grid container */}
-                  <RoadmapCard /> {/* Prominent teaser tile */}
-                  {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
-                  ))}
+          {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
+          <HeroSection />
+          <div className="flex flex-col md:flex-row gap-6 relative mt-0">
+            {" "}
+            {/* UPDATED: Added mt-0 to remove vertical space */}
+            {/* Sidebar */}
+            <Sidebar
+              isOpen={sidebarOpen}
+              onClose={() => setSidebarOpen(false)}
+              selectedTags={selectedTags}
+              onTagToggle={handleTagToggle}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+            />
+            {/* Main Content */}
+            <main className="flex-1 min-w-0">
+              {loading && posts.length === 0 ? (
+                <div className="flex justify-center items-center min-h-[400px]">
+                  <Loader2 className="w-8 h-8 text-accent animate-spin" />
                 </div>
-
-                {filteredPosts.length === 0 && !loading && (
-                  <div className="glass-effect rounded-3xl p-12 text-center">
-                    <p className="text-xl text-muted-foreground">No posts found. Try adjusting your filters.</p>
+              ) : (
+                <>
+                  <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0">
+                    {" "}
+                    {/* UPDATED: Added w-full to grid container */}
+                    <RoadmapCard /> {/* Prominent teaser tile */}
+                    {filteredPosts.map((post) => (
+                      <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
+                    ))}
                   </div>
-                )}
 
-                {loading && posts.length > 0 && (
-                  <div className="flex justify-center mt-8">
-                    <Loader2 className="w-6 h-6 text-accent animate-spin" />
-                  </div>
-                )}
-              </>
-            )}
-          </main>
+                  {filteredPosts.length === 0 && !loading && (
+                    <div className="glass-effect rounded-3xl p-12 text-center">
+                      <p className="text-xl text-muted-foreground">No posts found. Try adjusting your filters.</p>
+                    </div>
+                  )}
+
+                  {loading && posts.length > 0 && (
+                    <div className="flex justify-center mt-8">
+                      <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                    </div>
+                  )}
+                </>
+              )}
+            </main>
+          </div>
         </div>
+
+        {/* Post Modal - UPDATED: Pass modalLoading */}
+        <PostModal
+          post={selectedPost}
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedPost(null);
+            setFullContent("");
+            setModalLoading(false);
+          }}
+          fullContent={fullContent}
+          isLoading={modalLoading} // NEW: Pass loading state (handle in PostModal if needed)
+        />
+
+        {/* Footer */}
+        <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
+          <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
+            <p>© 2025 The Deadly Consultant. All rights reserved.</p>
+          </div>
+        </footer>
       </div>
 
-      {/* Post Modal - UPDATED: Pass modalLoading */}
-      <PostModal
-        post={selectedPost}
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setSelectedPost(null);
-          setFullContent("");
-          setModalLoading(false);
-        }}
-        fullContent={fullContent}
-        isLoading={modalLoading} // NEW: Pass loading state (handle in PostModal if needed)
-      />
-
-      {/* Footer */}
-      <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
-        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2025 The Deadly Consultant. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+      <style jsx global>{`
+        .glass-effect {
+          background: rgba(255, 255, 255, 0.32);
+          border: 1px solid rgba(255, 255, 255, 0.5);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          border-radius: 28px;
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+        }
+      `}</style>
+    </>
   );
 };
 
