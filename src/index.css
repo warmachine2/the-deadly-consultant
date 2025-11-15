@@ -155,15 +155,50 @@ All colors MUST be HSL.
     box-shadow: 0 0 20px hsla(0, 0%, 100%, 0.3);
   }
 
-  /* Frosted glass effects */
+  /* Frosted glass effects with gradient mesh and texture */
   .volumetric-glass {
     background: rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     border: 2.5px solid rgba(255, 255, 255, 0.45);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Gradient mesh blur overlay */
+  .volumetric-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(107, 79, 168, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(74, 123, 167, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Frosted glass texture overlay */
+  .volumetric-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px);
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Ensure content appears above overlays */
+  .volumetric-glass > * {
+    position: relative;
+    z-index: 3;
   }
 
   /* Modal variant with better visibility */
@@ -172,7 +207,6 @@ All colors MUST be HSL.
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
   }
-
 
   .volumetric-glass:hover {
     box-shadow: 
@@ -190,6 +224,23 @@ All colors MUST be HSL.
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Gradient mesh for buttons */
+  .volumetric-glass-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: 
+      radial-gradient(circle at 30% 40%, rgba(107, 79, 168, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(74, 123, 167, 0.12) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .volumetric-glass-button > * {
+    position: relative;
+    z-index: 2;
+  }
 
   .volumetric-glass-button:hover {
     transform: translateY(-2px);
@@ -207,12 +258,63 @@ All colors MUST be HSL.
     position: relative;
   }
 
+  .volumetric-glass-active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: 
+      radial-gradient(circle at 25% 35%, rgba(107, 79, 168, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 75% 65%, rgba(74, 123, 167, 0.18) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .volumetric-glass-active > * {
+    position: relative;
+    z-index: 2;
+  }
+
   
   .frosted-glass-subtle {
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 2.5px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    position: relative;
+  }
+
+  .frosted-glass-subtle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(107, 79, 168, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(74, 123, 167, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.1) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .frosted-glass-subtle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .frosted-glass-subtle > * {
+    position: relative;
+    z-index: 3;
   }
   
   /* Prose styling for Ghost content on dark backgrounds */
