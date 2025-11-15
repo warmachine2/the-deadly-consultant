@@ -89,7 +89,7 @@ All colors MUST be HSL.
     font-family: 'Play', sans-serif;
   }
   
-  /* Vibrant gradient orbs background */
+  /* Teal bokeh background */
   body::before {
     content: '';
     position: fixed;
@@ -97,12 +97,12 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/wave-lines-bg.jpg') no-repeat center center fixed;
+    background: url('/teal-bokeh-bg.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
 
-  /* Subtle cyan/teal mesh gradient overlay for soft diffusion */
+  /* Slight gradient mesh overlay for subtle depth */
   body::after {
     content: '';
     position: fixed;
@@ -111,11 +111,10 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(ellipse at 25% 35%, rgba(0, 255, 255, 0.14) 0%, transparent 45%),
-      radial-gradient(ellipse at 75% 65%, rgba(0, 200, 200, 0.12) 0%, transparent 48%),
-      radial-gradient(ellipse at 50% 50%, rgba(0, 255, 255, 0.10) 0%, transparent 42%),
-      radial-gradient(ellipse at 30% 75%, rgba(0, 220, 220, 0.11) 0%, transparent 40%);
-    opacity: 0.15;
+      radial-gradient(ellipse at 30% 40%, rgba(0, 120, 120, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(0, 150, 150, 0.06) 0%, transparent 48%),
+      radial-gradient(ellipse at 50% 80%, rgba(0, 180, 180, 0.05) 0%, transparent 45%);
+    opacity: 0.12;
     z-index: -2;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
