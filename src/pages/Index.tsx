@@ -134,29 +134,19 @@ const Index = () => {
   return (
     <>
       <div className="min-h-screen">
-        <div className="glass-effect">
-          <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        </div>
+        <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
         <div className="pt-16 px-0 md:px-6 pb-12">
           {" "}
           {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
-          <HeroSection />
+          <div className="glass-effect">
+            <HeroSection />
+          </div>
           <div className="flex flex-col md:flex-row gap-6 relative mt-0">
             {" "}
             {/* UPDATED: Added mt-0 to remove vertical space */}
             {/* Sidebar */}
-            <div className="glass-effect md:block hidden">
-              <Sidebar
-                isOpen={sidebarOpen}
-                onClose={() => setSidebarOpen(false)}
-                selectedTags={selectedTags}
-                onTagToggle={handleTagToggle}
-                selectedCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-              />
-            </div>
-            <div className="glass-effect block md:hidden">
+            <div className="glass-effect">
               <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
@@ -174,10 +164,11 @@ const Index = () => {
                 </div>
               ) : (
                 <>
-                  <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0">
+                  <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0 glass-effect">
                     {" "}
-                    {/* UPDATED: Added w-full to grid container */}
-                    <RoadmapCard /> {/* Prominent teaser tile */}
+                    {/* UPDATED: Added w-full to grid container and glass-effect for content tiles container */}
+                    <RoadmapCard />{" "}
+                    {/* Prominent teaser tile - assume it gets the effect from parent or edit component */}
                     {filteredPosts.map((post) => (
                       <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
                     ))}
