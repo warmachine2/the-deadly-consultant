@@ -102,7 +102,7 @@ All colors MUST be HSL.
     z-index: -4;
   }
 
-  /* Mesh gradient with gaussian blur effect */
+  /* Mesh gradient with strong gaussian blur effect */
   body::after {
     content: '';
     position: fixed;
@@ -111,12 +111,12 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(ellipse at 30% 35%, rgba(255, 0, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 65%, rgba(138, 43, 226, 0.18) 0%, transparent 55%),
-      radial-gradient(ellipse at 50% 50%, rgba(0, 150, 255, 0.12) 0%, transparent 48%),
-      radial-gradient(ellipse at 40% 75%, rgba(255, 0, 180, 0.14) 0%, transparent 52%);
-    opacity: 0.25;
-    filter: blur(40px);
+      radial-gradient(ellipse at 30% 35%, rgba(255, 0, 255, 0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 65%, rgba(138, 43, 226, 0.28) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(0, 150, 255, 0.22) 0%, transparent 48%),
+      radial-gradient(ellipse at 40% 75%, rgba(255, 0, 180, 0.24) 0%, transparent 52%);
+    opacity: 0.4;
+    filter: blur(70px);
     z-index: -2;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
