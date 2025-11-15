@@ -89,7 +89,7 @@ All colors MUST be HSL.
     font-family: 'Play', sans-serif;
   }
   
-  /* Gradient mesh background */
+  /* Mesh gradient background with bokeh highlights */
   body::before {
     content: '';
     position: fixed;
@@ -97,12 +97,12 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/teal-circuit-bg.png') no-repeat center center fixed;
+    background: url('/gradient-spheres-background.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
 
-  /* Mesh gradient with strong gaussian blur effect */
+  /* Bokeh highlights layer */
   body::after {
     content: '';
     position: fixed;
@@ -110,19 +110,48 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-      radial-gradient(ellipse at 30% 35%, rgba(255, 0, 255, 0.25) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 65%, rgba(138, 43, 226, 0.28) 0%, transparent 55%),
-      radial-gradient(ellipse at 50% 50%, rgba(0, 150, 255, 0.22) 0%, transparent 48%),
-      radial-gradient(ellipse at 40% 75%, rgba(255, 0, 180, 0.24) 0%, transparent 52%);
-    opacity: 0.4;
-    filter: blur(70px);
+    background-image: 
+      radial-gradient(circle at 15% 20%, rgba(0, 255, 255, 0.15) 0%, transparent 8%),
+      radial-gradient(circle at 85% 30%, rgba(255, 0, 255, 0.15) 0%, transparent 10%),
+      radial-gradient(circle at 40% 60%, rgba(0, 255, 255, 0.12) 0%, transparent 6%),
+      radial-gradient(circle at 70% 80%, rgba(255, 0, 255, 0.12) 0%, transparent 7%),
+      radial-gradient(circle at 25% 85%, rgba(0, 255, 255, 0.1) 0%, transparent 9%),
+      radial-gradient(circle at 90% 60%, rgba(255, 0, 255, 0.1) 0%, transparent 8%),
+      radial-gradient(circle at 50% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 5%),
+      repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px),
+      repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0.05) 2px);
+    filter: blur(40px);
+    opacity: 0.8;
     z-index: -2;
+    pointer-events: none;
+    animation: bokeh-float 20s ease-in-out infinite;
+  }
+
+  /* Mesh blur overlay for fluid motion */
+  body > #root::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(ellipse at 30% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(255, 0, 255, 0.08) 0%, transparent 50%);
+    filter: blur(60px);
+    z-index: -1;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
   }
 
-
+  @keyframes bokeh-float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-20px) scale(1.05);
+    }
+  }
 
   @keyframes mesh-float {
     0% {
@@ -136,7 +165,7 @@ All colors MUST be HSL.
 
 @layer utilities {
   .glass {
-    background: rgba(18, 18, 18, 0.5);
+    background: rgba(26, 26, 26, 0.3);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -144,7 +173,7 @@ All colors MUST be HSL.
   }
   
   .glass-strong {
-    background: rgba(18, 18, 18, 0.65);
+    background: rgba(26, 26, 26, 0.5);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -152,7 +181,7 @@ All colors MUST be HSL.
   }
   
   .glass-subtle {
-    background: rgba(18, 18, 18, 0.4);
+    background: rgba(26, 26, 26, 0.2);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -173,7 +202,7 @@ All colors MUST be HSL.
 
   /* Smoky frosted glass with vignette and entrance animation */
   .volumetric-glass {
-    background: rgba(15, 15, 15, 0.6);
+    background: rgba(20, 20, 20, 0.4);
     backdrop-filter: blur(9px) saturate(150%);
     -webkit-backdrop-filter: blur(9px) saturate(150%);
     border: 2.5px solid rgba(255, 255, 255, 0.45);
@@ -218,7 +247,7 @@ All colors MUST be HSL.
 
   /* Modal variant with better visibility */
   [data-radix-portal] .volumetric-glass {
-    background: rgba(15, 15, 15, 0.94);
+    background: rgba(20, 20, 20, 0.85);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
   }
@@ -230,7 +259,7 @@ All colors MUST be HSL.
   }
 
   .volumetric-glass-button {
-    background: rgba(15, 15, 15, 0.55);
+    background: rgba(20, 20, 20, 0.35);
     backdrop-filter: blur(9px) saturate(150%);
     -webkit-backdrop-filter: blur(9px) saturate(150%);
     border: 2.5px solid rgba(255, 255, 255, 0.4);
@@ -281,7 +310,7 @@ All colors MUST be HSL.
   }
 
   .volumetric-glass-active {
-    background: rgba(18, 18, 18, 0.65);
+    background: rgba(30, 30, 30, 0.45);
     backdrop-filter: blur(9px) saturate(150%);
     -webkit-backdrop-filter: blur(9px) saturate(150%);
     border: 2.5px solid rgba(0, 255, 255, 0.6);
@@ -323,7 +352,7 @@ All colors MUST be HSL.
 
   
   .frosted-glass-subtle {
-    background: rgba(15, 15, 15, 0.5);
+    background: rgba(20, 20, 20, 0.3);
     backdrop-filter: blur(9px) saturate(140%);
     -webkit-backdrop-filter: blur(9px) saturate(140%);
     border: 2.5px solid rgba(255, 255, 255, 0.35);
