@@ -89,7 +89,7 @@ All colors MUST be HSL.
     font-family: 'Play', sans-serif;
   }
   
-  /* Tech wave background */
+  /* Smooth gradient background */
   body::before {
     content: '';
     position: fixed;
@@ -97,7 +97,7 @@ All colors MUST be HSL.
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/tech-background.jpg') no-repeat center center fixed;
+    background: url('/gradient-bg-2025.jpg') no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
