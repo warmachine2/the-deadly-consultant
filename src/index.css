@@ -160,12 +160,7 @@ All colors MUST be HSL.
     background: rgba(255, 255, 255, 0.28);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 2.5px solid transparent;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.28)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.8) 100%);
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
+    border: 2.5px solid rgba(255, 255, 255, 0.45);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -189,12 +184,7 @@ All colors MUST be HSL.
     background: rgba(255, 255, 255, 0.24);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 2.5px solid transparent;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.7) 100%);
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
+    border: 2.5px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -210,12 +200,7 @@ All colors MUST be HSL.
 
   .volumetric-glass-active {
     background: rgba(255, 255, 255, 0.35);
-    border: 2.5px solid transparent;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.9) 100%);
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
+    border: 2.5px solid rgba(255, 255, 255, 0.6);
     box-shadow: 
       0 4px 20px rgba(255, 255, 255, 0.3),
       0 0 20px rgba(255, 255, 255, 0.3);
@@ -226,12 +211,7 @@ All colors MUST be HSL.
   .frosted-glass-subtle {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(3px);
-    border: 2.5px solid transparent;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.6) 100%);
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
+    border: 2.5px solid rgba(255, 255, 255, 0.35);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   }
   
