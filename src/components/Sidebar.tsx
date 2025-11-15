@@ -88,12 +88,14 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     w-full text-left px-4 py-4 rounded-2xl text-sm font-medium transition-all
                     ${
                       selectedCategory === category
-                        ? "volumetric-glass-active bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        ? "volumetric-glass-active"
                         : "volumetric-glass-button text-white/80"
                     }
                   `}
                 >
-                  {category}
+                  <span className={selectedCategory === category ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                    {category}
+                  </span>
                 </button>
               ))}
             </div>
@@ -123,12 +125,14 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     px-4 py-4 rounded-2xl text-xs font-medium italic transition-all
                     ${
                       selectedTags.includes(tag)
-                        ? "volumetric-glass-active bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        ? "volumetric-glass-active"
                         : "volumetric-glass-button text-white/80"
                     }
                   `}
                 >
-                  {tag}
+                  <span className={selectedTags.includes(tag) ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                    {tag}
+                  </span>
                 </button>
               ))}
             </div>
