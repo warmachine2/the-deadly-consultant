@@ -9,60 +9,27 @@ const RoadmapPage = () => {
   const shownRef = useRef(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 
-  // Load ConvertKit script and show popup once per session
+  // Load ConvertKit script - let SDK handle popup display
   useEffect(() => {
-    const POPUP_KEY = 'convertkit-popup-shown';
-    const w = window as any;
-
-    // If already shown this session, skip everything
-    if (sessionStorage.getItem(POPUP_KEY) === 'true') {
-      console.log('Popup already shown this session');
+    // Check if already loaded to avoid duplicates
+    const existingScript = document.querySelector('script[data-uid="fbd8fa5d1b"]');
+    if (existingScript) {
+      console.log('ConvertKit script already loaded');
       return;
     }
 
-    // Load script only once
-    const existingScript = document.querySelector('script[src*="kit.com/fbd8fa5d1b"]');
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = 'https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js';
-      script.async = true;
-      script.setAttribute('data-uid', 'fbd8fa5d1b');
-      document.head.appendChild(script);
-      scriptRef.current = script;
-    }
-
-    // Wait for formkit to load and show popup exactly once
-    let attempts = 0;
-    const maxAttempts = 150;
-    const intervalId = setInterval(() => {
-      attempts++;
-      const w = window as any;
-
-      if (w.formkit && typeof w.formkit.show === 'function' && !shownRef.current) {
-        shownRef.current = true;
-        clearInterval(intervalId);
-
-        // Show after short delay to ensure SDK is fully ready
-        setTimeout(() => {
-          // Double-check we haven't shown yet
-          if (sessionStorage.getItem(POPUP_KEY) !== 'true') {
-            sessionStorage.setItem(POPUP_KEY, 'true');
-            console.log('Showing ConvertKit popup');
-            try {
-              w.formkit.show('fbd8fa5d1b');
-            } catch (e) {
-              console.error('ConvertKit show error:', e);
-            }
-          }
-        }, 1500);
-      } else if (attempts >= maxAttempts) {
-        clearInterval(intervalId);
-        console.error('ConvertKit load timeout');
-      }
-    }, 200);
+    const script = document.createElement('script');
+    script.src = 'https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js';
+    script.async = true;
+    script.setAttribute('data-uid', 'fbd8fa5d1b');
+    document.head.appendChild(script);
+    scriptRef.current = script;
 
     return () => {
-      clearInterval(intervalId);
+      // Cleanup on unmount
+      if (scriptRef.current && document.head.contains(scriptRef.current)) {
+        document.head.removeChild(scriptRef.current);
+      }
     };
   }, []);
 
