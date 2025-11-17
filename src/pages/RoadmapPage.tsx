@@ -15,7 +15,7 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "fbd8fa5d1b";
+  const formId = "8677000"; // FIXED: From log (confirm in ConvertKit dashboard)
   const autoTriggeredRef = useRef(false); // Ensure single auto call
 
   const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
@@ -30,6 +30,17 @@ const RoadmapPage = () => {
       showOncePerSession("roadmap_popup_shown");
     }, 500); // Increased to 500ms
   }, [ready, showOncePerSession]);
+
+  // NEW: Refocus page after modal close
+  useEffect(() => {
+    const handleModalClose = () => {
+      console.log("Modal closed, refocusing page"); // Debug
+      document.body.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    window.addEventListener("formkit:modal:closed", handleModalClose); // ConvertKit event
+    return () => window.removeEventListener("formkit:modal:closed", handleModalClose);
+  }, []);
 
   // Page load (unchanged)
   useEffect(() => {
