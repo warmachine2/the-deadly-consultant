@@ -1,18 +1,16 @@
 import { useState, useEffect, useCallback, useRef, RefObject } from "react";
 
-// FIXED: Ambient declaration
 declare global {
   interface Window {
-    popupLocked?: boolean;
-    formkit?: any; // ConvertKit global
+    formkit?: any;
     formkitReady?: { [key: string]: boolean };
   }
 }
 
 interface UseFormkitPopupReturn {
   ready: boolean;
-  showAuto: () => void; // FIXED: For entry popup—always show, no param
-  showDebounced: (delayMs: number) => void; // FIXED: For CTA—always show, no param
+  showAuto: () => void;
+  showDebounced: (delayMs: number) => void;
 }
 
 export default function useFormkitPopup(
@@ -70,36 +68,28 @@ export default function useFormkitPopup(
     setTimeout(() => (window.location.href = href), 500);
   }, []);
 
-  // Show every time (auto—no session)
   const showAuto = useCallback(() => {
-    console.log(`showAuto: ready=${ready}, locked=${!!window.popupLocked}`);
-    if (window.popupLocked) {
-      console.log(`Locked, skipping auto`);
-      return;
-    }
+    console.log(`showAuto: ready=${ready}`);
     if (!ready || !triggerRef.current) {
       console.log(`Not ready/no trigger for auto, fallback redirect`);
       fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
       return;
     }
-    // FIXED: Extra safety—check formkit exists before click
     if (!window.formkit) {
       console.log("Formkit not loaded—fallback redirect");
       fallbackRedirect(triggerRef.current.href);
       return;
     }
     console.log(`Showing auto popup`);
-    window.popupLocked = true;
     triggerRef.current.click();
-    checkModalAndFallback(triggerRef.current.href); // Poll for modal
+    checkModalAndFallback(triggerRef.current.href);
   }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback]);
 
-  // Debounced show every time (CTA—no session)
   const showDebounced = useCallback(
     (delayMs: number) => {
-      console.log(`showDebounced: ready=${ready}, locked=${!!window.popupLocked}`);
-      if (debounceRef.current !== null || window.popupLocked) {
-        console.log("Debounce/locked, skipping CTA");
+      console.log(`showDebounced: ready=${ready}`);
+      if (debounceRef.current !== null) {
+        console.log("Debounce active, skipping CTA");
         return;
       }
       if (!ready || !triggerRef.current) {
@@ -107,14 +97,12 @@ export default function useFormkitPopup(
         fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
         return;
       }
-      // FIXED: Extra safety—check formkit exists before scheduling click
       if (!window.formkit) {
         console.log("Formkit not loaded—fallback redirect");
         fallbackRedirect(triggerRef.current.href);
         return;
       }
       console.log(`Starting CTA debounced show (delay: ${delayMs}ms)`);
-      window.popupLocked = true;
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
       }
@@ -122,7 +110,7 @@ export default function useFormkitPopup(
         if (triggerRef.current) {
           triggerRef.current.click();
           console.log("CTA trigger clicked");
-          checkModalAndFallback(triggerRef.current.href); // FIXED: Poll for modal/redirect
+          checkModalAndFallback(triggerRef.current.href);
         }
         debounceRef.current = null;
       }, delayMs) as unknown as number;
@@ -130,7 +118,6 @@ export default function useFormkitPopup(
     [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
   );
 
-  // Cleanup
   useEffect(() => {
     return () => {
       if (debounceRef.current !== null) {
@@ -141,7 +128,6 @@ export default function useFormkitPopup(
         clearTimeout(clickTimeoutRef.current);
         clickTimeoutRef.current = null;
       }
-      window.popupLocked = false;
     };
   }, []);
 
