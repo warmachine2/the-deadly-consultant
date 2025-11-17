@@ -16,7 +16,7 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<number | null>(null); // FIXED: number for browser setTimeout
+  const debounceRef = useRef<number | null>(null); // FIXED: number | null for browser setTimeout
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -42,9 +42,9 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     }
 
     const script = document.createElement("script");
-    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`; // FIXED: Original custom src
+    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`; // Original custom src
     script.async = true;
-    script.setAttribute("data-uid", formId); // FIXED: Original attribute
+    script.setAttribute("data-uid", formId); // Original attribute
     script.onload = () => {
       console.log(`Formkit script loaded for ${formId}`);
       // Buffer for event binding
@@ -66,7 +66,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
       window.popupLocked = false; // Reset lock
       if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
+        clearTimeout(debounceRef.current); // FIXED: clearTimeout with number
         debounceRef.current = null;
       }
     };
@@ -110,7 +110,6 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
-      // FIXED: Reformatted setTimeout without inline comment
       debounceRef.current = setTimeout(() => {
         window.popupLocked = true;
         triggerRef.current!.click();
