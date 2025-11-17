@@ -16,7 +16,7 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<number | null>(null); // FIXED: Force browser type (number | null)
+  const debounceRef = useRef<number | null>(null);
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -119,7 +119,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           window.popupLocked = false;
           debounceRef.current = null;
         }, 1000);
-      }, delayMs) as number; // FIXED: Cast to number (browser type)
+      }, delayMs) as unknown as number;
     },
     [formId, ready],
   );
