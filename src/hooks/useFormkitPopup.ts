@@ -64,7 +64,7 @@ export default function useFormkitPopup(
     }, 3000) as unknown as number;
   }, []);
 
-  // FIXED: Fallback redirect
+  // FIXED: Fallback redirect (use trigger href only)
   const fallbackRedirect = useCallback((href: string) => {
     console.log(`Immediate fallback: Redirecting to ${href}`);
     setTimeout(() => (window.location.href = href), 500);
@@ -79,7 +79,7 @@ export default function useFormkitPopup(
     }
     if (!ready || !triggerRef.current) {
       console.log(`Not ready/no trigger for auto, fallback redirect`);
-      fallbackRedirect(triggerRef.current?.href || `https://bi-fintech-consultant-academy.ck.page/${formId}`);
+      fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
       return;
     }
     // FIXED: Extra safety—check formkit exists before click
@@ -92,7 +92,7 @@ export default function useFormkitPopup(
     window.popupLocked = true;
     triggerRef.current.click();
     checkModalAndFallback(triggerRef.current.href); // Poll for modal
-  }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback, formId]);
+  }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback]);
 
   // Debounced show every time (CTA—no session)
   const showDebounced = useCallback(
@@ -104,7 +104,7 @@ export default function useFormkitPopup(
       }
       if (!ready || !triggerRef.current) {
         console.log(`Not ready/no trigger for CTA, fallback redirect`);
-        fallbackRedirect(triggerRef.current?.href || `https://bi-fintech-consultant-academy.ck.page/${formId}`);
+        fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
         return;
       }
       // FIXED: Extra safety—check formkit exists before scheduling click
@@ -127,7 +127,7 @@ export default function useFormkitPopup(
         debounceRef.current = null;
       }, delayMs) as unknown as number;
     },
-    [ready, triggerRef, fallbackRedirect, checkModalAndFallback, formId],
+    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
   );
 
   // Cleanup

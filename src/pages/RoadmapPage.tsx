@@ -14,9 +14,9 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  // TODO: Replace "8677000" with your actual ConvertKit form UID (alphanumeric, e.g., "fed4f02d31") from the Embed > JavaScript code in your dashboard
-  const formId = "8677000"; // FIXED: Use the data-uid value from ConvertKit embed code
-  // TODO: Confirm your creator subdomain (e.g., "bi-fintech-consultant-academy") from app.kit.com URL
+  // FIXED: Use the actual ConvertKit form UID from embed code
+  const formId = "fbd8fa5d1b";
+  // FIXED: Use the subdomain from embed code
   const creatorSubdomain = "bi-fintech-consultant-academy";
   const autoTriggeredRef = useRef(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
@@ -39,7 +39,7 @@ const RoadmapPage = () => {
     }
 
     const script = document.createElement("script");
-    script.src = `https://${creatorSubdomain}.ck.page/${formId}/index.js`; // FIXED: ck.page domain + form UID
+    script.src = `https://${creatorSubdomain}.kit.com/${formId}/index.js`; // FIXED: kit.com domain + form UID
     script.async = true;
     script.setAttribute("data-uid", formId); // FIXED: Form UID
     script.onload = () => {
@@ -195,7 +195,7 @@ const RoadmapPage = () => {
     [showDebounced, setCleanupTimeout],
   );
 
-  const formHref = `https://${creatorSubdomain}.ck.page/${formId}`; // FIXED: Correct ck.page form URL
+  const formHref = "https://bifintechconsulting.com/roadmap-signup"; // FIXED: Use the href from embed code
 
   return (
     <div className="min-h-screen">
@@ -266,7 +266,7 @@ const RoadmapPage = () => {
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
               <a
-                href={formHref} // FIXED: Correct ck.page fallback URL
+                href={formHref} // FIXED: Correct fallback URL
                 onClick={handleCTAClick}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
