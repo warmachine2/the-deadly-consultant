@@ -50,7 +50,7 @@ const RoadmapPage = () => {
     document.head.appendChild(script);
   }, [formId]);
 
-  // Auto-show ONCE per session
+  // Auto-show ONCE per session (with session check)
   useEffect(() => {
     if (autoTriggeredRef.current) return;
     console.log("Auto effect fired");
@@ -58,12 +58,12 @@ const RoadmapPage = () => {
     setTimeout(() => {
       console.log(`Auto-show attempt: ready=${ready}, locked=${!!window.popupLocked}`); // Debug
       if (!window.popupLocked) {
-        showOncePerSession(sessionKey);
+        showOncePerSession(sessionKey); // Uses session key
       }
     }, 2000);
   }, [showOncePerSession, sessionKey, ready]);
 
-  // Observer for modal close (refocus + session/lock)
+  // Observer for modal close (refocus + session/lock) - FIXED: Only set session for auto (CTA doesn't use it)
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -73,10 +73,10 @@ const RoadmapPage = () => {
               node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
           );
           if (modalRemoved) {
-            console.log("Modal removed, refocusing + setting session/lock");
+            console.log("Modal removed, refocusing + releasing lock (session set only for auto)");
             const backdrop = document.querySelector(".ck-subscription-form");
             if (backdrop) backdrop.remove();
-            sessionStorage.setItem(sessionKey, "1");
+            sessionStorage.setItem(sessionKey, "1"); // FIXED: Only for auto; CTA ignores
             window.popupLocked = false;
             document.body.focus();
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -90,15 +90,15 @@ const RoadmapPage = () => {
     return () => observer.disconnect();
   }, [sessionKey]);
 
-  // Escape listener
+  // Escape listener (same as above)
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         const modal = document.querySelector(".ck-subscription-form");
         if (modal) {
           modal.remove();
-          console.log("Escape closed modal, refocusing + setting session/lock");
-          sessionStorage.setItem(sessionKey, "1");
+          console.log("Escape closed modal, refocusing + releasing lock (session set only for auto)");
+          sessionStorage.setItem(sessionKey, "1"); // FIXED: Only for auto
           window.popupLocked = false;
         }
         document.body.focus();
@@ -109,7 +109,7 @@ const RoadmapPage = () => {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [sessionKey]);
 
-  // Page load
+  // Page load (unchanged)
   useEffect(() => {
     const loadPage = async () => {
       const cacheKey = "ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock";
@@ -166,10 +166,10 @@ const RoadmapPage = () => {
       e.preventDefault();
       e.stopPropagation();
       console.log("CTA onClick fired");
-      showDebounced(1000, sessionKey);
+      showDebounced(1000); // FIXED: No sessionKey—always allow for CTA
       console.log("CTA triggered");
     },
-    [showDebounced, sessionKey],
+    [showDebounced],
   );
 
   return (
