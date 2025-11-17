@@ -51,15 +51,15 @@ All colors MUST be HSL.
     --glass-bg: 0 0% 10%;
     --glass-border: 0 0% 100%;
     --glass-shadow: 0 0% 0%;
-    
+
     /* Gradients */
     --gradient-dark: linear-gradient(135deg, hsl(0, 0%, 10%) 0%, hsl(0, 0%, 18%) 100%);
     --gradient-glass: linear-gradient(135deg, hsla(0, 0%, 100%, 0.1) 0%, hsla(0, 0%, 100%, 0.05) 100%);
-    
+
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    
+
     /* Shadows */
     --shadow-glass: 0 8px 32px hsla(0, 0%, 0%, 0.3);
     --shadow-glass-hover: 0 12px 48px hsla(0, 0%, 0%, 0.4);
@@ -74,7 +74,6 @@ All colors MUST be HSL.
     --sidebar-border: 0 0% 100%;
     --sidebar-ring: 0 0% 100%;
   }
-
 }
 
 @layer base {
@@ -86,7 +85,7 @@ All colors MUST be HSL.
     @apply text-foreground;
     position: relative;
     min-height: 100vh;
-    font-family: 'Play', sans-serif;
+    font-family: "Play", sans-serif;
   }
 
   /* Full-screen volumetric glass pane overlay */
@@ -97,7 +96,7 @@ All colors MUST be HSL.
   }
 
   body > #root::before {
-    content: '';
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
@@ -107,7 +106,7 @@ All colors MUST be HSL.
     backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 
+    box-shadow:
       inset 0 0 100px rgba(255, 255, 255, 0.02),
       inset 0 0 200px rgba(0, 0, 0, 0.1);
     z-index: -1;
@@ -116,14 +115,20 @@ All colors MUST be HSL.
 
   /* Film grain texture overlay */
   body > #root::after {
-    content: '';
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px),
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.03) 2px,
+        rgba(255, 255, 255, 0.03) 4px
+      ),
       repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px),
       repeating-radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.015) 0px, transparent 3px),
       repeating-radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.02) 0px, transparent 3px);
@@ -134,44 +139,47 @@ All colors MUST be HSL.
   }
 
   @keyframes grain-flicker {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.45; }
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.45;
+    }
   }
-  
+
   /* Tech wave background */
   body::before {
-    content: '';
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/tech-background.jpg') no-repeat center center fixed;
+    background: url("/tech-background.jpg") no-repeat center center fixed;
     background-size: cover;
     z-index: -4;
   }
 
   /* Subtle mesh gradient overlay - multi-point teal/purple for organic diffusion */
   body::after {
-    content: '';
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
+    background:
       radial-gradient(ellipse at 20% 30%, rgba(0, 255, 255, 0.18) 0%, transparent 45%),
       radial-gradient(ellipse at 80% 70%, rgba(138, 43, 226, 0.15) 0%, transparent 48%),
       radial-gradient(ellipse at 50% 50%, rgba(0, 200, 255, 0.12) 0%, transparent 40%),
       radial-gradient(ellipse at 35% 80%, rgba(138, 43, 226, 0.14) 0%, transparent 42%),
-      radial-gradient(ellipse at 65% 20%, rgba(0, 255, 255, 0.10) 0%, transparent 38%);
-    opacity: 0.20;
+      radial-gradient(ellipse at 65% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 38%);
+    opacity: 0.2;
     z-index: -2;
     pointer-events: none;
     animation: mesh-float 15s ease-in-out infinite alternate;
   }
-
-
 
   @keyframes mesh-float {
     0% {
@@ -191,7 +199,7 @@ All colors MUST be HSL.
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
-  
+
   .glass-strong {
     background: rgba(26, 26, 26, 0.6);
     backdrop-filter: blur(25px);
@@ -199,25 +207,27 @@ All colors MUST be HSL.
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
-  
+
   .glass-subtle {
     background: rgba(26, 26, 26, 0.35);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
-  
+
   .hover-lift {
     transition: var(--transition-smooth);
   }
-  
+
   .hover-lift:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), 0 0 20px hsla(0, 0%, 100%, 0.3);
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.5),
+      0 0 20px hsla(0, 0%, 100%, 0.3);
   }
-  
+
   .hover-glow:hover {
-    box-shadow: 
+    box-shadow:
       0 0 30px hsla(0, 0%, 100%, 0.4),
       0 0 60px hsla(180, 100%, 50%, 0.2),
       0 0 90px hsla(280, 100%, 50%, 0.15);
@@ -231,7 +241,7 @@ All colors MUST be HSL.
     backdrop-filter: blur(9px) saturate(150%);
     -webkit-backdrop-filter: blur(9px) saturate(150%);
     border: 2.5px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.3),
       inset 0 0 80px rgba(0, 0, 0, 0.15);
     position: relative;
@@ -241,13 +251,26 @@ All colors MUST be HSL.
 
   /* Smoke pattern overlay with gradient */
   .volumetric-glass::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: 
-      linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, transparent 25%, rgba(0, 0, 0, 0.15) 50%, transparent 75%, rgba(0, 0, 0, 0.1) 100%),
-      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px);
+    background:
+      linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        transparent 25%,
+        rgba(0, 0, 0, 0.15) 50%,
+        transparent 75%,
+        rgba(0, 0, 0, 0.1) 100%
+      ),
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
     opacity: 0.7;
     pointer-events: none;
     z-index: 1;
@@ -255,7 +278,7 @@ All colors MUST be HSL.
 
   /* 15% vignette for depth */
   .volumetric-glass::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -278,7 +301,7 @@ All colors MUST be HSL.
   }
 
   .volumetric-glass:hover {
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.25),
       0 0 20px rgba(59, 130, 246, 0.25);
   }
@@ -288,7 +311,7 @@ All colors MUST be HSL.
     backdrop-filter: blur(9px) saturate(150%);
     -webkit-backdrop-filter: blur(9px) saturate(150%);
     border: 2.5px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.2),
       inset 0 0 60px rgba(0, 0, 0, 0.15);
     position: relative;
@@ -298,13 +321,19 @@ All colors MUST be HSL.
 
   /* Smoke pattern for buttons */
   .volumetric-glass-button::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: 
+    background:
       linear-gradient(135deg, rgba(0, 0, 0, 0.15) 0%, transparent 30%, rgba(0, 0, 0, 0.1) 60%, transparent 100%),
-      repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255, 255, 255, 0.02) 8px, rgba(255, 255, 255, 0.02) 16px);
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 8px,
+        rgba(255, 255, 255, 0.02) 8px,
+        rgba(255, 255, 255, 0.02) 16px
+      );
     opacity: 0.6;
     pointer-events: none;
     z-index: 1;
@@ -312,7 +341,7 @@ All colors MUST be HSL.
 
   /* Vignette for buttons */
   .volumetric-glass-button::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -328,7 +357,7 @@ All colors MUST be HSL.
 
   .volumetric-glass-button:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
       0 6px 24px rgba(0, 0, 0, 0.25),
       0 0 20px rgba(0, 255, 255, 0.3),
       inset 0 0 60px rgba(0, 0, 0, 0.2);
@@ -339,7 +368,7 @@ All colors MUST be HSL.
     backdrop-filter: blur(9px) saturate(150%);
     -webkit-backdrop-filter: blur(9px) saturate(150%);
     border: 2.5px solid rgba(0, 255, 255, 0.6);
-    box-shadow: 
+    box-shadow:
       0 4px 20px rgba(0, 255, 255, 0.3),
       0 0 20px rgba(0, 255, 255, 0.3),
       inset 0 0 80px rgba(0, 0, 0, 0.15);
@@ -348,20 +377,32 @@ All colors MUST be HSL.
   }
 
   .volumetric-glass-active::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: 
-      linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, transparent 30%, rgba(255, 0, 255, 0.08) 60%, transparent 100%),
-      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px);
+    background:
+      linear-gradient(
+        135deg,
+        rgba(0, 255, 255, 0.1) 0%,
+        transparent 30%,
+        rgba(255, 0, 255, 0.08) 60%,
+        transparent 100%
+      ),
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
     opacity: 0.7;
     pointer-events: none;
     z-index: 1;
   }
 
   .volumetric-glass-active::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -375,13 +416,12 @@ All colors MUST be HSL.
     z-index: 3;
   }
 
-  
   .frosted-glass-subtle {
     background: rgba(20, 20, 20, 0.45);
     backdrop-filter: blur(9px) saturate(140%);
     -webkit-backdrop-filter: blur(9px) saturate(140%);
     border: 2.5px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.2),
       inset 0 0 60px rgba(0, 0, 0, 0.15);
     position: relative;
@@ -389,20 +429,26 @@ All colors MUST be HSL.
   }
 
   .frosted-glass-subtle::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: 
+    background:
       linear-gradient(135deg, rgba(0, 0, 0, 0.15) 0%, transparent 25%, rgba(0, 0, 0, 0.1) 50%, transparent 75%),
-      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.02) 10px, rgba(255, 255, 255, 0.02) 20px);
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
     opacity: 0.6;
     pointer-events: none;
     z-index: 1;
   }
 
   .frosted-glass-subtle::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -427,125 +473,136 @@ All colors MUST be HSL.
       transform: translateY(0);
     }
   }
-  
+
   /* Prose styling for Ghost content on dark backgrounds */
   .prose {
-    color: #F1F5F9;
+    color: #f1f5f9;
   }
-  
-  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-    font-family: 'Play', sans-serif;
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    font-family: "Play", sans-serif;
     font-weight: bold;
-    color: #E5E7EB !important;
+    color: #e5e7eb !important;
     margin-bottom: 1.5rem;
     margin-top: 2rem;
     line-height: 1.3;
   }
-  
+
   .prose h1 {
     font-size: 2.25rem;
   }
-  
+
   .prose h2 {
     font-size: 1.875rem;
   }
-  
+
   .prose h3 {
     font-size: 1.5rem;
   }
-  
+
   .prose p {
-    color: #F1F5F9 !important;
+    color: #f1f5f9 !important;
     margin-bottom: 1.25rem;
     line-height: 1.75;
   }
-  
-  .prose ul, .prose ol {
-    color: #9CA3AF !important;
+
+  .prose ul,
+  .prose ol {
+    color: #9ca3af !important;
     padding-left: 1.5rem;
     margin-bottom: 1rem;
   }
-  
+
   .prose ul {
     list-style-type: disc;
   }
-  
+
   .prose ol {
     list-style-type: decimal;
   }
-  
-  .prose ul li, .prose ol li {
-    color: #9CA3AF !important;
+
+  .prose ul li,
+  .prose ol li {
+    color: #9ca3af !important;
     margin-bottom: 0.5rem;
   }
-  
+
   .prose code {
-    background-color: #1E1E1E !important;
+    background-color: #1e1e1e !important;
     border-radius: 0.375rem;
     padding: 0.125rem 0.375rem;
     font-size: 0.875em;
-    color: #E5E7EB !important;
+    color: #e5e7eb !important;
   }
-  
+
   .prose pre {
-    background-color: #1E1E1E !important;
+    background-color: #1e1e1e !important;
     border-radius: 0.5rem;
     padding: 1rem;
     margin-bottom: 1rem;
     overflow-x: auto;
   }
-  
+
   .prose pre code {
     background-color: transparent !important;
     padding: 0;
     border-radius: 0;
     font-size: 0.875rem;
   }
-  
+
   .prose a {
-    color: #E5E7EB !important;
+    color: #e5e7eb !important;
     text-decoration: underline;
   }
-  
+
   .prose a:hover {
     opacity: 0.8;
   }
-  
+
   .prose blockquote {
-    border-left: 4px solid #9CA3AF;
+    border-left: 4px solid #9ca3af;
     padding-left: 1rem;
-    color: #9CA3AF !important;
+    color: #9ca3af !important;
     font-style: italic;
     margin-bottom: 1rem;
   }
-  
+
   .prose img {
     border-radius: 0.5rem;
     margin-bottom: 1rem;
     max-width: 100%;
     height: auto;
   }
-  
+
   .prose hr {
     border-color: rgba(255, 255, 255, 0.1);
     margin: 2rem 0;
   }
-  
+
   /* Override Ghost inline styles */
   .prose * {
     background-color: transparent !important;
   }
-  
-  .prose pre, .prose pre *, .prose code {
-    background-color: #1E1E1E !important;
+
+  .prose pre,
+  .prose pre *,
+  .prose code {
+    background-color: #1e1e1e !important;
   }
-  
-  .prose strong, .prose b {
-    color: #E5E7EB !important;
+
+  .prose strong,
+  .prose b {
+    color: #e5e7eb !important;
   }
-  
-  .prose em, .prose i {
-    color: #9CA3AF !important;
+
+  .prose em,
+  .prose i {
+    color: #9ca3af !important;
   }
 
   /* Bokeh orbs effect for hero section */
@@ -617,7 +674,8 @@ All colors MUST be HSL.
   }
 
   @keyframes bokeh-pulse {
-    0%, 100% {
+    0%,
+    100% {
       transform: scale(1) translateY(0);
       opacity: 0.25;
     }
@@ -628,13 +686,21 @@ All colors MUST be HSL.
   }
 
   @keyframes bokeh-pulse-hover {
-    0%, 100% {
+    0%,
+    100% {
       transform: scale(1) translateY(0);
       opacity: 0.3;
     }
     50% {
       transform: scale(1.15) translateY(-15px);
       opacity: 0.35;
+      .ck-subscription-form {
+        background: rgba(0, 0, 0, 0.5) !important; /* Transparent backdrop—roadmap visible behind */
+        z-index: 9999;
+      }
+      .ck-subscription-form .ck-subscription-form-modal {
+        backdrop-filter: blur(0) !important; /* No blur on content */
+      }
     }
   }
 }
