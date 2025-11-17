@@ -15,9 +15,10 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "8677000"; // FIXED: Matches POST from logs
+  const formId = "fbd8fa5d1b"; // FIXED: Correct Form ID from your ConvertKit script
+  const sessionKey = "roadmap_popup_shown"; // Shared key for once-per-session
   const autoTriggeredRef = useRef(false); // Ensure single auto call
-  const refocusObserverRef = useRef<MutationObserver | null>(null); // For refocus
+  const refocusObserverRef = useRef<MutationObserver | null>(null); // For refocus + session/lock
 
   const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
 
@@ -26,15 +27,15 @@ const RoadmapPage = () => {
     if (autoTriggeredRef.current) return; // Guard: Only once
     console.log("Auto effect fired"); // Debug
     autoTriggeredRef.current = true;
-    // FIXED: Force attempt after 2s (ignores ready if stuck)
+    // FIXED: Force attempt after 2s (ignores ready if stuck, but hook now checks session/lock)
     setTimeout(() => {
       if (!window.popupLocked) {
-        showOncePerSession("roadmap_popup_shown");
+        showOncePerSession(sessionKey);
       }
     }, 2000); // 2s buffer for script
-  }, [showOncePerSession]);
+  }, [showOncePerSession, sessionKey]);
 
-  // NEW: Refocus after modal close (MutationObserver for .ck-subscription-form removal)
+  // FIXED: Observer for modal close (refocus + set session/lock release)
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -44,10 +45,13 @@ const RoadmapPage = () => {
               node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
           );
           if (modalRemoved) {
-            console.log("Modal removed, refocusing page"); // Debug
+            console.log("Modal removed, refocusing page + setting session/lock"); // Debug
             // FIXED: Force backdrop removal for white screen
             const backdrop = document.querySelector(".ck-subscription-form");
             if (backdrop) backdrop.remove();
+            // FIXED: Set session + release lock AFTER close (unified for both triggers)
+            sessionStorage.setItem(sessionKey, "1");
+            window.popupLocked = false;
             document.body.focus();
             window.scrollTo({ top: 0, behavior: "smooth" });
             observer.disconnect();
@@ -58,16 +62,19 @@ const RoadmapPage = () => {
     refocusObserverRef.current = observer;
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, []);
+  }, [sessionKey]);
 
-  // FIXED: Escape listener for close (forces refocus)
+  // FIXED: Escape listener for close (forces refocus + session/lock)
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         const modal = document.querySelector(".ck-subscription-form");
         if (modal) {
           modal.remove();
-          console.log("Escape closed modal, refocusing");
+          console.log("Escape closed modal, refocusing + setting session/lock");
+          // FIXED: Set session + release lock on manual close
+          sessionStorage.setItem(sessionKey, "1");
+          window.popupLocked = false;
         }
         document.body.focus();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -75,7 +82,7 @@ const RoadmapPage = () => {
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, []);
+  }, [sessionKey]);
 
   // Page load (unchanged)
   useEffect(() => {
@@ -135,16 +142,11 @@ const RoadmapPage = () => {
       e.preventDefault();
       e.stopPropagation(); // FIXED: Prevent bubble
       console.log("CTA onClick fired"); // Debug
-      // FIXED: Global lock before showDebounced (prevents dupes)
-      if (window.ctaLocked) {
-        console.log("CTA locked, skipping");
-        return;
-      }
-      showDebounced(1000); // 1s debounce for CTA
-      // FIXED: No fallback redirect—stay on page (add if needed later)
+      // FIXED: Session-aware debounced show (once total)
+      showDebounced(1000, sessionKey);
       console.log("CTA triggered—no fallback redirect");
     },
-    [showDebounced],
+    [showDebounced, sessionKey],
   );
 
   return (
