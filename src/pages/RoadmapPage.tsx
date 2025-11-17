@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
 import useFormkitPopup from "@/hooks/useFormkitPopup";
 
-// FIXED: Extend Window for custom flag (TS-safe)
+// FIXED: Extend Window for custom flag (TS-safe, but hook handles it now)
 declare global {
   interface Window {
     popupLocked?: boolean;
-    roadmapAutoShown?: boolean;
+    roadmapAutoShown?: boolean; // Optional, not used here
   }
 }
 
@@ -16,15 +16,16 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const formId = "fbd8fa5d1b";
+  const autoTriggeredRef = useRef(false); // NEW: Ensure single auto call
 
   const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
 
   // Auto-show ONCE per session upon landing on this page
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || autoTriggeredRef.current) return; // Guard: Only once after ready
+    autoTriggeredRef.current = true;
     showOncePerSession("roadmap_popup_shown");
   }, [ready, showOncePerSession]);
-
 
   // Page load (unchanged)
   useEffect(() => {
@@ -81,7 +82,7 @@ const RoadmapPage = () => {
   const handleCTAClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      showDebounced(1000);
+      showDebounced(1000); // 1s debounce for CTA
     },
     [showDebounced],
   );
