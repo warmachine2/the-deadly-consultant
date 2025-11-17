@@ -15,7 +15,6 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const formId = "fbd8fa5d1b"; // Your ConvertKit UID
-  const sessionKey = "roadmap_popup_shown";
   const autoTriggeredRef = useRef(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
   const scriptLoadedRef = useRef(false); // Ensure single script load
@@ -50,7 +49,7 @@ const RoadmapPage = () => {
     document.head.appendChild(script);
   }, [formId]);
 
-  // Auto-show ONCE per session (with session check)
+  // Auto-show EVERY TIME (no session check)
   useEffect(() => {
     if (autoTriggeredRef.current) return;
     console.log("Auto effect fired");
@@ -58,12 +57,12 @@ const RoadmapPage = () => {
     setTimeout(() => {
       console.log(`Auto-show attempt: ready=${ready}, locked=${!!window.popupLocked}`); // Debug
       if (!window.popupLocked) {
-        showOncePerSession(sessionKey); // Uses session key
+        showOncePerSession(); // FIXED: No sessionKey—always show
       }
     }, 2000);
-  }, [showOncePerSession, sessionKey, ready]);
+  }, [showOncePerSession, ready]);
 
-  // Observer for modal close (refocus + session/lock) - FIXED: Only set session for auto (CTA doesn't use it)
+  // Observer for modal close (refocus + release lock only—no session set)
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -73,10 +72,9 @@ const RoadmapPage = () => {
               node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
           );
           if (modalRemoved) {
-            console.log("Modal removed, refocusing + releasing lock (session set only for auto)");
+            console.log("Modal removed, refocusing + releasing lock");
             const backdrop = document.querySelector(".ck-subscription-form");
             if (backdrop) backdrop.remove();
-            sessionStorage.setItem(sessionKey, "1"); // FIXED: Only for auto; CTA ignores
             window.popupLocked = false;
             document.body.focus();
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -88,17 +86,16 @@ const RoadmapPage = () => {
     refocusObserverRef.current = observer;
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, [sessionKey]);
+  }, []);
 
-  // Escape listener (same as above)
+  // Escape listener (release lock only—no session set)
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         const modal = document.querySelector(".ck-subscription-form");
         if (modal) {
           modal.remove();
-          console.log("Escape closed modal, refocusing + releasing lock (session set only for auto)");
-          sessionStorage.setItem(sessionKey, "1"); // FIXED: Only for auto
+          console.log("Escape closed modal, refocusing + releasing lock");
           window.popupLocked = false;
         }
         document.body.focus();
@@ -107,7 +104,7 @@ const RoadmapPage = () => {
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [sessionKey]);
+  }, []);
 
   // Page load (unchanged)
   useEffect(() => {
