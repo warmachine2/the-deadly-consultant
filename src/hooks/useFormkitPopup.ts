@@ -20,7 +20,11 @@ export default function useFormkitPopup(
   const [ready, setReady] = useState(false);
   const debounceRef = useRef<number | null>(null);
   const clickTimeoutRef = useRef<number | null>(null);
+  const openLockRef = useRef(false);
 
+  const isModalOpen = () => {
+    return !!document.querySelector('[data-formkit-id], .formkit-modal, .ck-subscription-form');
+  };
   // Poll for ConvertKit script initialization
   useEffect(() => {
     console.log(`Starting readiness check for ${formId}`);
@@ -50,16 +54,16 @@ export default function useFormkitPopup(
     console.log("Post-click: Polling for modal...");
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     clickTimeoutRef.current = setTimeout(() => {
-      const modal = document.querySelector('[class*="formkit"], [data-formkit-id]');
+      const modal = document.querySelector('[data-formkit-id], .formkit-modal, .ck-subscription-form');
       if (!modal) {
         console.log("No modal appeared after click—redirecting to signup");
         window.open(href, '_blank');
       } else {
         console.log("Modal detected after click—success!");
       }
+      openLockRef.current = false;
     }, 2000) as unknown as number;
   }, []);
-
   // Fallback redirect - open in new tab
   const fallbackRedirect = useCallback((href: string) => {
     console.log(`Fallback: Opening signup in new tab ${href}`);
@@ -72,11 +76,15 @@ export default function useFormkitPopup(
       console.log(`Not ready/no trigger for auto, skipping`);
       return;
     }
+    if (isModalOpen() || openLockRef.current) {
+      console.log("Modal already open or locked, skipping auto");
+      return;
+    }
     console.log(`Showing auto popup via trigger click`);
+    openLockRef.current = true;
     triggerRef.current.click();
     checkModalAndFallback(triggerRef.current.href);
   }, [ready, triggerRef, checkModalAndFallback]);
-
   const showDebounced = useCallback(
     (delayMs: number) => {
       console.log(`showDebounced: ready=${ready}`);
@@ -95,16 +103,20 @@ export default function useFormkitPopup(
       }
       debounceRef.current = setTimeout(() => {
         if (triggerRef.current) {
-          triggerRef.current.click();
-          console.log("CTA trigger clicked");
-          checkModalAndFallback(triggerRef.current.href);
+          if (isModalOpen() || openLockRef.current) {
+            console.log("Modal already open or locked, skipping CTA click");
+          } else {
+            openLockRef.current = true;
+            triggerRef.current.click();
+            console.log("CTA trigger clicked");
+            checkModalAndFallback(triggerRef.current.href);
+          }
         }
         debounceRef.current = null;
       }, delayMs) as unknown as number;
     },
     [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
   );
-
   useEffect(() => {
     return () => {
       if (debounceRef.current !== null) {
@@ -115,9 +127,9 @@ export default function useFormkitPopup(
         clearTimeout(clickTimeoutRef.current);
         clickTimeoutRef.current = null;
       }
+      openLockRef.current = false;
     };
   }, []);
-
   // Log ready changes
   useEffect(() => {
     console.log(`Ready state: ${ready}`);
