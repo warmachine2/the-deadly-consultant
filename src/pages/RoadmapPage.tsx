@@ -23,16 +23,16 @@ const RoadmapPage = () => {
 
   // Auto-show ONCE per session upon landing on this page
   useEffect(() => {
-    if (!ready || autoTriggeredRef.current) return; // Guard: Only once after ready
+    if (autoTriggeredRef.current) return; // Guard: Only once
     console.log("Auto effect fired"); // Debug
     autoTriggeredRef.current = true;
-    // FIXED: Force attempt after 3s (ignores ready if stuck)
+    // FIXED: Force attempt after 2s (ignores ready if stuck)
     setTimeout(() => {
       if (!window.popupLocked) {
         showOncePerSession("roadmap_popup_shown");
       }
-    }, 3000); // 3s buffer for script
-  }, [ready, showOncePerSession]);
+    }, 2000); // 2s buffer for script
+  }, [showOncePerSession]);
 
   // NEW: Refocus after modal close (MutationObserver for .ck-subscription-form removal)
   useEffect(() => {
@@ -75,13 +75,6 @@ const RoadmapPage = () => {
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, []);
-
-  // NEW: Dev-only session clear (remove for production)
-  const clearSession = useCallback(() => {
-    sessionStorage.clear();
-    console.log("Session cleared for testing");
-    window.location.reload();
   }, []);
 
   // Page load (unchanged)
@@ -152,10 +145,6 @@ const RoadmapPage = () => {
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
-      {/* NEW: Dev button for clearing session (remove for production) */}
-      <button onClick={clearSession} className="fixed top-4 right-4 z-50 bg-blue-500 text-white px-4 py-2 rounded">
-        Clear Session (Dev)
-      </button>
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
