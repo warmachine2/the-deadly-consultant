@@ -7,78 +7,85 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFormkitReady, setIsFormkitReady] = useState(false);
-  const shownRef = useRef(false); // Tracks if we've attempted auto-show (for session guard)
+  const shownRef = useRef(false);
   const intervalRef = useRef<number | null>(null);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
-  const ctaIntervalRef = useRef<number | null>(null); // NEW: Separate ref for CTA retry to avoid conflict
+  const triggerRef = useRef<HTMLElement | null>(null); // NEW: Ref for hidden trigger element
+  const formId = "fbd8fa5d1b"; // Centralized
 
-  // Load ConvertKit script with onload for readiness
+  // Load ConvertKit script + create hidden trigger
   useEffect(() => {
-    const existingScript = document.querySelector('script[data-uid="fbd8fa5d1b"]');
+    const existingScript = document.querySelector('script[data-uid="' + formId + '"]');
     if (existingScript) {
       console.log("ConvertKit script already loaded");
-      if (window.formkit) setIsFormkitReady(true);
+      createTriggerIfNeeded(); // Ensure trigger exists
+      setIsFormkitReady(true);
       return;
     }
 
     const script = document.createElement("script");
-    script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
+    script.src = "https://bi-fintech-consultant-academy.kit.com/" + formId + "/index.js";
     script.async = true;
-    script.setAttribute("data-uid", "fbd8fa5d1b");
+    script.setAttribute("data-uid", formId);
     script.onload = () => {
-      console.log("ConvertKit script loaded, checking formkit...");
-      const checkReady = () => {
-        if (window.formkit) {
-          setIsFormkitReady(true);
-          console.log("Formkit ready!");
-        } else {
-          setTimeout(checkReady, 100);
-        }
-      };
-      checkReady();
+      console.log("ConvertKit script loaded");
+      // Short delay for event wiring
+      setTimeout(() => {
+        createTriggerIfNeeded();
+        setIsFormkitReady(true);
+        console.log("Formkit ready with trigger!");
+      }, 500);
     };
     document.head.appendChild(script);
     scriptRef.current = script;
+
+    const createTriggerIfNeeded = () => {
+      if (triggerRef.current) return; // Already created
+      const trigger = document.createElement("a");
+      trigger.href = "https://bifintechconsulting.com/roadmap-signup"; // Fallback if clicked manually
+      trigger.setAttribute("data-formkit-toggle", formId);
+      trigger.style.display = "none"; // Hidden
+      trigger.style.position = "absolute";
+      trigger.style.left = "-9999px";
+      document.body.appendChild(trigger);
+      triggerRef.current = trigger;
+      console.log("Hidden trigger created");
+    };
 
     return () => {
       if (scriptRef.current && document.head.contains(scriptRef.current)) {
         document.head.removeChild(scriptRef.current);
       }
+      if (triggerRef.current && document.body.contains(triggerRef.current)) {
+        document.body.removeChild(triggerRef.current);
+        triggerRef.current = null;
+      }
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      if (ctaIntervalRef.current) {
-        clearInterval(ctaIntervalRef.current);
-        ctaIntervalRef.current = null;
-      }
     };
   }, []);
 
-  // UPDATED: Shared attemptShow function as useCallback to access fresh state
+  // UPDATED: Shared show function - clicks hidden trigger
   const attemptShow = useCallback(
-    (isAuto = true, isRetry = false) => {
-      const formId = "fbd8fa5d1b";
-
-      // For auto-show only: Guard with session + ref to show once per session
+    (isAuto = true) => {
+      // Auto guard: Once per session
       if (isAuto && (sessionStorage.getItem("roadmap_popup_shown") || shownRef.current)) {
         console.log("Auto-show already done this session, skipping");
-        return true; // Treated as handled
+        return true;
       }
 
-      // Common lock check
       if (window.popupLocked) {
         console.log("Popup locked, skipping show");
-        return false; // Allow retry
+        return false;
       }
 
-      // Readiness check (now uses current state via callback)
-      if (window.formkit?.show && isFormkitReady) {
+      if (isFormkitReady && triggerRef.current) {
         console.log(isAuto ? "Auto-showing ConvertKit popup once" : "Showing ConvertKit popup via CTA");
         window.popupLocked = true;
-        window.formkit.show(formId);
+        triggerRef.current.click(); // Trigger the modal!
 
-        // Set session/ref only for auto (CTA doesn't set session, allows re-show if closed)
         if (isAuto) {
           sessionStorage.setItem("roadmap_popup_shown", "1");
           shownRef.current = true;
@@ -87,40 +94,38 @@ const RoadmapPage = () => {
         setTimeout(() => {
           window.popupLocked = false;
         }, 1000);
-        return true; // Handled
+        return true;
       }
 
-      return false; // Not ready, retry if applicable
+      return false;
     },
     [isFormkitReady],
-  ); // Dep on readiness for fresh check
+  );
 
-  // Auto-show effect: Once per session, on readiness
+  // Auto-show: On readiness, once per session
   useEffect(() => {
-    if (!isFormkitReady) return; // Wait for ready
+    if (!isFormkitReady) return;
 
     const tryAuto = () => {
-      if (attemptShow(true, false)) return true; // isAuto=true
+      if (attemptShow(true)) return true;
 
-      if (!shownRef.current) {
-        // Only start retry if not guarded out
-        console.log("Formkit ready but initial auto failed, starting retry...");
-        intervalRef.current = window.setInterval(() => {
-          if (attemptShow(true, true)) {
-            if (intervalRef.current) {
-              clearInterval(intervalRef.current);
-              intervalRef.current = null;
-            }
-          }
-        }, 250);
-        setTimeout(() => {
+      // If not ready (rare post-load), short retry
+      console.log("Trigger not ready post-load, retrying...");
+      intervalRef.current = window.setInterval(() => {
+        if (attemptShow(true)) {
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
-            console.log("Auto-show timeout, skipping");
           }
-        }, 5000);
-      }
+        }
+      }, 250);
+      setTimeout(() => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+          console.log("Auto-show timeout");
+        }
+      }, 3000); // Shorter for auto
       return false;
     };
 
@@ -132,7 +137,7 @@ const RoadmapPage = () => {
         intervalRef.current = null;
       }
     };
-  }, [attemptShow]); // Depend on callback (which deps readiness)
+  }, [attemptShow]);
 
   // Page content load (unchanged)
   useEffect(() => {
@@ -186,36 +191,15 @@ const RoadmapPage = () => {
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
 
-  // UPDATED: CTA handler - triggers show (no session guard, allows re-show if closed), with retry if not ready
+  // UPDATED: CTA - clicks trigger (allows re-show)
   const handleCTAClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
       console.log("CTA clicked: attempting popup");
-
-      const tryCTA = () => {
-        if (attemptShow(false, false)) return true; // isAuto=false, no session guard
-
-        console.log("CTA: Formkit not ready, starting one-time retry...");
-        ctaIntervalRef.current = window.setInterval(() => {
-          if (attemptShow(false, true)) {
-            if (ctaIntervalRef.current) {
-              clearInterval(ctaIntervalRef.current);
-              ctaIntervalRef.current = null;
-            }
-          }
-        }, 250);
-        // Short retry for click: 3s max
-        setTimeout(() => {
-          if (ctaIntervalRef.current) {
-            clearInterval(ctaIntervalRef.current);
-            ctaIntervalRef.current = null;
-            console.log("CTA retry timeout - popup not shown");
-          }
-        }, 3000);
-        return false;
-      };
-
-      tryCTA();
+      if (!attemptShow(false)) {
+        console.log("CTA: Trigger not ready, will try on next readiness");
+        // No fallback—wait for auto-retry if needed, or manual href if desperate
+      }
     },
     [attemptShow],
   );
@@ -291,7 +275,7 @@ const RoadmapPage = () => {
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
               <a
-                href="https://bifintechconsulting.com/roadmap-signup" // Fallback href if JS fails (but no auto-open)
+                href="https://bifintechconsulting.com/roadmap-signup"
                 onClick={handleCTAClick}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
