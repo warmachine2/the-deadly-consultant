@@ -11,8 +11,8 @@ declare global {
 
 interface UseFormkitPopupReturn {
   ready: boolean;
-  showOncePerSession: () => void; // FIXED: No param—always show
-  showDebounced: (delayMs: number) => void; // FIXED: No param—always show
+  showAuto: () => void; // FIXED: For entry popup—always show, no param
+  showDebounced: (delayMs: number) => void; // FIXED: For CTA—always show, no param
 }
 
 export default function useFormkitPopup(
@@ -75,26 +75,22 @@ export default function useFormkitPopup(
   }, []);
 
   // Show every time (auto—no session)
-  const showOncePerSession = useCallback(
-    // FIXED: Renamed but always shows
-    () => {
-      console.log(`showOncePerSession: ready=${ready}, locked=${!!window.popupLocked}`);
-      if (window.popupLocked) {
-        console.log(`Locked, skipping auto`);
-        return;
-      }
-      if (!ready || !triggerRef.current) {
-        console.log(`Not ready/no trigger for auto, fallback redirect`);
-        fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
-        return;
-      }
-      console.log(`Showing auto popup`);
-      window.popupLocked = true;
-      triggerRef.current.click();
-      checkModalAndFallback(triggerRef.current.href); // Poll for modal
-    },
-    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
-  );
+  const showAuto = useCallback(() => {
+    console.log(`showAuto: ready=${ready}, locked=${!!window.popupLocked}`);
+    if (window.popupLocked) {
+      console.log(`Locked, skipping auto`);
+      return;
+    }
+    if (!ready || !triggerRef.current) {
+      console.log(`Not ready/no trigger for auto, fallback redirect`);
+      fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
+      return;
+    }
+    console.log(`Showing auto popup`);
+    window.popupLocked = true;
+    triggerRef.current.click();
+    checkModalAndFallback(triggerRef.current.href); // Poll for modal
+  }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback]);
 
   // Debounced show every time (CTA—no session)
   const showDebounced = useCallback(
@@ -146,5 +142,5 @@ export default function useFormkitPopup(
     console.log(`Ready state: ${ready}`);
   }, [ready]);
 
-  return { ready, showOncePerSession, showDebounced };
+  return { ready, showAuto, showDebounced };
 }
