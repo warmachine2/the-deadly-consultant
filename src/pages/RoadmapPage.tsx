@@ -15,7 +15,7 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "8677000"; // FIXED: From log (confirm in ConvertKit dashboard)
+  const formId = "fbd8fa5d1b"; // FIXED: Original ID from logs (confirm in dashboard)
   const autoTriggeredRef = useRef(false); // Ensure single auto call
   const refocusObserverRef = useRef<MutationObserver | null>(null); // For refocus
 
@@ -26,10 +26,12 @@ const RoadmapPage = () => {
     if (!ready || autoTriggeredRef.current) return; // Guard: Only once after ready
     console.log("Auto effect fired"); // Debug
     autoTriggeredRef.current = true;
-    // FIXED: Longer buffer for trigger wiring
+    // FIXED: Force attempt after 3s (ignores ready if stuck)
     setTimeout(() => {
-      showOncePerSession("roadmap_popup_shown");
-    }, 500); // Increased to 500ms
+      if (!window.popupLocked) {
+        showOncePerSession("roadmap_popup_shown");
+      }
+    }, 3000); // 3s buffer for script
   }, [ready, showOncePerSession]);
 
   // NEW: Refocus after modal close (MutationObserver for .ck-subscription-form removal)
@@ -43,6 +45,9 @@ const RoadmapPage = () => {
           );
           if (modalRemoved) {
             console.log("Modal removed, refocusing page"); // Debug
+            // FIXED: Force backdrop removal for white screen
+            const backdrop = document.querySelector(".ck-subscription-form");
+            if (backdrop) backdrop.remove();
             document.body.focus();
             window.scrollTo({ top: 0, behavior: "smooth" });
             observer.disconnect();
@@ -53,6 +58,23 @@ const RoadmapPage = () => {
     refocusObserverRef.current = observer;
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
+  }, []);
+
+  // FIXED: Escape listener for close (forces refocus)
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        const modal = document.querySelector(".ck-subscription-form");
+        if (modal) {
+          modal.remove();
+          console.log("Escape closed modal, refocusing");
+        }
+        document.body.focus();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
   // NEW: Dev-only session clear (remove for production)
