@@ -474,6 +474,108 @@ All colors MUST be HSL.
     }
   }
 
+  /* Bokeh orbs effect for hero section */
+  .bokeh-orbs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .bokeh-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.25;
+    animation: bokeh-pulse 4s ease-in-out infinite;
+  }
+
+  .bokeh-orb-1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(74, 123, 167, 0.6) 0%, rgba(74, 123, 167, 0) 70%);
+    top: 10%;
+    left: 15%;
+    animation-delay: 0s;
+  }
+
+  .bokeh-orb-2 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(107, 79, 168, 0.6) 0%, rgba(107, 79, 168, 0) 70%);
+    top: 60%;
+    right: 10%;
+    animation-delay: 1s;
+  }
+
+  .bokeh-orb-3 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(74, 123, 167, 0.5) 0%, rgba(74, 123, 167, 0) 70%);
+    bottom: 15%;
+    left: 25%;
+    animation-delay: 2s;
+  }
+
+  .bokeh-orb-4 {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(107, 79, 168, 0.5) 0%, rgba(107, 79, 168, 0) 70%);
+    top: 30%;
+    right: 30%;
+    animation-delay: 0.5s;
+  }
+
+  .bokeh-orb-5 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(74, 123, 167, 0.4) 0%, rgba(74, 123, 167, 0) 70%);
+    bottom: 40%;
+    right: 15%;
+    animation-delay: 1.5s;
+  }
+
+  .hero-bokeh:hover .bokeh-orb {
+    animation: bokeh-pulse-hover 3s ease-in-out infinite;
+  }
+
+  @keyframes bokeh-pulse {
+    0%,
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 0.25;
+    }
+    50% {
+      transform: scale(1.1) translateY(-10px);
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes bokeh-pulse-hover {
+    0%,
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 0.3;
+    }
+    50% {
+      transform: scale(1.15) translateY(-15px);
+      opacity: 0.35;
+    }
+  }
+
+  /* FIXED: ConvertKit modal backdrop - transparent with roadmap visible behind */
+  .ck-subscription-form {
+    background: rgba(0, 0, 0, 0.5) !important; /* Semi-transparent backdrop */
+    z-index: 9999;
+  }
+
+  .ck-subscription-form .ck-subscription-form-modal {
+    backdrop-filter: blur(0) !important; /* No blur on content */
+  }
+
   /* Prose styling for Ghost content on dark backgrounds */
   .prose {
     color: #f1f5f9;
@@ -603,104 +705,5 @@ All colors MUST be HSL.
   .prose em,
   .prose i {
     color: #9ca3af !important;
-  }
-
-  /* Bokeh orbs effect for hero section */
-  .bokeh-orbs {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .bokeh-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.25;
-    animation: bokeh-pulse 4s ease-in-out infinite;
-  }
-
-  .bokeh-orb-1 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(74, 123, 167, 0.6) 0%, rgba(74, 123, 167, 0) 70%);
-    top: 10%;
-    left: 15%;
-    animation-delay: 0s;
-  }
-
-  .bokeh-orb-2 {
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(107, 79, 168, 0.6) 0%, rgba(107, 79, 168, 0) 70%);
-    top: 60%;
-    right: 10%;
-    animation-delay: 1s;
-  }
-
-  .bokeh-orb-3 {
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(74, 123, 167, 0.5) 0%, rgba(74, 123, 167, 0) 70%);
-    bottom: 15%;
-    left: 25%;
-    animation-delay: 2s;
-  }
-
-  .bokeh-orb-4 {
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, rgba(107, 79, 168, 0.5) 0%, rgba(107, 79, 168, 0) 70%);
-    top: 30%;
-    right: 30%;
-    animation-delay: 0.5s;
-  }
-
-  .bokeh-orb-5 {
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, rgba(74, 123, 167, 0.4) 0%, rgba(74, 123, 167, 0) 70%);
-    bottom: 40%;
-    right: 15%;
-    animation-delay: 1.5s;
-  }
-
-  .hero-bokeh:hover .bokeh-orb {
-    animation: bokeh-pulse-hover 3s ease-in-out infinite;
-  }
-
-  @keyframes bokeh-pulse {
-    0%,
-    100% {
-      transform: scale(1) translateY(0);
-      opacity: 0.25;
-    }
-    50% {
-      transform: scale(1.1) translateY(-10px);
-      opacity: 0.3;
-    }
-  }
-
-  @keyframes bokeh-pulse-hover {
-    0%,
-    100% {
-      transform: scale(1) translateY(0);
-      opacity: 0.3;
-    }
-    50% {
-      transform: scale(1.15) translateY(-15px);
-      opacity: 0.35;
-      .ck-subscription-form {
-        background: rgba(0, 0, 0, 0.5) !important; /* Transparent backdrop—roadmap visible behind */
-        z-index: 9999;
-      }
-      .ck-subscription-form .ck-subscription-form-modal {
-        backdrop-filter: blur(0) !important; /* No blur on content */
-      }
-    }
   }
 }
