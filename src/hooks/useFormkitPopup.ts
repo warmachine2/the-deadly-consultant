@@ -1,5 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// FIXED: Move declare global to top level (after imports)
+declare global {
+  interface Window {
+    popupLocked?: boolean;
+  }
+}
+
 interface UseFormkitPopupReturn {
   ready: boolean;
   showOncePerSession: (sessionKey: string) => void;
@@ -10,13 +17,6 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null); // For CTA debounce
-
-  // Extend Window for locks (TS-safe, local to hook)
-  declare global {
-    interface Window {
-      popupLocked?: boolean;
-    }
-  }
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -70,54 +70,18 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   }, [formId, createTriggerIfNeeded]);
 
   // Show once per session (auto-use case)
-  const showOncePerSession = useCallback(
-    (sessionKey: string) => {
-      if (sessionStorage.getItem(sessionKey) || window.popupLocked) {
-        console.log(`Session guard or lock active for ${sessionKey}, skipping show`);
-        return;
-      }
+  const showOncePerSession = useCallback((sessionKey: string) => {
+    if (sessionStorage.getItem(sessionKey) || window.popupLocked) {
+      console.log(`Session guard or lock active for ${sessionKey}, skipping show`);
+      return;
+    }
 
-      if (!ready || !triggerRef.current) {
-        console.log(`Not ready for ${formId}, skipping show`);
-        return;
-      }
+    if (!ready || !triggerRef.current) {
+      console.log(`Not ready for ${formId}, skipping show`);
+      return;
+    }
 
-      console.log(`Showing Formkit popup once for ${sessionKey}`);
-      window.popupLocked = true;
-      triggerRef.current.click();
-      sessionStorage.setItem(sessionKey, "1");
-      setTimeout(() => {
-        window.popupLocked = false;
-      }, 1000); // 1s lock
-    },
-    [formId, ready],
-  );
-
-  // Debounced show (CTA-use case, allows re-open if closed)
-  const showDebounced = useCallback(
-    (delayMs: number) => {
-      if (debounceRef.current || window.popupLocked) {
-        console.log("Debounce or lock active, skipping CTA show");
-        return;
-      }
-
-      if (!ready || !triggerRef.current) {
-        console.log(`Not ready for ${formId}, skipping debounced show`);
-        return;
-      }
-
-      console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
-      debounceRef.current = setTimeout(() => {
-        window.popupLocked = true;
-        triggerRef.current!.click();
-        setTimeout(() => {
-          window.popupLocked = false;
-          debounceRef.current = null;
-        }, 1000); // Lock during show
-      }, delayMs);
-    },
-    [formId, ready],
-  );
-
-  return { ready, showOncePerSession, showDebounced };
-}
+    console.log(`Showing Formkit popup once for ${sessionKey}`);
+    window.popupLocked = true;
+    triggerRef.current.click();
+    sessionStorage.setItem(sessionKey
