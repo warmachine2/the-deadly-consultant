@@ -3,6 +3,13 @@ import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
 
+// FIXED: Extend Window for custom flag (TS-safe)
+declare global {
+  interface Window {
+    roadmapAutoShown?: boolean;
+  }
+}
+
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
