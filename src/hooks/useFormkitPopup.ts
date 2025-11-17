@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-// FIXED: Move declare global to top level (after imports)
+// FIXED: Ambient declaration at top level
 declare global {
   interface Window {
     popupLocked?: boolean;
@@ -16,12 +16,12 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<NodeJS.Timeout | null>(null); // For CTA debounce
+  const debounceRef = useRef<number | null>(null); // FIXED: number for browser setTimeout
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
     const trigger = document.createElement("a");
-    trigger.href = `https://app.convertkit.com/forms/${formId}/subscriptions/new`; // Standard fallback
+    trigger.href = "https://bifintechconsulting.com/roadmap-signup"; // Your fallback
     trigger.setAttribute("data-formkit-toggle", formId);
     trigger.style.display = "none";
     trigger.style.position = "absolute";
@@ -42,21 +42,24 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     }
 
     const script = document.createElement("script");
-    script.src = `https://f.convertkit.com/${formId}/ckjs/ck.5.js`; // Updated to official CKJS (more reliable than custom subdomain)
+    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`; // FIXED: Original custom src
     script.async = true;
-    script.setAttribute("data-ck-subscription-one-click", formId); // One-click mode for modals
+    script.setAttribute("data-uid", formId); // FIXED: Original attribute
     script.onload = () => {
       console.log(`Formkit script loaded for ${formId}`);
+      // Buffer for event binding
       setTimeout(() => {
         createTriggerIfNeeded();
         setReady(true);
         console.log(`Formkit ready for ${formId}!`);
-      }, 500); // Buffer for event binding
+      }, 500);
     };
     document.head.appendChild(script);
 
     return () => {
-      if (document.head.contains(script)) document.head.removeChild(script);
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
       if (triggerRef.current && document.body.contains(triggerRef.current)) {
         document.body.removeChild(triggerRef.current);
         triggerRef.current = null;
@@ -107,13 +110,15 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
+      // FIXED: Reformatted setTimeout without inline comment
       debounceRef.current = setTimeout(() => {
         window.popupLocked = true;
         triggerRef.current!.click();
+        // Lock during show
         setTimeout(() => {
           window.popupLocked = false;
           debounceRef.current = null;
-        }, 1000); // Lock during show
+        }, 1000);
       }, delayMs);
     },
     [formId, ready],
