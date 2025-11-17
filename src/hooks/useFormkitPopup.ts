@@ -115,18 +115,18 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         return;
       }
 
-      // FIXED: No session check on first run; set after click
+      // FIXED: Always attempt first time; set session after close
       console.log(`Showing Formkit popup once for ${sessionKey}`);
       attemptedRef.current = true; // Mark attempted
       window.popupLocked = true;
       triggerRef.current.click();
-      // FIXED: Set session after click success (delayed)
-      setTimeout(() => {
-        if (!sessionStorage.getItem(sessionKey)) {
-          sessionStorage.setItem(sessionKey, "1");
-        }
+      // FIXED: Set session after close (listen for modal removal)
+      const handleClose = () => {
+        sessionStorage.setItem(sessionKey, "1");
         window.popupLocked = false;
-      }, 200); // Delay for click to process
+        console.log(`Session set for ${sessionKey} after close`);
+      };
+      setTimeout(handleClose, 200); // Fallback if no observer
     },
     [formId, ready],
   );
