@@ -17,6 +17,7 @@ const RoadmapPage = () => {
   const [loading, setLoading] = useState(true);
   const formId = "8677000"; // FIXED: From log (confirm in ConvertKit dashboard)
   const autoTriggeredRef = useRef(false); // Ensure single auto call
+  const refocusObserverRef = useRef<MutationObserver | null>(null); // For refocus
 
   const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
 
@@ -31,15 +32,27 @@ const RoadmapPage = () => {
     }, 500); // Increased to 500ms
   }, [ready, showOncePerSession]);
 
-  // NEW: Refocus page after modal close
+  // NEW: Refocus after modal close (MutationObserver for .ck-subscription-form removal)
   useEffect(() => {
-    const handleModalClose = () => {
-      console.log("Modal closed, refocusing page"); // Debug
-      document.body.focus();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-    window.addEventListener("formkit:modal:closed", handleModalClose); // ConvertKit event
-    return () => window.removeEventListener("formkit:modal:closed", handleModalClose);
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          const modalRemoved = Array.from(mutation.removedNodes).some(
+            (node) =>
+              node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
+          );
+          if (modalRemoved) {
+            console.log("Modal removed, refocusing page"); // Debug
+            document.body.focus();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            observer.disconnect();
+          }
+        }
+      });
+    });
+    refocusObserverRef.current = observer;
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, []);
 
   // Page load (unchanged)
