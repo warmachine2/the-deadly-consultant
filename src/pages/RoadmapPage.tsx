@@ -20,7 +20,7 @@ const RoadmapPage = () => {
   const scriptLoadedRef = useRef(false); // Ensure single script load
   const refocusObserverRef = useRef<MutationObserver | null>(null);
 
-  const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId, triggerRef); // Pass triggerRef to hook
+  const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // FIXED: Renamed functions for clarity (no params)
 
   // FIXED: Dynamic Script Load (Vite-compatible, early via useLayoutEffect)
   useLayoutEffect(() => {
@@ -57,10 +57,10 @@ const RoadmapPage = () => {
     setTimeout(() => {
       console.log(`Auto-show attempt: ready=${ready}, locked=${!!window.popupLocked}`); // Debug
       if (!window.popupLocked) {
-        showOncePerSession(); // FIXED: No sessionKey—always show
+        showAuto(); // FIXED: No args
       }
     }, 2000);
-  }, [showOncePerSession, ready]);
+  }, [showAuto, ready]);
 
   // Observer for modal close (refocus + release lock only—no session set)
   useEffect(() => {
@@ -163,7 +163,7 @@ const RoadmapPage = () => {
       e.preventDefault();
       e.stopPropagation();
       console.log("CTA onClick fired");
-      showDebounced(1000); // FIXED: No sessionKey—always allow for CTA
+      showDebounced(1000); // FIXED: No args
       console.log("CTA triggered");
     },
     [showDebounced],
