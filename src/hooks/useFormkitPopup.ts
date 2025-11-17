@@ -73,6 +73,8 @@ export default function useFormkitPopup(
           modalPollRef.current = null;
         }
         window.open(href, '_blank');
+        // Allow future shows since popup didn't appear
+        isShowingRef.current = false;
       }
     }, 150) as unknown as number;
   }, [isModalOpen]);
@@ -86,10 +88,15 @@ export default function useFormkitPopup(
   const showAuto = useCallback(() => {
     console.log(`showAuto: ready=${ready}`);
     if (!ready || !triggerRef.current) return;
+    if ((window as any).__ckAutoDone) {
+      console.log('Auto popup already attempted — skip');
+      return;
+    }
     if (isShowingRef.current || isModalOpen()) {
       console.log('Popup already showing — skip auto');
       return;
     }
+    (window as any).__ckAutoDone = true;
     isShowingRef.current = true;
     console.log(`Showing auto popup via trigger click`);
     triggerRef.current.click();
