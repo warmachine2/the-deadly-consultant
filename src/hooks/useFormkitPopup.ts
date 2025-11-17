@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 declare global {
   interface Window {
     popupLocked?: boolean;
+    formkit?: any; // ConvertKit global
   }
 }
 
@@ -18,6 +19,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const triggerRef = useRef<HTMLElement | null>(null);
   const debounceRef = useRef<number | null>(null); // number | null for browser setTimeout
   const ctaCallCountRef = useRef(0); // Debug log
+  const attemptedRef = useRef(false); // NEW: Track show attempts to prevent multi-runs
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -32,8 +34,16 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     console.log(`Formkit trigger created for ${formId}`);
   }, [formId]);
 
-  // Load script + set ready (runs once)
+  // Load script + set ready (runs once, idempotent)
   useEffect(() => {
+    // FIXED: Check if Formkit already initialized globally
+    if (window.formkit) {
+      console.log(`Formkit already initialized for ${formId}`);
+      createTriggerIfNeeded();
+      setReady(true);
+      return;
+    }
+
     const existingScript = document.querySelector(`script[data-uid="${formId}"]`);
     if (existingScript) {
       console.log(`Formkit script already loaded for ${formId}`);
@@ -76,8 +86,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   // Show once per session (auto-use case)
   const showOncePerSession = useCallback(
     (sessionKey: string) => {
-      if (sessionStorage.getItem(sessionKey) || window.popupLocked) {
-        console.log(`Session guard or lock active for ${sessionKey}, skipping show`);
+      if (attemptedRef.current || sessionStorage.getItem(sessionKey) || window.popupLocked) {
+        console.log(`Attempt/session guard or lock active for ${sessionKey}, skipping show`);
         return;
       }
 
@@ -87,9 +97,10 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Showing Formkit popup once for ${sessionKey}`);
+      attemptedRef.current = true; // Mark attempted
       window.popupLocked = true;
       triggerRef.current.click();
-      sessionStorage.setItem(sessionKey, "1");
+      sessionStorage.setItem(sessionKey, "1"); // Set after click (success)
       setTimeout(() => {
         window.popupLocked = false;
       }, 1000); // 1s lock
@@ -125,7 +136,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           window.popupLocked = false;
           debounceRef.current = null;
         }, 1000);
-      }, delayMs) as unknown as number; // FIXED: Double-cast for TS2352
+      }, delayMs) as unknown as number; // Double-cast for TS
     },
     [formId, ready],
   );
