@@ -208,10 +208,10 @@ const Index = () => {
       </div>
 
       {/* Post Modal - Conditional render based on modalOpen */}
-      {/* NOTE: If double-modal persists, update Radix UI: npm update @radix-ui/react-dialog */}
+      {/* NOTE: Run 'npm update @radix-ui/react-dialog' to fix known re-render bugs if persists */}
       {modalOpen && (
         <PostModal
-          key={selectedPost?.id || 'modal'}
+          key={selectedPost?.slug || 'modal-unique'}
           post={selectedPost}
           isOpen={modalOpen}
           onClose={() => {
