@@ -4,7 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 declare global {
   interface Window {
     popupLocked?: boolean;
-    formkitLoaded?: { [key: string]: boolean }; // NEW: Global per-form ID to prevent multi-loads
+    formkitLoaded?: { [key: string]: boolean }; // Per-form ID to prevent multi-loads
+    ctaLocked?: boolean; // NEW: Global for CTA lock
   }
 }
 
@@ -83,6 +84,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         triggerRef.current = null;
       }
       window.popupLocked = false; // Reset lock
+      window.ctaLocked = false; // NEW: Reset CTA lock
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
         debounceRef.current = null;
@@ -120,7 +122,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     (delayMs: number) => {
       ctaCallCountRef.current += 1; // Debug log
       console.log(`CTA call #${ctaCallCountRef.current}`);
-      if (debounceRef.current !== null || window.popupLocked) {
+      if (debounceRef.current !== null || window.popupLocked || window.ctaLocked) {
         console.log("Debounce or lock active, skipping CTA show");
         return;
       }
@@ -131,8 +133,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
-      // FIXED: Immediate lock + cancel previous if any
-      window.popupLocked = true;
+      // FIXED: Immediate global lock + cancel previous
+      window.ctaLocked = true;
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
       }
@@ -141,6 +143,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         // Release after show + lock
         setTimeout(() => {
           window.popupLocked = false;
+          window.ctaLocked = false;
           debounceRef.current = null;
         }, 1000);
       }, delayMs) as unknown as number; // Double-cast for TS
