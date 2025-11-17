@@ -18,10 +18,13 @@ export default function PostModal({
   fullContent,
   isLoading = false,
 }: PostModalProps) {
-  // Debug: Track modal renders
+  // Debug: Track modal mounts and unmounts
   useEffect(() => {
-    console.log('PostModal rendered', { postId: post?.id, isOpen, isLoading });
-  }, [post?.id, isOpen, isLoading]);
+    console.log('PostModal mounted/rendered', { postId: post?.id, slug: post?.slug, isOpen });
+    return () => {
+      console.log('PostModal unmounted', { postId: post?.id, slug: post?.slug });
+    };
+  }, [post?.id, post?.slug, isOpen]);
 
   // Only render when explicitly open
   if (!isOpen) return null;
