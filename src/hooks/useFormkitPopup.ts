@@ -8,6 +8,7 @@ declare global {
     ctaTrigger?: { [key: string]: HTMLElement }; // Global trigger per form to prevent multi-triggers
     ctaLocked?: boolean; // Global for CTA lock
     formkit?: any; // ConvertKit global for polling
+    formkitReady?: { [key: string]: boolean }; // NEW: Shared ready state across instances
   }
 }
 
@@ -28,6 +29,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   if (typeof window !== "undefined") {
     window.formkitLoaded = window.formkitLoaded || {};
     window.ctaTrigger = window.ctaTrigger || {};
+    window.formkitReady = window.formkitReady || {};
   }
 
   const createTriggerIfNeeded = useCallback(() => {
@@ -49,6 +51,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     if (window.formkitLoaded?.[formId]) {
       console.log(`Formkit already loaded for ${formId}`);
       createTriggerIfNeeded();
+      // FIXED: Use shared global ready
+      window.formkitReady[formId] = true;
       setReady(true);
       return;
     }
@@ -57,6 +61,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     if (existingScript) {
       console.log(`Formkit script already loaded for ${formId}`);
       createTriggerIfNeeded();
+      // FIXED: Use shared global ready
+      window.formkitReady[formId] = true;
       setReady(true);
       return;
     }
@@ -71,6 +77,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       const pollReady = () => {
         if (window.formkit) {
           createTriggerIfNeeded();
+          // FIXED: Use shared global ready
+          window.formkitReady[formId] = true;
           setReady(true);
           console.log(`Formkit ready for ${formId}! (polled)`);
         } else {
@@ -78,14 +86,15 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         }
       };
       pollReady();
-      // FIXED: Fallback ready after 3s if polling fails (ad blocker)
+      // FIXED: Fallback ready after 2s if polling fails (ad blocker)
       setTimeout(() => {
-        if (!ready) {
+        if (!window.formkitReady[formId]) {
           createTriggerIfNeeded();
+          window.formkitReady[formId] = true;
           setReady(true);
           console.log(`Formkit fallback ready for ${formId}!`);
         }
-      }, 3000);
+      }, 2000);
     };
     document.head.appendChild(script);
 
@@ -108,7 +117,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         debounceRef.current = null;
       }
     };
-  }, [formId, createTriggerIfNeeded, ready]);
+  }, [formId, createTriggerIfNeeded]);
 
   // Show once per session (auto-use case)
   const showOncePerSession = useCallback(
@@ -162,7 +171,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
       debounceRef.current = setTimeout(() => {
         // FIXED: Poll ready one more time before click
-        const finalReady = window.formkit || true; // Fallback true
+        const finalReady = window.formkitReady[formId] || true; // Fallback true
         if (finalReady && triggerRef.current) {
           triggerRef.current.click();
           console.log("Trigger clicked for CTA");
