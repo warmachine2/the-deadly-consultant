@@ -4,12 +4,6 @@ import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
 import useFormkitPopup from "@/hooks/useFormkitPopup";
 
-// FIXED: Extend Window for custom flag
-declare global {
-  interface Window {
-    popupLocked?: boolean;
-  }
-}
 
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
@@ -19,7 +13,8 @@ const RoadmapPage = () => {
   // FIXED: Use the subdomain from embed code
   const creatorSubdomain = "bi-fintech-consultant-academy";
   const autoTriggeredRef = useRef(false);
-  const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
+  const ctaTriggeredRef = useRef(false);
+  const triggerRef = useRef<HTMLAnchorElement | null>(null);
   const scriptLoadedRef = useRef(false); // Ensure single script load
   const refocusObserverRef = useRef<MutationObserver | null>(null);
   const cleanupTimeoutRef = useRef<number | null>(null); // For force cleanup
@@ -53,20 +48,16 @@ const RoadmapPage = () => {
     document.head.appendChild(script);
   }, [formId, creatorSubdomain]);
 
-  // Auto-show EVERY TIME (wait for ready)
   useEffect(() => {
-    if (autoTriggeredRef.current || !ready) return; // FIXED: Wait for ready
+    if (autoTriggeredRef.current || !ready) return;
     console.log("Auto effect fired");
     autoTriggeredRef.current = true;
     setTimeout(() => {
-      console.log(`Auto-show attempt: ready=${ready}, locked=${!!window.popupLocked}`); // Debug
-      if (!window.popupLocked) {
-        showAuto(); // FIXED: No args
-      }
+      console.log(`Auto-show attempt: ready=${ready}`);
+      showAuto();
     }, 2000);
   }, [showAuto, ready]);
 
-  // FIXED: Force cleanup timeout after any show (prevents stuck backdrop)
   useEffect(() => {
     return () => {
       if (cleanupTimeoutRef.current) {
@@ -80,7 +71,6 @@ const RoadmapPage = () => {
     console.log("Force cleanup: Removing all ConvertKit elements");
     const ckElements = document.querySelectorAll('[class*="ck-"], [data-formkit-toggle]');
     ckElements.forEach((el) => el.remove());
-    window.popupLocked = false;
     document.body.focus();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -187,9 +177,14 @@ const RoadmapPage = () => {
     (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      if (ctaTriggeredRef.current) {
+        console.log("CTA already triggered, skipping");
+        return;
+      }
       console.log("CTA onClick fired");
-      showDebounced(1000); // FIXED: Call with delay
-      setCleanupTimeout(); // FIXED: Start safety timer
+      ctaTriggeredRef.current = true;
+      showDebounced(1000);
+      setCleanupTimeout();
       console.log("CTA triggered");
     },
     [showDebounced, setCleanupTimeout],
