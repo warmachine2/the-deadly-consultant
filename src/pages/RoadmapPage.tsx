@@ -15,7 +15,7 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "fbd8fa5d1b"; // FIXED: Original ID from logs (confirm in dashboard)
+  const formId = "8677000"; // FIXED: Matches POST from logs
   const autoTriggeredRef = useRef(false); // Ensure single auto call
   const refocusObserverRef = useRef<MutationObserver | null>(null); // For refocus
 
@@ -38,18 +38,17 @@ const RoadmapPage = () => {
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.type === "childList") {
-          const modalRemoved = Array.from(mutation.removedNodes).some(
-            (node) =>
-              node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
+        if (mutation.type === 'childList') {
+          const modalRemoved = Array.from(mutation.removedNodes).some(node => 
+            node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains('ck-subscription-form')
           );
           if (modalRemoved) {
             console.log("Modal removed, refocusing page"); // Debug
             // FIXED: Force backdrop removal for white screen
-            const backdrop = document.querySelector(".ck-subscription-form");
+            const backdrop = document.querySelector('.ck-subscription-form');
             if (backdrop) backdrop.remove();
             document.body.focus();
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             observer.disconnect();
           }
         }
@@ -63,18 +62,18 @@ const RoadmapPage = () => {
   // FIXED: Escape listener for close (forces refocus)
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        const modal = document.querySelector(".ck-subscription-form");
+      if (e.key === 'Escape') {
+        const modal = document.querySelector('.ck-subscription-form');
         if (modal) {
           modal.remove();
           console.log("Escape closed modal, refocusing");
         }
         document.body.focus();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
   // Page load (unchanged)
@@ -135,6 +134,11 @@ const RoadmapPage = () => {
       e.preventDefault();
       e.stopPropagation(); // FIXED: Prevent bubble
       console.log("CTA onClick fired"); // Debug
+      // FIXED: Global lock before showDebounced (prevents dupes)
+      if (window.ctaLocked) {
+        console.log("CTA locked, skipping");
+        return;
+      }
       showDebounced(1000); // 1s debounce for CTA
       // FIXED: No fallback redirect—stay on page (add if needed later)
       console.log("CTA triggered—no fallback redirect");
@@ -194,27 +198,4 @@ const RoadmapPage = () => {
             </section>
 
             <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
-              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
-              </p>
-              <a
-                href="https://bifintechconsulting.com/roadmap-signup"
-                onClick={handleCTAClick}
-                className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
-              >
-                Get Your Free Roadmap PDF
-              </a>
-            </section>
-          </>
-        ) : (
-          <div className="glass rounded-3xl p-12 text-center">
-            <p className="text-muted-foreground">Content not available. Please check back later.</p>
-          </div>
-        )}
-      </main>
-    </div>
-  );
-};
-
-export default RoadmapPage;
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb
