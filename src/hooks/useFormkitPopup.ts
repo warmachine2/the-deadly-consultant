@@ -15,75 +15,67 @@ interface UseFormkitPopupReturn {
 
 export default function useFormkitPopup(
   formId: string,
-  triggerRef: RefObject<HTMLAnchorElement>, // Receive static ref
+  triggerRef: RefObject<HTMLAnchorElement>,
 ): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const debounceRef = useRef<number | null>(null);
-  const clickTimeoutRef = useRef<number | null>(null); // For post-click modal poll
+  const clickTimeoutRef = useRef<number | null>(null);
 
-  // FIXED: Poll for ready (removed force fallback—ready only if actually loaded)
+  // Poll for ConvertKit script initialization
   useEffect(() => {
-    console.log(`Starting poll for ${formId} ready state`);
-    const pollInterval = setInterval(() => {
-      if (window.formkit) {
-        window.formkitReady = window.formkitReady || {};
-        window.formkitReady[formId] = true;
+    console.log(`Starting readiness check for ${formId}`);
+    let attempts = 0;
+    const maxAttempts = 30; // 3 seconds total
+    
+    const checkReady = setInterval(() => {
+      attempts++;
+      const trigger = document.querySelector(`[data-formkit-toggle="${formId}"]`);
+      
+      if (trigger) {
+        console.log(`ConvertKit trigger found for ${formId}, marking ready`);
         setReady(true);
-        console.log(`Formkit ready for ${formId}! (polled)`);
-        clearInterval(pollInterval);
+        clearInterval(checkReady);
+      } else if (attempts >= maxAttempts) {
+        console.log(`ConvertKit not detected after ${maxAttempts} attempts, marking ready anyway`);
+        setReady(true);
+        clearInterval(checkReady);
       }
     }, 100);
 
-    // Optional: Extend poll timeout if needed, but no force ready
-    const longPoll = setTimeout(() => {
-      if (!ready) {
-        console.log(`Extended poll for ${formId}—still waiting...`);
-      }
-    }, 5000);
+    return () => clearInterval(checkReady);
+  }, [formId]);
 
-    return () => {
-      clearInterval(pollInterval);
-      clearTimeout(longPoll);
-    };
-  }, [formId, ready]);
-
-  // FIXED: Post-click modal check (poll 3s, redirect if no .ck-subscription-form)
+  // Post-click modal check - poll for modal appearance
   const checkModalAndFallback = useCallback((href: string) => {
     console.log("Post-click: Polling for modal...");
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     clickTimeoutRef.current = setTimeout(() => {
-      const modal = document.querySelector(".ck-subscription-form");
+      const modal = document.querySelector('[class*="formkit"], [data-formkit-id]');
       if (!modal) {
         console.log("No modal appeared after click—redirecting to signup");
-        window.location.href = href;
+        window.open(href, '_blank');
       } else {
         console.log("Modal detected after click—success!");
       }
-    }, 3000) as unknown as number;
+    }, 2000) as unknown as number;
   }, []);
 
-  // FIXED: Fallback redirect (use trigger href only)
+  // Fallback redirect - open in new tab
   const fallbackRedirect = useCallback((href: string) => {
-    console.log(`Immediate fallback: Redirecting to ${href}`);
-    setTimeout(() => (window.location.href = href), 500);
+    console.log(`Fallback: Opening signup in new tab ${href}`);
+    window.open(href, '_blank');
   }, []);
 
   const showAuto = useCallback(() => {
     console.log(`showAuto: ready=${ready}`);
     if (!ready || !triggerRef.current) {
-      console.log(`Not ready/no trigger for auto, fallback redirect`);
-      fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
+      console.log(`Not ready/no trigger for auto, skipping`);
       return;
     }
-    if (!window.formkit) {
-      console.log("Formkit not loaded—fallback redirect");
-      fallbackRedirect(triggerRef.current.href);
-      return;
-    }
-    console.log(`Showing auto popup`);
+    console.log(`Showing auto popup via trigger click`);
     triggerRef.current.click();
     checkModalAndFallback(triggerRef.current.href);
-  }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback]);
+  }, [ready, triggerRef, checkModalAndFallback]);
 
   const showDebounced = useCallback(
     (delayMs: number) => {
@@ -93,13 +85,8 @@ export default function useFormkitPopup(
         return;
       }
       if (!ready || !triggerRef.current) {
-        console.log(`Not ready/no trigger for CTA, fallback redirect`);
+        console.log(`Not ready/no trigger for CTA, opening in new tab`);
         fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
-        return;
-      }
-      if (!window.formkit) {
-        console.log("Formkit not loaded—fallback redirect");
-        fallbackRedirect(triggerRef.current.href);
         return;
       }
       console.log(`Starting CTA debounced show (delay: ${delayMs}ms)`);
