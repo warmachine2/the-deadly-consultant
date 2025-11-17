@@ -20,45 +20,62 @@ export default function useFormkitPopup(
   const [ready, setReady] = useState(false);
   const debounceRef = useRef<number | null>(null);
   const clickTimeoutRef = useRef<number | null>(null);
+  const modalPollRef = useRef<number | null>(null);
+  const isShowingRef = useRef(false);
 
-  // Poll for ConvertKit script initialization
+  // Utility: detect if a CK modal/iframe is present
+  const isModalOpen = useCallback(() => {
+    return (
+      !!document.querySelector('.ck-subscription-form, .ck-modal, [role="dialog"][class*="ck-"], [data-formkit-id]') ||
+      !!document.querySelector('iframe[src*="kit.com"], iframe[src*="convertkit"]')
+    );
+  }, []);
+
+  // Ready when the hidden trigger exists (script attaches behavior to it)
   useEffect(() => {
     console.log(`Starting readiness check for ${formId}`);
     let attempts = 0;
-    const maxAttempts = 30; // 3 seconds total
-    
-    const checkReady = setInterval(() => {
+    const maxAttempts = 50; // 5s
+    const timer = setInterval(() => {
       attempts++;
       const trigger = document.querySelector(`[data-formkit-toggle="${formId}"]`);
-      
       if (trigger) {
-        console.log(`ConvertKit trigger found for ${formId}, marking ready`);
         setReady(true);
-        clearInterval(checkReady);
+        console.log(`Formkit ready: trigger present for ${formId}`);
+        clearInterval(timer);
       } else if (attempts >= maxAttempts) {
-        console.log(`ConvertKit not detected after ${maxAttempts} attempts, marking ready anyway`);
-        setReady(true);
-        clearInterval(checkReady);
+        console.log(`Formkit trigger not found after ${maxAttempts} attempts`);
+        clearInterval(timer);
       }
     }, 100);
-
-    return () => clearInterval(checkReady);
+    return () => clearInterval(timer);
   }, [formId]);
 
-  // Post-click modal check - poll for modal appearance
+  // Post-click: poll for modal and cancel fallback if detected
   const checkModalAndFallback = useCallback((href: string) => {
-    console.log("Post-click: Polling for modal...");
-    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
-    clickTimeoutRef.current = setTimeout(() => {
-      const modal = document.querySelector('[class*="formkit"], [data-formkit-id]');
-      if (!modal) {
-        console.log("No modal appeared after click—redirecting to signup");
-        window.open(href, '_blank');
-      } else {
-        console.log("Modal detected after click—success!");
+    console.log("Post-click: watching for modal...");
+    if (modalPollRef.current) clearInterval(modalPollRef.current);
+    const start = Date.now();
+    modalPollRef.current = setInterval(() => {
+      const elapsed = Date.now() - start;
+      if (isModalOpen()) {
+        console.log("Modal detected — cancelling fallback");
+        if (modalPollRef.current) {
+          clearInterval(modalPollRef.current);
+          modalPollRef.current = null;
+        }
+        return;
       }
-    }, 2000) as unknown as number;
-  }, []);
+      if (elapsed > 3000) {
+        console.log("No modal after 3s — opening fallback in new tab");
+        if (modalPollRef.current) {
+          clearInterval(modalPollRef.current);
+          modalPollRef.current = null;
+        }
+        window.open(href, '_blank');
+      }
+    }, 150) as unknown as number;
+  }, [isModalOpen]);
 
   // Fallback redirect - open in new tab
   const fallbackRedirect = useCallback((href: string) => {
@@ -68,14 +85,16 @@ export default function useFormkitPopup(
 
   const showAuto = useCallback(() => {
     console.log(`showAuto: ready=${ready}`);
-    if (!ready || !triggerRef.current) {
-      console.log(`Not ready/no trigger for auto, skipping`);
+    if (!ready || !triggerRef.current) return;
+    if (isShowingRef.current || isModalOpen()) {
+      console.log('Popup already showing — skip auto');
       return;
     }
+    isShowingRef.current = true;
     console.log(`Showing auto popup via trigger click`);
     triggerRef.current.click();
     checkModalAndFallback(triggerRef.current.href);
-  }, [ready, triggerRef, checkModalAndFallback]);
+  }, [ready, triggerRef, checkModalAndFallback, isModalOpen]);
 
   const showDebounced = useCallback(
     (delayMs: number) => {
@@ -89,10 +108,15 @@ export default function useFormkitPopup(
         fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
         return;
       }
+      if (isShowingRef.current || isModalOpen()) {
+        console.log('Popup already showing — skip CTA');
+        return;
+      }
       console.log(`Starting CTA debounced show (delay: ${delayMs}ms)`);
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
       }
+      isShowingRef.current = true;
       debounceRef.current = setTimeout(() => {
         if (triggerRef.current) {
           triggerRef.current.click();
@@ -102,7 +126,7 @@ export default function useFormkitPopup(
         debounceRef.current = null;
       }, delayMs) as unknown as number;
     },
-    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
+    [ready, triggerRef, fallbackRedirect, checkModalAndFallback, isModalOpen],
   );
 
   useEffect(() => {
@@ -115,8 +139,24 @@ export default function useFormkitPopup(
         clearTimeout(clickTimeoutRef.current);
         clickTimeoutRef.current = null;
       }
+      if (modalPollRef.current !== null) {
+        clearInterval(modalPollRef.current);
+        modalPollRef.current = null;
+      }
+      isShowingRef.current = false;
     };
   }, []);
+
+  // Observe DOM to reset showing flag when modal closes
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      if (!isModalOpen()) {
+        isShowingRef.current = false;
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [isModalOpen]);
 
   // Log ready changes
   useEffect(() => {

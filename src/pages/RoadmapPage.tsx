@@ -13,7 +13,6 @@ const RoadmapPage = () => {
   // FIXED: Use the subdomain from embed code
   const creatorSubdomain = "bi-fintech-consultant-academy";
   const autoTriggeredRef = useRef(false);
-  const ctaTriggeredRef = useRef(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null);
   const scriptLoadedRef = useRef(false); // Ensure single script load
   const refocusObserverRef = useRef<MutationObserver | null>(null);
@@ -184,12 +183,7 @@ const RoadmapPage = () => {
     (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      if (ctaTriggeredRef.current) {
-        console.log("CTA already triggered, skipping");
-        return;
-      }
       console.log("CTA onClick fired");
-      ctaTriggeredRef.current = true;
       showDebounced(1000);
       setCleanupTimeout();
       console.log("CTA triggered");
