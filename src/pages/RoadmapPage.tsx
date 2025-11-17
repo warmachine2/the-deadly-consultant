@@ -11,18 +11,23 @@ const RoadmapPage = () => {
 
   // Load ConvertKit script + Show modal ONLY ONCE (strong lock for live sites)
   useEffect(() => {
+    const POPUP_KEY = 'convertkit-popup-shown';
     const w = window as any;
-    // Lock: If already shown, skip everything
-    if (w.popupLocked) {
-      console.log("Popup already locked – skipping");
+    
+    // Check persistent session lock first
+    if (sessionStorage.getItem(POPUP_KEY) === 'true' || w.popupLocked || shownRef.current) {
+      console.log("Popup already shown – skipping");
       return;
     }
-    w.popupLocked = true; // Global lock – blocks doubles forever on this page
+    
+    // Set both locks immediately
+    w.popupLocked = true;
+    sessionStorage.setItem(POPUP_KEY, 'true');
 
     // Check for existing script to avoid duplicates
     const existingScript = document.querySelector('script[src*="kit.com/fbd8fa5d1b"]');
     if (existingScript) {
-      console.log("Script already there – just polling");
+      console.log("Script already loaded");
     } else {
       const script = document.createElement("script");
       script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
@@ -32,19 +37,24 @@ const RoadmapPage = () => {
       scriptRef.current = script;
     }
 
-    // Poll slowly for ready state
+    // Poll for ready state with strict single-execution guard
     let attempts = 0;
-    const maxAttempts = 150; // 15s max
-    const interval = setInterval(() => {
+    let intervalId: NodeJS.Timeout | null = null;
+    const maxAttempts = 150;
+    
+    intervalId = setInterval(() => {
       attempts++;
       const w = window as any;
+      
       if (w.formkit && typeof w.formkit.show === "function" && !shownRef.current) {
-        clearInterval(interval);
-        // Wait 3s extra to let everything settle
+        shownRef.current = true;
+        if (intervalId) clearInterval(intervalId);
+        
+        // Single delayed execution
         setTimeout(() => {
-          if (!shownRef.current) {
-            shownRef.current = true;
-            console.log("ConvertKit locked & ready – showing ONCE");
+          if (sessionStorage.getItem(POPUP_KEY) === 'true' && !w.popupExecuted) {
+            w.popupExecuted = true;
+            console.log("Showing ConvertKit popup");
             try {
               w.formkit.show("fbd8fa5d1b");
             } catch (e) {
@@ -53,19 +63,14 @@ const RoadmapPage = () => {
           }
         }, 3000);
       } else if (attempts >= maxAttempts) {
-        clearInterval(interval);
+        if (intervalId) clearInterval(intervalId);
         console.error("ConvertKit load failed");
       }
-    }, 200); // Slower checks (200ms)
+    }, 200);
 
     return () => {
-      clearInterval(interval);
-      if (scriptRef.current && document.head.contains(scriptRef.current)) {
-        document.head.removeChild(scriptRef.current);
-      }
-      // Unlock on leave (for other pages)
-      const w = window as any;
-      w.popupLocked = false;
+      if (intervalId) clearInterval(intervalId);
+      // Don't remove locks - they should persist for the session
     };
   }, []);
 
