@@ -8,7 +8,7 @@ declare global {
     ctaTrigger?: { [key: string]: HTMLElement }; // Global trigger per form to prevent multi-triggers
     ctaLocked?: boolean; // Global for CTA lock
     formkit?: any; // ConvertKit global for polling
-    formkitReady?: { [key: string]: boolean }; // NEW: Shared ready state across instances
+    formkitReady?: { [key: string]: boolean }; // Shared ready state across instances
   }
 }
 
