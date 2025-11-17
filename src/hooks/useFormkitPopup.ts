@@ -70,18 +70,54 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   }, [formId, createTriggerIfNeeded]);
 
   // Show once per session (auto-use case)
-  const showOncePerSession = useCallback((sessionKey: string) => {
-    if (sessionStorage.getItem(sessionKey) || window.popupLocked) {
-      console.log(`Session guard or lock active for ${sessionKey}, skipping show`);
-      return;
-    }
+  const showOncePerSession = useCallback(
+    (sessionKey: string) => {
+      if (sessionStorage.getItem(sessionKey) || window.popupLocked) {
+        console.log(`Session guard or lock active for ${sessionKey}, skipping show`);
+        return;
+      }
 
-    if (!ready || !triggerRef.current) {
-      console.log(`Not ready for ${formId}, skipping show`);
-      return;
-    }
+      if (!ready || !triggerRef.current) {
+        console.log(`Not ready for ${formId}, skipping show`);
+        return;
+      }
 
-    console.log(`Showing Formkit popup once for ${sessionKey}`);
-    window.popupLocked = true;
-    triggerRef.current.click();
-    sessionStorage.setItem(sessionKey
+      console.log(`Showing Formkit popup once for ${sessionKey}`);
+      window.popupLocked = true;
+      triggerRef.current.click();
+      sessionStorage.setItem(sessionKey, "1");
+      setTimeout(() => {
+        window.popupLocked = false;
+      }, 1000); // 1s lock
+    },
+    [formId, ready],
+  );
+
+  // Debounced show (CTA-use case, allows re-open if closed)
+  const showDebounced = useCallback(
+    (delayMs: number) => {
+      if (debounceRef.current || window.popupLocked) {
+        console.log("Debounce or lock active, skipping CTA show");
+        return;
+      }
+
+      if (!ready || !triggerRef.current) {
+        console.log(`Not ready for ${formId}, skipping debounced show`);
+        return;
+      }
+
+      console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
+      debounceRef.current = setTimeout(() => {
+        window.popupLocked = true;
+        triggerRef.current!.click();
+        setTimeout(() => {
+          window.popupLocked = false;
+          debounceRef.current = null;
+        }, 1000); // Lock during show
+      }, delayMs);
+    },
+    [formId, ready],
+  );
+
+  return { ready, showOncePerSession, showDebounced };
+}
