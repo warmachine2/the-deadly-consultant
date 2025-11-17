@@ -7,6 +7,7 @@ declare global {
     formkitLoaded?: { [key: string]: boolean }; // Per-form ID to prevent multi-loads
     ctaTrigger?: { [key: string]: HTMLElement }; // Global trigger per form to prevent multi-triggers
     ctaLocked?: boolean; // Global for CTA lock
+    formkit?: any; // ConvertKit global for polling
   }
 }
 
@@ -66,12 +67,17 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     script.setAttribute("data-uid", formId); // Original attribute
     script.onload = () => {
       console.log(`Formkit script loaded for ${formId}`);
-      // Buffer for event binding
-      setTimeout(() => {
-        createTriggerIfNeeded();
-        setReady(true);
-        console.log(`Formkit ready for ${formId}!`);
-      }, 500);
+      // FIXED: Poll for window.formkit (ready when SDK inits)
+      const pollReady = () => {
+        if (window.formkit) {
+          createTriggerIfNeeded();
+          setReady(true);
+          console.log(`Formkit ready for ${formId}! (polled)`);
+        } else {
+          setTimeout(pollReady, 100); // Poll every 100ms
+        }
+      };
+      pollReady();
     };
     document.head.appendChild(script);
 
