@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
@@ -100,14 +100,12 @@ const Index = () => {
     }
   };
 
-  // Handler with ref guard to prevent duplicate opens
-  const handlePostClickInternal = useCallback(async (post: BlogPost) => {
-    // Guard: prevent duplicate opens
+  // Modal open handler with guard and memoization
+  const handlePostClick = useCallback(async (post: BlogPost) => {
     if (isOpeningRef.current) {
       console.log("Modal already opening, skipping duplicate call");
       return;
     }
-    
     if (!post || !post.slug) {
       console.warn("Invalid post clicked:", post);
       return;
@@ -115,7 +113,7 @@ const Index = () => {
 
     // Set guard
     isOpeningRef.current = true;
-    
+
     setSelectedPost(post);
     setModalOpen(true);
     setFullContent("");
@@ -141,10 +139,10 @@ const Index = () => {
     }, 0);
   }, []);
 
-  // Debounced version to prevent rapid clicks
-  const handlePostClick = useCallback(
-    debounce(handlePostClickInternal, 300, { leading: true, trailing: false }),
-    [handlePostClickInternal]
+  // Debounced handler to avoid rapid multiple opens
+  const debouncedHandlePostClick = useMemo(
+    () => debounce(handlePostClick, 300),
+    [handlePostClick]
   );
 
   const handleTagToggle = (tag: string) => {
@@ -185,7 +183,7 @@ const Index = () => {
                   {/* UPDATED: Added w-full to grid container */}
                   <RoadmapCard /> {/* Prominent teaser tile */}
                   {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} onClick={() => handlePostClick(post)} />
+                    <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
                   ))}
                 </div>
 
