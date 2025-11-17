@@ -25,7 +25,7 @@ const RoadmapPage = () => {
     if (!ready || autoTriggeredRef.current) return; // Guard: Only once after ready
     console.log("Auto effect fired"); // Debug
     autoTriggeredRef.current = true;
-    // FIXED: Longer buffer for trigger wiring (no poll needed)
+    // FIXED: Longer buffer for trigger wiring (no poll needed—ready guarantees it)
     setTimeout(() => {
       showOncePerSession("roadmap_popup_shown");
     }, 300);
