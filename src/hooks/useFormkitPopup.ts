@@ -11,8 +11,8 @@ declare global {
 
 interface UseFormkitPopupReturn {
   ready: boolean;
-  showOncePerSession: (sessionKey: string) => void;
-  showDebounced: (delayMs: number, sessionKey?: string) => void; // Optional key (skip check if undefined for CTA)
+  showOncePerSession: () => void; // FIXED: No param—always show
+  showDebounced: (delayMs: number) => void; // FIXED: No param—always show
 }
 
 export default function useFormkitPopup(
@@ -23,20 +23,12 @@ export default function useFormkitPopup(
   const debounceRef = useRef<number | null>(null);
   const clickTimeoutRef = useRef<number | null>(null); // For post-click modal poll
 
-  // FIXED: Set ready=true immediately after script load (passed from page onload)
-  window.formkitReady = window.formkitReady || {};
+  // FIXED: Poll for ready (force after 2s)
   useEffect(() => {
-    // Initial check
-    if (window.formkit) {
-      window.formkitReady[formId] = true;
-      setReady(true);
-      console.log(`Formkit ready for ${formId}! (initial)`);
-      return;
-    }
-
-    // Poll if not
+    console.log(`Starting poll for ${formId} ready state`);
     const pollInterval = setInterval(() => {
       if (window.formkit) {
+        window.formkitReady = window.formkitReady || {};
         window.formkitReady[formId] = true;
         setReady(true);
         console.log(`Formkit ready for ${formId}! (polled)`);
@@ -44,9 +36,10 @@ export default function useFormkitPopup(
       }
     }, 100);
 
-    // Fallback after 2s (force for click even if no global)
+    // Fallback after 2s
     const fallbackTimeout = setTimeout(() => {
       if (!ready) {
+        window.formkitReady = window.formkitReady || {};
         window.formkitReady[formId] = true;
         setReady(true);
         console.log(`Formkit fallback ready for ${formId} (force for click)`);
@@ -81,16 +74,11 @@ export default function useFormkitPopup(
     setTimeout(() => (window.location.href = href), 500);
   }, []);
 
-  // Show once per session (auto: requires key)
+  // Show every time (auto—no session)
   const showOncePerSession = useCallback(
-    (sessionKey: string) => {
-      console.log(
-        `showOncePerSession: session=${!!sessionStorage.getItem(sessionKey)}, ready=${ready}, locked=${!!window.popupLocked}`,
-      );
-      if (sessionStorage.getItem(sessionKey)) {
-        console.log(`Already shown for ${sessionKey}, skipping auto`);
-        return;
-      }
+    // FIXED: Renamed but always shows
+    () => {
+      console.log(`showOncePerSession: ready=${ready}, locked=${!!window.popupLocked}`);
       if (window.popupLocked) {
         console.log(`Locked, skipping auto`);
         return;
@@ -100,23 +88,18 @@ export default function useFormkitPopup(
         fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
         return;
       }
-      console.log(`Showing auto popup for ${sessionKey}`);
+      console.log(`Showing auto popup`);
       window.popupLocked = true;
       triggerRef.current.click();
       checkModalAndFallback(triggerRef.current.href); // Poll for modal
     },
-    [formId, ready, triggerRef, fallbackRedirect, checkModalAndFallback],
+    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
   );
 
-  // Debounced show (CTA: optional key—skip session if undefined)
+  // Debounced show every time (CTA—no session)
   const showDebounced = useCallback(
-    (delayMs: number, sessionKey?: string) => {
-      const hasSessionKey = !!sessionKey;
-      console.log(`showDebounced: hasSessionKey=${hasSessionKey}, ready=${ready}, locked=${!!window.popupLocked}`);
-      if (hasSessionKey && sessionStorage.getItem(sessionKey!)) {
-        console.log(`Shown for ${sessionKey}, skipping (but CTA should not pass key)`);
-        return;
-      }
+    (delayMs: number) => {
+      console.log(`showDebounced: ready=${ready}, locked=${!!window.popupLocked}`);
       if (debounceRef.current !== null || window.popupLocked) {
         console.log("Debounce/locked, skipping CTA");
         return;
@@ -140,7 +123,7 @@ export default function useFormkitPopup(
         debounceRef.current = null;
       }, delayMs) as unknown as number;
     },
-    [formId, ready, triggerRef, fallbackRedirect, checkModalAndFallback],
+    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
   );
 
   // Cleanup
