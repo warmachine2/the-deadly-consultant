@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
 import Sidebar from "@/components/Sidebar";
@@ -19,9 +20,12 @@ const Index = () => {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [fullContent, setFullContent] = useState<string>("");
-  const [modalLoading, setModalLoading] = useState(false); // NEW: Track modal content loading
+  const [modalLoading, setModalLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+  // Ref to prevent duplicate modal opens
+  const isOpeningRef = useRef(false);
 
   // Fetch initial posts
   useEffect(() => {
@@ -96,16 +100,26 @@ const Index = () => {
     }
   };
 
-  // UPDATED: Wrapped in useCallback, added modalLoading, and micro-delay for state sync
-  const handlePostClick = useCallback(async (post: BlogPost) => {
-    if (!post || !post.slug) {
-      console.warn("Invalid post clicked:", post); // Debug log
+  // Handler with ref guard to prevent duplicate opens
+  const handlePostClickInternal = useCallback(async (post: BlogPost) => {
+    // Guard: prevent duplicate opens
+    if (isOpeningRef.current) {
+      console.log("Modal already opening, skipping duplicate call");
       return;
     }
+    
+    if (!post || !post.slug) {
+      console.warn("Invalid post clicked:", post);
+      return;
+    }
+
+    // Set guard
+    isOpeningRef.current = true;
+    
     setSelectedPost(post);
     setModalOpen(true);
-    setFullContent(""); // Reset content
-    setModalLoading(true); // NEW: Show loading in modal
+    setFullContent("");
+    setModalLoading(true);
 
     // Fetch full content with micro-delay to ensure modal state settles
     setTimeout(async () => {
@@ -114,17 +128,24 @@ const Index = () => {
         if (fullPost?.html) {
           setFullContent(fullPost.html);
         } else {
-          // Fallback to excerpt if no full content
           setFullContent(`<p>${post.excerpt}</p>`);
         }
       } catch (error) {
         console.error("Error fetching full post:", error);
         setFullContent(`<p>${post.excerpt}</p>`);
       } finally {
-        setModalLoading(false); // NEW: Hide loading
+        setModalLoading(false);
+        // Reset guard after content loads
+        isOpeningRef.current = false;
       }
-    }, 0); // Zero-delay queue ensures post-modal-open execution
+    }, 0);
   }, []);
+
+  // Debounced version to prevent rapid clicks
+  const handlePostClick = useCallback(
+    debounce(handlePostClickInternal, 300, { leading: true, trailing: false }),
+    [handlePostClickInternal]
+  );
 
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
@@ -185,19 +206,23 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Post Modal - UPDATED: Pass modalLoading */}
-      <PostModal
-        post={selectedPost}
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setSelectedPost(null);
-          setFullContent("");
-          setModalLoading(false);
-        }}
-        fullContent={fullContent}
-        isLoading={modalLoading} // NEW: Pass loading state (handle in PostModal if needed)
-      />
+      {/* Post Modal - Conditional render based on modalOpen */}
+      {modalOpen && (
+        <PostModal
+          post={selectedPost}
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedPost(null);
+            setFullContent("");
+            setModalLoading(false);
+            // Reset guard on close
+            isOpeningRef.current = false;
+          }}
+          fullContent={fullContent}
+          isLoading={modalLoading}
+        />
+      )}
 
       {/* Footer */}
       <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
