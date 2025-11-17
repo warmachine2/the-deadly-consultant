@@ -23,11 +23,9 @@ const SignupButton = ({ formId, fallbackHref, className = "" }: SignupButtonProp
       description: "Thank you for signing up. Check your email for confirmation.",
     });
 
-    // If formId is provided, trigger FormKit popup (guarded to once per session)
-    const POPUP_KEY = 'convertkit-popup-shown';
-    if (formId && window.formkit?.show && sessionStorage.getItem(POPUP_KEY) !== 'true') {
+    // If formId is provided, trigger FormKit popup
+    if (formId && window.formkit?.show) {
       window.formkit.show(formId);
-      sessionStorage.setItem(POPUP_KEY, 'true');
     }
   };
 
