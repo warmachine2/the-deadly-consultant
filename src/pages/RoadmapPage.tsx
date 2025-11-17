@@ -19,8 +19,9 @@ const RoadmapPage = () => {
   const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
   const scriptLoadedRef = useRef(false); // Ensure single script load
   const refocusObserverRef = useRef<MutationObserver | null>(null);
+  const cleanupTimeoutRef = useRef<number | null>(null); // For force cleanup
 
-  const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // FIXED: Renamed functions for clarity (no params)
+  const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // Destructure correctly
 
   // FIXED: Dynamic Script Load (Vite-compatible, early via useLayoutEffect)
   useLayoutEffect(() => {
@@ -49,9 +50,9 @@ const RoadmapPage = () => {
     document.head.appendChild(script);
   }, [formId]);
 
-  // Auto-show EVERY TIME (no session check)
+  // Auto-show EVERY TIME (wait for ready)
   useEffect(() => {
-    if (autoTriggeredRef.current) return;
+    if (autoTriggeredRef.current || !ready) return; // FIXED: Wait for ready
     console.log("Auto effect fired");
     autoTriggeredRef.current = true;
     setTimeout(() => {
@@ -62,7 +63,26 @@ const RoadmapPage = () => {
     }, 2000);
   }, [showAuto, ready]);
 
-  // Observer for modal close (refocus + release lock only—no session set)
+  // FIXED: Force cleanup timeout after any show (prevents stuck backdrop)
+  useEffect(() => {
+    return () => {
+      if (cleanupTimeoutRef.current) {
+        clearTimeout(cleanupTimeoutRef.current);
+        cleanupTimeoutRef.current = null;
+      }
+    };
+  }, []);
+
+  const forceCleanup = useCallback(() => {
+    console.log("Force cleanup: Removing all ConvertKit elements");
+    const ckElements = document.querySelectorAll('[class*="ck-"], [data-formkit-toggle]');
+    ckElements.forEach((el) => el.remove());
+    window.popupLocked = false;
+    document.body.focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  // Observer for modal close (enhanced: clear all CK elements)
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -72,13 +92,11 @@ const RoadmapPage = () => {
               node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
           );
           if (modalRemoved) {
-            console.log("Modal removed, refocusing + releasing lock");
-            const backdrop = document.querySelector(".ck-subscription-form");
-            if (backdrop) backdrop.remove();
-            window.popupLocked = false;
-            document.body.focus();
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            console.log("Modal removed, refocusing + full cleanup");
+            forceCleanup(); // FIXED: Force remove all
             observer.disconnect();
+            // Reconnect observer for next show
+            setTimeout(() => observer.observe(document.body, { childList: true, subtree: true }), 100);
           }
         }
       });
@@ -86,25 +104,29 @@ const RoadmapPage = () => {
     refocusObserverRef.current = observer;
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, []);
+  }, [forceCleanup]);
 
-  // Escape listener (release lock only—no session set)
+  // Escape listener (enhanced: full cleanup)
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         const modal = document.querySelector(".ck-subscription-form");
         if (modal) {
           modal.remove();
-          console.log("Escape closed modal, refocusing + releasing lock");
-          window.popupLocked = false;
+          console.log("Escape closed modal, full cleanup");
+          forceCleanup(); // FIXED: Force remove all
         }
-        document.body.focus();
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, []);
+  }, [forceCleanup]);
+
+  // FIXED: Set force cleanup timeout after show (10s safety net)
+  const setCleanupTimeout = useCallback(() => {
+    if (cleanupTimeoutRef.current) clearTimeout(cleanupTimeoutRef.current);
+    cleanupTimeoutRef.current = setTimeout(forceCleanup, 10000) as unknown as number; // 10s force close
+  }, [forceCleanup]);
 
   // Page load (unchanged)
   useEffect(() => {
@@ -163,10 +185,11 @@ const RoadmapPage = () => {
       e.preventDefault();
       e.stopPropagation();
       console.log("CTA onClick fired");
-      showDebounced(1000); // FIXED: No args
+      showDebounced(1000); // FIXED: Call with delay
+      setCleanupTimeout(); // FIXED: Start safety timer
       console.log("CTA triggered");
     },
-    [showDebounced],
+    [showDebounced, setCleanupTimeout],
   );
 
   return (
