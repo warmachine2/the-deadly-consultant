@@ -16,7 +16,7 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const debounceRef = useRef<number | null>(null); // FIXED: number | null for browser setTimeout
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -66,7 +66,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
       window.popupLocked = false; // Reset lock
       if (debounceRef.current !== null) {
-        clearTimeout(debounceRef.current); // FIXED: Type guard for clearTimeout
+        clearTimeout(debounceRef.current);
         debounceRef.current = null;
       }
     };
@@ -110,10 +110,11 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
+      // FIXED: Immediate lock on call to prevent queueing
+      window.popupLocked = true;
       debounceRef.current = setTimeout(() => {
-        window.popupLocked = true;
         triggerRef.current!.click();
-        // Lock during show
+        // Release after show + lock
         setTimeout(() => {
           window.popupLocked = false;
           debounceRef.current = null;
