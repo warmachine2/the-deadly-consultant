@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 declare global {
   interface Window {
     popupLocked?: boolean;
-    formkit?: any; // ConvertKit global
+    formkitLoaded?: { [key: string]: boolean }; // NEW: Global per-form ID to prevent multi-loads
   }
 }
 
@@ -19,7 +19,12 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const triggerRef = useRef<HTMLElement | null>(null);
   const debounceRef = useRef<number | null>(null); // number | null for browser setTimeout
   const ctaCallCountRef = useRef(0); // Debug log
-  const attemptedRef = useRef(false); // NEW: Track show attempts to prevent multi-runs
+  const attemptedRef = useRef(false); // Track show attempts
+
+  // FIXED: Global loaded flag per form ID
+  if (typeof window !== "undefined") {
+    window.formkitLoaded = window.formkitLoaded || {};
+  }
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -34,11 +39,10 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     console.log(`Formkit trigger created for ${formId}`);
   }, [formId]);
 
-  // Load script + set ready (runs once, idempotent)
+  // Load script + set ready (idempotent, single run)
   useEffect(() => {
-    // FIXED: Check if Formkit already initialized globally
-    if (window.formkit) {
-      console.log(`Formkit already initialized for ${formId}`);
+    if (window.formkitLoaded?.[formId]) {
+      console.log(`Formkit already loaded for ${formId}`);
       createTriggerIfNeeded();
       setReady(true);
       return;
@@ -66,6 +70,9 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }, 500);
     };
     document.head.appendChild(script);
+
+    // FIXED: Mark as loaded on success
+    window.formkitLoaded![formId] = true;
 
     return () => {
       if (document.head.contains(script)) {
