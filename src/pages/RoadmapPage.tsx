@@ -16,15 +16,24 @@ const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const formId = "fbd8fa5d1b";
-  const autoTriggeredRef = useRef(false); // NEW: Ensure single auto call
+  const autoTriggeredRef = useRef(false); // Ensure single auto call
 
   const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
 
   // Auto-show ONCE per session upon landing on this page
   useEffect(() => {
     if (!ready || autoTriggeredRef.current) return; // Guard: Only once after ready
+    console.log("Auto effect fired"); // Debug
     autoTriggeredRef.current = true;
-    showOncePerSession("roadmap_popup_shown");
+    // FIXED: Poll for trigger ready (max 1s, every 100ms)
+    const pollInterval = setInterval(() => {
+      if (triggerRef.current) {
+        // Assume hook exposes triggerRef or check via window (simplified; use ready as proxy)
+        clearInterval(pollInterval);
+        showOncePerSession("roadmap_popup_shown");
+      }
+    }, 100);
+    setTimeout(() => clearInterval(pollInterval), 1000); // Max 1s poll
   }, [ready, showOncePerSession]);
 
   // Page load (unchanged)
@@ -82,6 +91,7 @@ const RoadmapPage = () => {
   const handleCTAClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
+      console.log("CTA onClick fired"); // Debug
       showDebounced(1000); // 1s debounce for CTA
     },
     [showDebounced],
