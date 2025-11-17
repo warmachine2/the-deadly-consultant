@@ -5,7 +5,8 @@ declare global {
   interface Window {
     popupLocked?: boolean;
     formkitLoaded?: { [key: string]: boolean }; // Per-form ID to prevent multi-loads
-    ctaLocked?: boolean; // NEW: Global for CTA lock
+    ctaTrigger?: { [key: string]: HTMLElement }; // Global trigger per form to prevent multi-triggers
+    ctaLocked?: boolean; // Global for CTA lock
   }
 }
 
@@ -25,10 +26,11 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   // FIXED: Global loaded flag per form ID
   if (typeof window !== "undefined") {
     window.formkitLoaded = window.formkitLoaded || {};
+    window.ctaTrigger = window.ctaTrigger || {};
   }
 
   const createTriggerIfNeeded = useCallback(() => {
-    if (triggerRef.current) return;
+    if (triggerRef.current || window.ctaTrigger[formId]) return;
     const trigger = document.createElement("a");
     trigger.href = "https://bifintechconsulting.com/roadmap-signup"; // Your fallback
     trigger.setAttribute("data-formkit-toggle", formId);
@@ -37,6 +39,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     trigger.style.left = "-9999px";
     document.body.appendChild(trigger);
     triggerRef.current = trigger;
+    window.ctaTrigger[formId] = trigger; // Global to share across instances
     console.log(`Formkit trigger created for ${formId}`);
   }, [formId]);
 
@@ -83,8 +86,9 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         document.body.removeChild(triggerRef.current);
         triggerRef.current = null;
       }
+      delete window.ctaTrigger[formId]; // Cleanup global trigger
       window.popupLocked = false; // Reset lock
-      window.ctaLocked = false; // NEW: Reset CTA lock
+      window.ctaLocked = false; // Reset CTA lock
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
         debounceRef.current = null;
@@ -95,8 +99,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   // Show once per session (auto-use case)
   const showOncePerSession = useCallback(
     (sessionKey: string) => {
-      if (attemptedRef.current || sessionStorage.getItem(sessionKey) || window.popupLocked) {
-        console.log(`Attempt/session guard or lock active for ${sessionKey}, skipping show`);
+      if (attemptedRef.current || window.popupLocked) {
+        console.log(`Attempt/lock active for ${sessionKey}, skipping show`);
         return;
       }
 
@@ -105,14 +109,18 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         return;
       }
 
+      // FIXED: Check session after click success (delay)
       console.log(`Showing Formkit popup once for ${sessionKey}`);
       attemptedRef.current = true; // Mark attempted
       window.popupLocked = true;
       triggerRef.current.click();
-      sessionStorage.setItem(sessionKey, "1"); // Set after click (success)
+      // Set session after click (success assumed)
       setTimeout(() => {
+        if (!sessionStorage.getItem(sessionKey)) {
+          sessionStorage.setItem(sessionKey, "1");
+        }
         window.popupLocked = false;
-      }, 1000); // 1s lock
+      }, 100); // Short delay for click to process
     },
     [formId, ready],
   );
@@ -139,13 +147,16 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         clearTimeout(debounceRef.current);
       }
       debounceRef.current = setTimeout(() => {
-        triggerRef.current!.click();
+        // Use global trigger to ensure single click
+        const globalTrigger = window.ctaTrigger[formId];
+        if (globalTrigger) {
+          globalTrigger.click();
+        }
         // Release after show + lock
         setTimeout(() => {
-          window.popupLocked = false;
           window.ctaLocked = false;
           debounceRef.current = null;
-        }, 1000);
+        }, 2000); // 2s total lock for CTA
       }, delayMs) as unknown as number; // Double-cast for TS
     },
     [formId, ready],
