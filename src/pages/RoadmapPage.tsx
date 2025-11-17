@@ -1,41 +1,41 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import Script from "next/script"; // FIXED: For static ConvertKit script load
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
 import useFormkitPopup from "@/hooks/useFormkitPopup";
 
-// FIXED: Extend Window for custom flag (TS-safe, but hook handles it now)
+// FIXED: Extend Window for custom flag
 declare global {
   interface Window {
     popupLocked?: boolean;
-    roadmapAutoShown?: boolean; // Optional, not used here
   }
 }
 
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "fbd8fa5d1b"; // FIXED: Correct Form ID from your ConvertKit script
-  const sessionKey = "roadmap_popup_shown"; // Shared key for once-per-session
-  const autoTriggeredRef = useRef(false); // Ensure single auto call
-  const refocusObserverRef = useRef<MutationObserver | null>(null); // For refocus + session/lock
+  const formId = "fbd8fa5d1b"; // Your ConvertKit UID
+  const sessionKey = "roadmap_popup_shown";
+  const autoTriggeredRef = useRef(false);
+  const triggerRef = useRef<HTMLAnchorElement | null>(null); // FIXED: Ref for static trigger
+  const refocusObserverRef = useRef<MutationObserver | null>(null);
 
-  const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
+  const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId, triggerRef); // FIXED: Pass triggerRef to hook
 
-  // Auto-show ONCE per session upon landing on this page
+  // Auto-show ONCE per session
   useEffect(() => {
-    if (autoTriggeredRef.current) return; // Guard: Only once
-    console.log("Auto effect fired"); // Debug
+    if (autoTriggeredRef.current) return;
+    console.log("Auto effect fired");
     autoTriggeredRef.current = true;
-    // FIXED: Force attempt after 2s (ignores ready if stuck, but hook now checks session/lock)
     setTimeout(() => {
       if (!window.popupLocked) {
         showOncePerSession(sessionKey);
       }
-    }, 2000); // 2s buffer for script
+    }, 2000);
   }, [showOncePerSession, sessionKey]);
 
-  // FIXED: Observer for modal close (refocus + set session/lock release)
+  // Observer for modal close (refocus + session/lock)
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -45,11 +45,9 @@ const RoadmapPage = () => {
               node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
           );
           if (modalRemoved) {
-            console.log("Modal removed, refocusing page + setting session/lock"); // Debug
-            // FIXED: Force backdrop removal for white screen
+            console.log("Modal removed, refocusing + setting session/lock");
             const backdrop = document.querySelector(".ck-subscription-form");
             if (backdrop) backdrop.remove();
-            // FIXED: Set session + release lock AFTER close (unified for both triggers)
             sessionStorage.setItem(sessionKey, "1");
             window.popupLocked = false;
             document.body.focus();
@@ -64,7 +62,7 @@ const RoadmapPage = () => {
     return () => observer.disconnect();
   }, [sessionKey]);
 
-  // FIXED: Escape listener for close (forces refocus + session/lock)
+  // Escape listener
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -72,7 +70,6 @@ const RoadmapPage = () => {
         if (modal) {
           modal.remove();
           console.log("Escape closed modal, refocusing + setting session/lock");
-          // FIXED: Set session + release lock on manual close
           sessionStorage.setItem(sessionKey, "1");
           window.popupLocked = false;
         }
@@ -84,7 +81,7 @@ const RoadmapPage = () => {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [sessionKey]);
 
-  // Page load (unchanged)
+  // Page load
   useEffect(() => {
     const loadPage = async () => {
       const cacheKey = "ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock";
@@ -114,7 +111,6 @@ const RoadmapPage = () => {
     return iframeMatch ? iframeMatch[1] : null;
   };
 
-  // FIXED: Full regex for filterSmallVideos (balanced, no truncation)
   const filterSmallVideos = (html: string): string => {
     if (!html) return "";
 
@@ -140,11 +136,10 @@ const RoadmapPage = () => {
   const handleCTAClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      e.stopPropagation(); // FIXED: Prevent bubble
-      console.log("CTA onClick fired"); // Debug
-      // FIXED: Session-aware debounced show (once total)
+      e.stopPropagation();
+      console.log("CTA onClick fired");
       showDebounced(1000, sessionKey);
-      console.log("CTA triggered—no fallback redirect");
+      console.log("CTA triggered");
     },
     [showDebounced, sessionKey],
   );
@@ -152,6 +147,26 @@ const RoadmapPage = () => {
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
+
+      {/* FIXED: Static ConvertKit Script Load */}
+      <Script
+        src="https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js"
+        data-uid="fbd8fa5d1b"
+        strategy="afterInteractive"
+        onLoad={() => console.log("ConvertKit script loaded statically")}
+      />
+
+      {/* FIXED: Static Hidden Trigger */}
+      <a
+        ref={triggerRef}
+        href="https://bifintechconsulting.com/roadmap-signup"
+        data-formkit-toggle="fbd8fa5d1b"
+        style={{
+          display: "none",
+          position: "absolute",
+          left: "-9999px",
+        }}
+      />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
