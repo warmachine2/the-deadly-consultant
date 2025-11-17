@@ -33,6 +33,33 @@ const RoadmapPage = () => {
     };
   }, []);
 
+  // Show ConvertKit popup once on first visit only
+  useEffect(() => {
+    const formId = "fbd8fa5d1b";
+    if (sessionStorage.getItem("roadmap_popup_shown") || shownRef.current) return;
+
+    const tryShow = () => {
+      if (window.formkit?.show) {
+        console.log("Auto-showing ConvertKit popup once");
+        window.formkit.show(formId);
+        sessionStorage.setItem("roadmap_popup_shown", "1");
+        shownRef.current = true;
+        return true;
+      }
+      return false;
+    };
+
+    if (!tryShow()) {
+      const interval = window.setInterval(() => {
+        if (tryShow()) {
+          clearInterval(interval);
+        }
+      }, 250);
+      setTimeout(() => clearInterval(interval), 5000);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
   useEffect(() => {
     const loadPage = async () => {
       const cacheKey = 'ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock';
@@ -159,6 +186,10 @@ const RoadmapPage = () => {
               <a
                 data-formkit-toggle="fbd8fa5d1b"
                 href="https://bifintechconsulting.com/roadmap-signup"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.formkit?.show?.('fbd8fa5d1b');
+                }}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
                 Get Your Free Roadmap PDF
