@@ -38,17 +38,18 @@ const RoadmapPage = () => {
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.type === 'childList') {
-          const modalRemoved = Array.from(mutation.removedNodes).some(node => 
-            node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains('ck-subscription-form')
+        if (mutation.type === "childList") {
+          const modalRemoved = Array.from(mutation.removedNodes).some(
+            (node) =>
+              node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
           );
           if (modalRemoved) {
             console.log("Modal removed, refocusing page"); // Debug
             // FIXED: Force backdrop removal for white screen
-            const backdrop = document.querySelector('.ck-subscription-form');
+            const backdrop = document.querySelector(".ck-subscription-form");
             if (backdrop) backdrop.remove();
             document.body.focus();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: "smooth" });
             observer.disconnect();
           }
         }
@@ -62,18 +63,18 @@ const RoadmapPage = () => {
   // FIXED: Escape listener for close (forces refocus)
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        const modal = document.querySelector('.ck-subscription-form');
+      if (e.key === "Escape") {
+        const modal = document.querySelector(".ck-subscription-form");
         if (modal) {
           modal.remove();
           console.log("Escape closed modal, refocusing");
         }
         document.body.focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
   // Page load (unchanged)
@@ -198,4 +199,27 @@ const RoadmapPage = () => {
             </section>
 
             <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
+              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
+              </p>
+              <a
+                href="https://bifintechconsulting.com/roadmap-signup"
+                onClick={handleCTAClick}
+                className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
+              >
+                Get Your Free Roadmap PDF
+              </a>
+            </section>
+          </>
+        ) : (
+          <div className="glass rounded-3xl p-12 text-center">
+            <p className="text-muted-foreground">Content not available. Please check back later.</p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default RoadmapPage;
