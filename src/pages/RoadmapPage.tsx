@@ -8,6 +8,7 @@ const RoadmapPage = () => {
   const [loading, setLoading] = useState(true);
   const [isFormkitReady, setIsFormkitReady] = useState(false);
   const shownRef = useRef(false);
+  const autoAttemptedRef = useRef(false); // NEW: Strict guard for single auto attempt
   const intervalRef = useRef<number | null>(null);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const triggerRef = useRef<HTMLElement | null>(null); // NEW: Ref for hidden trigger element
@@ -70,9 +71,9 @@ const RoadmapPage = () => {
   // UPDATED: Shared show function - clicks hidden trigger
   const attemptShow = useCallback(
     (isAuto = true) => {
-      // Auto guard: Once per session
-      if (isAuto && (sessionStorage.getItem("roadmap_popup_shown") || shownRef.current)) {
-        console.log("Auto-show already done this session, skipping");
+      // Auto guard: Once per session + single attempt
+      if (isAuto && (sessionStorage.getItem("roadmap_popup_shown") || shownRef.current || autoAttemptedRef.current)) {
+        console.log("Auto-show already attempted this session, skipping");
         return true;
       }
 
@@ -89,6 +90,7 @@ const RoadmapPage = () => {
         if (isAuto) {
           sessionStorage.setItem("roadmap_popup_shown", "1");
           shownRef.current = true;
+          autoAttemptedRef.current = true; // Mark as attempted
         }
 
         setTimeout(() => {
@@ -102,42 +104,31 @@ const RoadmapPage = () => {
     [isFormkitReady],
   );
 
-  // Auto-show: On readiness, once per session
+  // Auto-show: On readiness, once per session + single attempt (no interval to avoid multiples)
   useEffect(() => {
-    if (!isFormkitReady) return;
+    if (!isFormkitReady || autoAttemptedRef.current) return; // NEW: Strict single-run guard
 
+    // Single attempt with short delay if needed
     const tryAuto = () => {
-      if (attemptShow(true)) return true;
-
-      // If not ready (rare post-load), short retry
-      console.log("Trigger not ready post-load, retrying...");
-      intervalRef.current = window.setInterval(() => {
-        if (attemptShow(true)) {
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-          }
+      if (attemptShow(true)) {
+        console.log("Auto-show successful");
+        return;
+      }
+      // If trigger not yet wired, one retry after 250ms
+      console.log("Auto initial failed, one retry...");
+      setTimeout(() => {
+        if (!autoAttemptedRef.current && attemptShow(true)) {
+          console.log("Auto retry successful");
+        } else {
+          console.log("Auto-show skipped after retry");
         }
       }, 250);
-      setTimeout(() => {
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-          console.log("Auto-show timeout");
-        }
-      }, 3000); // Shorter for auto
-      return false;
     };
 
     tryAuto();
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [attemptShow]);
+    // No interval—keeps it to at most 2 calls (initial + retry)
+  }, [isFormkitReady, attemptShow]); // Deps ensure re-run only if readiness changes, but guard prevents
 
   // Page content load (unchanged)
   useEffect(() => {
@@ -197,8 +188,7 @@ const RoadmapPage = () => {
       e.preventDefault();
       console.log("CTA clicked: attempting popup");
       if (!attemptShow(false)) {
-        console.log("CTA: Trigger not ready, will try on next readiness");
-        // No fallback—wait for auto-retry if needed, or manual href if desperate
+        console.log("CTA: Trigger not ready");
       }
     },
     [attemptShow],
