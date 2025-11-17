@@ -55,6 +55,18 @@ const RoadmapPage = () => {
             console.error('ConvertKit show error:', e);
           }
         };
+
+        // Auto-open once after patch if not already shown
+        setTimeout(() => {
+          if (sessionStorage.getItem(POPUP_KEY) !== 'true') {
+            try {
+              fk.show('fbd8fa5d1b');
+            } catch (e) {
+              console.error('Auto-open error:', e);
+            }
+          }
+        }, 2000);
+
         clearInterval(intervalId);
       }
 
