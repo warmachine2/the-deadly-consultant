@@ -9,17 +9,18 @@ const RoadmapPage = () => {
   const shownRef = useRef(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 
-  // Load ConvertKit script and install a single-run guard to prevent multi-open
+  // Load ConvertKit script and show popup once per session
   useEffect(() => {
     const POPUP_KEY = 'convertkit-popup-shown';
     const w = window as any;
 
-    // If already shown this session, don't do anything else
+    // If already shown this session, skip everything
     if (sessionStorage.getItem(POPUP_KEY) === 'true') {
+      console.log('Popup already shown this session');
       return;
     }
 
-    // Ensure script loaded only once
+    // Load script only once
     const existingScript = document.querySelector('script[src*="kit.com/fbd8fa5d1b"]');
     if (!existingScript) {
       const script = document.createElement('script');
@@ -30,55 +31,38 @@ const RoadmapPage = () => {
       scriptRef.current = script;
     }
 
-    // Patch formkit.show to be idempotent for the session
+    // Wait for formkit to load and show popup exactly once
     let attempts = 0;
-    const maxAttempts = 150; // ~30s @ 200ms
+    const maxAttempts = 150;
     const intervalId = setInterval(() => {
       attempts++;
       const w = window as any;
-      const fk = w.formkit;
 
-      // Once SDK is present, wrap show() so it runs at most once per session
-      if (fk && typeof fk.show === 'function' && !w.__ck_show_patched) {
-        w.__ck_show_patched = true;
-        const originalShow = fk.show.bind(fk);
-        fk.show = (id: string) => {
-          if (sessionStorage.getItem(POPUP_KEY) === 'true') {
-            // Already shown this session
-            return;
-          }
-          // Mark as shown and open once
-          sessionStorage.setItem(POPUP_KEY, 'true');
-          try {
-            originalShow(id);
-          } catch (e) {
-            console.error('ConvertKit show error:', e);
-          }
-        };
+      if (w.formkit && typeof w.formkit.show === 'function' && !shownRef.current) {
+        shownRef.current = true;
+        clearInterval(intervalId);
 
-        // Auto-open once after patch if not already shown
+        // Show after short delay to ensure SDK is fully ready
         setTimeout(() => {
+          // Double-check we haven't shown yet
           if (sessionStorage.getItem(POPUP_KEY) !== 'true') {
+            sessionStorage.setItem(POPUP_KEY, 'true');
+            console.log('Showing ConvertKit popup');
             try {
-              fk.show('fbd8fa5d1b');
+              w.formkit.show('fbd8fa5d1b');
             } catch (e) {
-              console.error('Auto-open error:', e);
+              console.error('ConvertKit show error:', e);
             }
           }
-        }, 2000);
-
+        }, 1500);
+      } else if (attempts >= maxAttempts) {
         clearInterval(intervalId);
-      }
-
-      if (attempts >= maxAttempts) {
-        clearInterval(intervalId);
-        if (!w.formkit) console.error('ConvertKit load failed');
+        console.error('ConvertKit load timeout');
       }
     }, 200);
 
     return () => {
       clearInterval(intervalId);
-      // Keep sessionStorage POPUP_KEY so it never re-opens this session
     };
   }, []);
 
