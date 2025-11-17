@@ -1,105 +1,123 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
-// Module-scoped singletons to avoid duplicate script/trigger across mounts
-let scriptLoadPromise: Promise<void> | null = null;
-let triggerEl: HTMLAnchorElement | null = null;
-let isReady = false;
-
-function ensureScript(formId: string) {
-  if (isReady) return Promise.resolve();
-  if (scriptLoadPromise) return scriptLoadPromise;
-
-  // If already present in DOM, mark ready immediately
-  const existing = document.querySelector(`script[data-uid="${formId}"]`);
-  if (existing) {
-    isReady = true;
-    return Promise.resolve();
-  }
-
-  scriptLoadPromise = new Promise<void>((resolve) => {
-    const script = document.createElement("script");
-    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`;
-    script.async = true;
-    script.setAttribute("data-uid", formId);
-    script.onload = () => {
-      // Small delay to allow kit to hydrate DOM
-      setTimeout(() => {
-        isReady = true;
-        resolve();
-      }, 200);
-    };
-    document.head.appendChild(script);
-  });
-
-  return scriptLoadPromise;
+interface UseFormkitPopupReturn {
+  ready: boolean;
+  showOncePerSession: (sessionKey: string) => void;
+  showDebounced: (delayMs: number) => void;
 }
 
-function ensureTrigger(formId: string) {
-  if (triggerEl) return triggerEl;
-  const el = document.createElement("a");
-  el.href = "https://bifintechconsulting.com/roadmap-signup";
-  el.setAttribute("data-formkit-toggle", formId);
-  el.style.display = "none";
-  el.style.position = "absolute";
-  el.style.left = "-9999px";
-  document.body.appendChild(el);
-  triggerEl = el;
-  return el;
-}
-
-function showForm(formId: string) {
-  // Prefer official API if present, fallback to hidden trigger
-  if (window.formkit?.show) {
-    window.formkit.show(formId);
-    return true;
-  }
-  const el = ensureTrigger(formId);
-  el.click();
-  return true;
-}
-
-export function useFormkitPopup(formId: string) {
+export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
-  const lockRef = useRef(false); // shared debounce/lock
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null); // For CTA debounce
 
-  useEffect(() => {
-    let mounted = true;
-    ensureScript(formId).then(() => {
-      if (!mounted) return;
-      ensureTrigger(formId);
-      setReady(true);
-    });
-    return () => {
-      mounted = false;
-    };
+  // Extend Window for locks (TS-safe, local to hook)
+  declare global {
+    interface Window {
+      popupLocked?: boolean;
+    }
+  }
+
+  const createTriggerIfNeeded = useCallback(() => {
+    if (triggerRef.current) return;
+    const trigger = document.createElement("a");
+    trigger.href = `https://app.convertkit.com/forms/${formId}/subscriptions/new`; // Standard fallback
+    trigger.setAttribute("data-formkit-toggle", formId);
+    trigger.style.display = "none";
+    trigger.style.position = "absolute";
+    trigger.style.left = "-9999px";
+    document.body.appendChild(trigger);
+    triggerRef.current = trigger;
+    console.log(`Formkit trigger created for ${formId}`);
   }, [formId]);
 
-  const api = useMemo(
-    () => ({
-      ready,
-      // Auto once per session using a key
-      showOncePerSession: (sessionKey = `formkit_once_${formId}`) => {
-        if (!ready) return false;
-        if (sessionStorage.getItem(sessionKey)) return false;
-        if (lockRef.current) return false;
-        lockRef.current = true;
-        sessionStorage.setItem(sessionKey, "1");
-        setTimeout(() => (lockRef.current = false), 800);
-        return showForm(formId);
-      },
-      // Debounced manual show via CTA
-      showDebounced: (ms = 800) => {
-        if (!ready) return false;
-        if (lockRef.current) return false;
-        lockRef.current = true;
-        setTimeout(() => (lockRef.current = false), ms);
-        return showForm(formId);
-      },
-    }),
-    [ready, formId],
+  // Load script + set ready (runs once)
+  useEffect(() => {
+    const existingScript = document.querySelector(`script[data-uid="${formId}"]`);
+    if (existingScript) {
+      console.log(`Formkit script already loaded for ${formId}`);
+      createTriggerIfNeeded();
+      setReady(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://f.convertkit.com/${formId}/ckjs/ck.5.js`; // Updated to official CKJS (more reliable than custom subdomain)
+    script.async = true;
+    script.setAttribute("data-ck-subscription-one-click", formId); // One-click mode for modals
+    script.onload = () => {
+      console.log(`Formkit script loaded for ${formId}`);
+      setTimeout(() => {
+        createTriggerIfNeeded();
+        setReady(true);
+        console.log(`Formkit ready for ${formId}!`);
+      }, 500); // Buffer for event binding
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      if (document.head.contains(script)) document.head.removeChild(script);
+      if (triggerRef.current && document.body.contains(triggerRef.current)) {
+        document.body.removeChild(triggerRef.current);
+        triggerRef.current = null;
+      }
+      window.popupLocked = false; // Reset lock
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+        debounceRef.current = null;
+      }
+    };
+  }, [formId, createTriggerIfNeeded]);
+
+  // Show once per session (auto-use case)
+  const showOncePerSession = useCallback(
+    (sessionKey: string) => {
+      if (sessionStorage.getItem(sessionKey) || window.popupLocked) {
+        console.log(`Session guard or lock active for ${sessionKey}, skipping show`);
+        return;
+      }
+
+      if (!ready || !triggerRef.current) {
+        console.log(`Not ready for ${formId}, skipping show`);
+        return;
+      }
+
+      console.log(`Showing Formkit popup once for ${sessionKey}`);
+      window.popupLocked = true;
+      triggerRef.current.click();
+      sessionStorage.setItem(sessionKey, "1");
+      setTimeout(() => {
+        window.popupLocked = false;
+      }, 1000); // 1s lock
+    },
+    [formId, ready],
   );
 
-  return api;
-}
+  // Debounced show (CTA-use case, allows re-open if closed)
+  const showDebounced = useCallback(
+    (delayMs: number) => {
+      if (debounceRef.current || window.popupLocked) {
+        console.log("Debounce or lock active, skipping CTA show");
+        return;
+      }
 
-export default useFormkitPopup;
+      if (!ready || !triggerRef.current) {
+        console.log(`Not ready for ${formId}, skipping debounced show`);
+        return;
+      }
+
+      console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
+      debounceRef.current = setTimeout(() => {
+        window.popupLocked = true;
+        triggerRef.current!.click();
+        setTimeout(() => {
+          window.popupLocked = false;
+          debounceRef.current = null;
+        }, 1000); // Lock during show
+      }, delayMs);
+    },
+    [formId, ready],
+  );
+
+  return { ready, showOncePerSession, showDebounced };
+}
