@@ -17,7 +17,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
   const debounceRef = useRef<number | null>(null); // number | null for browser setTimeout
-  const ctaCallCountRef = useRef(0); // NEW: Log CTA calls for debug
+  const ctaCallCountRef = useRef(0); // Debug log
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -125,7 +125,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           window.popupLocked = false;
           debounceRef.current = null;
         }, 1000);
-      }, delayMs) as number; // Cast to number (browser type)
+      }, delayMs) as unknown as number; // FIXED: Double-cast for TS2352
     },
     [formId, ready],
   );
