@@ -16,7 +16,8 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<number | null>(null);
+  const debounceRef = useRef<number | null>(null); // number | null for browser setTimeout
+  const ctaCallCountRef = useRef(0); // NEW: Log CTA calls for debug
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -99,6 +100,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   // Debounced show (CTA-use case, allows re-open if closed)
   const showDebounced = useCallback(
     (delayMs: number) => {
+      ctaCallCountRef.current += 1; // Debug log
+      console.log(`CTA call #${ctaCallCountRef.current}`);
       if (debounceRef.current !== null || window.popupLocked) {
         console.log("Debounce or lock active, skipping CTA show");
         return;
@@ -110,8 +113,11 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
-      // FIXED: Immediate lock + type assertion for TS
+      // FIXED: Immediate lock + cancel previous if any
       window.popupLocked = true;
+      if (debounceRef.current !== null) {
+        clearTimeout(debounceRef.current);
+      }
       debounceRef.current = setTimeout(() => {
         triggerRef.current!.click();
         // Release after show + lock
@@ -119,7 +125,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           window.popupLocked = false;
           debounceRef.current = null;
         }, 1000);
-      }, delayMs) as unknown as number;
+      }, delayMs) as number; // Cast to number (browser type)
     },
     [formId, ready],
   );
