@@ -102,6 +102,8 @@ const Index = () => {
 
   // Modal open handler with guard and memoization
   const handlePostClick = useCallback(async (post: BlogPost) => {
+    console.log('Modal trigger attempt', { postId: post?.id, isOpening: isOpeningRef.current });
+    
     if (isOpeningRef.current) {
       console.log("Modal already opening, skipping duplicate call");
       return;
@@ -113,6 +115,7 @@ const Index = () => {
 
     // Set guard
     isOpeningRef.current = true;
+    console.log('Modal opened', { postId: post.id });
 
     setSelectedPost(post);
     setModalOpen(true);
@@ -205,8 +208,10 @@ const Index = () => {
       </div>
 
       {/* Post Modal - Conditional render based on modalOpen */}
+      {/* NOTE: If double-modal persists, update Radix UI: npm update @radix-ui/react-dialog */}
       {modalOpen && (
         <PostModal
+          key={selectedPost?.id || 'modal'}
           post={selectedPost}
           isOpen={modalOpen}
           onClose={() => {

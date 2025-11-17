@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BlogPost } from "./BlogCard";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -17,6 +18,11 @@ export default function PostModal({
   fullContent,
   isLoading = false,
 }: PostModalProps) {
+  // Debug: Track modal renders
+  useEffect(() => {
+    console.log('PostModal rendered', { postId: post?.id, isOpen, isLoading });
+  }, [post?.id, isOpen, isLoading]);
+
   // Only render when explicitly open
   if (!isOpen) return null;
 
