@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
+import useFormkitPopup from "@/hooks/useFormkitPopup";
 
 // FIXED: Extend Window for custom flag (TS-safe)
 declare global {
@@ -14,117 +15,16 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isFormkitReady, setIsFormkitReady] = useState(false);
-  const triggerRef = useRef<HTMLElement | null>(null);
-  const autoShownRef = useRef(false); // NEW: Ref for auto guard (local, reliable)
-  const ctaLockedRef = useRef(false); // NEW: Ref for CTA-specific lock
   const formId = "fbd8fa5d1b";
 
-  const createTriggerIfNeeded = useCallback(() => {
-    if (triggerRef.current) return;
-    const trigger = document.createElement("a");
-    trigger.href = "https://bifintechconsulting.com/roadmap-signup";
-    trigger.setAttribute("data-formkit-toggle", formId);
-    trigger.style.display = "none";
-    trigger.style.position = "absolute";
-    trigger.style.left = "-9999px";
-    document.body.appendChild(trigger);
-    triggerRef.current = trigger;
-    console.log("Hidden trigger created");
-  }, [formId]);
+  const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId);
 
-  // Load script + trigger (runs once)
+  // Auto-show ONCE per session upon landing on this page
   useEffect(() => {
-    const existingScript = document.querySelector(`script[data-uid="${formId}"]`);
-    if (existingScript) {
-      console.log("ConvertKit script already loaded");
-      createTriggerIfNeeded();
-      setIsFormkitReady(true);
-      return;
-    }
+    if (!ready) return;
+    showOncePerSession("roadmap_popup_shown");
+  }, [ready, showOncePerSession]);
 
-    const script = document.createElement("script");
-    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`;
-    script.async = true;
-    script.setAttribute("data-uid", formId);
-    script.onload = () => {
-      console.log("ConvertKit script loaded");
-      setTimeout(() => {
-        createTriggerIfNeeded();
-        setIsFormkitReady(true);
-        console.log("Formkit ready with trigger!");
-      }, 500);
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      if (document.head.contains(script)) document.head.removeChild(script);
-      if (triggerRef.current && document.body.contains(triggerRef.current)) {
-        document.body.removeChild(triggerRef.current);
-        triggerRef.current = null;
-      }
-      // Reset globals on unmount
-      window.popupLocked = false;
-      window.roadmapAutoShown = false;
-    };
-  }, [createTriggerIfNeeded]);
-
-  // Shared show - simplified guards
-  const attemptShow = useCallback(
-    (isAuto = true) => {
-      // Auto guard: Session + ref
-      if (isAuto && (sessionStorage.getItem("roadmap_popup_shown") || autoShownRef.current)) {
-        console.log("Auto-show already done, skipping");
-        return true;
-      }
-
-      // Lock: Global for auto, ref for CTA
-      if (isAuto && window.popupLocked) {
-        console.log("Global lock active, skipping auto");
-        return false;
-      }
-      if (!isAuto && ctaLockedRef.current) {
-        console.log("CTA lock active, skipping");
-        return false;
-      }
-
-      if (isFormkitReady && triggerRef.current) {
-        console.log(isAuto ? "Auto-showing ConvertKit popup once" : "Showing via CTA");
-
-        if (isAuto) {
-          window.popupLocked = true;
-          sessionStorage.setItem("roadmap_popup_shown", "1");
-          autoShownRef.current = true;
-          setTimeout(() => {
-            window.popupLocked = false;
-          }, 1000);
-        } else {
-          ctaLockedRef.current = true;
-          setTimeout(() => {
-            ctaLockedRef.current = false;
-          }, 1000);
-        }
-
-        triggerRef.current.click();
-        return true;
-      }
-
-      return false;
-    },
-    [isFormkitReady],
-  );
-
-  // FIXED: Auto-show - Dep on readiness to re-run when ready, but guard prevents multi
-  useEffect(() => {
-    if (!isFormkitReady) return;
-
-    // Single delayed attempt
-    const timer = setTimeout(() => {
-      attemptShow(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [isFormkitReady, attemptShow]); // Deps: Re-runs on ready=true, but only once due to guard
 
   // Page load (unchanged)
   useEffect(() => {
@@ -181,10 +81,9 @@ const RoadmapPage = () => {
   const handleCTAClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      console.log("CTA clicked");
-      attemptShow(false);
+      showDebounced(1000);
     },
-    [attemptShow],
+    [showDebounced],
   );
 
   return (
