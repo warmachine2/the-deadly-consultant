@@ -6,7 +6,6 @@ declare global {
     popupLocked?: boolean;
     formkitLoaded?: { [key: string]: boolean }; // Per-form ID to prevent multi-loads
     ctaTrigger?: { [key: string]: HTMLElement }; // Global trigger per form to prevent multi-triggers
-    ctaLocked?: boolean; // Global for CTA lock
     formkit?: any; // ConvertKit global for polling
     formkitReady?: { [key: string]: boolean }; // Shared ready state across instances
   }
@@ -15,15 +14,13 @@ declare global {
 interface UseFormkitPopupReturn {
   ready: boolean;
   showOncePerSession: (sessionKey: string) => void;
-  showDebounced: (delayMs: number) => void;
+  showDebounced: (delayMs: number, sessionKey?: string) => void; // FIXED: Optional sessionKey for once-per-session
 }
 
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
   const debounceRef = useRef<number | null>(null); // number | null for browser setTimeout
-  const ctaCallCountRef = useRef(0); // Debug log
-  const attemptedRef = useRef(false); // Track show attempts
 
   // FIXED: Global loaded flag per form ID
   if (typeof window !== "undefined") {
@@ -111,7 +108,6 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
       delete window.ctaTrigger[formId]; // Cleanup global trigger
       window.popupLocked = false; // Reset lock
-      window.ctaLocked = false; // Reset CTA lock
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
         debounceRef.current = null;
@@ -119,53 +115,52 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
     };
   }, [formId, createTriggerIfNeeded]);
 
-  // Show once per session (auto-use case)
+  // Show once per session (auto-use case) - FIXED: Session check + unified lock
   const showOncePerSession = useCallback(
     (sessionKey: string) => {
-      if (attemptedRef.current || window.popupLocked) {
-        console.log(`Attempt/lock active for ${sessionKey}, skipping show`);
+      // FIXED: Check session before anything
+      if (sessionStorage.getItem(sessionKey)) {
+        console.log(`Already shown this session for ${sessionKey}, skipping show`);
         return;
       }
-
+      if (window.popupLocked) {
+        console.log(`Popup locked, skipping show for ${sessionKey}`);
+        return;
+      }
       if (!ready || !triggerRef.current) {
         console.log(`Not ready for ${formId}, skipping show`);
         return;
       }
 
-      // FIXED: Always attempt first time; set session after close
       console.log(`Showing Formkit popup once for ${sessionKey}`);
-      attemptedRef.current = true; // Mark attempted
-      window.popupLocked = true;
+      window.popupLocked = true; // FIXED: Unified lock before click
       triggerRef.current.click();
-      // FIXED: Set session after close (listen for modal removal)
-      const handleClose = () => {
-        sessionStorage.setItem(sessionKey, "1");
-        window.popupLocked = false;
-        console.log(`Session set for ${sessionKey} after close`);
-      };
-      setTimeout(handleClose, 200); // Fallback if no observer
+      // FIXED: No early timeout—observer handles session set + lock release after close
     },
     [formId, ready],
   );
 
-  // Debounced show (CTA-use case, allows re-open if closed)
+  // Debounced show (CTA-use case) - FIXED: Optional sessionKey + unified lock
   const showDebounced = useCallback(
-    (delayMs: number) => {
-      ctaCallCountRef.current += 1; // Debug log
-      console.log(`CTA call #${ctaCallCountRef.current}`);
-      if (debounceRef.current !== null || window.popupLocked || window.ctaLocked) {
+    (delayMs: number, sessionKey?: string) => {
+      console.log(`CTA debounced call (delay: ${delayMs}ms)`);
+      // FIXED: Check session if provided
+      if (sessionKey && sessionStorage.getItem(sessionKey)) {
+        console.log(`Already shown this session for ${sessionKey}, skipping debounced show`);
+        return;
+      }
+      if (debounceRef.current !== null || window.popupLocked) {
         console.log("Debounce or lock active, skipping CTA show");
         return;
       }
-
       if (!ready || !triggerRef.current) {
         console.log(`Not ready for ${formId}, skipping debounced show`);
         return;
       }
 
-      console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
-      // FIXED: Immediate global lock + cancel previous
-      window.ctaLocked = true;
+      console.log(`Starting debounced show for CTA`);
+      // FIXED: Unified lock + cancel previous
+      window.popupLocked = true;
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
       }
@@ -176,11 +171,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           triggerRef.current.click();
           console.log("Trigger clicked for CTA");
         }
-        // Release after show + lock
-        setTimeout(() => {
-          window.ctaLocked = false;
-          debounceRef.current = null;
-        }, 2000); // 2s total lock for CTA
+        // FIXED: No release here—observer handles after close
+        debounceRef.current = null;
       }, delayMs) as unknown as number; // Double-cast for TS
     },
     [formId, ready],
