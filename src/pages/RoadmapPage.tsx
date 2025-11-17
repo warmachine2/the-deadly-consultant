@@ -56,11 +56,12 @@ const RoadmapPage = () => {
     console.log("Auto effect fired");
     autoTriggeredRef.current = true;
     setTimeout(() => {
+      console.log(`Auto-show attempt: ready=${ready}, locked=${!!window.popupLocked}`); // Debug
       if (!window.popupLocked) {
         showOncePerSession(sessionKey);
       }
     }, 2000);
-  }, [showOncePerSession, sessionKey]);
+  }, [showOncePerSession, sessionKey, ready]);
 
   // Observer for modal close (refocus + session/lock)
   useEffect(() => {
