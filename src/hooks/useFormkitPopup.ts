@@ -16,7 +16,7 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<number | null>(null); // FIXED: number | null for browser setTimeout
+  const debounceRef = useRef<number | null>(null); // FIXED: Force browser type (number | null)
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -110,7 +110,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       }
 
       console.log(`Debounced show for CTA (delay: ${delayMs}ms)`);
-      // FIXED: Immediate lock on call to prevent queueing
+      // FIXED: Immediate lock + type assertion for TS
       window.popupLocked = true;
       debounceRef.current = setTimeout(() => {
         triggerRef.current!.click();
@@ -119,7 +119,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           window.popupLocked = false;
           debounceRef.current = null;
         }, 1000);
-      }, delayMs);
+      }, delayMs) as number; // FIXED: Cast to number (browser type)
     },
     [formId, ready],
   );
