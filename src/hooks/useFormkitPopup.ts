@@ -78,6 +78,14 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         }
       };
       pollReady();
+      // FIXED: Fallback ready after 3s if polling fails (ad blocker)
+      setTimeout(() => {
+        if (!ready) {
+          createTriggerIfNeeded();
+          setReady(true);
+          console.log(`Formkit fallback ready for ${formId}!`);
+        }
+      }, 3000);
     };
     document.head.appendChild(script);
 
@@ -100,7 +108,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         debounceRef.current = null;
       }
     };
-  }, [formId, createTriggerIfNeeded]);
+  }, [formId, createTriggerIfNeeded, ready]);
 
   // Show once per session (auto-use case)
   const showOncePerSession = useCallback(
@@ -153,10 +161,11 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         clearTimeout(debounceRef.current);
       }
       debounceRef.current = setTimeout(() => {
-        // Use global trigger to ensure single click
-        const globalTrigger = window.ctaTrigger[formId];
-        if (globalTrigger) {
-          globalTrigger.click();
+        // FIXED: Poll ready one more time before click
+        const finalReady = window.formkit || true; // Fallback true
+        if (finalReady && triggerRef.current) {
+          triggerRef.current.click();
+          console.log("Trigger clicked for CTA");
         }
         // Release after show + lock
         setTimeout(() => {
