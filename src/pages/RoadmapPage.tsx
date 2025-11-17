@@ -6,22 +6,40 @@ import TopNav from "@/components/TopNav";
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isFormkitReady, setIsFormkitReady] = useState(false); // NEW: Track SDK readiness
   const shownRef = useRef(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null); // NEW: Ref for single interval tracking
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 
-  // Load ConvertKit script - let SDK handle popup display
+  // Load ConvertKit script with onload for readiness
   useEffect(() => {
     // Check if already loaded to avoid duplicates
     const existingScript = document.querySelector('script[data-uid="fbd8fa5d1b"]');
     if (existingScript) {
-      console.log('ConvertKit script already loaded');
+      console.log("ConvertKit script already loaded");
+      // Assume ready if exists (quick check)
+      if (window.formkit) setIsFormkitReady(true);
       return;
     }
 
-    const script = document.createElement('script');
-    script.src = 'https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js';
+    const script = document.createElement("script");
+    script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
     script.async = true;
-    script.setAttribute('data-uid', 'fbd8fa5d1b');
+    script.setAttribute("data-uid", "fbd8fa5d1b");
+    script.onload = () => {
+      // NEW: Explicit readiness on load
+      console.log("ConvertKit script loaded, checking formkit...");
+      // Poll briefly for formkit init (SDK sometimes needs a tick)
+      const checkReady = () => {
+        if (window.formkit) {
+          setIsFormkitReady(true);
+          console.log("Formkit ready!");
+        } else {
+          setTimeout(checkReady, 100);
+        }
+      };
+      checkReady();
+    };
     document.head.appendChild(script);
     scriptRef.current = script;
 
@@ -30,47 +48,85 @@ const RoadmapPage = () => {
       if (scriptRef.current && document.head.contains(scriptRef.current)) {
         document.head.removeChild(scriptRef.current);
       }
+      // NEW: Clear any lingering interval
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, []);
+
+  // Shared helper: Try show with lock/retry (used by both auto and CTA)
+  const tryShowPopup = useRef<(retry?: boolean) => boolean>(() => {
+    const formId = "fbd8fa5d1b";
+    if (window.popupLocked) {
+      console.log("Popup locked, skipping show");
+      return false; // Not handled, allow retry if needed
+    }
+    if (window.formkit?.show && isFormkitReady) {
+      // Use readiness state
+      console.log("Showing ConvertKit popup");
+      window.popupLocked = true;
+      window.formkit.show(formId);
+      if (!shownRef.current) {
+        // Only set session if first show
+        sessionStorage.setItem("roadmap_popup_shown", "1");
+        shownRef.current = true;
+      }
+      setTimeout(() => {
+        window.popupLocked = false;
+      }, 1000);
+      return true; // Handled
+    }
+    return false; // Not ready, retry if flag set
+  });
 
   // Show ConvertKit popup once on first visit only
   useEffect(() => {
     const formId = "fbd8fa5d1b";
     if (sessionStorage.getItem("roadmap_popup_shown") || shownRef.current) return;
 
-    const tryShow = () => {
-      if (window.popupLocked) {
-        console.log("Popup locked, skipping auto-show");
-        return true; // treat as handled to stop retry loop
-      }
-      if (window.formkit?.show) {
-        console.log("Auto-showing ConvertKit popup once");
-        window.popupLocked = true;
-        window.formkit.show(formId);
-        sessionStorage.setItem("roadmap_popup_shown", "1");
-        shownRef.current = true;
+    const attemptShow = (isRetry = false) => {
+      const handled = tryShowPopup.current(isRetry);
+      if (handled) return true;
+
+      if (!isRetry) {
+        // Initial attempt failed → start retry only once
+        console.log("Formkit not ready, starting retry...");
+        intervalRef.current = window.setInterval(() => {
+          if (attemptShow(true)) {
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+          }
+        }, 250);
+        // Safety net: Stop after 5s
         setTimeout(() => {
-          window.popupLocked = false;
-        }, 1000);
-        return true;
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+            console.log("Auto-show timeout, skipping");
+          }
+        }, 5000);
       }
       return false;
     };
 
-    if (!tryShow()) {
-      const interval = window.setInterval(() => {
-        if (tryShow()) {
-          clearInterval(interval);
-        }
-      }, 250);
-      setTimeout(() => clearInterval(interval), 5000);
-      return () => clearInterval(interval);
-    }
-  }, []);
+    attemptShow(); // Kick off
+
+    // Cleanup in this effect too
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [isFormkitReady]); // NEW: Depend on readiness to re-trigger if loads late
 
   useEffect(() => {
     const loadPage = async () => {
-      const cacheKey = 'ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock';
+      const cacheKey = "ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock";
       // Try cache first to avoid flicker on re-mounts
       try {
         const cached = sessionStorage.getItem(cacheKey);
@@ -82,13 +138,13 @@ const RoadmapPage = () => {
 
       // Fetch fresh content in background (no loading flicker)
       try {
-        const content = await fetchPageBySlug('2026-bi-fintech-consulting-roadmap-pdf-unlock');
+        const content = await fetchPageBySlug("2026-bi-fintech-consulting-roadmap-pdf-unlock");
         if (content) {
           setPageContent(content);
           setLoading(false);
         }
       } catch (e) {
-        console.error('Roadmap fetch failed:', e);
+        console.error("Roadmap fetch failed:", e);
       }
     };
     loadPage();
@@ -120,6 +176,17 @@ const RoadmapPage = () => {
   };
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
+
+  // NEW: CTA click handler with retry/fallback
+  const handleCTAClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("CTA clicked: attempting popup");
+    const handled = tryShowPopup.current();
+    if (!handled) {
+      console.log("Popup not ready, falling back to direct link");
+      window.open("https://bifintechconsulting.com/roadmap-signup", "_blank");
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -185,7 +252,7 @@ const RoadmapPage = () => {
               />
             </section>
 
-            {/* CTA Section – Fallback button */}
+            {/* CTA Section – Updated with shared handler */}
             <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
@@ -193,19 +260,7 @@ const RoadmapPage = () => {
               </p>
               <a
                 href="https://bifintechconsulting.com/roadmap-signup"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (window.popupLocked) {
-                    console.log("Popup locked, ignoring CTA click");
-                    return;
-                  }
-                  console.log("CTA clicked: opening ConvertKit popup");
-                  window.popupLocked = true;
-                  window.formkit?.show?.('fbd8fa5d1b');
-                  setTimeout(() => {
-                    window.popupLocked = false;
-                  }, 1000);
-                }}
+                onClick={handleCTAClick} // UPDATED: Use shared handler
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
                 Get Your Free Roadmap PDF
