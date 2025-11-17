@@ -55,6 +55,13 @@ const RoadmapPage = () => {
     return () => observer.disconnect();
   }, []);
 
+  // NEW: Dev-only session clear (remove for production)
+  const clearSession = useCallback(() => {
+    sessionStorage.clear();
+    console.log("Session cleared for testing");
+    window.location.reload();
+  }, []);
+
   // Page load (unchanged)
   useEffect(() => {
     const loadPage = async () => {
@@ -113,14 +120,14 @@ const RoadmapPage = () => {
       e.stopPropagation(); // FIXED: Prevent bubble
       console.log("CTA onClick fired"); // Debug
       showDebounced(1000); // 1s debounce for CTA
-      // FIXED: Fallback navigation if popup fails (after 1s)
+      // FIXED: Fallback navigation if popup fails (after 2s)
       setTimeout(() => {
         if (!window.popupLocked) {
           // If no lock, redirect
           console.log("Popup failed, redirecting to fallback");
           window.location.href = "https://bifintechconsulting.com/roadmap-signup";
         }
-      }, 1500);
+      }, 2000); // Longer timeout
     },
     [showDebounced],
   );
@@ -128,6 +135,10 @@ const RoadmapPage = () => {
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
+      {/* NEW: Dev button for clearing session (remove for production) */}
+      <button onClick={clearSession} className="fixed top-4 right-4 z-50 bg-blue-500 text-white px-4 py-2 rounded">
+        Clear Session (Dev)
+      </button>
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
         <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
