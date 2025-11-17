@@ -39,11 +39,19 @@ const RoadmapPage = () => {
     if (sessionStorage.getItem("roadmap_popup_shown") || shownRef.current) return;
 
     const tryShow = () => {
+      if (window.popupLocked) {
+        console.log("Popup locked, skipping auto-show");
+        return true; // treat as handled to stop retry loop
+      }
       if (window.formkit?.show) {
         console.log("Auto-showing ConvertKit popup once");
+        window.popupLocked = true;
         window.formkit.show(formId);
         sessionStorage.setItem("roadmap_popup_shown", "1");
         shownRef.current = true;
+        setTimeout(() => {
+          window.popupLocked = false;
+        }, 1000);
         return true;
       }
       return false;
@@ -184,11 +192,19 @@ const RoadmapPage = () => {
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
               <a
-                data-formkit-toggle="fbd8fa5d1b"
                 href="https://bifintechconsulting.com/roadmap-signup"
                 onClick={(e) => {
                   e.preventDefault();
+                  if (window.popupLocked) {
+                    console.log("Popup locked, ignoring CTA click");
+                    return;
+                  }
+                  console.log("CTA clicked: opening ConvertKit popup");
+                  window.popupLocked = true;
                   window.formkit?.show?.('fbd8fa5d1b');
+                  setTimeout(() => {
+                    window.popupLocked = false;
+                  }, 1000);
                 }}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
