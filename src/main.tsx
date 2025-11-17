@@ -2,13 +2,8 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-// Note: React.StrictMode is intentionally disabled in dev to avoid double-invoked effects
-// that can cause duplicate modal opens. Re-enable for production checks.
-// Example:
-// createRoot(document.getElementById("root")!).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
+// StrictMode removed to fix multi-modal bug; re-enable after: <React.StrictMode><App /></React.StrictMode>
+// To re-enable later, wrap <App /> as shown above.
 
+// Plain render without StrictMode
 createRoot(document.getElementById("root")!).render(<App />);
