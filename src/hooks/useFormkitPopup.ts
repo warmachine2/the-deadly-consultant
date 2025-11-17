@@ -22,26 +22,41 @@ export default function useFormkitPopup(
   const clickTimeoutRef = useRef<number | null>(null);
   const openLockRef = useRef(false);
 
+  // Detect if a ConvertKit modal is actually visible (not just injected/hidden)
   const isModalOpen = () => {
-    return !!document.querySelector('[data-formkit-id], .formkit-modal, .ck-subscription-form');
+    const candidates = document.querySelectorAll(
+      '[data-formkit-id], .formkit-modal, .ck-subscription-form'
+    );
+    return Array.from(candidates).some((el) => {
+      const elAny = el as HTMLElement;
+      const style = window.getComputedStyle(elAny);
+      const rect = elAny.getBoundingClientRect();
+      return (
+        style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        parseFloat(style.opacity || "1") > 0 &&
+        rect.width > 0 &&
+        rect.height > 0
+      );
+    });
   };
-  // Poll for ConvertKit script initialization
+
+  // Poll for trigger presence and mark ready
   useEffect(() => {
-    console.log(`Starting readiness check for ${formId}`);
     let attempts = 0;
-    const maxAttempts = 30; // 3 seconds total
-    
+    const maxAttempts = 30; // ~3s
+
     const checkReady = setInterval(() => {
       attempts++;
-      const trigger = document.querySelector(`[data-formkit-toggle="${formId}"]`);
-      
+      const trigger = document.querySelector(
+        `[data-formkit-toggle="${formId}"]`
+      );
+
       if (trigger) {
-        console.log(`ConvertKit trigger found for ${formId}, marking ready`);
         setReady(true);
         clearInterval(checkReady);
       } else if (attempts >= maxAttempts) {
-        console.log(`ConvertKit not detected after ${maxAttempts} attempts, marking ready anyway`);
-        setReady(true);
+        setReady(true); // best-effort ready even if we didn't find the trigger yet
         clearInterval(checkReady);
       }
     }, 100);
@@ -49,74 +64,61 @@ export default function useFormkitPopup(
     return () => clearInterval(checkReady);
   }, [formId]);
 
-  // Post-click modal check - poll for modal appearance
+  // After clicking, wait briefly for modal; if none, fallback to href in new tab
   const checkModalAndFallback = useCallback((href: string) => {
-    console.log("Post-click: Polling for modal...");
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     clickTimeoutRef.current = setTimeout(() => {
-      const modal = document.querySelector('[data-formkit-id], .formkit-modal, .ck-subscription-form');
-      if (!modal) {
-        console.log("No modal appeared after click—redirecting to signup");
-        window.open(href, '_blank');
-      } else {
-        console.log("Modal detected after click—success!");
+      if (!isModalOpen()) {
+        window.open(href, "_blank");
       }
+      // Release the open lock regardless to allow the next attempt later
       openLockRef.current = false;
     }, 2000) as unknown as number;
   }, []);
+
   // Fallback redirect - open in new tab
   const fallbackRedirect = useCallback((href: string) => {
-    console.log(`Fallback: Opening signup in new tab ${href}`);
-    window.open(href, '_blank');
+    window.open(href, "_blank");
   }, []);
 
   const showAuto = useCallback(() => {
-    console.log(`showAuto: ready=${ready}`);
-    if (!ready || !triggerRef.current) {
-      console.log(`Not ready/no trigger for auto, skipping`);
-      return;
-    }
-    if (isModalOpen() || openLockRef.current) {
-      console.log("Modal already open or locked, skipping auto");
-      return;
-    }
-    console.log(`Showing auto popup via trigger click`);
+    if (!ready || !triggerRef.current) return;
+    if (isModalOpen() || openLockRef.current) return;
+
     openLockRef.current = true;
     triggerRef.current.click();
     checkModalAndFallback(triggerRef.current.href);
   }, [ready, triggerRef, checkModalAndFallback]);
+
   const showDebounced = useCallback(
     (delayMs: number) => {
-      console.log(`showDebounced: ready=${ready}`);
-      if (debounceRef.current !== null) {
-        console.log("Debounce active, skipping CTA");
-        return;
-      }
+      if (debounceRef.current !== null) return;
       if (!ready || !triggerRef.current) {
-        console.log(`Not ready/no trigger for CTA, opening in new tab`);
-        fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
+        fallbackRedirect(
+          triggerRef.current?.href ||
+            "https://bifintechconsulting.com/roadmap-signup"
+        );
         return;
       }
-      console.log(`Starting CTA debounced show (delay: ${delayMs}ms)`);
+
       if (debounceRef.current !== null) {
         clearTimeout(debounceRef.current);
       }
       debounceRef.current = setTimeout(() => {
-        if (triggerRef.current) {
-          if (isModalOpen() || openLockRef.current) {
-            console.log("Modal already open or locked, skipping CTA click");
-          } else {
-            openLockRef.current = true;
-            triggerRef.current.click();
-            console.log("CTA trigger clicked");
-            checkModalAndFallback(triggerRef.current.href);
-          }
+        if (!triggerRef.current) return;
+        if (isModalOpen() || openLockRef.current) {
+          // Skip if already open/opening
+        } else {
+          openLockRef.current = true;
+          triggerRef.current.click();
+          checkModalAndFallback(triggerRef.current.href);
         }
         debounceRef.current = null;
       }, delayMs) as unknown as number;
     },
-    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
+    [ready, triggerRef, fallbackRedirect, checkModalAndFallback]
   );
+
   useEffect(() => {
     return () => {
       if (debounceRef.current !== null) {
@@ -130,9 +132,10 @@ export default function useFormkitPopup(
       openLockRef.current = false;
     };
   }, []);
-  // Log ready changes
+
+  // Optional: log state changes while debugging
   useEffect(() => {
-    console.log(`Ready state: ${ready}`);
+    // console.log(`FormKit ready: ${ready}`);
   }, [ready]);
 
   return { ready, showAuto, showDebounced };
