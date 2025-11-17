@@ -21,7 +21,7 @@ const RoadmapPage = () => {
 
   const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // Destructure correctly
 
-  // FIXED: Dynamic Script Load with correct Domain and Form UID
+  // Dynamic Script Load - ConvertKit embed script
   useLayoutEffect(() => {
     if (scriptLoadedRef.current) return;
     console.log("Loading ConvertKit script dynamically");
@@ -34,16 +34,23 @@ const RoadmapPage = () => {
     }
 
     const script = document.createElement("script");
-    script.src = `https://${creatorSubdomain}.kit.com/${formId}/index.js`; // FIXED: kit.com domain + form UID
+    script.src = `https://${creatorSubdomain}.kit.com/${formId}/index.js`;
     script.async = true;
-    script.setAttribute("data-uid", formId); // FIXED: Form UID
+    script.setAttribute("data-uid", formId);
     script.onload = () => {
-      console.log("ConvertKit script loaded dynamically");
+      console.log("ConvertKit script loaded - marking as ready");
       scriptLoadedRef.current = true;
+      // Mark ready after short delay to ensure ConvertKit initializes
+      setTimeout(() => {
+        console.log("ConvertKit initialized, triggering ready state");
+        if (window.formkitReady) {
+          window.formkitReady[formId] = true;
+        }
+      }, 500);
     };
     script.onerror = () => {
-      console.error("Failed to load ConvertKit script - check formId and subdomain");
-      scriptLoadedRef.current = true; // Allow fallback (ready stays false)
+      console.error("Failed to load ConvertKit script");
+      scriptLoadedRef.current = true;
     };
     document.head.appendChild(script);
   }, [formId, creatorSubdomain]);
