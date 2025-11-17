@@ -6,6 +6,7 @@ import TopNav from "@/components/TopNav";
 // FIXED: Extend Window for custom flag (TS-safe)
 declare global {
   interface Window {
+    popupLocked?: boolean;
     roadmapAutoShown?: boolean;
   }
 }
@@ -15,9 +16,10 @@ const RoadmapPage = () => {
   const [loading, setLoading] = useState(true);
   const [isFormkitReady, setIsFormkitReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const autoShownRef = useRef(false); // NEW: Ref for auto guard (local, reliable)
+  const ctaLockedRef = useRef(false); // NEW: Ref for CTA-specific lock
   const formId = "fbd8fa5d1b";
 
-  // FIXED: Define createTriggerIfNeeded early in effect
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
     const trigger = document.createElement("a");
@@ -61,37 +63,49 @@ const RoadmapPage = () => {
         document.body.removeChild(triggerRef.current);
         triggerRef.current = null;
       }
-      window.roadmapAutoShown = false; // Reset on unmount
+      // Reset globals on unmount
+      window.popupLocked = false;
+      window.roadmapAutoShown = false;
     };
   }, [createTriggerIfNeeded]);
 
-  // UPDATED: Shared show - no retries
+  // Shared show - simplified guards
   const attemptShow = useCallback(
     (isAuto = true) => {
-      const key = isAuto ? "roadmap_popup_shown" : null;
-      if (isAuto && (sessionStorage.getItem(key) || window.roadmapAutoShown)) {
+      // Auto guard: Session + ref
+      if (isAuto && (sessionStorage.getItem("roadmap_popup_shown") || autoShownRef.current)) {
         console.log("Auto-show already done, skipping");
         return true;
       }
 
-      if (window.popupLocked) {
-        console.log("Popup locked, skipping");
+      // Lock: Global for auto, ref for CTA
+      if (isAuto && window.popupLocked) {
+        console.log("Global lock active, skipping auto");
+        return false;
+      }
+      if (!isAuto && ctaLockedRef.current) {
+        console.log("CTA lock active, skipping");
         return false;
       }
 
       if (isFormkitReady && triggerRef.current) {
         console.log(isAuto ? "Auto-showing ConvertKit popup once" : "Showing via CTA");
-        window.popupLocked = true;
-        triggerRef.current.click();
 
         if (isAuto) {
-          sessionStorage.setItem(key, "1");
-          window.roadmapAutoShown = true;
+          window.popupLocked = true;
+          sessionStorage.setItem("roadmap_popup_shown", "1");
+          autoShownRef.current = true;
+          setTimeout(() => {
+            window.popupLocked = false;
+          }, 1000);
+        } else {
+          ctaLockedRef.current = true;
+          setTimeout(() => {
+            ctaLockedRef.current = false;
+          }, 1000);
         }
 
-        setTimeout(() => {
-          window.popupLocked = false;
-        }, 2000); // Longer lock
+        triggerRef.current.click();
         return true;
       }
 
@@ -100,17 +114,17 @@ const RoadmapPage = () => {
     [isFormkitReady],
   );
 
-  // Auto-show: Runs ONCE on mount, after ready (empty deps for single fire)
+  // FIXED: Auto-show - Dep on readiness to re-run when ready, but guard prevents multi
   useEffect(() => {
     if (!isFormkitReady) return;
 
-    // Single delayed attempt (no interval/retry)
+    // Single delayed attempt
     const timer = setTimeout(() => {
       attemptShow(true);
-    }, 100); // Tiny buffer post-ready
+    }, 100);
 
     return () => clearTimeout(timer);
-  }, []); // EMPTY DEPS: Runs once on mount, ignores readiness changes
+  }, [isFormkitReady, attemptShow]); // Deps: Re-runs on ready=true, but only once due to guard
 
   // Page load (unchanged)
   useEffect(() => {
