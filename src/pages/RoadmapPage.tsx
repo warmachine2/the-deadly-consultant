@@ -22,30 +22,16 @@ const RoadmapPage = () => {
 
   // Dynamic Script Load - ConvertKit embed script
   useLayoutEffect(() => {
-    if (scriptLoadedRef.current) return;
+    if (scriptLoadedRef.current || (window as any).formkit) return;
     console.log("Loading ConvertKit script dynamically");
-
-    const existingScript = document.querySelector(`script[data-uid="${formId}"]`);
-    if (existingScript) {
-      console.log("ConvertKit script already present");
-      scriptLoadedRef.current = true;
-      return;
-    }
 
     const script = document.createElement("script");
     script.src = `https://${creatorSubdomain}.kit.com/${formId}/index.js`;
     script.async = true;
     script.setAttribute("data-uid", formId);
     script.onload = () => {
-      console.log("ConvertKit script loaded - marking as ready");
+      console.log("ConvertKit script loaded - initialized");
       scriptLoadedRef.current = true;
-      // Mark ready after short delay to ensure ConvertKit initializes
-      setTimeout(() => {
-        console.log("ConvertKit initialized, triggering ready state");
-        if (window.formkitReady) {
-          window.formkitReady[formId] = true;
-        }
-      }, 500);
     };
     script.onerror = () => {
       console.error("Failed to load ConvertKit script");
@@ -173,6 +159,12 @@ const RoadmapPage = () => {
       }
       return match;
     });
+
+    // Strip any ConvertKit scripts or inline CK triggers from Ghost content to prevent duplicates
+    filtered = filtered
+      .replace(/<script[^>]*kit\.com[^<]*<\/script>/gi, "")
+      .replace(/<script[^>]*data-uid=[\"']?fbd8fa5d1b[\"']?[^<]*<\/script>/gi, "")
+      .replace(/<script[^>]*>[^<]*CK\.showForm\([^<]*<\/script>/gi, "");
 
     return filtered;
   };

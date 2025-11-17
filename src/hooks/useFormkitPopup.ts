@@ -51,8 +51,7 @@ export default function useFormkitPopup(
     return () => clearInterval(timer);
   }, [formId]);
 
-  // Post-click: poll for modal and cancel fallback if detected
-  const checkModalAndFallback = useCallback((href: string) => {
+  const checkModalAndFallback = useCallback((href: string, fallback: 'none' | 'same' = 'none') => {
     console.log("Post-click: watching for modal...");
     if (modalPollRef.current) clearInterval(modalPollRef.current);
     const start = Date.now();
@@ -67,12 +66,14 @@ export default function useFormkitPopup(
         return;
       }
       if (elapsed > 3000) {
-        console.log("No modal after 3s — opening fallback in new tab");
+        console.log("No modal after 3s — handling fallback");
         if (modalPollRef.current) {
           clearInterval(modalPollRef.current);
           modalPollRef.current = null;
         }
-        window.open(href, '_blank');
+        if (fallback === 'same') {
+          window.location.href = href;
+        }
         // Allow future shows since popup didn't appear
         isShowingRef.current = false;
       }
@@ -81,8 +82,8 @@ export default function useFormkitPopup(
 
   // Fallback redirect - open in new tab
   const fallbackRedirect = useCallback((href: string) => {
-    console.log(`Fallback: Opening signup in new tab ${href}`);
-    window.open(href, '_blank');
+    console.log(`Fallback: Navigating to ${href}`);
+    window.location.href = href;
   }, []);
 
   const showAuto = useCallback(() => {
@@ -100,7 +101,7 @@ export default function useFormkitPopup(
     isShowingRef.current = true;
     console.log(`Showing auto popup via trigger click`);
     triggerRef.current.click();
-    checkModalAndFallback(triggerRef.current.href);
+    checkModalAndFallback(triggerRef.current.href, 'none');
   }, [ready, triggerRef, checkModalAndFallback, isModalOpen]);
 
   const showDebounced = useCallback(
@@ -128,7 +129,7 @@ export default function useFormkitPopup(
         if (triggerRef.current) {
           triggerRef.current.click();
           console.log("CTA trigger clicked");
-          checkModalAndFallback(triggerRef.current.href);
+          checkModalAndFallback(triggerRef.current.href, 'same');
         }
         debounceRef.current = null;
       }, delayMs) as unknown as number;
