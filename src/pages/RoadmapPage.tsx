@@ -110,8 +110,17 @@ const RoadmapPage = () => {
   const handleCTAClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
+      e.stopPropagation(); // FIXED: Prevent bubble
       console.log("CTA onClick fired"); // Debug
       showDebounced(1000); // 1s debounce for CTA
+      // FIXED: Fallback navigation if popup fails (after 1s)
+      setTimeout(() => {
+        if (!window.popupLocked) {
+          // If no lock, redirect
+          console.log("Popup failed, redirecting to fallback");
+          window.location.href = "https://bifintechconsulting.com/roadmap-signup";
+        }
+      }, 1500);
     },
     [showDebounced],
   );
