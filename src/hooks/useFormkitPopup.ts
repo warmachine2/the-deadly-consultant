@@ -16,7 +16,7 @@ interface UseFormkitPopupReturn {
 export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   const [ready, setReady] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const debounceRef = useRef<number | null>(null); // FIXED: number | null for browser setTimeout
+  const debounceRef = useRef<number | null>(null); // Browser-safe: number | null
 
   const createTriggerIfNeeded = useCallback(() => {
     if (triggerRef.current) return;
@@ -65,8 +65,8 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         triggerRef.current = null;
       }
       window.popupLocked = false; // Reset lock
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current); // FIXED: clearTimeout with number
+      if (debounceRef.current !== null) {
+        clearTimeout(debounceRef.current); // FIXED: Type guard for clearTimeout
         debounceRef.current = null;
       }
     };
@@ -99,7 +99,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
   // Debounced show (CTA-use case, allows re-open if closed)
   const showDebounced = useCallback(
     (delayMs: number) => {
-      if (debounceRef.current || window.popupLocked) {
+      if (debounceRef.current !== null || window.popupLocked) {
         console.log("Debounce or lock active, skipping CTA show");
         return;
       }
@@ -118,7 +118,7 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
           window.popupLocked = false;
           debounceRef.current = null;
         }, 1000);
-      }, delayMs);
+      }, delayMs) as number; // FIXED: Cast to number for strict TS
     },
     [formId, ready],
   );
