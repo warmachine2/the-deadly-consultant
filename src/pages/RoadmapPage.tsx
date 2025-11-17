@@ -25,15 +25,10 @@ const RoadmapPage = () => {
     if (!ready || autoTriggeredRef.current) return; // Guard: Only once after ready
     console.log("Auto effect fired"); // Debug
     autoTriggeredRef.current = true;
-    // FIXED: Poll for trigger ready (max 1s, every 100ms)
-    const pollInterval = setInterval(() => {
-      if (triggerRef.current) {
-        // Assume hook exposes triggerRef or check via window (simplified; use ready as proxy)
-        clearInterval(pollInterval);
-        showOncePerSession("roadmap_popup_shown");
-      }
-    }, 100);
-    setTimeout(() => clearInterval(pollInterval), 1000); // Max 1s poll
+    // FIXED: Longer buffer for trigger wiring (no poll needed)
+    setTimeout(() => {
+      showOncePerSession("roadmap_popup_shown");
+    }, 300);
   }, [ready, showOncePerSession]);
 
   // Page load (unchanged)
