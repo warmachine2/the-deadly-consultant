@@ -9,68 +9,64 @@ const RoadmapPage = () => {
   const shownRef = useRef(false);
   const scriptRef = useRef<HTMLScriptElement | null>(null);
 
-  // Load ConvertKit script + Show modal ONLY ONCE (strong lock for live sites)
+  // Load ConvertKit script and install a single-run guard to prevent multi-open
   useEffect(() => {
     const POPUP_KEY = 'convertkit-popup-shown';
     const w = window as any;
-    
-    // Check persistent session lock first
-    if (sessionStorage.getItem(POPUP_KEY) === 'true' || w.popupLocked || shownRef.current) {
-      console.log("Popup already shown – skipping");
+
+    // If already shown this session, don't do anything else
+    if (sessionStorage.getItem(POPUP_KEY) === 'true') {
       return;
     }
-    
-    // Set both locks immediately
-    w.popupLocked = true;
-    sessionStorage.setItem(POPUP_KEY, 'true');
 
-    // Check for existing script to avoid duplicates
+    // Ensure script loaded only once
     const existingScript = document.querySelector('script[src*="kit.com/fbd8fa5d1b"]');
-    if (existingScript) {
-      console.log("Script already loaded");
-    } else {
-      const script = document.createElement("script");
-      script.src = "https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js";
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js';
       script.async = true;
-      script.setAttribute("data-uid", "fbd8fa5d1b");
+      script.setAttribute('data-uid', 'fbd8fa5d1b');
       document.head.appendChild(script);
       scriptRef.current = script;
     }
 
-    // Poll for ready state with strict single-execution guard
+    // Patch formkit.show to be idempotent for the session
     let attempts = 0;
-    let intervalId: NodeJS.Timeout | null = null;
-    const maxAttempts = 150;
-    
-    intervalId = setInterval(() => {
+    const maxAttempts = 150; // ~30s @ 200ms
+    const intervalId = setInterval(() => {
       attempts++;
       const w = window as any;
-      
-      if (w.formkit && typeof w.formkit.show === "function" && !shownRef.current) {
-        shownRef.current = true;
-        if (intervalId) clearInterval(intervalId);
-        
-        // Single delayed execution
-        setTimeout(() => {
-          if (sessionStorage.getItem(POPUP_KEY) === 'true' && !w.popupExecuted) {
-            w.popupExecuted = true;
-            console.log("Showing ConvertKit popup");
-            try {
-              w.formkit.show("fbd8fa5d1b");
-            } catch (e) {
-              console.error("Popup error:", e);
-            }
+      const fk = w.formkit;
+
+      // Once SDK is present, wrap show() so it runs at most once per session
+      if (fk && typeof fk.show === 'function' && !w.__ck_show_patched) {
+        w.__ck_show_patched = true;
+        const originalShow = fk.show.bind(fk);
+        fk.show = (id: string) => {
+          if (sessionStorage.getItem(POPUP_KEY) === 'true') {
+            // Already shown this session
+            return;
           }
-        }, 3000);
-      } else if (attempts >= maxAttempts) {
-        if (intervalId) clearInterval(intervalId);
-        console.error("ConvertKit load failed");
+          // Mark as shown and open once
+          sessionStorage.setItem(POPUP_KEY, 'true');
+          try {
+            originalShow(id);
+          } catch (e) {
+            console.error('ConvertKit show error:', e);
+          }
+        };
+        clearInterval(intervalId);
+      }
+
+      if (attempts >= maxAttempts) {
+        clearInterval(intervalId);
+        if (!w.formkit) console.error('ConvertKit load failed');
       }
     }, 200);
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
-      // Don't remove locks - they should persist for the session
+      clearInterval(intervalId);
+      // Keep sessionStorage POPUP_KEY so it never re-opens this session
     };
   }, []);
 
