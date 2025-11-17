@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import Script from "next/script"; // FIXED: For static ConvertKit script load
+import { useState, useEffect, useRef, useCallback, useLayoutEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
@@ -18,10 +17,38 @@ const RoadmapPage = () => {
   const formId = "fbd8fa5d1b"; // Your ConvertKit UID
   const sessionKey = "roadmap_popup_shown";
   const autoTriggeredRef = useRef(false);
-  const triggerRef = useRef<HTMLAnchorElement | null>(null); // FIXED: Ref for static trigger
+  const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
+  const scriptLoadedRef = useRef(false); // Ensure single script load
   const refocusObserverRef = useRef<MutationObserver | null>(null);
 
-  const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId, triggerRef); // FIXED: Pass triggerRef to hook
+  const { ready, showOncePerSession, showDebounced } = useFormkitPopup(formId, triggerRef); // Pass triggerRef to hook
+
+  // FIXED: Dynamic Script Load (Vite-compatible, early via useLayoutEffect)
+  useLayoutEffect(() => {
+    if (scriptLoadedRef.current) return;
+    console.log("Loading ConvertKit script dynamically");
+
+    const existingScript = document.querySelector(`script[data-uid="${formId}"]`);
+    if (existingScript) {
+      console.log("ConvertKit script already present");
+      scriptLoadedRef.current = true;
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`;
+    script.async = true;
+    script.setAttribute("data-uid", formId);
+    script.onload = () => {
+      console.log("ConvertKit script loaded dynamically");
+      scriptLoadedRef.current = true;
+    };
+    script.onerror = () => {
+      console.error("Failed to load ConvertKit script");
+      scriptLoadedRef.current = true; // Allow fallback
+    };
+    document.head.appendChild(script);
+  }, [formId]);
 
   // Auto-show ONCE per session
   useEffect(() => {
@@ -148,19 +175,11 @@ const RoadmapPage = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
-      {/* FIXED: Static ConvertKit Script Load */}
-      <Script
-        src="https://bi-fintech-consultant-academy.kit.com/fbd8fa5d1b/index.js"
-        data-uid="fbd8fa5d1b"
-        strategy="afterInteractive"
-        onLoad={() => console.log("ConvertKit script loaded statically")}
-      />
-
       {/* FIXED: Static Hidden Trigger */}
       <a
         ref={triggerRef}
         href="https://bifintechconsulting.com/roadmap-signup"
-        data-formkit-toggle="fbd8fa5d1b"
+        data-formkit-toggle={formId}
         style={{
           display: "none",
           position: "absolute",
