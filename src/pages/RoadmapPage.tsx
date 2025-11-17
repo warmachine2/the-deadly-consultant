@@ -14,7 +14,7 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "fbd8fa5d1b"; // Your ConvertKit UID
+  const formId = "8677000"; // FIXED: Numeric Form ID (matches API /visit call)
   const autoTriggeredRef = useRef(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
   const scriptLoadedRef = useRef(false); // Ensure single script load
@@ -23,7 +23,7 @@ const RoadmapPage = () => {
 
   const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // Destructure correctly
 
-  // FIXED: Dynamic Script Load (Vite-compatible, early via useLayoutEffect)
+  // FIXED: Dynamic Script Load with correct Form ID
   useLayoutEffect(() => {
     if (scriptLoadedRef.current) return;
     console.log("Loading ConvertKit script dynamically");
@@ -36,9 +36,9 @@ const RoadmapPage = () => {
     }
 
     const script = document.createElement("script");
-    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`;
+    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`; // FIXED: Numeric ID
     script.async = true;
-    script.setAttribute("data-uid", formId);
+    script.setAttribute("data-uid", formId); // FIXED: Numeric ID
     script.onload = () => {
       console.log("ConvertKit script loaded dynamically");
       scriptLoadedRef.current = true;
