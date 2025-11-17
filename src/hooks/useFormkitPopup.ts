@@ -23,7 +23,7 @@ export default function useFormkitPopup(
   const debounceRef = useRef<number | null>(null);
   const clickTimeoutRef = useRef<number | null>(null); // For post-click modal poll
 
-  // FIXED: Poll for ready (force after 2s)
+  // FIXED: Poll for ready (removed force fallback—ready only if actually loaded)
   useEffect(() => {
     console.log(`Starting poll for ${formId} ready state`);
     const pollInterval = setInterval(() => {
@@ -36,20 +36,16 @@ export default function useFormkitPopup(
       }
     }, 100);
 
-    // Fallback after 2s
-    const fallbackTimeout = setTimeout(() => {
+    // Optional: Extend poll timeout if needed, but no force ready
+    const longPoll = setTimeout(() => {
       if (!ready) {
-        window.formkitReady = window.formkitReady || {};
-        window.formkitReady[formId] = true;
-        setReady(true);
-        console.log(`Formkit fallback ready for ${formId} (force for click)`);
-        clearInterval(pollInterval);
+        console.log(`Extended poll for ${formId}—still waiting...`);
       }
-    }, 2000);
+    }, 5000);
 
     return () => {
       clearInterval(pollInterval);
-      clearTimeout(fallbackTimeout);
+      clearTimeout(longPoll);
     };
   }, [formId, ready]);
 
@@ -83,14 +79,20 @@ export default function useFormkitPopup(
     }
     if (!ready || !triggerRef.current) {
       console.log(`Not ready/no trigger for auto, fallback redirect`);
-      fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
+      fallbackRedirect(triggerRef.current?.href || `https://bi-fintech-consultant-academy.ck.page/${formId}`);
+      return;
+    }
+    // FIXED: Extra safety—check formkit exists before click
+    if (!window.formkit) {
+      console.log("Formkit not loaded—fallback redirect");
+      fallbackRedirect(triggerRef.current.href);
       return;
     }
     console.log(`Showing auto popup`);
     window.popupLocked = true;
     triggerRef.current.click();
     checkModalAndFallback(triggerRef.current.href); // Poll for modal
-  }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback]);
+  }, [ready, triggerRef, fallbackRedirect, checkModalAndFallback, formId]);
 
   // Debounced show every time (CTA—no session)
   const showDebounced = useCallback(
@@ -102,7 +104,13 @@ export default function useFormkitPopup(
       }
       if (!ready || !triggerRef.current) {
         console.log(`Not ready/no trigger for CTA, fallback redirect`);
-        fallbackRedirect(triggerRef.current?.href || "https://bifintechconsulting.com/roadmap-signup");
+        fallbackRedirect(triggerRef.current?.href || `https://bi-fintech-consultant-academy.ck.page/${formId}`);
+        return;
+      }
+      // FIXED: Extra safety—check formkit exists before scheduling click
+      if (!window.formkit) {
+        console.log("Formkit not loaded—fallback redirect");
+        fallbackRedirect(triggerRef.current.href);
         return;
       }
       console.log(`Starting CTA debounced show (delay: ${delayMs}ms)`);
@@ -119,7 +127,7 @@ export default function useFormkitPopup(
         debounceRef.current = null;
       }, delayMs) as unknown as number;
     },
-    [ready, triggerRef, fallbackRedirect, checkModalAndFallback],
+    [ready, triggerRef, fallbackRedirect, checkModalAndFallback, formId],
   );
 
   // Cleanup

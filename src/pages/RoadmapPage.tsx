@@ -14,7 +14,10 @@ declare global {
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "8677000"; // FIXED: Numeric Form ID (matches API /visit call)
+  // TODO: Replace "8677000" with your actual ConvertKit form UID (alphanumeric, e.g., "fed4f02d31") from the Embed > JavaScript code in your dashboard
+  const formId = "8677000"; // FIXED: Use the data-uid value from ConvertKit embed code
+  // TODO: Confirm your creator subdomain (e.g., "bi-fintech-consultant-academy") from app.kit.com URL
+  const creatorSubdomain = "bi-fintech-consultant-academy";
   const autoTriggeredRef = useRef(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null); // Ref for static trigger
   const scriptLoadedRef = useRef(false); // Ensure single script load
@@ -23,7 +26,7 @@ const RoadmapPage = () => {
 
   const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // Destructure correctly
 
-  // FIXED: Dynamic Script Load with correct Form ID
+  // FIXED: Dynamic Script Load with correct Domain and Form UID
   useLayoutEffect(() => {
     if (scriptLoadedRef.current) return;
     console.log("Loading ConvertKit script dynamically");
@@ -36,19 +39,19 @@ const RoadmapPage = () => {
     }
 
     const script = document.createElement("script");
-    script.src = `https://bi-fintech-consultant-academy.kit.com/${formId}/index.js`; // FIXED: Numeric ID
+    script.src = `https://${creatorSubdomain}.ck.page/${formId}/index.js`; // FIXED: ck.page domain + form UID
     script.async = true;
-    script.setAttribute("data-uid", formId); // FIXED: Numeric ID
+    script.setAttribute("data-uid", formId); // FIXED: Form UID
     script.onload = () => {
       console.log("ConvertKit script loaded dynamically");
       scriptLoadedRef.current = true;
     };
     script.onerror = () => {
-      console.error("Failed to load ConvertKit script");
-      scriptLoadedRef.current = true; // Allow fallback
+      console.error("Failed to load ConvertKit script - check formId and subdomain");
+      scriptLoadedRef.current = true; // Allow fallback (ready stays false)
     };
     document.head.appendChild(script);
-  }, [formId]);
+  }, [formId, creatorSubdomain]);
 
   // Auto-show EVERY TIME (wait for ready)
   useEffect(() => {
@@ -192,14 +195,16 @@ const RoadmapPage = () => {
     [showDebounced, setCleanupTimeout],
   );
 
+  const formHref = `https://${creatorSubdomain}.ck.page/${formId}`; // FIXED: Correct ck.page form URL
+
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
-      {/* FIXED: Static Hidden Trigger */}
+      {/* FIXED: Static Hidden Trigger with correct href */}
       <a
         ref={triggerRef}
-        href="https://bifintechconsulting.com/roadmap-signup"
+        href={formHref}
         data-formkit-toggle={formId}
         style={{
           display: "none",
@@ -261,7 +266,7 @@ const RoadmapPage = () => {
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
               <a
-                href="https://bifintechconsulting.com/roadmap-signup"
+                href={formHref} // FIXED: Correct ck.page fallback URL
                 onClick={handleCTAClick}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
