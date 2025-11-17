@@ -109,18 +109,16 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
         return;
       }
 
-      // FIXED: Check session after click success (delay)
+      // FIXED: No session check on first run; set after click
       console.log(`Showing Formkit popup once for ${sessionKey}`);
       attemptedRef.current = true; // Mark attempted
       window.popupLocked = true;
       triggerRef.current.click();
-      // Set session after click (success assumed)
+      // FIXED: Set session after click success (delayed)
       setTimeout(() => {
-        if (!sessionStorage.getItem(sessionKey)) {
-          sessionStorage.setItem(sessionKey, "1");
-        }
+        sessionStorage.setItem(sessionKey, "1");
         window.popupLocked = false;
-      }, 100); // Short delay for click to process
+      }, 200); // Delay for click to process
     },
     [formId, ready],
   );
