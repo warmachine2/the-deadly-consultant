@@ -116,7 +116,9 @@ export default function useFormkitPopup(formId: string): UseFormkitPopupReturn {
       triggerRef.current.click();
       // FIXED: Set session after click success (delayed)
       setTimeout(() => {
-        sessionStorage.setItem(sessionKey, "1");
+        if (!sessionStorage.getItem(sessionKey)) {
+          sessionStorage.setItem(sessionKey, "1");
+        }
         window.popupLocked = false;
       }, 200); // Delay for click to process
     },
