@@ -16,7 +16,7 @@ const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
 
 const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory, onCategoryChange }: SidebarProps) => {
   const [showTags, setShowTags] = useState(true);
-  const [showCategories, | setShowCategories] = useState(true);
+  const [showCategories, setShowCategories] = useState(true);
   const isMobile = useIsMobile();
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -56,18 +56,18 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* × BUTTON — PERFECT TOP-RIGHT, NOTHING CAN PUSH IT LEFT */}
+        {/* × BUTTON — TOP-RIGHT, CLEAN, IMPOSSIBLE TO MOVE LEFT */}
         {isMobile && (
           <button
             onClick={onClose}
             className="absolute top-6 right-6 text-white/70 hover:text-white transition z-50"
             aria-label="Close sidebar"
           >
-            <X className="w-7 h-7" />
+            <X className="w-8 h-8" />
           </button>
         )}
 
-        {/* Title now has left padding so it doesn't touch the button */}
+        {/* Title with right padding so it never overlaps the button */}
         <h2 className="text-xl font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16">
           Filters
         </h2>
@@ -96,7 +96,13 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     ${selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span className={selectedCategory === category ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                  <span
+                    className={
+                      selectedCategory === category
+                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        : ""
+                    }
+                  >
                     {category}
                   </span>
                 </button>
@@ -128,4 +134,23 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span className={selectedTags.includes(tag) ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4...
+                  <span
+                    className={
+                      selectedTags.includes(tag)
+                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        : ""
+                    }
+                  >
+                    {tag}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
+  );
+};
+
+export default Sidebar;
