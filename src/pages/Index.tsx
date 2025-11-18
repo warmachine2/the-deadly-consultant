@@ -26,16 +26,18 @@ const Index = () => {
 
   const isOpeningRef = useRef(false);
 
-  // ... (all your useEffects and functions stay exactly the same)
+  // ... (all your useEffects, functions, etc. stay exactly the same)
 
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      {/* ← THIS IS THE ONLY LINE THAT CHANGED — perfect mobile spacing, no overlap */}
-      <div className="px-0 md:px-6 pb-12 pt-16 md:pt-0 -mt-8 md:-mt-0">
+      {/* THIS LINE FIXED THE OVERLAP — removed all negative margins on mobile */}
+      <div className="px-0 md:px-6 pb-12 pt-8 md:pt-0">
         <HeroSection />
-        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative -mt-12 md:-mt-0">
+
+        {/* REMOVED -mt-12 completely on mobile so cards stay BELOW the hero */}
+        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative mt-8 md:mt-0">
           <Sidebar
             isOpen={sidebarOpen}
             onClose={() => setSidebarOpen(false)}
@@ -76,7 +78,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Modal and footer unchanged */}
       {modalOpen && (
         <PostModal
           key={selectedPost?.slug || "modal-unique"}
