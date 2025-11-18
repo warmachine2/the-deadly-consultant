@@ -50,7 +50,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <div className="flex items-center">
               {/* Mobile Logo with Glass Effect */}
               <div className="md:hidden p-2 rounded-xl volumetric-glass-button mr-3">
-                <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6" />
+                <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
               </div>
               {/* Desktop Text Title */}
               <h1
