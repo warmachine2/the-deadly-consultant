@@ -26,6 +26,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
     }
   }, [isOpen, isMobile]);
 
+  // Fixed body lock — only lock when sidebar is actually open
   useEffect(() => {
     if (isOpen && isMobile) {
       document.body.style.overflow = "hidden";
@@ -40,26 +41,34 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
   return (
     <>
       {/* Overlay for mobile */}
-      {isOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
+      {isOpen && isMobile && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={onClose} />}
 
-      {/* Sidebar – ONLY THIS LINE CHANGED (top-16 → top-0 md:top-16) */}
+      {/* Sidebar – THIS IS THE FIXED VERSION */}
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:sticky top-0 md:top-16 left-0 h-[calc(100vh-4rem)] z-40
+          fixed md:sticky top-0 left-0 z-40
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
-          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${isOpen ? "visible" : "invisible md:visible"}
+          ${
+            isMobile
+              ? isOpen
+                ? "translate-x-0 h-screen"
+                : "-translate-x-full hidden"
+              : "md:top-16 h-[calc(100vh-4rem)] translate-x-0"
+          }
         `}
       >
         {/* Close button for mobile */}
-        <button
-          onClick={onClose}
-          className="md:hidden absolute top-4 right-4 p-4 rounded-2xl volumetric-glass-button"
-          aria-label="Close sidebar"
-        >
-          <X className="w-5 h-5 text-white" />
-        </button>
+        {isMobile && (
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-4 rounded-2xl volumetric-glass-button z-50"
+            aria-label="Close sidebar"
+          >
+            <X className="w-5 h-5 text-white" />
+          </button>
+        )}
 
         <h2 className="text-lg font-bold text-white mb-2 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
           Filters
