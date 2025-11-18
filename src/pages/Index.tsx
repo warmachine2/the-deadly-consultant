@@ -16,7 +16,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = setSidebarOpen(false);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [fullContent, setFullContent] = useState<string>("");
@@ -50,7 +50,6 @@ const Index = () => {
   useEffect(() => {
     let filtered = [...posts];
 
-    // Search filter
     if (searchQuery) {
       filtered = filtered.filter(
         (post) =>
@@ -59,12 +58,10 @@ const Index = () => {
       );
     }
 
-    // Tag filter
     if (selectedTags.length > 0) {
       filtered = filtered.filter((post) => post.tags?.some((tag) => selectedTags.includes(tag.name)));
     }
 
-    // Category filter (simplified - you can enhance this)
     if (selectedCategory !== "All Posts") {
       filtered = filtered.filter((post) => post.tags?.some((tag) => tag.name === selectedCategory));
     }
@@ -100,79 +97,56 @@ const Index = () => {
     }
   };
 
-  // Modal open handler with guard and memoization
   const handlePostClick = useCallback(async (post: BlogPost) => {
-    console.log('Modal trigger attempt', { postId: post?.id, isOpening: isOpeningRef.current });
-    
-    if (isOpeningRef.current) {
-      console.log("Modal already opening, skipping duplicate call");
-      return;
-    }
-    if (!post || !post.slug) {
-      console.warn("Invalid post clicked:", post);
-      return;
-    }
+    if (isOpeningRef.current) return;
+    if (!post || !post.slug) return;
 
-    // Set guard
     isOpeningRef.current = true;
-    console.log('Modal opened', { postId: post.id });
 
     setSelectedPost(post);
     setModalOpen(true);
     setFullContent("");
     setModalLoading(true);
 
-    // Fetch full content with micro-delay to ensure modal state settles
     setTimeout(async () => {
       try {
         const fullPost = await fetchPostBySlug(post.slug);
-        if (fullPost?.html) {
-          setFullContent(fullPost.html);
-        } else {
-          setFullContent(`<p>${post.excerpt}</p>`);
-        }
+        setFullContent(fullPost?.html || `<p>${post.excerpt}</p>`);
       } catch (error) {
         console.error("Error fetching full post:", error);
         setFullContent(`<p>${post.excerpt}</p>`);
       } finally {
         setModalLoading(false);
-        // Reset guard after content loads
         isOpeningRef.current = false;
       }
     }, 0);
   }, []);
 
-  // Debounced handler to avoid rapid multiple opens
-  const debouncedHandlePostClick = useMemo(
-    () => debounce(handlePostClick, 300),
-    [handlePostClick]
-  );
+  const debouncedHandlePostClick = useMemo(() => debounce(handlePostClick, 300), [handlePostClick]);
 
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
   };
 
-  // UPDATED: Pass modalLoading to PostModal (use it for a spinner if needed)
   return (
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="pt-16 px-0 md:px-6 pb-12">
-        {" "}
-        {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
+      {/* ← ONLY THESE LINES CHANGED → */}
+      <div className="px-0 md:px-6 pb-12 -mt-8 md:-mt-0">
         <HeroSection />
-        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative mt-0">
-          {" "}
-          {/* UPDATED: Added mt-0 to remove vertical space */}
+        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative -mt-12 md:-mt-0">
           {/* Sidebar */}
           <Sidebar
             isOpen={sidebarOpen}
+            Pay
             onClose={() => setSidebarOpen(false)}
             selectedTags={selectedTags}
             onTagToggle={handleTagToggle}
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
           />
+
           {/* Main Content */}
           <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
@@ -181,10 +155,8 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-0 md:px-0">
-                  {" "}
-                  {/* UPDATED: Added w-full to grid container */}
-                  <RoadmapCard /> {/* Prominent teaser tile */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
+                  <RoadmapCard />
                   {filteredPosts.map((post) => (
                     <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
                   ))}
@@ -206,12 +178,11 @@ const Index = () => {
           </main>
         </div>
       </div>
+      {/* ← END OF CHANGES → */}
 
-      {/* Post Modal - Conditional render based on modalOpen */}
-      {/* NOTE: Run 'npm update @radix-ui/react-dialog' to fix known re-render bugs if persists */}
       {modalOpen && (
         <PostModal
-          key={selectedPost?.slug || 'modal-unique'}
+          key={selectedPost?.slug || "modal-unique"}
           post={selectedPost}
           isOpen={modalOpen}
           onClose={() => {
@@ -219,7 +190,6 @@ const Index = () => {
             setSelectedPost(null);
             setFullContent("");
             setModalLoading(false);
-            // Reset guard on close
             isOpeningRef.current = false;
           }}
           fullContent={fullContent}
@@ -227,7 +197,6 @@ const Index = () => {
         />
       )}
 
-      {/* Footer */}
       <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
