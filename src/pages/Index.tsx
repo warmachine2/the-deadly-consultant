@@ -127,8 +127,8 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      {/* ONLY THESE CLASSES WERE CHANGED — mobile gap fixed */}
-      <div className="px-0 md:px-6 pb-12 -mt-8 md:-mt-0">
+      {/* ← ONLY THIS ONE LINE CHANGED (added pt-8 for mobile breathing room) */}
+      <div className="px-0 md:px-6 pb-12 pt-8 md:pt-0 -mt-8 md:-mt-0">
         <HeroSection />
         <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative -mt-12 md:-mt-0">
           <Sidebar
