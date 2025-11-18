@@ -44,20 +44,20 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:sticky top-16 md:top-0 left-0 z-40   {/* ← starts right under TopNav on mobile */}
+          fixed md:sticky top-16 md:top-0 left-0 z-40
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl
           p-6
           transition-transform duration-300 overflow-y-auto
           ${
             isMobile
               ? isOpen
-                ? "translate-x-0 h-[calc(100vh-64px)]"   {/* ← height = screen - TopNav */}
+                ? "translate-x-0 h-[calc(100vh-64px)]"
                 : "-translate-x-full hidden"
               : "md:top-16 h-[calc(100vh-4rem)] translate-x-0"
           }
         `}
       >
-        {/* Close button — top-right, perfect */}
+        {/* Close button — top-right */}
         {isMobile && (
           <button
             onClick={onClose}
@@ -96,7 +96,13 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     ${selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span className={selectedCategory === category ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                  <span
+                    className={
+                      selectedCategory === category
+                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        : ""
+                    }
+                  >
                     {category}
                   </span>
                 </button>
@@ -129,7 +135,13 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span className={selectedTags.includes(tag) ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                  <span
+                    className={
+                      selectedTags.includes(tag)
+                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        : ""
+                    }
+                  >
                     {tag}
                   </span>
                 </button>
