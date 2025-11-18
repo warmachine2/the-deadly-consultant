@@ -39,10 +39,8 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
 
   return (
     <>
-      {/* Overlay */}
       {isOpen && isMobile && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={onClose} />}
 
-      {/* Sidebar */}
       <aside
         ref={sidebarRef}
         className={`
@@ -58,7 +56,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* CLOSE BUTTON — now perfectly top-right on mobile */}
+        {/* CLOSE BUTTON — now perfectly top-right */}
         {isMobile && (
           <button
             onClick={onClose}
@@ -73,7 +71,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           Filters
         </h2>
 
-        {/* Categories */}
+        {/* Categories & Tags stay exactly the same */}
         <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
@@ -116,7 +114,6 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           )}
         </div>
 
-        {/* Tags */}
         <div>
           <button
             onClick={() => setShowTags(!showTags)}
