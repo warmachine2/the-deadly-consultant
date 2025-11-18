@@ -45,7 +45,8 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
         ref={sidebarRef}
         className={`
           fixed md:sticky top-0 left-0 z-40
-          w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-6 pt-20 md:pt-6
+          w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl
+          p-6 pt-20 md:pt-6
           transition-transform duration-300 overflow-y-auto
           ${
             isMobile
@@ -56,23 +57,22 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* × BUTTON — TOP-RIGHT, CLEAN, IMPOSSIBLE TO MOVE LEFT */}
+        {/* CLOSE BUTTON — TOP-RIGHT, CLEAN */}
         {isMobile && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/70 hover:text-white transition z-50"
+            className="absolute top-6 right-6 text-white/70 hover:text-white transition z-50"
             aria-label="Close sidebar"
           >
             <X className="w-8 h-8" />
           </button>
         )}
 
-        {/* Title with right padding so it never overlaps the button */}
-        <h2 className="text-xl font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16">
+        <h2 className="text-xl font-bold text-white mb-6 mt-8 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16">
           Filters
         </h2>
 
-        {/* Rest of your code 100% unchanged */}
+        {/* Categories */}
         <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
@@ -111,6 +111,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           )}
         </div>
 
+        {/* Tags */}
         <div>
           <button
             onClick={() => setShowTags(!showTags)}
