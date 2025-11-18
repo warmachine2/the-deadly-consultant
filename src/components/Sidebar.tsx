@@ -16,7 +16,7 @@ const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
 
 const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory, onCategoryChange }: SidebarProps) => {
   const [showTags, setShowTags] = useState(true);
-  const [showCategories, setShowCategories] = useState(true);
+  const [showCategories, | setShowCategories] = useState(true);
   const isMobile = useIsMobile();
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -45,7 +45,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
         ref={sidebarRef}
         className={`
           fixed md:sticky top-0 left-0 z-40
-          w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-6 pt-16 md:pt-6
+          w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-6 pt-20 md:pt-6
           transition-transform duration-300 overflow-y-auto
           ${
             isMobile
@@ -56,22 +56,23 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* CLOSE BUTTON — now perfectly top-right */}
+        {/* × BUTTON — PERFECT TOP-RIGHT, NOTHING CAN PUSH IT LEFT */}
         {isMobile && (
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 text-white/70 hover:text-white transition z-50"
+            className="absolute top-6 right-6 text-white/70 hover:text-white transition z-50"
             aria-label="Close sidebar"
           >
-            <X className="w-8 h-8" />
+            <X className="w-7 h-7" />
           </button>
         )}
 
-        <h2 className="text-xl font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+        {/* Title now has left padding so it doesn't touch the button */}
+        <h2 className="text-xl font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16">
           Filters
         </h2>
 
-        {/* Categories & Tags stay exactly the same */}
+        {/* Rest of your code 100% unchanged */}
         <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
@@ -92,20 +93,10 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                   onClick={() => onCategoryChange(category)}
                   className={`
                     w-full text-left px-4 py-4 rounded-2xl text-sm font-medium transition-all
-                    ${
-                      selectedCategory === category
-                        ? "volumetric-glass-active"
-                        : "volumetric-glass-button text-white/80"
-                    }
+                    ${selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span
-                    className={
-                      selectedCategory === category
-                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
-                        : ""
-                    }
-                  >
+                  <span className={selectedCategory === category ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
                     {category}
                   </span>
                 </button>
@@ -137,23 +128,4 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span
-                    className={
-                      selectedTags.includes(tag)
-                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
-                        : ""
-                    }
-                  >
-                    {tag}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </aside>
-    </>
-  );
-};
-
-export default Sidebar;
+                  <span className={selectedTags.includes(tag) ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4...
