@@ -58,18 +58,17 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* CLEAN CLOSE BUTTON — top-right, no background box */}
+        {/* CLOSE BUTTON — now perfectly top-right on mobile */}
         {isMobile && (
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 text-white/80 hover:text-white transition z-50"
+            className="absolute top-5 right-5 text-white/70 hover:text-white transition z-50"
             aria-label="Close sidebar"
           >
-            <X className="w-7 h-7" />
+            <X className="w-8 h-8" />
           </button>
         )}
 
-        {/* Title with proper top spacing */}
         <h2 className="text-xl font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
           Filters
         </h2>
