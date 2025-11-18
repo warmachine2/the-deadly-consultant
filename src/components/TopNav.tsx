@@ -1,7 +1,9 @@
-import { Search, Menu } from "lucide-react";
+import { Search, Menu, User } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SignupButton from "@/components/SignupButton"; // Adjust path if needed (e.g., create the file)
+import EmailCaptureModal from "@/components/EmailCaptureModal";
+import { toast } from "@/hooks/use-toast";
 
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
@@ -10,11 +12,24 @@ interface TopNavProps {
 
 const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
     onSearchChange?.(value);
+  };
+
+  const handleMobileSignup = async (data: { name: string; email: string }) => {
+    console.log("Form submitted:", data);
+    setIsModalOpen(false);
+    toast({
+      title: "Success!",
+      description: "Thank you for signing up. Check your email for confirmation.",
+    });
+    if (window.formkit?.show) {
+      window.formkit.show("fbd8fa5d1b");
+    }
   };
 
   return (
@@ -34,7 +49,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <Link to="/">
             <div className="flex items-center">
               {/* Mobile Logo */}
-              <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-8 h-8 block md:hidden" />
+              <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="h-8 w-8 mr-3 block md:hidden" />
               {/* Desktop Text Title */}
               <h1
                 className="hidden md:block text-xl md:text-2xl font-bold text-foreground cursor-pointer transition-opacity whitespace-nowrap"
@@ -85,12 +100,23 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </button>
           </Link>
 
-          {/* Injected: New CTA Button with Gradient Outline & Glow - Smaller on mobile */}
-          <SignupButton
-            formId="fbd8fa5d1b"
-            fallbackHref="https://bifintechconsulting.com/case-study-signup"
-            className="px-2 py-1.5 md:px-5 md:py-2 text-sm md:text-base font-semibold"
-          />
+          {/* Mobile: Icon-only signup button */}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="md:hidden p-2 rounded-xl volumetric-glass-button"
+            aria-label="Sign up"
+          >
+            <User className="w-6 h-6 text-white" />
+          </button>
+
+          {/* Desktop/Tablet: Full signup button */}
+          <div className="hidden md:block">
+            <SignupButton
+              formId="fbd8fa5d1b"
+              fallbackHref="https://bifintechconsulting.com/case-study-signup"
+              className="px-5 py-2 text-base font-semibold"
+            />
+          </div>
         </div>
       </div>
 
@@ -103,10 +129,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             placeholder="Search posts..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="w-full pl-10 pr-4 py-2 volumetric-glass-button rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 placeholder:text-white/60"
+            className="w-full pl-9 pr-3 py-2 volumetric-glass-button rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 placeholder:text-white/60"
           />
         </div>
       </div>
+
+      {/* Mobile Sign Up Modal */}
+      <EmailCaptureModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleMobileSignup} />
     </nav>
   );
 };
