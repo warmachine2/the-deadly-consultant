@@ -161,7 +161,7 @@ const Index = () => {
         {" "}
         {/* UPDATED: px-0 on mobile for full-width, md:px-6 for desktop */}
         <HeroSection />
-        <div className="flex flex-col md:flex-row gap-6 relative mt-0">
+        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative mt-0">
           {" "}
           {/* UPDATED: Added mt-0 to remove vertical space */}
           {/* Sidebar */}

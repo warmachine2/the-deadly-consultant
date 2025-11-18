@@ -1,6 +1,6 @@
 const HeroSection = () => {
   return (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8 hero-bokeh relative overflow-hidden">
+    <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
         <div className="bokeh-orb bokeh-orb-1"></div>
