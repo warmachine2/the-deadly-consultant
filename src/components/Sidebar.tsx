@@ -42,11 +42,11 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
       {/* Overlay for mobile */}
       {isOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden" onClick={onClose} />}
 
-      {/* Sidebar */}
+      {/* Sidebar – ONLY THIS LINE CHANGED (top-16 → top-0 md:top-16) */}
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:sticky top-16 left-0 h-[calc(100vh-4rem)] z-40
+          fixed md:sticky top-0 md:top-16 left-0 h-[calc(100vh-4rem)] z-40
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
           transition-transform duration-300 overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${isOpen ? "visible" : "invisible md:visible"}
@@ -93,7 +93,13 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                     }
                   `}
                 >
-                  <span className={selectedCategory === category ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                  <span
+                    className={
+                      selectedCategory === category
+                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        : ""
+                    }
+                  >
                     {category}
                   </span>
                 </button>
@@ -123,14 +129,16 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                   onClick={() => onTagToggle(tag)}
                   className={`
                     px-4 py-4 rounded-2xl text-xs font-medium italic transition-all
-                    ${
-                      selectedTags.includes(tag)
-                        ? "volumetric-glass-active"
-                        : "volumetric-glass-button text-white/80"
-                    }
+                    ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
                   `}
                 >
-                  <span className={selectedTags.includes(tag) ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent" : ""}>
+                  <span
+                    className={
+                      selectedTags.includes(tag)
+                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
+                        : ""
+                    }
+                  >
                     {tag}
                   </span>
                 </button>
