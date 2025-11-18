@@ -60,7 +60,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
         {isMobile && (
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition z-50"
+            className="absolute top-4 right-4 text-white/70 hover:text-white transition z-50"
             aria-label="Close sidebar"
           >
             <X className="w-8 h-8" />
