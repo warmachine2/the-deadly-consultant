@@ -57,7 +57,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* Close button — top-right, clean */}
+        {/* × BUTTON — TOP-RIGHT, 100% GUARANTEED */}
         {isMobile && (
           <button
             onClick={onClose}
