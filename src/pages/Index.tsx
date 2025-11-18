@@ -69,7 +69,6 @@ const Index = () => {
   }, [searchQuery, selectedTags, selectedCategory, posts]);
 
   // Infinite scroll
-  unchanged;
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading && hasMore) {
@@ -97,7 +96,6 @@ const Index = () => {
     }
   };
 
-  // Modal handler (unchanged, just cleaned a bit)
   const handlePostClick = useCallback(async (post: BlogPost) => {
     if (isOpeningRef.current || !post?.slug) return;
 
@@ -129,7 +127,7 @@ const Index = () => {
     <div className="min-h-screen">
       <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-      {/* ONLY THESE 3 LINES CHANGED — gap fixed on mobile */}
+      {/* ONLY THESE CLASSES WERE CHANGED — mobile gap fixed */}
       <div className="px-0 md:px-6 pb-12 -mt-8 md:-mt-0">
         <HeroSection />
         <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative -mt-12 md:-mt-0">
