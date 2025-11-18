@@ -26,7 +26,6 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
     }
   }, [isOpen, isMobile]);
 
-  // Fixed body lock — only lock when sidebar is actually open
   useEffect(() => {
     if (isOpen && isMobile) {
       document.body.style.overflow = "hidden";
@@ -40,15 +39,15 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
 
   return (
     <>
-      {/* Overlay for mobile */}
+      {/* Overlay */}
       {isOpen && isMobile && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={onClose} />}
 
-      {/* Sidebar – THIS IS THE FIXED VERSION */}
+      {/* Sidebar */}
       <aside
         ref={sidebarRef}
         className={`
           fixed md:sticky top-0 left-0 z-40
-          w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-4
+          w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl p-6 pt-16 md:pt-6
           transition-transform duration-300 overflow-y-auto
           ${
             isMobile
@@ -59,23 +58,24 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           }
         `}
       >
-        {/* Close button for mobile */}
+        {/* CLEAN CLOSE BUTTON — top-right, no background box */}
         {isMobile && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-4 rounded-2xl volumetric-glass-button z-50"
+            className="absolute top-5 right-5 text-white/80 hover:text-white transition z-50"
             aria-label="Close sidebar"
           >
-            <X className="w-5 h-5 text-white" />
+            <X className="w-7 h-7" />
           </button>
         )}
 
-        <h2 className="text-lg font-bold text-white mb-2 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+        {/* Title with proper top spacing */}
+        <h2 className="text-xl font-bold text-white mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
           Filters
         </h2>
 
         {/* Categories */}
-        <div className="mb-2">
+        <div className="mb-6">
           <button
             onClick={() => setShowCategories(!showCategories)}
             className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
