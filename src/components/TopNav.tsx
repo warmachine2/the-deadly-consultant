@@ -48,8 +48,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Mobile: Favicon Logo; Desktop: Text Title */}
           <Link to="/">
             <div className="flex items-center">
-              {/* Mobile Logo */}
-              <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="h-8 w-8 mr-3 block md:hidden" />
+              {/* Mobile Logo with Glass Effect */}
+              <div className="md:hidden p-2 rounded-xl volumetric-glass-button mr-3">
+                <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6" />
+              </div>
               {/* Desktop Text Title */}
               <h1
                 className="hidden md:block text-xl md:text-2xl font-bold text-foreground cursor-pointer transition-opacity whitespace-nowrap"
