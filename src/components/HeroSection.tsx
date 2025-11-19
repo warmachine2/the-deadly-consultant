@@ -18,7 +18,7 @@ const HeroSection = () => {
             <span style={{ color: "white" }}>Consultant</span>
           </span>
         </h1>
-        <p className="text-lg md:text-xl mb-6 text-[#A0B0C0]">
+        <p className="text-lg md:text-xl mb-6 text-white">
           Explore career paths, essential tools, and inspiring success stories
         </p>
       </div>
