@@ -1,6 +1,5 @@
 const HeroSection = () => {
-  return (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
+  return <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
         <div className="bokeh-orb bokeh-orb-1"></div>
@@ -11,14 +10,11 @@ const HeroSection = () => {
       </div>
       
       <div className="max-w-4xl mx-auto text-center relative z-10">
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
-          Full Stack Training to Become a 10k/mo+ BI-FinTech PM Consultant
-        </h1>
+        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">Full Stack Training to Become an AI-Proof 10k/mo+ BI-FinTech PM Consultant</h1>
         <p className="text-lg md:text-xl mb-6 text-[#A0B0C0]">
           Explore career paths, essential tools, and inspiring success stories
         </p>
       </div>
-    </section>
-  );
+    </section>;
 };
 export default HeroSection;
