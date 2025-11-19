@@ -97,11 +97,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                   `}
                 >
                   <span
-                    className={
-                      selectedCategory === category
-                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
-                        : ""
-                    }
+                    style={selectedCategory === category ? { color: "#F4C903" } : {}}
                   >
                     {category}
                   </span>
@@ -136,11 +132,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
                   `}
                 >
                   <span
-                    className={
-                      selectedTags.includes(tag)
-                        ? "bg-gradient-to-r from-[#4A7BA7] to-[#6B4FA8] bg-clip-text text-transparent"
-                        : ""
-                    }
+                    style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}
                   >
                     {tag}
                   </span>
