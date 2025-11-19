@@ -58,14 +58,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
               >
                 The{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, #F4C903 0%, #ffffff 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
+                <span style={{ color: "#F4C903" }}>
                   Deadly
                 </span>{" "}
                 Consultant
