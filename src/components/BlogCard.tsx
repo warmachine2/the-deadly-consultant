@@ -49,7 +49,7 @@ const BlogCard = ({ post, onClick, className }: BlogCardProps) => {
           {post.title}
         </h3>
 
-        <p className="text-sm mb-4 line-clamp-2 text-[#95DCD9]">{post.excerpt}</p>
+        <p className="text-sm mb-4 line-clamp-2 text-white">{post.excerpt}</p>
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
