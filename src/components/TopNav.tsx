@@ -60,7 +60,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 The{" "}
                 <span
                   style={{
-                    background: "linear-gradient(135deg, #04c3fc 0%, #ffffff 100%)",
+                    background: "linear-gradient(135deg, #F4C903 0%, #ffffff 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
