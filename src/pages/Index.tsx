@@ -8,7 +8,7 @@ import PostModal from "@/components/PostModal";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2 } from "lucide-react";
 import RoadmapCard from "@/components/RoadmapCard";
-//force rebuild
+
 const Index = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
