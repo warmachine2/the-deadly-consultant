@@ -38,11 +38,8 @@ const DEFAULT_META: SiteMeta = {
     "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
 };
 
-// Handle both Node.js (build time) and browser (runtime) contexts
-const ghostApiKey = 
-  (typeof process !== 'undefined' && process.env?.VITE_GHOST_CONTENT_API_KEY) ||
-  (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_GHOST_CONTENT_API_KEY) ||
-  undefined;
+// Ghost Content API keys are public and safe to include in code
+const ghostApiKey = '2cd123c73978a865e977713943';
 
 export async function getSiteMeta(): Promise<SiteMeta> {
   if (!ghostApiKey) {
