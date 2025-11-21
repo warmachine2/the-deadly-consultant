@@ -38,9 +38,10 @@ const DEFAULT_META: SiteMeta = {
     "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
 };
 
-export async function getSiteMeta(): Promise<SiteMeta> {
-  const ghostApiKey = import.meta.env.VITE_GHOST_CONTENT_API_KEY;
+// This line fixes the TS2339 error
+const ghostApiKey = import.meta.env.VITE_GHOST_CONTENT_API_KEY as string | undefined;
 
+export async function getSiteMeta(): Promise<SiteMeta> {
   if (!ghostApiKey) {
     console.warn("VITE_GHOST_CONTENT_API_KEY not found, using default meta tags");
     return DEFAULT_META;
