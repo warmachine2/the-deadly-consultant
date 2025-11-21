@@ -26,33 +26,34 @@ interface SiteMeta {
 
 const DEFAULT_META: SiteMeta = {
   title: "The Deadly Consultant - Career Paths & BI-FinTech Success Stories",
-  description: "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, PMP certifications, and inspiring success stories.",
+  description:
+    "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, PMP certifications, and inspiring success stories.",
   ogImage: "https://lovable.dev/opengraph-image-p98pqg.png",
   ogTitle: "The Deadly Consultant - Career Paths & BI-FinTech Success",
-  ogDescription: "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
+  ogDescription:
+    "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
   twitterImage: "https://lovable.dev/opengraph-image-p98pqg.png",
   twitterTitle: "The Deadly Consultant - Career Paths & BI-FinTech Success",
-  twitterDescription: "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
+  twitterDescription:
+    "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
 };
 
 export async function getSiteMeta(): Promise<SiteMeta> {
-  const ghostApiKey = process.env.VITE_GHOST_CONTENT_API_KEY;
-  
+  const ghostApiKey = import.meta.env.VITE_GHOST_CONTENT_API_KEY;
+
   if (!ghostApiKey) {
     console.warn("VITE_GHOST_CONTENT_API_KEY not found, using default meta tags");
     return DEFAULT_META;
   }
 
   try {
-    const response = await fetch(
-      `https://thedeadlyconsultant.com/ghost/api/content/settings/?key=${ghostApiKey}`
-    );
+    const response = await fetch(`https://thedeadlyconsultant.com/ghost/api/content/settings/?key=${ghostApiKey}`);
 
     if (!response.ok) {
       throw new Error(`Ghost API returned ${response.status}`);
     }
 
-    const data = await response.json() as GhostSettingsResponse;
+    const data = (await response.json()) as GhostSettingsResponse;
     const settings: GhostSettings = data.settings;
 
     return {
@@ -63,7 +64,11 @@ export async function getSiteMeta(): Promise<SiteMeta> {
       ogDescription: settings.og_description || settings.description || DEFAULT_META.ogDescription,
       twitterImage: settings.twitter_image || settings.og_image || DEFAULT_META.twitterImage,
       twitterTitle: settings.twitter_title || settings.og_title || settings.title || DEFAULT_META.twitterTitle,
-      twitterDescription: settings.twitter_description || settings.og_description || settings.description || DEFAULT_META.twitterDescription,
+      twitterDescription:
+        settings.twitter_description ||
+        settings.og_description ||
+        settings.description ||
+        DEFAULT_META.twitterDescription,
     };
   } catch (error) {
     console.error("Failed to fetch Ghost site settings:", error);
