@@ -38,8 +38,11 @@ const DEFAULT_META: SiteMeta = {
     "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
 };
 
-// This line fixes the TS2339 error
-const ghostApiKey = import.meta.env.VITE_GHOST_CONTENT_API_KEY as string | undefined;
+// Handle both Node.js (build time) and browser (runtime) contexts
+const ghostApiKey = 
+  (typeof process !== 'undefined' && process.env?.VITE_GHOST_CONTENT_API_KEY) ||
+  (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_GHOST_CONTENT_API_KEY) ||
+  undefined;
 
 export async function getSiteMeta(): Promise<SiteMeta> {
   if (!ghostApiKey) {
