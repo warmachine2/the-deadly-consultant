@@ -219,6 +219,51 @@ const RoadmapPage = () => {
             bottom: 0 !important;
             transform: none !important;
             margin: 0 !important;
+            overflow-y: auto !important;
+            padding: 1rem !important;
+          }
+          
+          /* Scale down text and form elements inside ConvertKit modal on mobile */
+          .ck-subscription-form h1,
+          .ck-subscription-form h2,
+          .ck-subscription-form h3,
+          [class*="formkit"] h1,
+          [class*="formkit"] h2,
+          [class*="formkit"] h3 {
+            font-size: 1.5rem !important;
+            line-height: 1.3 !important;
+            margin-bottom: 0.75rem !important;
+          }
+          
+          .ck-subscription-form p,
+          .ck-subscription-form label,
+          .ck-subscription-form div,
+          [class*="formkit"] p,
+          [class*="formkit"] label,
+          [class*="formkit"] div {
+            font-size: 0.875rem !important;
+            line-height: 1.4 !important;
+          }
+          
+          .ck-subscription-form input,
+          .ck-subscription-form button,
+          [class*="formkit"] input,
+          [class*="formkit"] button {
+            font-size: 0.875rem !important;
+            padding: 0.625rem 0.875rem !important;
+          }
+          
+          .ck-subscription-form button,
+          [class*="formkit"] button {
+            font-size: 1rem !important;
+            padding: 0.75rem 1.25rem !important;
+          }
+          
+          /* Ensure proper spacing and prevent overflow */
+          .ck-subscription-form *,
+          [class*="formkit"] * {
+            max-width: 100% !important;
+            word-wrap: break-word !important;
           }
         }
       `}</style>
