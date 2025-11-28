@@ -11,21 +11,16 @@ const HeroSection = () => {
       
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
-          <span className="block text-4xl md:text-6xl">Become a Triple Certified</span>
-          <span className="block text-3xl md:text-5xl">FinTech and BI (Business Intelligence / Data)
-Project Manager</span>
+          <span className="block text-4xl md:text-4xl">Your 10k/mo+ AI-Proof 90-Day Pivot</span>
+          <span className="block text-3xl md:text-5xl">BI/FinTech & AI Deployment PM</span>
           <span className="block text-3xl md:text-5xl">
-            <span style={{
-            color: "#F4C903"
-          }}>BI-FinTech PM </span>
+            
             <span style={{
             color: "white"
-          }}>Consultant</span>
+          }}>I will help you with full training, one source, killer portfolio, 3 Certs (PMP, PSM, CPMAI). Become deadly competent</span>
           </span>
         </h1>
-        <p className="text-lg md:text-xl mb-6 text-white">
-          Explore career paths, essential tools, and inspiring success stories
-        </p>
+        
       </div>
     </section>;
 };
