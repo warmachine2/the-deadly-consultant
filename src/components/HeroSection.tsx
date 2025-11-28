@@ -9,7 +9,7 @@ const HeroSection = () => {
         <div className="bokeh-orb bokeh-orb-5"></div>
       </div>
       
-      <div className="max-w-4xl text-left relative z-10">
+      <div className="max-w-4xl text-left relative z-10 pl-4 md:pl-8">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
           <span className="block text-4xl text-primary-foreground mb-6 md:text-5xl">
             Your AI-Proof 90-Day Pivot to $10k/mo+ BI/FinTech & <span style={{
