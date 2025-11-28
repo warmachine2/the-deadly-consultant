@@ -72,7 +72,7 @@ const DynamicPage = () => {
   if (loading) {
     return (
       <>
-      <TopNav onSearchChange={() => {}} />
+        <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black flex items-center justify-center">
           <div className="text-white text-xl">Loading...</div>
         </div>
@@ -83,7 +83,7 @@ const DynamicPage = () => {
   if (notFound || !content) {
     return (
       <>
-        <TopNav onSearchChange={() => {}} />
+        <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black flex items-center justify-center px-4">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: "Play, sans-serif" }}>
@@ -104,7 +104,7 @@ const DynamicPage = () => {
 
   return (
     <>
-      <TopNav onSearchChange={() => {}} />
+      <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black">
         {/* Injected: Banner with "Return to Main Page" button (branded with "The Deadly Consultant") and Home button */}
         <div className="sticky top-0 z-40 bg-gradient-to-r from-gray-900/95 to-purple-900/95 backdrop-blur border-b border-white/10">
