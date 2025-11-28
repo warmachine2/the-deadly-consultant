@@ -477,6 +477,42 @@ All colors MUST be HSL.
     }
   }
 
+  /* CTA glow pulse animation - cyan */
+  @keyframes cta-glow-pulse-cyan {
+    0%, 100% {
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.5), 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.7), 0 0 50px rgba(0, 212, 255, 0.4), 0 0 70px rgba(0, 212, 255, 0.2);
+    }
+  }
+
+  /* CTA glow pulse animation - red button variant */
+  @keyframes cta-glow-pulse-red {
+    0%, 100% {
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4), 0 0 25px rgba(0, 212, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.6), 0 0 45px rgba(0, 212, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .cta-glow-pulse {
+    animation: cta-glow-pulse-cyan 2s ease-in-out infinite;
+  }
+
+  .cta-glow-pulse:hover {
+    animation: none;
+  }
+
+  .cta-glow-pulse-red {
+    animation: cta-glow-pulse-red 2s ease-in-out infinite;
+  }
+
+  .cta-glow-pulse-red:hover {
+    animation: none;
+  }
+
   /* Bokeh orbs effect for hero section */
   .bokeh-orbs {
     position: absolute;

@@ -25,8 +25,8 @@ const HeroSection = () => {
         </p>
 
         {/* CTA Button */}
-        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
-        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.6), 0 0 90px rgba(0, 212, 255, 0.3)" : "0 0 15px rgba(0, 212, 255, 0.5), 0 0 30px rgba(0, 212, 255, 0.3)"
+        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
+        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.6), 0 0 90px rgba(0, 212, 255, 0.3)" : undefined
       }}>
           <span className="block">Download Free <span className="text-[#F4C903]">AI-Proof</span></span>
           <span className="block">BI-FinTech PM Consulting
