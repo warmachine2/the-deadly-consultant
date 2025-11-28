@@ -54,16 +54,21 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
               </div>
               {/* Desktop Text Title */}
-              <h1
-                className="hidden md:block text-xl md:text-2xl font-bold text-foreground cursor-pointer transition-opacity whitespace-nowrap"
-                style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
-              >
-                The{" "}
-                <span style={{ color: "#F4C903" }}>
-                  Deadly
-                </span>{" "}
-                Consultant
-              </h1>
+              <div className="hidden md:flex flex-col">
+                <h1
+                  className="text-xl md:text-2xl font-bold text-foreground cursor-pointer transition-opacity whitespace-nowrap"
+                  style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+                >
+                  The{" "}
+                  <span style={{ color: "#F4C903" }}>
+                    Deadly
+                  </span>{" "}
+                  Consultant
+                </h1>
+                <span className="text-[10px] text-white/70 bg-black/60 px-1.5 py-0.5 rounded w-fit tracking-wide">
+                  AI Proof PM Consulting by Hassan Khan
+                </span>
+              </div>
             </div>
           </Link>
 
