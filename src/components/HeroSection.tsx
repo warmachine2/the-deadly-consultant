@@ -23,8 +23,8 @@ const HeroSection = () => {
           href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock"
           className="inline-block mt-8 px-8 py-4 text-white font-bold text-2xl md:text-4xl rounded-lg transition-all duration-300 hover:scale-105"
           style={{
-            backgroundColor: "#00D4FF",
-            boxShadow: "0 0 20px rgba(255, 50, 50, 0.5), 0 0 40px rgba(255, 50, 50, 0.3)",
+            backgroundColor: "#F4C903",
+            boxShadow: "0 0 20px rgba(75, 41, 76, 0.6), 0 0 40px rgba(75, 41, 76, 0.4)",
             fontFamily: "sans-serif"
           }}
         >
