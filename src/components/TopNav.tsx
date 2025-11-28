@@ -124,7 +124,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               className="px-5 py-1.5 text-base font-semibold"
             />
             <span className="text-[9px] text-white/70 tracking-wide">
-              Unlock Members Only Area
+              Members Only Unlock (Free)
             </span>
           </div>
         </div>
