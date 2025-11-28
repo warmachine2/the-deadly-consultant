@@ -11,8 +11,8 @@ const HeroSection = () => {
       
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
-          <span className="block text-4xl md:text-4xl">Your AI-Proof 90-Day Pivot to $10k/mo+ BI-FinTech & AI Deployment PM Consulting</span>
-          <span className="block text-3xl md:text-sm">Full project management consulting training. Land high value contracts confidently. </span>
+          <span className="block text-4xl md:text-4xl text-primary-foreground">Your AI-Proof 90-Day Pivot to $10k/mo+ BI/FinTech & AI Deployment PM Consulting</span>
+          <span className="block text-3xl md:text-base">Full project management consulting training. Land high value contracts confidently. </span>
           <span className="block text-3xl md:text-5xl">
             
             <span style={{
