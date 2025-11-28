@@ -54,7 +54,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
               </div>
               {/* Desktop Text Title */}
-              <div className="hidden md:flex flex-col items-center gap-1">
+              <div className="hidden md:flex flex-col items-center gap-0">
                 <h1
                   className="text-xl md:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap bg-black/60 px-3 py-1 rounded"
                   style={{ 
