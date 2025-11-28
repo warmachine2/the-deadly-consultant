@@ -86,7 +86,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         <div className="flex items-center gap-2 md:gap-4">
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
-              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all whitespace-nowrap volumetric-glass-button text-white border border-white/20"
+              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all whitespace-nowrap volumetric-glass-button text-white hover:text-[#F4C903] border border-white/20"
               onMouseEnter={() => setIsRoadmapHovered(true)}
               onMouseLeave={() => setIsRoadmapHovered(false)}
               style={{
