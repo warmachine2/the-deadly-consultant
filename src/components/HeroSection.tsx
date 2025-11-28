@@ -24,14 +24,37 @@ const HeroSection = () => {
           <span className="text-[#F4C903]">High Value Contracts</span>.
         </p>
 
-        {/* CTA Button */}
-        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
-        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.6), 0 0 90px rgba(0, 212, 255, 0.3)" : undefined
-      }}>
-          <span className="block">Download Free <span className="text-[#F4C903]">AI-Proof</span></span>
-          <span className="block">BI-FinTech PM Consulting
-Roadmap</span>
-        </a>
+        {/* CTA Buttons */}
+        <div className="flex flex-col md:flex-row gap-4 mt-4">
+          {/* Main CTA Button */}
+          <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
+            boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.6), 0 0 90px rgba(0, 212, 255, 0.3)" : undefined
+          }}>
+            <span className="block">Download Free <span className="text-[#F4C903]">AI-Proof</span></span>
+            <span className="block">BI-FinTech PM Consulting</span>
+            <span className="block">Roadmap</span>
+          </a>
+
+          {/* Second CTA Button - Strategy Guide */}
+          <div className="flex flex-col items-center">
+            <button className="px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80">
+              <span className="block"><span className="text-[#F4C903]">AI-Proof</span> BI-FinTech PM</span>
+              <span className="block">Contracts Strategy Guide</span>
+              <span className="block">(Free)</span>
+            </button>
+            <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
+          </div>
+
+          {/* Third CTA Button - Contract Alerts */}
+          <div className="flex flex-col items-center">
+            <button className="px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80">
+              <span className="block">Weekly $10k/mo+</span>
+              <span className="block">Contract Alerts</span>
+              <span className="block">(Members Only)</span>
+            </button>
+            <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
+          </div>
+        </div>
 
         {/* Supporting List */}
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-3 text-base md:text-lg text-white/80 w-full max-w-4xl">
