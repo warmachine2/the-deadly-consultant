@@ -45,7 +45,7 @@ Roadmap</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Build $60k PPM BI tools for your portfolio</span>
+            <span>Build $60k PPM BI tools for your portfolio.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
@@ -53,11 +53,11 @@ Roadmap</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Land $10k/mo gigs - faster, easier</span>
+            <span>Land $10k/mo gigs - faster, easier.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Become a Certified Professional in Project Management & AI Deployment Projects</span>
+            <span>Become a Certified Professional in Project Management & AI Deployment Projects.</span>
           </li>
         </ul>
       </div>
