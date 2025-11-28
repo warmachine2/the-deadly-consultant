@@ -13,6 +13,7 @@ interface TopNavProps {
 const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -85,10 +86,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         <div className="flex items-center gap-2 md:gap-4">
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
-              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base text-white hover-glow transition-all whitespace-nowrap"
+              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base text-black transition-all whitespace-nowrap"
+              onMouseEnter={() => setIsRoadmapHovered(true)}
+              onMouseLeave={() => setIsRoadmapHovered(false)}
               style={{
                 backgroundColor: "#F4C903",
-                boxShadow: "0 0 20px rgba(244, 201, 3, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)",
+                boxShadow: isRoadmapHovered 
+                  ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" 
+                  : "0 0 20px rgba(244, 201, 3, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)",
               }}
             >
               Free $10k/mo+ Roadmap
