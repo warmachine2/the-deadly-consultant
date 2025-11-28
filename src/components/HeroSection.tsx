@@ -13,8 +13,8 @@ const HeroSection = () => {
         <div className="bokeh-orb bokeh-orb-5"></div>
       </div>
       
-      <div className="max-w-4xl text-left relative z-10 pl-20 md:pl-40">
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
+      <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
+        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide text-left w-full">
           <span className="block text-4xl text-primary-foreground mb-6 md:text-5xl">
             Your AI-Proof 90-Day Pivot to $10k/mo+ BI/FinTech & <span style={{
             color: "#F4C903"
@@ -25,7 +25,7 @@ const HeroSection = () => {
         
         <a 
           href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock"
-          className="inline-block mt-8 px-8 py-4 text-white font-bold text-2xl md:text-4xl rounded-lg transition-all duration-300 hover:scale-105"
+          className="inline-block mt-8 px-8 py-4 text-black text-center font-bold text-2xl md:text-4xl rounded-lg transition-all duration-300 hover:scale-105"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           style={{
@@ -39,7 +39,7 @@ const HeroSection = () => {
           Get Free Instant Access to AI-Proof 90-Day Roadmap
         </a>
         
-        <p className="mt-4 text-lg md:text-2xl italic text-white/90">
+        <p className="mt-4 text-lg md:text-2xl italic text-white/90 text-left w-full">
           Escape AI job vaporization – master PMP/PSM/CPMAI trifecta + build $60k PPM tools for your portfolio. Land $10k/mo gigs. Faster, easier, guaranteed.
         </p>
       </div>
