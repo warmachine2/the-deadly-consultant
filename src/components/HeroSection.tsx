@@ -25,19 +25,10 @@ const HeroSection = () => {
         </p>
 
         {/* CTA Button */}
-        <a 
-          href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-          className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 volumetric-glass-button text-white hover:text-[#F4C903] border border-white/20 text-center" 
-          onMouseEnter={() => setIsHovered(true)} 
-          onMouseLeave={() => setIsHovered(false)} 
-          style={{
-            boxShadow: isHovered 
-              ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" 
-              : "0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)"
-          }}
-        >
-          Download Free BI-FinTech PM Consulting Roadmap
-        </a>
+        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 volumetric-glass-button text-white hover:text-[#F4C903] border border-white/20 text-center" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
+        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" : "0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)"
+      }}>Download Free BI-FinTech
+PM Consulting Roadmap</a>
 
         {/* Supporting Text */}
         <p className="text-base md:text-lg text-white/80 italic max-w-3xl">
