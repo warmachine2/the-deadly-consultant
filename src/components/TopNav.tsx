@@ -117,12 +117,18 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </button>
 
           {/* Desktop/Tablet: Full signup button */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex flex-col items-center">
             <SignupButton
               formId="fbd8fa5d1b"
               fallbackHref="https://bifintechconsulting.com/case-study-signup"
               className="px-5 py-2 text-base font-semibold"
             />
+            <span 
+              className="text-[9px] text-white/70 bg-black/60 px-1.5 py-0.5 rounded tracking-wide mt-1"
+              style={{ boxShadow: "0 0 6px rgba(0, 212, 255, 0.25), 0 0 12px rgba(0, 212, 255, 0.1)" }}
+            >
+              Unlock Members Only Area
+            </span>
           </div>
         </div>
       </div>
