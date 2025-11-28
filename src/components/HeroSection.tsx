@@ -31,9 +31,9 @@ const HeroSection = () => {
 PM Consulting Roadmap</a>
 
         {/* Supporting Text */}
-        <p className="text-base md:text-lg text-white/80 italic max-w-3xl">
-          Escape AI job vaporization – master PMP/PSM/CPMAI trifecta + build $60k PPM tools for your portfolio. Land $10k/mo gigs. Faster, easier, guaranteed.
-        </p>
+        <p className="text-base md:text-lg text-white/80 italic max-w-3xl">* Escape AI job vaporization
+* Master PMP/PSM/CPMAI trifecta
+*  build $60k PPM tools for your portfolio. Land $10k/mo gigs. Faster, easier, guaranteed.</p>
       </div>
     </section>;
 };
