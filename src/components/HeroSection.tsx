@@ -1,7 +1,10 @@
 import { useState } from "react";
+
 const HeroSection = () => {
   const [isHovered, setIsHovered] = useState(false);
-  return <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
+
+  return (
+    <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
         <div className="bokeh-orb bokeh-orb-1"></div>
@@ -25,16 +28,46 @@ const HeroSection = () => {
         </p>
 
         {/* CTA Button */}
-        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 volumetric-glass-button text-white hover:text-[#F4C903] border border-white/20 text-center" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
-        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" : "0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)"
-      }}>Download Free BI-FinTech
-PM Consulting Roadmap</a>
+        <a
+          href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock"
+          className="inline-block mt-4 px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 volumetric-glass-button text-white hover:text-[#F4C903] border border-white/20 text-center"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          style={{
+            boxShadow: isHovered
+              ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)"
+              : "0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)",
+          }}
+        >
+          Download Free BI-FinTech PM Consulting Roadmap
+        </a>
 
-        {/* Supporting Text */}
-        <p className="text-base md:text-lg text-white/80 italic max-w-3xl">* Escape AI job vaporization
-* Master PMP/PSM/CPMAI trifecta
-*  build $60k PPM tools for your portfolio. Land $10k/mo gigs. Faster, easier, guaranteed.</p>
+        {/* Supporting List */}
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-3 text-base md:text-lg text-white/80 w-full max-w-4xl">
+          <li className="flex items-start gap-2">
+            <span className="text-[#F4C903]">•</span>
+            <span>Escape AI job vaporization</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#F4C903]">•</span>
+            <span>Master PMP/PSM/CPMAI trifecta</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#F4C903]">•</span>
+            <span>Build $60k PPM tools for your portfolio</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#F4C903]">•</span>
+            <span>Orchestrate AI Deployment in FinTech</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#F4C903]">•</span>
+            <span>Land $10k/mo gigs—faster, easier, guaranteed</span>
+          </li>
+        </ul>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;
