@@ -86,13 +86,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         <div className="flex items-center gap-2 md:gap-4">
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
-              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60 active:scale-95"
+              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60 active:scale-95 cta-glow-pulse-red"
               onMouseEnter={() => setIsRoadmapHovered(true)}
               onMouseLeave={() => setIsRoadmapHovered(false)}
               style={{
                 boxShadow: isRoadmapHovered 
                   ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" 
-                  : "0 0 20px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3)",
+                  : undefined,
               }}
             >
               Free $10k/mo+ Roadmap
