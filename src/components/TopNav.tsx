@@ -117,10 +117,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </button>
 
           {/* Desktop/Tablet: Full signup button */}
-          <div 
-            className="hidden md:flex flex-col items-center bg-black/60 rounded px-2 py-1.5"
-            style={{ boxShadow: "0 0 8px rgba(0, 212, 255, 0.3), 0 0 16px rgba(0, 212, 255, 0.15)" }}
-          >
+          <div className="hidden md:flex flex-col items-center">
             <SignupButton
               formId="fbd8fa5d1b"
               fallbackHref="https://bifintechconsulting.com/case-study-signup"
