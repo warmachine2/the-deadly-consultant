@@ -267,7 +267,7 @@ const RoadmapPage = () => {
           }
         }
       `}</style>
-      <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
+      <TopNav onSearchChange={() => {}} />
 
       {/* FIXED: Static Hidden Trigger with correct href */}
       <a
