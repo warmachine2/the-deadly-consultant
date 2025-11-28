@@ -16,7 +16,7 @@ const HeroSection = () => {
             color: "#F4C903"
           }}>AI Deployment PM</span> Consulting
           </span>
-          <span className="block text-3xl md:text-lg">Full project management training. Land high value contracts confidently.</span>
+          <span className="block text-3xl md:text-lg">Full project management training. Land <span style={{ color: "#F4C903" }}>high value contracts</span> confidently.</span>
         </h1>
       </div>
     </section>;
