@@ -123,7 +123,7 @@ const Index = () => {
   };
 
   return (
-    <div className="pt-20">
+    <>
       <TopNav 
         onSearchChange={setSearchQuery} 
         selectedTags={selectedTags}
@@ -132,19 +132,19 @@ const Index = () => {
         onCategoryChange={setSelectedCategory}
       />
 
-      {/* Main content */}
-      <div className="px-4 md:px-6 pb-12">
+      {/* Main content - pt-20 accounts for fixed navbar height */}
+      <main className="pt-20 px-4 md:px-6 pb-12">
         <HeroSection />
 
         <div className="flex flex-col gap-0 md:gap-6 relative mt-8 md:mt-0">
-          <main className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
                 <Loader2 className="w-8 h-8 text-accent animate-spin" />
               </div>
             ) : (
               <>
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <RoadmapCard />
                   {filteredPosts.map((post) => (
                     <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
@@ -164,9 +164,9 @@ const Index = () => {
                 )}
               </>
             )}
-          </main>
+          </div>
         </div>
-      </div>
+      </main>
 
       {modalOpen && (
         <PostModal
@@ -190,7 +190,7 @@ const Index = () => {
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 
