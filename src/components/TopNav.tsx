@@ -61,12 +61,90 @@ const TopNav = ({
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
-      <div className="flex items-center justify-between h-16 px-4 md:px-6">
-        {/* Left: Filter Menu + Logo + Search */}
-        <div className="flex items-center gap-3 flex-1">
-          {/* Filter Dropdown */}
-          <div ref={filterRef} className="relative">
+    <>
+      {/* Sidebar Overlay */}
+      {isFilterOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]" onClick={() => setIsFilterOpen(false)} />
+      )}
+      
+      {/* Sidebar */}
+      <aside
+        ref={filterRef}
+        className={`fixed top-0 left-0 h-full w-72 volumetric-glass z-[70] p-6 pt-20 overflow-y-auto transition-transform duration-300 ${
+          isFilterOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <button
+          onClick={() => setIsFilterOpen(false)}
+          className="absolute top-5 right-5 text-white/70 hover:text-white transition"
+        >
+          <X className="w-6 h-6" />
+        </button>
+
+        <h3 className="text-xl font-bold text-white mb-6">Filters</h3>
+
+        {/* Categories */}
+        <div className="mb-6">
+          <button
+            onClick={() => setShowCategories(!showCategories)}
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white"
+          >
+            Categories
+            <ChevronDown className={`w-4 h-4 transition-transform text-cyan-400 ${showCategories ? "rotate-180" : ""}`} />
+          </button>
+          {showCategories && (
+            <div className="flex flex-col gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => onCategoryChange?.(category)}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"
+                  }`}
+                >
+                  <span style={selectedCategory === category ? { color: "#F4C903" } : {}}>
+                    {category}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Tags */}
+        <div>
+          <button
+            onClick={() => setShowTags(!showTags)}
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white"
+          >
+            Tags
+            <ChevronDown className={`w-4 h-4 transition-transform text-cyan-400 ${showTags ? "rotate-180" : ""}`} />
+          </button>
+          {showTags && (
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => onTagToggle?.(tag)}
+                  className={`px-4 py-3 rounded-xl text-xs font-medium transition-all ${
+                    selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"
+                  }`}
+                >
+                  <span style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}>
+                    {tag}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </aside>
+
+      <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
+        <div className="flex items-center justify-between h-16 px-4 md:px-6">
+          {/* Left: Filter Menu + Logo + Search */}
+          <div className="flex items-center gap-3 flex-1">
+            {/* Filter Toggle Button */}
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="p-2 rounded-xl volumetric-glass-button"
@@ -74,78 +152,6 @@ const TopNav = ({
             >
               <Menu className="w-6 h-6 text-white" />
             </button>
-
-            {/* Dropdown Menu */}
-            {isFilterOpen && (
-              <div className="absolute top-full left-0 mt-2 w-72 volumetric-glass rounded-2xl p-4 z-50">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-white">Filters</h3>
-                  <button
-                    onClick={() => setIsFilterOpen(false)}
-                    className="text-white/70 hover:text-white transition"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Categories */}
-                <div className="mb-4">
-                  <button
-                    onClick={() => setShowCategories(!showCategories)}
-                    className="flex items-center justify-between w-full mb-2 text-sm font-bold text-white"
-                  >
-                    Categories
-                    <ChevronDown className={`w-4 h-4 transition-transform text-cyan-400 ${showCategories ? "rotate-180" : ""}`} />
-                  </button>
-                  {showCategories && (
-                    <div className="flex flex-col gap-1">
-                      {categories.map((category) => (
-                        <button
-                          key={category}
-                          onClick={() => onCategoryChange?.(category)}
-                          className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                            selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"
-                          }`}
-                        >
-                          <span style={selectedCategory === category ? { color: "#F4C903" } : {}}>
-                            {category}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Tags */}
-                <div>
-                  <button
-                    onClick={() => setShowTags(!showTags)}
-                    className="flex items-center justify-between w-full mb-2 text-sm font-bold text-white"
-                  >
-                    Tags
-                    <ChevronDown className={`w-4 h-4 transition-transform text-cyan-400 ${showTags ? "rotate-180" : ""}`} />
-                  </button>
-                  {showTags && (
-                    <div className="flex flex-wrap gap-1">
-                      {tags.map((tag) => (
-                        <button
-                          key={tag}
-                          onClick={() => onTagToggle?.(tag)}
-                          className={`px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                            selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"
-                          }`}
-                        >
-                          <span style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}>
-                            {tag}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
 
           {/* Mobile: Favicon Logo; Desktop: Text Title */}
           <Link to="/">
@@ -237,6 +243,7 @@ const TopNav = ({
       {/* Mobile Sign Up Modal */}
       <EmailCaptureModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleMobileSignup} />
     </nav>
+    </>
   );
 };
 
