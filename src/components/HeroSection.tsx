@@ -1,8 +1,6 @@
 import { useState } from "react";
-
 const HeroSection = () => {
   const [isHovered, setIsHovered] = useState(false);
-
   return <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
@@ -20,24 +18,17 @@ const HeroSection = () => {
             color: "#F4C903"
           }}>AI Deployment PM</span> Consulting
           </span>
-          <span className="block text-3xl md:text-lg">Full project management training. Land <span style={{ color: "#F4C903" }}>high value contracts</span> confidently.</span>
+          <span className="block text-3xl md:text-lg">Full project management training. Land <span style={{
+            color: "#F4C903"
+          }}>high value contracts</span> confidently.</span>
         </h1>
         
-        <a 
-          href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock"
-          className="inline-block mt-8 px-8 py-4 text-black text-center font-bold text-2xl md:text-4xl rounded-lg transition-all duration-300 hover:scale-105"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          style={{
-            backgroundColor: "#F4C903",
-            boxShadow: isHovered 
-              ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" 
-              : "0 0 20px rgba(75, 41, 76, 0.6), 0 0 40px rgba(75, 41, 76, 0.4)",
-            fontFamily: "sans-serif"
-          }}
-        >
-          Get Free Instant Access to AI-Proof 90-Day Roadmap
-        </a>
+        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-8 px-8 py-4 text-black text-center font-bold text-2xl md:text-4xl rounded-lg transition-all duration-300 hover:scale-105" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
+        backgroundColor: "#F4C903",
+        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" : "0 0 20px rgba(75, 41, 76, 0.6), 0 0 40px rgba(75, 41, 76, 0.4)",
+        fontFamily: "sans-serif"
+      }}>Get Started with Free
+ Roadmap</a>
         
         <p className="mt-4 text-lg md:text-2xl italic text-white/90 text-left w-full">
           Escape AI job vaporization – master PMP/PSM/CPMAI trifecta + build $60k PPM tools for your portfolio. Land $10k/mo gigs. Faster, easier, guaranteed.
