@@ -1,19 +1,46 @@
-import { Search, Menu, User } from "lucide-react";
-import { useState } from "react";
+import { Search, Menu, User, ChevronDown, X } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import SignupButton from "@/components/SignupButton"; // Adjust path if needed (e.g., create the file)
+import SignupButton from "@/components/SignupButton";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { toast } from "@/hooks/use-toast";
 
+const tags = ["PMP Certs", "AI-Proof", "Tools", "Career Pivot", "BI Analytics", "FinTech"];
+const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
+
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
-  onToggleSidebar?: () => void;
+  selectedTags?: string[];
+  onTagToggle?: (tag: string) => void;
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
 }
 
-const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
+const TopNav = ({ 
+  onSearchChange, 
+  selectedTags = [], 
+  onTagToggle, 
+  selectedCategory = "All Posts", 
+  onCategoryChange 
+}: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [showTags, setShowTags] = useState(true);
+  const [showCategories, setShowCategories] = useState(true);
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -36,15 +63,89 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
       <div className="flex items-center justify-between h-16 px-4 md:px-6">
-        {/* Left: Logo + Search */}
+        {/* Left: Filter Menu + Logo + Search */}
         <div className="flex items-center gap-3 flex-1">
-          <button
-            onClick={() => onToggleSidebar?.()}
-            className="md:hidden p-2 rounded-xl volumetric-glass-button"
-            aria-label="Toggle menu"
-          >
-            <Menu className="w-6 h-6 text-white" />
-          </button>
+          {/* Filter Dropdown */}
+          <div ref={filterRef} className="relative">
+            <button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="p-2 rounded-xl volumetric-glass-button"
+              aria-label="Toggle filters"
+            >
+              <Menu className="w-6 h-6 text-white" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isFilterOpen && (
+              <div className="absolute top-full left-0 mt-2 w-72 volumetric-glass rounded-2xl p-4 z-50">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-white">Filters</h3>
+                  <button
+                    onClick={() => setIsFilterOpen(false)}
+                    className="text-white/70 hover:text-white transition"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Categories */}
+                <div className="mb-4">
+                  <button
+                    onClick={() => setShowCategories(!showCategories)}
+                    className="flex items-center justify-between w-full mb-2 text-sm font-bold text-white"
+                  >
+                    Categories
+                    <ChevronDown className={`w-4 h-4 transition-transform text-cyan-400 ${showCategories ? "rotate-180" : ""}`} />
+                  </button>
+                  {showCategories && (
+                    <div className="flex flex-col gap-1">
+                      {categories.map((category) => (
+                        <button
+                          key={category}
+                          onClick={() => onCategoryChange?.(category)}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                            selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"
+                          }`}
+                        >
+                          <span style={selectedCategory === category ? { color: "#F4C903" } : {}}>
+                            {category}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <button
+                    onClick={() => setShowTags(!showTags)}
+                    className="flex items-center justify-between w-full mb-2 text-sm font-bold text-white"
+                  >
+                    Tags
+                    <ChevronDown className={`w-4 h-4 transition-transform text-cyan-400 ${showTags ? "rotate-180" : ""}`} />
+                  </button>
+                  {showTags && (
+                    <div className="flex flex-wrap gap-1">
+                      {tags.map((tag) => (
+                        <button
+                          key={tag}
+                          onClick={() => onTagToggle?.(tag)}
+                          className={`px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                            selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"
+                          }`}
+                        >
+                          <span style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}>
+                            {tag}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Mobile: Favicon Logo; Desktop: Text Title */}
           <Link to="/">

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
-import Sidebar from "@/components/Sidebar";
 import BlogCard, { BlogPost } from "@/components/BlogCard";
 import PostModal from "@/components/PostModal";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
@@ -16,7 +15,6 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [fullContent, setFullContent] = useState<string>("");
@@ -126,22 +124,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      <TopNav 
+        onSearchChange={setSearchQuery} 
+        selectedTags={selectedTags}
+        onTagToggle={handleTagToggle}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+      />
 
       {/* Fixed overlap + perfect mobile spacing */}
       <div className="px-0 md:px-6 pb-12 pt-8 md:pt-0">
         <HeroSection />
 
-        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative mt-8 md:mt-0">
-          <Sidebar
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            selectedTags={selectedTags}
-            onTagToggle={handleTagToggle}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-
+        <div className="flex flex-col gap-0 md:gap-6 relative mt-8 md:mt-0">
           <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
