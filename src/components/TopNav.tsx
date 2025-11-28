@@ -67,21 +67,22 @@ const TopNav = ({
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]" onClick={() => setIsFilterOpen(false)} />
       )}
       
-      {/* Sidebar */}
+      {/* Sidebar - expands downward from nav */}
       <aside
         ref={filterRef}
-        className={`fixed top-0 left-0 h-full w-72 volumetric-glass z-[70] p-6 pt-20 overflow-y-auto transition-transform duration-300 ${
-          isFilterOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-16 left-0 w-72 max-h-[calc(100vh-4rem)] volumetric-glass z-[70] p-6 overflow-y-auto transition-all duration-300 origin-top ${
+          isFilterOpen ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0 pointer-events-none"
         }`}
       >
-        <button
-          onClick={() => setIsFilterOpen(false)}
-          className="absolute top-5 right-5 text-white/70 hover:text-white transition"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        <h3 className="text-xl font-bold text-white mb-6">Filters</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-white">Filters</h3>
+          <button
+            onClick={() => setIsFilterOpen(false)}
+            className="text-white/70 hover:text-white transition"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* Categories */}
         <div className="mb-6">
@@ -140,7 +141,7 @@ const TopNav = ({
         </div>
       </aside>
 
-      <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
+      <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass" style={{ position: 'fixed' }}>
         <div className="flex items-center justify-between h-16 px-4 md:px-6">
           {/* Left: Filter Menu + Logo + Search */}
           <div className="flex items-center gap-3 flex-1">
