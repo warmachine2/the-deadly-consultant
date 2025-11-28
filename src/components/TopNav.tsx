@@ -87,8 +87,8 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <button
               className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base text-white hover-glow transition-all whitespace-nowrap"
               style={{
-                background: "linear-gradient(135deg, #04c3fc 0%, #0891d4 100%)",
-                boxShadow: "0 0 20px rgba(4, 195, 252, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)",
+                backgroundColor: "#F4C903",
+                boxShadow: "0 0 20px rgba(244, 201, 3, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3)",
               }}
             >
               Free $10k/mo+ Roadmap
