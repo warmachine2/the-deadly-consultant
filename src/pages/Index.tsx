@@ -123,7 +123,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="pt-20">
       <TopNav 
         onSearchChange={setSearchQuery} 
         selectedTags={selectedTags}
@@ -132,8 +132,8 @@ const Index = () => {
         onCategoryChange={setSelectedCategory}
       />
 
-      {/* Fixed overlap + perfect mobile spacing */}
-      <div className="px-0 md:px-6 pb-12 pt-20">
+      {/* Main content */}
+      <div className="px-4 md:px-6 pb-12">
         <HeroSection />
 
         <div className="flex flex-col gap-0 md:gap-6 relative mt-8 md:mt-0">

@@ -1,7 +1,7 @@
 import { useState } from "react";
 const HeroSection = () => {
   const [isHovered, setIsHovered] = useState(false);
-  return <section className="volumetric-glass rounded-3xl px-6 py-10 md:px-12 md:py-14 mb-0 md:mb-8 hero-bokeh relative overflow-hidden mx-4 md:mx-0">
+  return <section className="volumetric-glass rounded-3xl px-6 py-10 md:px-12 md:py-14 mb-8 hero-bokeh relative overflow-hidden">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
         <div className="bokeh-orb bokeh-orb-1"></div>
