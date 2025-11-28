@@ -47,7 +47,7 @@ const HeroSection = () => {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Orchestrate AI Deployment/BI projects. Learn consulting contracting skills from the front-lines</span>
+            <span>Orchestrate AI Deployment/BI projects. Learn front-line PM consulting skills.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
