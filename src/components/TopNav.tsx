@@ -54,13 +54,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
               </div>
               {/* Desktop Text Title */}
-              <div className="hidden md:flex flex-col items-center gap-0">
+              <div 
+                className="hidden md:flex flex-col items-center bg-black/60 rounded px-3 py-1.5"
+                style={{ boxShadow: "0 0 8px rgba(0, 212, 255, 0.3), 0 0 16px rgba(0, 212, 255, 0.15)" }}
+              >
                 <h1
-                  className="text-xl md:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap bg-black/60 px-3 py-1 rounded"
-                  style={{ 
-                    filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))",
-                    boxShadow: "0 0 8px rgba(0, 212, 255, 0.3), 0 0 16px rgba(0, 212, 255, 0.15)"
-                  }}
+                  className="text-xl md:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
+                  style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
                 >
                   The{" "}
                   <span style={{ color: "#F4C903" }}>
@@ -68,10 +68,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   </span>{" "}
                   Consultant
                 </h1>
-                <span 
-                  className="text-[10px] text-white/70 bg-black/60 px-1.5 py-0.5 rounded tracking-wide"
-                  style={{ boxShadow: "0 0 8px rgba(0, 212, 255, 0.3), 0 0 16px rgba(0, 212, 255, 0.15)" }}
-                >
+                <span className="text-[10px] text-white/70 tracking-wide">
                   AI Proof PM Consulting by Hassan Khan
                 </span>
               </div>
