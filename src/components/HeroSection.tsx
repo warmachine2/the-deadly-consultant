@@ -23,13 +23,10 @@ const HeroSection = () => {
           }}>high value contracts</span> confidently.</span>
         </h1>
         
-        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-8 px-8 py-4 text-center font-bold text-2xl md:text-4xl rounded-lg transition-all duration-300 hover:scale-105" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
-        backgroundColor: "#000000",
-        color: "#F4C903",
-        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" : "0 0 20px rgba(75, 41, 76, 0.6), 0 0 40px rgba(75, 41, 76, 0.4)",
+        <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block mt-8 px-8 py-4 text-center font-bold text-2xl md:text-4xl rounded-xl transition-all duration-300 hover:scale-105 volumetric-glass-button text-white border border-white/20" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
+        boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" : "0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)",
         fontFamily: "sans-serif"
-      }}>Get Started with Free
- Roadmap</a>
+      }}>Get Started with Free Roadmap</a>
         
         <p className="mt-4 text-lg md:text-2xl italic text-white/90 text-left w-full">
           Escape AI job vaporization – master PMP/PSM/CPMAI trifecta + build $60k PPM tools for your portfolio. Land $10k/mo gigs. Faster, easier, guaranteed.
