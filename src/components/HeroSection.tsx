@@ -11,12 +11,12 @@ const HeroSection = () => {
       
       <div className="max-w-4xl text-left relative z-10">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 animate-fade-in tracking-wide">
-          <span className="block text-4xl md:text-4xl text-primary-foreground mb-6">
-            Your AI-Proof 90-Day Pivot to $10k/mo+ BI/FinTech & <span style={{ color: "#F4C903" }}>AI Deployment PM</span> Consulting
+          <span className="block text-4xl text-primary-foreground mb-6 md:text-5xl">
+            Your AI-Proof 90-Day Pivot to $10k/mo+ BI/FinTech & <span style={{
+            color: "#F4C903"
+          }}>AI Deployment PM</span> Consulting
           </span>
-          <span className="block text-3xl md:text-lg">
-            Full project management consulting training. Land high value contracts confidently.
-          </span>
+          <span className="block text-3xl md:text-lg">Full project management training. Land high value contracts confidently.</span>
         </h1>
       </div>
     </section>;
