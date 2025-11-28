@@ -35,11 +35,11 @@ const HeroSection = () => {
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-3 text-base md:text-lg text-white/80 w-full max-w-4xl">
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Escape AI job vaporization</span>
+            <span>Escape AI job vaporization. </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Master PMP/PSM/CPMAI trifecta</span>
+            <span>Master PMP/PSM/CPMAI trifecta. </span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
@@ -47,7 +47,7 @@ const HeroSection = () => {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Orchestrate AI Deployment in FinTech</span>
+            <span>Orchestrate AI Deployment/BI projects. Learn consulting contracting skills from the front-lines</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
@@ -55,7 +55,7 @@ const HeroSection = () => {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Become an ultra-competent Certified Professional in Project Management & AI Deployment</span>
+            <span>Become a Certified Professional in Project Management & AI Deployment Projects</span>
           </li>
         </ul>
       </div>
