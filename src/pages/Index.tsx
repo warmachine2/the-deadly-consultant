@@ -133,7 +133,7 @@ const Index = () => {
       />
 
       {/* Fixed overlap + perfect mobile spacing */}
-      <div className="px-0 md:px-6 pb-12 pt-20 md:pt-20">
+      <div className="px-0 md:px-6 pb-12 pt-20">
         <HeroSection />
 
         <div className="flex flex-col gap-0 md:gap-6 relative mt-8 md:mt-0">
