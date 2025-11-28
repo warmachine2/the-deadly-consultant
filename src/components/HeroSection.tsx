@@ -21,7 +21,7 @@ const HeroSection = () => {
         {/* Subheadline */}
         <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-medium">
           Full Project Management Training. Land{" "}
-          <span className="text-[#F4C903]">High Value Contracts</span> confidently.
+          <span className="text-[#F4C903]">High Value Contracts</span>.
         </p>
 
         {/* CTA Button */}
