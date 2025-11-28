@@ -53,6 +53,10 @@ const HeroSection = () => {
             <span className="text-[#F4C903]">•</span>
             <span>Land $10k/mo gigs - faster, easier</span>
           </li>
+          <li className="flex items-start gap-2">
+            <span className="text-[#F4C903]">•</span>
+            <span>Become an ultra-competent Certified Professional in Project Management & AI Deployment</span>
+          </li>
         </ul>
       </div>
     </section>;
