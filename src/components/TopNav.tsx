@@ -54,10 +54,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
               </div>
               {/* Desktop Text Title */}
-              <div 
-                className="hidden md:flex flex-col items-center bg-black/60 rounded px-3 py-1.5"
-                style={{ boxShadow: "0 0 8px rgba(0, 212, 255, 0.3), 0 0 16px rgba(0, 212, 255, 0.15)" }}
-              >
+              <div className="hidden md:flex flex-col items-center px-3 py-1.5">
                 <h1
                   className="text-xl md:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
                   style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
