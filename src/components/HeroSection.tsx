@@ -65,7 +65,7 @@ const HeroSection = () => {
           >
             <span className="block">AI-Proof BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
-            <span className="block text-[10px] md:text-xs">(Free but Members only)</span>
+            <span className="block text-[10px] md:text-xs">Members Only</span>
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
           </button>
 
