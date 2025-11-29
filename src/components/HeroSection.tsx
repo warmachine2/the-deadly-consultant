@@ -25,29 +25,22 @@ const HeroSection = () => {
         {/* CTA Buttons - 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full max-w-4xl">
           {/* Main CTA Button */}
-          <a 
-            href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="inline-flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
-            style={{
-              background: "rgba(15, 15, 15, 0.85)",
-              backdropFilter: "blur(9px) saturate(150%)",
-              WebkitBackdropFilter: "blur(9px) saturate(150%)",
-            }}
-          >
+          <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]" style={{
+          background: "rgba(15, 15, 15, 0.85)",
+          backdropFilter: "blur(9px) saturate(150%)",
+          WebkitBackdropFilter: "blur(9px) saturate(150%)"
+        }}>
             <span className="block">Get Free Instant Access to</span>
             <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
             <span className="block text-[10px] md:text-xs text-white/80 mt-1">PMP/PSM/CPMAI Trifecta + build $60k Tools - Escape AI Now</span>
           </a>
 
           {/* Second CTA Button - Job Alerts */}
-          <button 
-            className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
-            style={{
-              background: "rgba(15, 15, 15, 0.85)",
-              backdropFilter: "blur(9px) saturate(150%)",
-              WebkitBackdropFilter: "blur(9px) saturate(150%)",
-            }}
-          >
+          <button className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]" style={{
+          background: "rgba(15, 15, 15, 0.85)",
+          backdropFilter: "blur(9px) saturate(150%)",
+          WebkitBackdropFilter: "blur(9px) saturate(150%)"
+        }}>
             <span className="block">Weekly $10k/mo+</span>
             <span className="block"><span className="text-[#F4C903]">Job Alerts</span> (Members Only)</span>
             <span className="block text-[10px] md:text-xs text-white/80 mt-1">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
@@ -55,32 +48,23 @@ const HeroSection = () => {
           </button>
 
           {/* Third CTA Button - Strategy Guide */}
-          <button 
-            className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
-            style={{
-              background: "rgba(15, 15, 15, 0.85)",
-              backdropFilter: "blur(9px) saturate(150%)",
-              WebkitBackdropFilter: "blur(9px) saturate(150%)",
-            }}
-          >
+          <button className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]" style={{
+          background: "rgba(15, 15, 15, 0.85)",
+          backdropFilter: "blur(9px) saturate(150%)",
+          WebkitBackdropFilter: "blur(9px) saturate(150%)"
+        }}>
             <span className="block">AI-Proof BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
-            <span className="block text-[10px] md:text-xs">Members Only</span>
+            <span className="block text-[10px] md:text-xs">(Members Only)</span>
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
           </button>
 
           {/* Fourth CTA Button - Accelerator */}
-          <a 
-            href="https://skool.com/bi-fintech-consultant-academy/about"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
-            style={{
-              background: "rgba(15, 15, 15, 0.85)",
-              backdropFilter: "blur(9px) saturate(150%)",
-              WebkitBackdropFilter: "blur(9px) saturate(150%)",
-            }}
-          >
+          <a href="https://skool.com/bi-fintech-consultant-academy/about" target="_blank" rel="noopener noreferrer" className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]" style={{
+          background: "rgba(15, 15, 15, 0.85)",
+          backdropFilter: "blur(9px) saturate(150%)",
+          WebkitBackdropFilter: "blur(9px) saturate(150%)"
+        }}>
             <span className="block">AI-Proof <span className="text-[#F4C903]">BI-FinTech PM</span></span>
             <span className="block">Accelerator</span>
             <span className="block text-[10px] md:text-xs text-white/80 mt-1">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
