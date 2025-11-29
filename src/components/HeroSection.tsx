@@ -13,7 +13,7 @@ const HeroSection = () => {
         {/* Main Headline */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight animate-fade-in">
           Your AI-Proof 90-Day Pivot to $10k/mo+{" "}
-          <span className="text-[#F4C903]">BI-FinTech & AI</span> Deployment PM Consulting
+          <span className="text-[#F4C903]">BI-FinTech & AI Deployment PM</span> Consulting
         </h1>
 
         {/* Subheadline */}
