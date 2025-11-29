@@ -27,7 +27,7 @@ const HeroSection = () => {
           {/* Main CTA Button */}
           <a 
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="inline-flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
+            className="inline-flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -41,7 +41,7 @@ const HeroSection = () => {
 
           {/* Second CTA Button - Job Alerts */}
           <button 
-            className="flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
+            className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -56,7 +56,7 @@ const HeroSection = () => {
 
           {/* Third CTA Button - Strategy Guide */}
           <button 
-            className="flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
+            className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -74,15 +74,15 @@ const HeroSection = () => {
             href="https://skool.com/bi-fintech-consultant-academy/about"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
+            className="flex flex-col justify-center px-6 py-4 text-lg md:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)",
             }}
           >
-            <span className="block"><span className="text-[#F4C903]">AI-Proof</span> BI-FinTech PM</span>
-            <span className="block"><span className="text-[#F4C903]">Accelerator</span></span>
+            <span className="block">AI-Proof <span className="text-[#F4C903]">BI-FinTech PM</span></span>
+            <span className="block">Accelerator</span>
             <span className="block text-[10px] md:text-xs text-white/80 mt-1">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
           </a>
         </div>
