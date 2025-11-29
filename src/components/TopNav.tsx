@@ -73,15 +73,15 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </Link>
 
           {/* Desktop Search */}
-          <div className="hidden md:flex items-center flex-1 max-w-md ml-4">
+          <div className="hidden md:flex items-center max-w-[200px] ml-4">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
+              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
               <input
                 type="text"
-                placeholder="Search posts..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-10 pr-4 py-2 volumetric-glass-button rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 placeholder:text-white/60"
+                className="w-full pl-8 pr-3 py-1.5 volumetric-glass-button rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 placeholder:text-white/60"
               />
             </div>
           </div>
