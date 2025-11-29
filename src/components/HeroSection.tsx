@@ -1,6 +1,4 @@
-import { useState } from "react";
 const HeroSection = () => {
-  const [isHovered, setIsHovered] = useState(false);
   return <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
@@ -27,16 +25,29 @@ const HeroSection = () => {
         {/* CTA Buttons */}
         <div className="flex flex-col md:flex-row gap-4 mt-4 md:items-stretch">
           {/* Main CTA Button */}
-          <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
-            boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.6), 0 0 90px rgba(0, 212, 255, 0.3)" : undefined
-          }}>
+          <a 
+            href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
+            className="inline-flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]"
+            style={{
+              background: "rgba(30, 30, 30, 0.7)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)",
+            }}
+          >
             <span className="block">Download Free <span className="text-[#F4C903]">AI-Proof</span></span>
             <span className="block">BI-FinTech PM Consulting</span>
             <span className="block">Roadmap</span>
           </a>
 
           {/* Second CTA Button - Strategy Guide */}
-          <button className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80 min-h-[140px]">
+          <button 
+            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
+            style={{
+              background: "rgba(30, 30, 30, 0.7)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)",
+            }}
+          >
             <span className="block">AI-Proof BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
             <span className="block">(Free)</span>
@@ -44,7 +55,14 @@ const HeroSection = () => {
           </button>
 
           {/* Third CTA Button - Contract Alerts */}
-          <button className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80 min-h-[140px]">
+          <button 
+            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
+            style={{
+              background: "rgba(30, 30, 30, 0.7)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)",
+            }}
+          >
             <span className="block">Weekly $10k/mo+</span>
             <span className="block"><span className="text-[#F4C903]">Contract Alerts</span></span>
             <span className="block">(Members Only)</span>
