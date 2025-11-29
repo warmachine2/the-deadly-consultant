@@ -65,8 +65,9 @@ const HeroSection = () => {
           backdropFilter: "blur(9px) saturate(150%)",
           WebkitBackdropFilter: "blur(9px) saturate(150%)"
         }}>
-            <span className="block">AI-Proof <span className="text-[#F4C903]">BI-FinTech PM</span></span>
-            <span className="block">Accelerator</span>
+            <span className="block">AI-Proof 10k/mo+
+ BI-FinTech PM Accelerator<span className="text-[#F4C903]">BI-FinTech PM</span></span>
+            
             <span className="block text-[10px] md:text-xs text-white/80 mt-1">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
           </a>
         </div>
