@@ -25,17 +25,17 @@ interface SiteMeta {
 }
 
 const DEFAULT_META: SiteMeta = {
-  title: "The Deadly Consultant - Career Paths & BI-FinTech Success Stories",
+  title: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   description:
-    "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, PMP certifications, and inspiring success stories.",
+    "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
   ogImage: "https://thedeadlyconsultant.com/og-image.png",
-  ogTitle: "The Deadly Consultant - Career Paths & BI-FinTech Success",
+  ogTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   ogDescription:
-    "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
+    "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
   twitterImage: "https://thedeadlyconsultant.com/og-image.png",
-  twitterTitle: "The Deadly Consultant - Career Paths & BI-FinTech Success",
+  twitterTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   twitterDescription:
-    "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
+    "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
 };
 
 // Ghost Content API keys are public and safe to include in code
