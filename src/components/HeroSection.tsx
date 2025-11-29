@@ -29,7 +29,7 @@ const HeroSection = () => {
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
             className="inline-flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]"
             style={{
-              background: "rgba(30, 30, 30, 0.7)",
+              background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)",
             }}
@@ -43,7 +43,7 @@ const HeroSection = () => {
           <button 
             className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
             style={{
-              background: "rgba(30, 30, 30, 0.7)",
+              background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)",
             }}
@@ -58,7 +58,7 @@ const HeroSection = () => {
           <button 
             className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
             style={{
-              background: "rgba(30, 30, 30, 0.7)",
+              background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)",
             }}
