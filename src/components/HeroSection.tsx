@@ -12,14 +12,14 @@ const HeroSection = () => {
       <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-start gap-6">
         {/* Main Headline */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight animate-fade-in">
-          Your AI-Proof 90-Day Pivot to $10k/mo+ BI/FinTech &{" "}
-          <span className="text-[#F4C903]">AI Deployment PM</span> Consulting
+          Your AI-Proof 90-Day Pivot to $10k/mo+{" "}
+          <span className="text-[#F4C903]">BI-FinTech & AI</span> Deployment PM Consulting
         </h1>
 
         {/* Subheadline */}
         <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-medium">
-          Full Project Management Training. Land{" "}
-          <span className="text-[#F4C903]">High Value Contracts</span>.
+          Escape AI job vaporization. Master{" "}
+          <span className="text-[#F4C903]">PMP/PSM/CPMAI trifecta</span> + build $60k PPM tools. Land guaranteed interviews fast. Click below to kick-start your pivot.
         </p>
 
         {/* CTA Buttons */}
@@ -34,12 +34,27 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)",
             }}
           >
-            <span className="block">Download Free <span className="text-[#F4C903]">AI-Proof</span></span>
-            <span className="block">BI-FinTech PM Consulting</span>
-            <span className="block">Roadmap</span>
+            <span className="block">Get Free Instant Access to</span>
+            <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
+            <span className="block text-xs md:text-sm text-white/80">PMP/PSM/CPMAI Trifecta + build $60k Tools - Escape AI Now</span>
           </a>
 
-          {/* Second CTA Button - Strategy Guide */}
+          {/* Second CTA Button - Job Alerts */}
+          <button 
+            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)",
+            }}
+          >
+            <span className="block">Weekly $10k/mo+</span>
+            <span className="block"><span className="text-[#F4C903]">Job Alerts</span> (Members Only)</span>
+            <span className="block text-xs md:text-sm text-white/80">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
+            <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
+          </button>
+
+          {/* Third CTA Button - Strategy Guide */}
           <button 
             className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
             style={{
@@ -54,20 +69,22 @@ const HeroSection = () => {
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
           </button>
 
-          {/* Third CTA Button - Contract Alerts */}
-          <button 
-            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
+          {/* Fourth CTA Button - Accelerator */}
+          <a 
+            href="https://skool.com/bi-fintech-consultant-academy/about"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)",
             }}
           >
-            <span className="block">Weekly $10k/mo+</span>
-            <span className="block"><span className="text-[#F4C903]">Contract Alerts</span></span>
-            <span className="block text-xs md:text-sm">(Free but Members only)</span>
-            <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
-          </button>
+            <span className="block"><span className="text-[#F4C903]">AI-Proof</span> BI-FinTech PM</span>
+            <span className="block"><span className="text-[#F4C903]">Accelerator</span></span>
+            <span className="block text-xs md:text-sm text-white/80">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
+          </a>
         </div>
 
         {/* Supporting List */}
