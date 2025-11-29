@@ -153,7 +153,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <SignupButton
               formId="fbd8fa5d1b"
               fallbackHref="https://bifintechconsulting.com/case-study-signup"
-              className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-black hover:bg-[#F4C903]/90 hover:text-black border-none cta-glow-pulse-subtle"
+              className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90 hover:text-white border-none cta-glow-pulse-subtle"
               label="Subscribe"
             />
           </div>
