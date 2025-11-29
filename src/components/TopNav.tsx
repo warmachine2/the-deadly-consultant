@@ -146,21 +146,16 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Desktop/Tablet: Login + Subscribe buttons */}
           <div className="hidden md:flex items-center gap-2">
             <button
-              className="px-4 py-1.5 text-sm font-semibold rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/20 transition-all duration-300"
+              className="px-4 py-1.5 text-sm font-semibold rounded-xl bg-transparent backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all duration-300"
             >
               Log-in
             </button>
-            <div className="flex flex-col items-center">
-              <SignupButton
-                formId="fbd8fa5d1b"
-                fallbackHref="https://bifintechconsulting.com/case-study-signup"
-                className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-black hover:bg-[#F4C903]/90 hover:text-black border-none"
-                label="Subscribe"
-              />
-              <span className="text-[9px] text-white/70 tracking-wide">
-                Unlock More (Free)
-              </span>
-            </div>
+            <SignupButton
+              formId="fbd8fa5d1b"
+              fallbackHref="https://bifintechconsulting.com/case-study-signup"
+              className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-black hover:bg-[#F4C903]/90 hover:text-black border-none cta-glow-pulse-subtle"
+              label="Subscribe"
+            />
           </div>
         </div>
       </div>
