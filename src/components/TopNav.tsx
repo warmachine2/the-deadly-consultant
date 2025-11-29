@@ -65,8 +65,11 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   </span>{" "}
                   Consultant
                 </h1>
-                <span className="text-[10px] text-white/70 tracking-wide">
-                  AI Proof PM Consulting by Hassan Khan B.Eng., PMP, AZ305
+                <span className="text-[10px] text-white/70 tracking-wide text-center">
+                  AI Proof PM Consulting
+                </span>
+                <span className="text-[10px] text-white/70 tracking-wide text-center">
+                  by Hassan Khan B.Eng., PMP, AZ305
                 </span>
               </div>
             </div>
