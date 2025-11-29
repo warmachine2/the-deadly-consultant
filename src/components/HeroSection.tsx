@@ -25,9 +25,9 @@ const HeroSection = () => {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 mt-4">
+        <div className="flex flex-col md:flex-row gap-4 mt-4 md:items-stretch">
           {/* Main CTA Button */}
-          <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-block px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
+          <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{
             boxShadow: isHovered ? "0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.6), 0 0 90px rgba(0, 212, 255, 0.3)" : undefined
           }}>
             <span className="block">Download Free <span className="text-[#F4C903]">AI-Proof</span></span>
@@ -36,24 +36,20 @@ const HeroSection = () => {
           </a>
 
           {/* Second CTA Button - Strategy Guide */}
-          <div className="flex flex-col items-center">
-            <button className="px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80">
-              <span className="block"><span className="text-[#F4C903]">AI-Proof</span> BI-FinTech PM</span>
-              <span className="block">Contracts Strategy Guide</span>
-              <span className="block">(Free)</span>
-            </button>
+          <button className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80 min-h-[140px]">
+            <span className="block">AI-Proof BI-FinTech PM</span>
+            <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
+            <span className="block">(Free)</span>
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
-          </div>
+          </button>
 
           {/* Third CTA Button - Contract Alerts */}
-          <div className="flex flex-col items-center">
-            <button className="px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80">
-              <span className="block">Weekly $10k/mo+</span>
-              <span className="block">Contract Alerts</span>
-              <span className="block">(Members Only)</span>
-            </button>
+          <button className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 volumetric-glass-button text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed opacity-80 min-h-[140px]">
+            <span className="block">Weekly $10k/mo+</span>
+            <span className="block"><span className="text-[#F4C903]">Contract Alerts</span></span>
+            <span className="block">(Members Only)</span>
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
-          </div>
+          </button>
         </div>
 
         {/* Supporting List */}
