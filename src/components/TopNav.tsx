@@ -87,8 +87,15 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </div>
         </div>
 
-        {/* Right: Roadmap Button + Injected Signup Button - Responsive for mobile visibility */}
+        {/* Right: About + Roadmap Button + Injected Signup Button - Responsive for mobile visibility */}
         <div className="flex items-center gap-2 md:gap-4">
+          <Link to="/about">
+            <button
+              className="px-3 py-2 text-xs md:px-4 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+            >
+              About
+            </button>
+          </Link>
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
               className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60 active:scale-95 cta-glow-pulse-red"
