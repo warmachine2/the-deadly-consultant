@@ -28,11 +28,11 @@ const DEFAULT_META: SiteMeta = {
   title: "The Deadly Consultant - Career Paths & BI-FinTech Success Stories",
   description:
     "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, PMP certifications, and inspiring success stories.",
-  ogImage: "https://lovable.dev/opengraph-image-p98pqg.png",
+  ogImage: "https://thedeadlyconsultant.com/og-image.png",
   ogTitle: "The Deadly Consultant - Career Paths & BI-FinTech Success",
   ogDescription:
     "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
-  twitterImage: "https://lovable.dev/opengraph-image-p98pqg.png",
+  twitterImage: "https://thedeadlyconsultant.com/og-image.png",
   twitterTitle: "The Deadly Consultant - Career Paths & BI-FinTech Success",
   twitterDescription:
     "Unlock your $10k+/mo BI-FinTech pivot. Explore career roadmaps, essential tools, and inspiring success stories.",
