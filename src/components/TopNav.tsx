@@ -1,7 +1,7 @@
 import { Search, Menu, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import SignupButton from "@/components/SignupButton"; // Adjust path if needed (e.g., create the file)
+import SignupButton from "@/components/SignupButton";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { toast } from "@/hooks/use-toast";
 
@@ -14,6 +14,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isSearchExpanded && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchExpanded]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -72,33 +80,48 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </div>
           </Link>
 
-          {/* Desktop Search */}
-          <div className="hidden md:flex items-center max-w-[200px] ml-4">
-            <div className="relative w-full">
-              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full pl-8 pr-3 py-1.5 volumetric-glass-button rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-400/50 placeholder:text-white/60"
-              />
-            </div>
-          </div>
         </div>
 
-        {/* Right: About + Roadmap Button + Injected Signup Button - Responsive for mobile visibility */}
-        <div className="flex items-center gap-2 md:gap-4">
-          <Link to="/about">
+        {/* Right: Search + Separator + About + Roadmap + Login + Subscribe */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Desktop: Collapsible Search */}
+          <div className="hidden md:flex items-center">
+            <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-40' : 'w-8'}`}>
+              <button
+                onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+                className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
+              </button>
+              {isSearchExpanded && (
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onBlur={() => !searchQuery && setIsSearchExpanded(false)}
+                  className="absolute left-8 w-32 pl-2 pr-2 py-1 volumetric-glass-button rounded-lg text-xs text-white focus:outline-none placeholder:text-white/60"
+                />
+              )}
+            </div>
+            
+            {/* Separator */}
+            <span className="text-white/40 mx-2">|</span>
+          </div>
+
+          <a href="https://thedeadlyconsultant.com/about/" target="_blank" rel="noopener noreferrer">
             <button
-              className="px-3 py-2 text-xs md:px-4 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+              className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
             >
               About
             </button>
-          </Link>
+          </a>
+
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
-              className="px-3 py-2 text-xs md:px-6 md:py-2.5 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60 active:scale-95 cta-glow-pulse-red"
+              className="px-3 py-2 text-xs md:px-5 md:py-2 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60 active:scale-95 cta-glow-pulse-red"
               onMouseEnter={() => setIsRoadmapHovered(true)}
               onMouseLeave={() => setIsRoadmapHovered(false)}
               style={{
@@ -111,7 +134,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </button>
           </Link>
 
-          {/* Mobile: Icon-only signup button */}
+          {/* Mobile: Icon-only buttons */}
           <button
             onClick={() => setIsModalOpen(true)}
             className="md:hidden p-2 rounded-xl volumetric-glass-button"
@@ -120,16 +143,24 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <User className="w-6 h-6 text-white" />
           </button>
 
-          {/* Desktop/Tablet: Full signup button */}
-          <div className="hidden md:flex flex-col items-center">
-            <SignupButton
-              formId="fbd8fa5d1b"
-              fallbackHref="https://bifintechconsulting.com/case-study-signup"
-              className="px-5 py-1.5 text-base font-semibold"
-            />
-            <span className="text-[9px] text-white/70 tracking-wide">
-              Unlock More (Free)
-            </span>
+          {/* Desktop/Tablet: Login + Subscribe buttons */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              className="px-4 py-1.5 text-sm font-semibold rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/20 transition-all duration-300"
+            >
+              Log-in
+            </button>
+            <div className="flex flex-col items-center">
+              <SignupButton
+                formId="fbd8fa5d1b"
+                fallbackHref="https://bifintechconsulting.com/case-study-signup"
+                className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-black hover:bg-[#F4C903]/90 hover:text-black border-none"
+                label="Subscribe"
+              />
+              <span className="text-[9px] text-white/70 tracking-wide">
+                Unlock More (Free)
+              </span>
+            </div>
           </div>
         </div>
       </div>
