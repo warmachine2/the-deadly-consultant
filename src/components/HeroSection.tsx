@@ -22,12 +22,12 @@ const HeroSection = () => {
           <span className="text-[#F4C903]">PMP/PSM/CPMAI trifecta</span> + build $60k PPM tools. Land guaranteed interviews fast. Click below to kick-start your pivot.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 mt-4 md:items-stretch">
+        {/* CTA Buttons - 2x2 Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full max-w-4xl">
           {/* Main CTA Button */}
           <a 
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="inline-flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]"
+            className="inline-flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -36,12 +36,12 @@ const HeroSection = () => {
           >
             <span className="block">Get Free Instant Access to</span>
             <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
-            <span className="block text-xs md:text-sm text-white/80">PMP/PSM/CPMAI Trifecta + build $60k Tools - Escape AI Now</span>
+            <span className="block text-[10px] md:text-xs text-white/80 mt-1">PMP/PSM/CPMAI Trifecta + build $60k Tools - Escape AI Now</span>
           </a>
 
           {/* Second CTA Button - Job Alerts */}
           <button 
-            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
+            className="flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -50,13 +50,13 @@ const HeroSection = () => {
           >
             <span className="block">Weekly $10k/mo+</span>
             <span className="block"><span className="text-[#F4C903]">Job Alerts</span> (Members Only)</span>
-            <span className="block text-xs md:text-sm text-white/80">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
+            <span className="block text-[10px] md:text-xs text-white/80 mt-1">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
           </button>
 
           {/* Third CTA Button - Strategy Guide */}
           <button 
-            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[140px]"
+            className="flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -65,7 +65,7 @@ const HeroSection = () => {
           >
             <span className="block">AI-Proof BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
-            <span className="block text-xs md:text-sm">(Free but Members only)</span>
+            <span className="block text-[10px] md:text-xs">(Free but Members only)</span>
             <span className="text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
           </button>
 
@@ -74,7 +74,7 @@ const HeroSection = () => {
             href="https://skool.com/bi-fintech-consultant-academy/about"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col justify-center px-8 py-4 text-base md:text-lg lg:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[140px]"
+            className="flex flex-col justify-center px-6 py-4 text-base md:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[120px]"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -83,7 +83,7 @@ const HeroSection = () => {
           >
             <span className="block"><span className="text-[#F4C903]">AI-Proof</span> BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Accelerator</span></span>
-            <span className="block text-xs md:text-sm text-white/80">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
+            <span className="block text-[10px] md:text-xs text-white/80 mt-1">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
           </a>
         </div>
 
