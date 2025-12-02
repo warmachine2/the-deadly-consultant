@@ -32,7 +32,9 @@ const Index = () => {
       setLoading(true);
       try {
         const response = await fetchPosts(1, 20);
-        const transformedPosts = response.posts.map(transformGhostPost);
+        const transformedPosts = response.posts
+          .filter(post => post.slug !== "about-post")
+          .map(transformGhostPost);
         setPosts(transformedPosts);
         setFilteredPosts(transformedPosts);
         setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
@@ -85,7 +87,9 @@ const Index = () => {
     try {
       const nextPage = page + 1;
       const response = await fetchPosts(nextPage, 20);
-      const transformedPosts = response.posts.map(transformGhostPost);
+      const transformedPosts = response.posts
+        .filter(post => post.slug !== "about-post")
+        .map(transformGhostPost);
       setPosts((prev) => [...prev, ...transformedPosts]);
       setPage(nextPage);
       setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
