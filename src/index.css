@@ -654,14 +654,18 @@ All colors MUST be HSL.
   }
 
   .prose h1 {
-    font-size: 2.25rem;
+    font-size: 3rem;
   }
 
   .prose h2 {
-    font-size: 1.875rem;
+    font-size: 2.5rem;
   }
 
   .prose h3 {
+    font-size: 2rem;
+  }
+
+  .prose h4 {
     font-size: 1.5rem;
   }
 
