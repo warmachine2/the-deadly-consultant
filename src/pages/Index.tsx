@@ -98,31 +98,10 @@ const Index = () => {
     }
   };
 
-  const handlePostClick = useCallback(async (post: BlogPost) => {
-    if (isOpeningRef.current || !post?.slug) return;
-
-    // Navigate to full page for about-post
-    if (post.slug === "about-post") {
-      navigate("/about-post");
-      return;
-    }
-
-    isOpeningRef.current = true;
-    setSelectedPost(post);
-    setModalOpen(true);
-    setFullContent("");
-    setModalLoading(true);
-
-    try {
-      const fullPost = await fetchPostBySlug(post.slug);
-      setFullContent(fullPost?.html || `<p>${post.excerpt}</p>`);
-    } catch (error) {
-      console.error("Error fetching full post:", error);
-      setFullContent(`<p>${post.excerpt}</p>`);
-    } finally {
-      setModalLoading(false);
-      isOpeningRef.current = false;
-    }
+  const handlePostClick = useCallback((post: BlogPost) => {
+    if (!post?.slug) return;
+    // Navigate to full page for all posts
+    navigate(`/${post.slug}`);
   }, [navigate]);
 
   const debouncedHandlePostClick = useMemo(() => debounce(handlePostClick, 300), [handlePostClick]);
