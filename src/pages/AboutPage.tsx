@@ -4,21 +4,10 @@ import TopNav from "@/components/TopNav";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
-
-interface GhostContent {
-  id: string;
-  title: string;
-  html: string;
-  feature_image?: string;
-  tags?: Array<{ name: string; slug: string }>;
-  published_at: string;
-}
+import { fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 
 const AboutPage = () => {
-  const [content, setContent] = useState<GhostContent | null>(null);
+  const [content, setContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,53 +17,18 @@ const AboutPage = () => {
       setError(null);
 
       try {
-        // Fetch posts/pages with #featured-static tag filter
-        const response = await fetch(
-          `${GHOST_API_URL}/posts/?key=${GHOST_API_KEY}&filter=tag:hash-featured-static&include=tags&limit=1`
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.posts && data.posts[0]) {
-            setContent(data.posts[0]);
-            setLoading(false);
-            return;
-          }
+        // Fetch the about-post using the same edge function as other posts
+        const post = await fetchPostBySlug("about-post");
+        
+        if (post) {
+          setContent(post);
+        } else {
+          setError("About content not found");
         }
-
-        // Try pages if no post found
-        const pageResponse = await fetch(
-          `${GHOST_API_URL}/pages/?key=${GHOST_API_KEY}&filter=tag:hash-featured-static&include=tags&limit=1`
-        );
-
-        if (pageResponse.ok) {
-          const pageData = await pageResponse.json();
-          if (pageData.pages && pageData.pages[0]) {
-            setContent(pageData.pages[0]);
-            setLoading(false);
-            return;
-          }
-        }
-
-        // Fallback: try fetching the "about" slug directly
-        const aboutResponse = await fetch(
-          `${GHOST_API_URL}/pages/slug/about/?key=${GHOST_API_KEY}&include=tags`
-        );
-
-        if (aboutResponse.ok) {
-          const aboutData = await aboutResponse.json();
-          if (aboutData.pages && aboutData.pages[0]) {
-            setContent(aboutData.pages[0]);
-            setLoading(false);
-            return;
-          }
-        }
-
-        setError("About content not found");
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching about content:", err);
         setError("Failed to load about content");
+      } finally {
         setLoading(false);
       }
     };
@@ -186,7 +140,7 @@ const AboutPage = () => {
 
             <div
               className="prose prose-invert prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: content.html }}
+              dangerouslySetInnerHTML={{ __html: content.html || "" }}
               style={{
                 fontFamily: "Play, sans-serif",
                 color: "rgba(255, 255, 255, 0.9)",
