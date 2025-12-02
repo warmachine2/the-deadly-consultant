@@ -1,25 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
-import { Button } from "@/components/ui/button"; // Added: For styled buttons
-import { ChevronLeft, Home } from "lucide-react"; // Added: Icons for return/home
-import { cn } from "@/lib/utils"; // Added: Utility for class merging
-
-const GHOST_API_URL = "https://thedeadlyconsultant.com/ghost/api/content";
-const GHOST_API_KEY = "138812683c4aee42ad4d684a05";
-
-interface GhostContent {
-  id: string;
-  title: string;
-  html: string;
-  feature_image?: string;
-  tags?: Array<{ name: string; slug: string }>;
-  published_at: string;
-}
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, Home } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { fetchPostBySlug, fetchPageBySlug, GhostPost } from "@/lib/ghostApi";
 
 const DynamicPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [content, setContent] = useState<GhostContent | null>(null);
+  const [content, setContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -32,28 +21,21 @@ const DynamicPage = () => {
 
       try {
         // Try fetching as a page first
-        let response = await fetch(`${GHOST_API_URL}/pages/slug/${slug}/?key=${GHOST_API_KEY}&include=tags`);
-
-        let data;
-        if (response.ok) {
-          data = await response.json();
-          if (data.pages && data.pages[0]) {
-            setContent(data.pages[0]);
-            setLoading(false);
-            return;
-          }
+        let result = await fetchPageBySlug(slug);
+        
+        if (result) {
+          setContent(result);
+          setLoading(false);
+          return;
         }
 
         // If not found as page, try as post
-        response = await fetch(`${GHOST_API_URL}/posts/slug/${slug}/?key=${GHOST_API_KEY}&include=tags`);
-
-        if (response.ok) {
-          data = await response.json();
-          if (data.posts && data.posts[0]) {
-            setContent(data.posts[0]);
-            setLoading(false);
-            return;
-          }
+        result = await fetchPostBySlug(slug);
+        
+        if (result) {
+          setContent(result);
+          setLoading(false);
+          return;
         }
 
         // Not found
@@ -174,7 +156,7 @@ const DynamicPage = () => {
             {/* HTML Content */}
             <div
               className="prose prose-invert prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: content.html }}
+              dangerouslySetInnerHTML={{ __html: content.html || "" }}
               style={{
                 fontFamily: "Play, sans-serif",
                 color: "rgba(255, 255, 255, 0.9)",
