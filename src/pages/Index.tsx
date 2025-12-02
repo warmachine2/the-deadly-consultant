@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
@@ -10,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import RoadmapCard from "@/components/RoadmapCard";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -99,6 +101,12 @@ const Index = () => {
   const handlePostClick = useCallback(async (post: BlogPost) => {
     if (isOpeningRef.current || !post?.slug) return;
 
+    // Navigate to full page for about-post
+    if (post.slug === "about-post") {
+      navigate("/about-post");
+      return;
+    }
+
     isOpeningRef.current = true;
     setSelectedPost(post);
     setModalOpen(true);
@@ -115,7 +123,7 @@ const Index = () => {
       setModalLoading(false);
       isOpeningRef.current = false;
     }
-  }, []);
+  }, [navigate]);
 
   const debouncedHandlePostClick = useMemo(() => debounce(handlePostClick, 300), [handlePostClick]);
 
