@@ -67,7 +67,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass overflow-x-hidden">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6 max-w-full">
-        {/* Left: Hamburger (mobile) or Logo (desktop) */}
+        {/* Left: Hamburger + Favicon (mobile/tablet) or Full Logo (desktop) */}
         <div className="flex items-center gap-3 flex-shrink-0">
           {/* Mobile/Tablet: Hamburger Menu */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -188,7 +188,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </SheetContent>
           </Sheet>
 
-          {/* Desktop Text Title */}
+          {/* Favicon on mobile/tablet (left side) */}
+          <Link to="/" className="lg:hidden">
+            <div className="p-2 rounded-xl volumetric-glass-button">
+              <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
+            </div>
+          </Link>
+
+          {/* Desktop Text Title (left side on desktop) */}
           <Link to="/" className="hidden lg:block">
             <div className="flex flex-col items-center px-3 py-1.5">
               <h1
@@ -208,11 +215,18 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </Link>
         </div>
 
-        {/* Center: Mobile Logo (absolute centered) */}
-        <Link to="/" className="lg:hidden absolute left-1/2 transform -translate-x-1/2">
-          <div className="p-2 rounded-xl volumetric-glass-button">
-            <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
-          </div>
+        {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}
+        <Link to="/" className="hidden sm:block lg:hidden absolute left-1/2 transform -translate-x-1/2">
+          <h1
+            className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
+            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+          >
+            The{" "}
+            <span style={{ color: "#F4C903" }}>
+              Deadly
+            </span>{" "}
+            Consultant
+          </h1>
         </Link>
 
         {/* Right: Desktop Nav Items */}
