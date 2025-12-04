@@ -1,6 +1,12 @@
-import { Search, Menu, User } from "lucide-react";
+import { Search, Menu, User, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import SignupButton from "@/components/SignupButton";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
 import { toast } from "@/hooks/use-toast";
@@ -118,6 +124,24 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               About
             </button>
           </Link>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap flex items-center gap-1"
+              >
+                Free Stuff
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-gray-900 border border-white/20 min-w-[200px]">
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/3KS-Tracker" className="w-full">
+                  3KS Productivity Tracker
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
