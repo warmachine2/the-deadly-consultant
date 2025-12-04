@@ -67,7 +67,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass overflow-x-hidden">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6 max-w-full">
-        {/* Left: Logo */}
+        {/* Left: Hamburger (mobile) or Logo (desktop) */}
         <div className="flex items-center gap-3 flex-shrink-0">
           {/* Mobile/Tablet: Hamburger Menu */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -188,32 +188,32 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </SheetContent>
           </Sheet>
 
-          {/* Logo */}
-          <Link to="/">
-            <div className="flex items-center">
-              {/* Mobile Logo with Glass Effect */}
-              <div className="lg:hidden p-2 rounded-xl volumetric-glass-button">
-                <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
-              </div>
-              {/* Desktop Text Title */}
-              <div className="hidden lg:flex flex-col items-center px-3 py-1.5">
-                <h1
-                  className="text-xl lg:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
-                  style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
-                >
-                  The{" "}
-                  <span style={{ color: "#F4C903" }}>
-                    Deadly
-                  </span>{" "}
-                  Consultant
-                </h1>
-                <span className="text-[8px] text-white/70 tracking-wide text-center bg-black/60 px-2 py-0.5 rounded">
-                  By Hassan Khan B.Eng., PMP, AZ305
-                </span>
-              </div>
+          {/* Desktop Text Title */}
+          <Link to="/" className="hidden lg:block">
+            <div className="flex flex-col items-center px-3 py-1.5">
+              <h1
+                className="text-xl lg:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
+                style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+              >
+                The{" "}
+                <span style={{ color: "#F4C903" }}>
+                  Deadly
+                </span>{" "}
+                Consultant
+              </h1>
+              <span className="text-[8px] text-white/70 tracking-wide text-center bg-black/60 px-2 py-0.5 rounded">
+                By Hassan Khan B.Eng., PMP, AZ305
+              </span>
             </div>
           </Link>
         </div>
+
+        {/* Center: Mobile Logo (absolute centered) */}
+        <Link to="/" className="lg:hidden absolute left-1/2 transform -translate-x-1/2">
+          <div className="p-2 rounded-xl volumetric-glass-button">
+            <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="w-6 h-6 object-contain" />
+          </div>
+        </Link>
 
         {/* Right: Desktop Nav Items */}
         <div className="flex items-center gap-1 lg:gap-3">
