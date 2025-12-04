@@ -7,16 +7,11 @@ interface SidebarProps {
   onClose: () => void;
   selectedTags: string[];
   onTagToggle: (tag: string) => void;
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
+  availableTags: string[];
 }
 
-const tags = ["PMP Certs", "AI-Proof", "Tools", "Career Pivot", "BI Analytics", "FinTech"];
-const categories = ["All Posts", "Roadmaps", "Stories", "Guides"];
-
-const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory, onCategoryChange }: SidebarProps) => {
+const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: SidebarProps) => {
   const [showTags, setShowTags] = useState(true);
-  const [showCategories, setShowCategories] = useState(true);
   const isMobile = useIsMobile();
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -53,7 +48,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
               ? isOpen
                 ? "translate-x-0 h-screen"
                 : "-translate-x-full hidden"
-              : "md:top-16 h-[calc(100vh-4rem)] translate-x-0"
+              : "md:top-20 h-[calc(100vh-5rem)] translate-x-0"
           }
         `}
       >
@@ -69,43 +64,8 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
         )}
 
         <h2 className="text-xl font-bold text-white mt-4 mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16">
-          Filters
+          Filter by Tags
         </h2>
-
-        {/* Categories */}
-        <div className="mb-6">
-          <button
-            onClick={() => setShowCategories(!showCategories)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
-          >
-            Categories
-            <ChevronDown
-              className={`w-4 h-4 transition-transform text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)] ${
-                showCategories ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {showCategories && (
-            <div className="flex flex-col gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => onCategoryChange(category)}
-                  className={`
-                    w-full text-left px-4 py-4 rounded-2xl text-sm font-medium transition-all
-                    ${selectedCategory === category ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
-                  `}
-                >
-                  <span
-                    style={selectedCategory === category ? { color: "#F4C903" } : {}}
-                  >
-                    {category}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* Tags */}
         <div>
@@ -122,25 +82,39 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, selectedCategory,
           </button>
           {showTags && (
             <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => onTagToggle(tag)}
-                  className={`
-                    px-4 py-4 rounded-2xl text-xs font-medium italic transition-all
-                    ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
-                  `}
-                >
-                  <span
-                    style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}
+              {availableTags.length === 0 ? (
+                <p className="text-white/60 text-sm">No tags available</p>
+              ) : (
+                availableTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => onTagToggle(tag)}
+                    className={`
+                      px-4 py-3 rounded-2xl text-xs font-medium italic transition-all
+                      ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
+                    `}
                   >
-                    {tag}
-                  </span>
-                </button>
-              ))}
+                    <span
+                      style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}
+                    >
+                      {tag}
+                    </span>
+                  </button>
+                ))
+              )}
             </div>
           )}
         </div>
+
+        {/* Clear filters button */}
+        {selectedTags.length > 0 && (
+          <button
+            onClick={() => selectedTags.forEach(tag => onTagToggle(tag))}
+            className="mt-6 w-full px-4 py-3 rounded-2xl text-sm font-medium volumetric-glass-button text-white/80 hover:text-white transition-all"
+          >
+            Clear All Filters
+          </button>
+        )}
       </aside>
     </>
   );
