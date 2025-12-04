@@ -2,7 +2,7 @@ import TopNav from "@/components/TopNav";
 
 const ProductivityTrackerPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="min-h-screen">
       <TopNav />
       
       <main className="pt-24 pb-16 px-4 md:px-8 max-w-4xl mx-auto">
