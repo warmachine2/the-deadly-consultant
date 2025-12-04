@@ -131,6 +131,49 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               <button
                 className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap flex items-center gap-1"
               >
+                Articles
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-gray-900 border border-white/20 min-w-[200px]">
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/tools-articles" className="w-full">
+                  Tools Articles
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/pmp-certification-articles" className="w-full">
+                  PMP Cert Articles
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/psm-certification-articles" className="w-full">
+                  PSM Cert Articles
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/pmi-cpmai-certification-articles" className="w-full">
+                  PMI-CPMAI Cert Articles
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/consulting-job-stories-articles" className="w-full">
+                  Consulting Jobs/Stories Articles
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/other-articles" className="w-full">
+                  Other Articles
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap flex items-center gap-1"
+              >
                 AI/BI-FinTech PM Resources
                 <ChevronDown className="w-4 h-4" />
               </button>
