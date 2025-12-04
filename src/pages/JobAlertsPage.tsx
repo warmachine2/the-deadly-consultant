@@ -15,7 +15,7 @@ import {
   Stack,
 } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2 } from 'lucide-react';
+import { Filter, Loader2, RefreshCw } from 'lucide-react';
 import TopNav from '@/components/TopNav';
 
 interface JobData {
@@ -211,22 +211,25 @@ const JobAlertsPage: React.FC = () => {
   
   const isMobile = useMediaQuery('(max-width:768px)');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(CSV_URL);
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const csvText = await response.text();
-        const parsedData = parseCSV(csvText);
-        setData(parsedData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load job data');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(CSV_URL + '&t=' + Date.now()); // Cache bust
+      if (!response.ok) throw new Error('Failed to fetch data');
+      const csvText = await response.text();
+      console.log('CSV Response:', csvText);
+      const parsedData = parseCSV(csvText);
+      console.log('Parsed data:', parsedData);
+      setData(parsedData);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load job data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -286,6 +289,14 @@ const JobAlertsPage: React.FC = () => {
               <option value="this-month">This Month</option>
               <option value="all">All Time</option>
             </select>
+            <button
+              onClick={() => fetchData()}
+              disabled={loading}
+              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors flex items-center gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
             <span className="text-muted-foreground text-sm">
               {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
             </span>
