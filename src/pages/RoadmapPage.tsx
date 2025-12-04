@@ -282,7 +282,7 @@ const RoadmapPage = () => {
       />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
-        <section className="glass-strong rounded-3xl p-8 md:p-12 mb-8 hover-lift">
+        <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
               {pageContent?.title || ""}
@@ -301,7 +301,7 @@ const RoadmapPage = () => {
           <>
             {youtubeUrl && (
               <section className="mb-8">
-                <div className="glass rounded-3xl p-6">
+                <div className="volumetric-glass rounded-3xl p-6">
                   <div className="relative w-full pb-[56.25%]">
                     <iframe
                       className="absolute top-0 left-0 w-full h-full rounded-2xl"
@@ -314,7 +314,7 @@ const RoadmapPage = () => {
               </section>
             )}
 
-            <section className="glass rounded-3xl p-8 md:p-12 mb-8">
+            <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8">
               <style>{`
                 .prose img[width] { max-width: 100%; }
                 .prose img[width]:is([width="1"], [width="2"], [width="3"], [width="4"], [width="5"], [width="10"], [width="20"], [width="50"], [width="100"], [width="120"], [width="150"], [width="200"], [width="250"]) { display: none !important; }
@@ -328,7 +328,7 @@ const RoadmapPage = () => {
               />
             </section>
 
-            <section className="glass-strong rounded-3xl p-8 md:p-12 text-center">
+            <section className="volumetric-glass rounded-3xl p-8 md:p-12 text-center">
               <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
