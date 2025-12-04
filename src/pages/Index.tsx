@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
-import Sidebar from "@/components/Sidebar";
 import BlogCard, { BlogPost } from "@/components/BlogCard";
 import PostModal from "@/components/PostModal";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
@@ -16,9 +15,6 @@ const Index = () => {
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All Posts");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [fullContent, setFullContent] = useState<string>("");
@@ -47,7 +43,7 @@ const Index = () => {
     loadPosts();
   }, []);
 
-  // Filter posts
+  // Filter posts by search query only
   useEffect(() => {
     let filtered = [...posts];
 
@@ -59,16 +55,8 @@ const Index = () => {
       );
     }
 
-    if (selectedTags.length > 0) {
-      filtered = filtered.filter((post) => post.tags?.some((tag) => selectedTags.includes(tag.name)));
-    }
-
-    if (selectedCategory !== "All Posts") {
-      filtered = filtered.filter((post) => post.tags?.some((tag) => tag.name === selectedCategory));
-    }
-
     setFilteredPosts(filtered);
-  }, [searchQuery, selectedTags, selectedCategory, posts]);
+  }, [searchQuery, posts]);
 
   // Infinite scroll
   useEffect(() => {
@@ -100,35 +88,20 @@ const Index = () => {
 
   const handlePostClick = useCallback((post: BlogPost) => {
     if (!post?.slug) return;
-    // Navigate to full page for all posts
     navigate(`/${post.slug}`);
   }, [navigate]);
 
   const debouncedHandlePostClick = useMemo(() => debounce(handlePostClick, 300), [handlePostClick]);
 
-  // ← THIS WAS MISSING — now added back
-  const handleTagToggle = (tag: string) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
-  };
-
   return (
     <div className="min-h-screen">
-      <TopNav onSearchChange={setSearchQuery} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      <TopNav onSearchChange={setSearchQuery} />
 
       {/* Fixed overlap + perfect mobile spacing */}
       <div className="px-0 md:px-6 pb-12 pt-8 md:pt-0">
         <HeroSection />
 
-        <div className="flex flex-col md:flex-row gap-0 md:gap-6 relative mt-8 md:mt-0">
-          <Sidebar
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-            selectedTags={selectedTags}
-            onTagToggle={handleTagToggle}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-
+        <div className="mt-8 md:mt-0">
           <main className="flex-1 min-w-0">
             {loading && posts.length === 0 ? (
               <div className="flex justify-center items-center min-h-[400px]">
