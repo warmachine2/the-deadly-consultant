@@ -122,7 +122,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               <button
                 className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap flex items-center gap-1"
               >
-                Free Stuff
+                AI/BI-FinTech PM Resources
                 <ChevronDown className="w-4 h-4" />
               </button>
             </DropdownMenuTrigger>
@@ -130,6 +130,21 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
                 <Link to="/3KS-Tracker" className="w-full">
                   3KS Productivity Tracker
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="w-full">
+                  90D PM Pivot Roadmap
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/pm-strategy-guide-pdf" className="w-full">
+                  PM Consulting Strategy Guide PDF
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
+                <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="w-full">
+                  AI/BI-FinTech PM Job Alerts/Repo
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
