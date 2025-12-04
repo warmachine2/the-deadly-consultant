@@ -45,13 +45,14 @@ const ProductivityTrackerPage = () => {
             </div>
           ) : post ? (
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-6 text-center">
+              <h1 className="text-3xl md:text-5xl font-bold text-[#F4C903] mb-6 text-center">
                 {post.title}
               </h1>
               {post.html && (
                 <div 
                   className="prose prose-invert prose-lg max-w-none
-                    prose-headings:text-[#F4C903] prose-headings:font-bold
+                    [&_h1]:text-[#F4C903] [&_h2]:text-[#F4C903] [&_h3]:text-[#F4C903] [&_h4]:text-[#F4C903] [&_h5]:text-[#F4C903] [&_h6]:text-[#F4C903]
+                    [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold
                     prose-p:text-muted-foreground prose-p:leading-relaxed
                     prose-a:text-[#F4C903] prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-foreground
