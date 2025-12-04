@@ -48,8 +48,8 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
-      <div className="flex items-center justify-between h-16 px-4 md:px-6">
+    <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass overflow-x-hidden">
+      <div className="flex items-center justify-between h-16 px-4 md:px-6 max-w-full">
         {/* Left: Logo + Search */}
         <div className="flex items-center gap-3 flex-1">
           <button

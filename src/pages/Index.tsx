@@ -94,7 +94,7 @@ const Index = () => {
   const debouncedHandlePostClick = useMemo(() => debounce(handlePostClick, 300), [handlePostClick]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <TopNav onSearchChange={setSearchQuery} />
 
       {/* Fixed overlap + perfect mobile spacing */}
