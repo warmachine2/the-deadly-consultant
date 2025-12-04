@@ -51,7 +51,7 @@ const ProductivityTrackerPage = () => {
               {post.html && (
                 <div 
                   className="prose prose-invert prose-lg max-w-none
-                    prose-headings:text-foreground prose-headings:font-bold
+                    prose-headings:text-[#F4C903] prose-headings:font-bold
                     prose-p:text-muted-foreground prose-p:leading-relaxed
                     prose-a:text-[#F4C903] prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-foreground
