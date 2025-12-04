@@ -117,14 +117,6 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <span className="text-white/40 mx-2">|</span>
           </div>
 
-          <Link to="/about-post">
-            <button
-              className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
-            >
-              About
-            </button>
-          </Link>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
@@ -142,6 +134,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Link to="/about-post">
+            <button
+              className="px-2 py-1.5 text-xs md:px-3 md:py-2 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+            >
+              About
+            </button>
+          </Link>
 
           <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
             <button
