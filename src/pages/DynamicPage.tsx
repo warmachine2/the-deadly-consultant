@@ -85,10 +85,10 @@ const DynamicPage = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
       
-      <div className="pt-24 md:pt-20 px-4 md:px-6 pb-12">
+      <div className="pt-20 lg:pt-24 px-4 md:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
           {/* Content Card */}
           <article className="volumetric-glass rounded-3xl overflow-hidden">

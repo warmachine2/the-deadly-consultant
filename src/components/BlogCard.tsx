@@ -24,7 +24,7 @@ const BlogCard = ({ post, onClick, className }: BlogCardProps) => {
   return (
     <article
       onClick={onClick}
-      className={`volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group min-w-[320px] max-w-[320px] mx-auto md:min-w-0 md:max-w-none md:mx-0 ${className || ""}`}
+      className={`volumetric-glass rounded-2xl overflow-hidden hover-lift cursor-pointer group w-full ${className || ""}`}
     >
       {/* Image */}
       {post.feature_image && !imageError ? (

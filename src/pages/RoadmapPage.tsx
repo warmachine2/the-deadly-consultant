@@ -200,7 +200,7 @@ const RoadmapPage = () => {
   const formHref = "https://bifintechconsulting.com/roadmap-signup"; // FIXED: Use the href from embed code
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <style>{`
         /* Mobile-only full-screen ConvertKit modal */
         @media (max-width: 767px) {
@@ -281,7 +281,7 @@ const RoadmapPage = () => {
         }}
       />
 
-      <main className="container mx-auto px-4 py-8 max-w-5xl mt-24">
+      <main className="container mx-auto px-4 py-8 max-w-5xl mt-20 lg:mt-24">
         <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
