@@ -57,7 +57,7 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#F4C903',
+      main: '#FFE87C',
     },
     background: {
       default: 'transparent',
@@ -76,7 +76,7 @@ const darkTheme = createTheme({
         },
         head: {
           backgroundColor: 'rgba(31, 41, 55, 0.9)',
-          color: '#F4C903',
+          color: '#FFE87C',
           fontWeight: 600,
         },
       },
@@ -85,7 +85,7 @@ const darkTheme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': {
-            backgroundColor: 'rgba(244, 201, 3, 0.08) !important',
+            backgroundColor: 'rgba(255, 232, 124, 0.08) !important',
           },
         },
       },
@@ -191,14 +191,14 @@ const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
       <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="subtitle1" sx={{ color: '#F4C903', fontWeight: 600 }}>
+            <Typography variant="subtitle1" sx={{ color: '#FFE87C', fontWeight: 600 }}>
               {job.role}
             </Typography>
             <Typography variant="body2" sx={{ color: '#9ca3af' }}>
               {job.company} • {job.date}
             </Typography>
             <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              <Chip label={job.term} size="small" sx={{ backgroundColor: 'rgba(244, 201, 3, 0.2)', color: '#F4C903' }} />
+              <Chip label={job.term} size="small" sx={{ backgroundColor: 'rgba(255, 232, 124, 0.2)', color: '#FFE87C' }} />
               <Chip label={job.workType} size="small" sx={{ backgroundColor: 'rgba(0, 212, 255, 0.2)', color: '#00d4ff' }} />
             </Box>
           </Box>
@@ -210,40 +210,40 @@ const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
         <Collapse in={expanded}>
           <Stack spacing={1.5} sx={{ mt: 2 }}>
             <Box>
-              <Typography variant="caption" sx={{ color: '#F4C903' }}>Duties</Typography>
+              <Typography variant="caption" sx={{ color: '#FFE87C' }}>Duties</Typography>
               <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.duties}</Typography>
             </Box>
             <Box>
-              <Typography variant="caption" sx={{ color: '#F4C903' }}>Required Experience</Typography>
+              <Typography variant="caption" sx={{ color: '#FFE87C' }}>Required Experience</Typography>
               <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.requiredExperience}</Typography>
             </Box>
             <Box>
-              <Typography variant="caption" sx={{ color: '#F4C903' }}>Required Skills</Typography>
+              <Typography variant="caption" sx={{ color: '#FFE87C' }}>Required Skills</Typography>
               <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.requiredSkills}</Typography>
             </Box>
             {job.additionalRequirements && (
               <Box>
-                <Typography variant="caption" sx={{ color: '#F4C903' }}>Additional Requirements</Typography>
+                <Typography variant="caption" sx={{ color: '#FFE87C' }}>Additional Requirements</Typography>
                 <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.additionalRequirements}</Typography>
               </Box>
             )}
             {job.comments && (
               <Box>
-                <Typography variant="caption" sx={{ color: '#F4C903' }}>Comments</Typography>
+                <Typography variant="caption" sx={{ color: '#FFE87C' }}>Comments</Typography>
                 <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.comments}</Typography>
               </Box>
             )}
             <Box>
-              <Typography variant="caption" sx={{ color: '#F4C903' }}>Strategy</Typography>
+              <Typography variant="caption" sx={{ color: '#FFE87C' }}>Strategy</Typography>
               <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.strategy}</Typography>
             </Box>
             <Box>
-              <Typography variant="caption" sx={{ color: '#F4C903' }}>Earning Estimate</Typography>
+              <Typography variant="caption" sx={{ color: '#FFE87C' }}>Earning Estimate</Typography>
               <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.earningEstimate}</Typography>
             </Box>
             {(job.recruiterEmail || job.recruiterPhone) && (
               <Box>
-                <Typography variant="caption" sx={{ color: '#F4C903' }}>Contact</Typography>
+                <Typography variant="caption" sx={{ color: '#FFE87C' }}>Contact</Typography>
                 <Typography variant="body2" sx={{ color: '#e5e7eb' }}>
                   {job.recruiterEmail && <span>{job.recruiterEmail}</span>}
                   {job.recruiterEmail && job.recruiterPhone && <span> • </span>}
@@ -334,7 +334,7 @@ const JobAlertsPage: React.FC = () => {
               variant="h4" 
               component="h1" 
               sx={{ 
-                color: '#F4C903', 
+                color: '#FFE87C',
                 fontWeight: 700, 
                 mb: 2,
                 fontSize: { xs: '1.5rem', md: '2.125rem' }
@@ -348,7 +348,7 @@ const JobAlertsPage: React.FC = () => {
             
             {/* Filters */}
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mb: 3 }}>
-              <FilterList sx={{ color: '#F4C903' }} />
+              <FilterList sx={{ color: '#FFE87C' }} />
               <FormControl size="small" sx={{ minWidth: 150 }}>
                 <InputLabel sx={{ color: '#9ca3af' }}>Date Filter</InputLabel>
                 <Select
@@ -358,7 +358,7 @@ const JobAlertsPage: React.FC = () => {
                   sx={{ 
                     color: '#e5e7eb',
                     '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(75, 85, 99, 0.6)' },
-                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#F4C903' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#FFE87C' },
                   }}
                 >
                   <MenuItem value="this-month">This Month</MenuItem>
@@ -373,7 +373,7 @@ const JobAlertsPage: React.FC = () => {
 
           {loading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress sx={{ color: '#F4C903' }} />
+              <CircularProgress sx={{ color: '#FFE87C' }} />
             </Box>
           ) : error ? (
             <Paper sx={{ p: 4, textAlign: 'center' }}>
@@ -415,10 +415,10 @@ const JobAlertsPage: React.FC = () => {
                           direction={orderBy === column.id ? order : 'asc'}
                           onClick={() => handleSort(column.id)}
                           sx={{
-                            '&.MuiTableSortLabel-root': { color: '#F4C903' },
-                            '&.MuiTableSortLabel-root:hover': { color: '#F4C903' },
-                            '&.Mui-active': { color: '#F4C903' },
-                            '& .MuiTableSortLabel-icon': { color: '#F4C903 !important' },
+                            '&.MuiTableSortLabel-root': { color: '#FFE87C' },
+                            '&.MuiTableSortLabel-root:hover': { color: '#FFE87C' },
+                            '&.Mui-active': { color: '#FFE87C' },
+                            '& .MuiTableSortLabel-icon': { color: '#FFE87C !important' },
                           }}
                         >
                           {column.label}
