@@ -98,7 +98,7 @@ const Index = () => {
       <TopNav onSearchChange={setSearchQuery} />
 
       {/* Fixed overlap + perfect mobile spacing */}
-      <div className="px-0 md:px-6 pb-12 pt-8 md:pt-0">
+      <div className="px-0 md:px-6 pb-12 pt-20 lg:pt-20">
         <HeroSection />
 
         <div className="mt-8 md:mt-0">
