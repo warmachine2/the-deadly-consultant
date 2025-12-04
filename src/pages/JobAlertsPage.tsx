@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -15,8 +14,17 @@ import {
   Stack,
 } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
+import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
+import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 interface JobData {
   date: string;
@@ -33,6 +41,7 @@ interface JobData {
   recruiterPhone: string;
   strategy: string;
   earningEstimate: string;
+  location: string; // City/State/Province/Country
 }
 
 type Order = 'asc' | 'desc';
@@ -83,6 +92,7 @@ const parseCSV = (csvText: string): JobData[] => {
         recruiterPhone: values[11] || '',
         strategy: values[12] || '',
         earningEstimate: values[13] || '',
+        location: values[14] || '', // New location column (index 14, column O)
       });
     }
   }
@@ -90,27 +100,35 @@ const parseCSV = (csvText: string): JobData[] => {
   return rows;
 };
 
-const truncateText = (text: string, maxLength: number): string => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
-
-const isThisMonth = (dateStr: string): boolean => {
-  if (!dateStr) return false;
+const parseDate = (dateStr: string): Date | null => {
+  if (!dateStr) return null;
+  
+  // Try various date formats
+  const formats = ['yyyy-MM-dd', 'yyyy-M-d', 'MM/dd/yyyy', 'M/d/yyyy', 'dd/MM/yyyy'];
+  for (const fmt of formats) {
+    try {
+      const parsed = parse(dateStr, fmt, new Date());
+      if (!isNaN(parsed.getTime())) return parsed;
+    } catch {
+      continue;
+    }
+  }
+  
+  // Fallback to native parsing
   const date = new Date(dateStr);
-  const now = new Date();
-  return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+  return isNaN(date.getTime()) ? null : date;
 };
 
 const columns: { id: keyof JobData; label: string; minWidth?: number; truncate?: number }[] = [
   { id: 'date', label: 'Date', minWidth: 100 },
   { id: 'role', label: 'Role', minWidth: 150 },
+  { id: 'location', label: 'Location', minWidth: 120 },
   { id: 'term', label: 'Term', minWidth: 80 },
-  { id: 'duties', label: 'Duties', minWidth: 200, truncate: 200 },
+  { id: 'duties', label: 'Duties', minWidth: 200, truncate: 150 },
   { id: 'requiredExperience', label: 'Required Experience', minWidth: 150 },
   { id: 'requiredSkills', label: 'Required Skills', minWidth: 150 },
   { id: 'additionalRequirements', label: 'Additional Requirements', minWidth: 150 },
-  { id: 'comments', label: 'Comments', minWidth: 120 },
+  { id: 'comments', label: 'Comments', minWidth: 120, truncate: 150 },
   { id: 'workType', label: 'Remote/Hybrid/In-Person', minWidth: 120 },
   { id: 'company', label: 'Company', minWidth: 120 },
   { id: 'recruiterEmail', label: 'Recruiter Email', minWidth: 150 },
@@ -118,6 +136,28 @@ const columns: { id: keyof JobData; label: string; minWidth?: number; truncate?:
   { id: 'strategy', label: 'Strategy', minWidth: 200 },
   { id: 'earningEstimate', label: 'Earning Estimate', minWidth: 150 },
 ];
+
+// Expandable text component
+const ExpandableText: React.FC<{ text: string; maxLength: number }> = ({ text, maxLength }) => {
+  const [expanded, setExpanded] = useState(false);
+  
+  if (!text || text.length <= maxLength) {
+    return <span>{text}</span>;
+  }
+  
+  return (
+    <div>
+      <span>{expanded ? text : text.substring(0, maxLength) + '...'}</span>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="ml-2 text-xs font-medium hover:underline"
+        style={{ color: '#FFDD40' }}
+      >
+        {expanded ? 'Show Less' : 'Read More'}
+      </button>
+    </div>
+  );
+};
 
 // Mobile card row component
 const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
@@ -133,6 +173,9 @@ const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
           <p className="text-muted-foreground text-sm">
             {job.company} • {job.date}
           </p>
+          {job.location && (
+            <p className="text-muted-foreground text-xs mt-1">{job.location}</p>
+          )}
           <div className="mt-2 flex gap-2 flex-wrap">
             <span className="px-2 py-1 text-xs rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.2)', color: '#FFDD40' }}>
               {job.term}
@@ -201,20 +244,87 @@ const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
   );
 };
 
+// Date Range Picker Component
+const DateRangePicker: React.FC<{
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+  onStartChange: (date: Date | undefined) => void;
+  onEndChange: (date: Date | undefined) => void;
+}> = ({ startDate, endDate, onStartChange, onEndChange }) => {
+  return (
+    <div className="flex gap-2 items-center flex-wrap">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-[140px] justify-start text-left font-normal bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#FFDD40]/50",
+              !startDate && "text-muted-foreground"
+            )}
+          >
+            <Calendar className="mr-2 h-4 w-4" />
+            {startDate ? format(startDate, "MMM d, yyyy") : "Start date"}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 bg-background border-white/10" align="start">
+          <CalendarComponent
+            mode="single"
+            selected={startDate}
+            onSelect={onStartChange}
+            initialFocus
+            className="p-3 pointer-events-auto"
+          />
+        </PopoverContent>
+      </Popover>
+      <span className="text-muted-foreground">to</span>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-[140px] justify-start text-left font-normal bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#FFDD40]/50",
+              !endDate && "text-muted-foreground"
+            )}
+          >
+            <Calendar className="mr-2 h-4 w-4" />
+            {endDate ? format(endDate, "MMM d, yyyy") : "End date"}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 bg-background border-white/10" align="start">
+          <CalendarComponent
+            mode="single"
+            selected={endDate}
+            onSelect={onEndChange}
+            initialFocus
+            className="p-3 pointer-events-auto"
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
+
 const JobAlertsPage: React.FC = () => {
   const [data, setData] = useState<JobData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [orderBy, setOrderBy] = useState<keyof JobData>('date');
   const [order, setOrder] = useState<Order>('desc');
-  const [dateFilter, setDateFilter] = useState<string>('this-month');
+  
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState<string>('all');
+  const [selectedLocation, setSelectedLocation] = useState<string>('all');
+  const [startDate, setStartDate] = useState<Date | undefined>(startOfMonth(new Date()));
+  const [endDate, setEndDate] = useState<Date | undefined>(endOfMonth(new Date()));
+  const [showFilters, setShowFilters] = useState(true);
   
   const isMobile = useMediaQuery('(max-width:768px)');
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(CSV_URL + '&t=' + Date.now()); // Cache bust
+      const response = await fetch(CSV_URL + '&t=' + Date.now());
       if (!response.ok) throw new Error('Failed to fetch data');
       const csvText = await response.text();
       console.log('CSV Response:', csvText);
@@ -239,20 +349,89 @@ const JobAlertsPage: React.FC = () => {
     setOrderBy(property);
   };
 
+  // Extract unique locations from data
+  const { countries, locations } = useMemo(() => {
+    const countrySet = new Set<string>();
+    const locationSet = new Set<string>();
+    
+    data.forEach(job => {
+      if (job.location) {
+        locationSet.add(job.location);
+        // Try to extract country (assume last part after comma is country)
+        const parts = job.location.split(',').map(p => p.trim());
+        const lastPart = parts[parts.length - 1]?.toUpperCase();
+        if (lastPart === 'CANADA' || lastPart === 'CA' || lastPart === 'CAN') {
+          countrySet.add('Canada');
+        } else if (lastPart === 'USA' || lastPart === 'US' || lastPart === 'UNITED STATES') {
+          countrySet.add('USA');
+        } else if (parts.length > 0) {
+          countrySet.add(parts[parts.length - 1]);
+        }
+      }
+    });
+    
+    return {
+      countries: Array.from(countrySet).sort(),
+      locations: Array.from(locationSet).sort()
+    };
+  }, [data]);
+
   const filteredAndSortedData = useMemo(() => {
     let filtered = [...data];
     
-    if (dateFilter === 'this-month') {
-      filtered = filtered.filter(row => isThisMonth(row.date));
+    // Search filter (Role, Duties, Company)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(row => 
+        row.role.toLowerCase().includes(query) ||
+        row.duties.toLowerCase().includes(query) ||
+        row.company.toLowerCase().includes(query)
+      );
     }
     
+    // Country filter
+    if (selectedCountry !== 'all') {
+      filtered = filtered.filter(row => {
+        const loc = row.location?.toUpperCase() || '';
+        if (selectedCountry === 'Canada') {
+          return loc.includes('CANADA') || loc.includes(', CA') || loc.endsWith(' CA');
+        } else if (selectedCountry === 'USA') {
+          return loc.includes('USA') || loc.includes('UNITED STATES') || loc.includes(', US') || loc.endsWith(' US');
+        }
+        return loc.includes(selectedCountry.toUpperCase());
+      });
+    }
+    
+    // Location filter
+    if (selectedLocation !== 'all') {
+      filtered = filtered.filter(row => row.location === selectedLocation);
+    }
+    
+    // Date range filter
+    if (startDate || endDate) {
+      filtered = filtered.filter(row => {
+        const jobDate = parseDate(row.date);
+        if (!jobDate) return true; // Include jobs without valid dates
+        
+        if (startDate && endDate) {
+          return isWithinInterval(jobDate, { start: startDate, end: endDate });
+        } else if (startDate) {
+          return jobDate >= startDate;
+        } else if (endDate) {
+          return jobDate <= endDate;
+        }
+        return true;
+      });
+    }
+    
+    // Sort
     filtered.sort((a, b) => {
       const aValue = a[orderBy] || '';
       const bValue = b[orderBy] || '';
       
       if (orderBy === 'date') {
-        const dateA = new Date(aValue).getTime() || 0;
-        const dateB = new Date(bValue).getTime() || 0;
+        const dateA = parseDate(aValue)?.getTime() || 0;
+        const dateB = parseDate(bValue)?.getTime() || 0;
         return order === 'asc' ? dateA - dateB : dateB - dateA;
       }
       
@@ -262,7 +441,15 @@ const JobAlertsPage: React.FC = () => {
     });
     
     return filtered;
-  }, [data, orderBy, order, dateFilter]);
+  }, [data, orderBy, order, searchQuery, selectedCountry, selectedLocation, startDate, endDate]);
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedCountry('all');
+    setSelectedLocation('all');
+    setStartDate(startOfMonth(new Date()));
+    setEndDate(endOfMonth(new Date()));
+  };
 
   return (
     <div className="min-h-screen overflow-x-hidden flex flex-col">
@@ -278,29 +465,102 @@ const JobAlertsPage: React.FC = () => {
             Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
           </p>
           
-          {/* Filters */}
-          <div className="flex gap-3 flex-wrap items-center">
-            <Filter className="w-5 h-5" style={{ color: '#FFDD40' }} />
-            <select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors"
-            >
-              <option value="this-month">This Month</option>
-              <option value="all">All Time</option>
-            </select>
-            <button
-              onClick={() => fetchData()}
-              disabled={loading}
-              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors flex items-center gap-2"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </button>
-            <span className="text-muted-foreground text-sm">
-              {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
-            </span>
-          </div>
+          {/* Toggle Filters Button */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 mb-4 text-sm font-medium hover:opacity-80 transition-opacity"
+            style={{ color: '#FFDD40' }}
+          >
+            <Filter className="w-4 h-4" />
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+            {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+          
+          {/* Filters Section */}
+          {showFilters && (
+            <div className="space-y-4">
+              {/* Search Bar */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search by Role, Duties, or Company..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors"
+                />
+              </div>
+              
+              {/* Filter Row */}
+              <div className="flex gap-3 flex-wrap items-center">
+                {/* Country Filter */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-muted-foreground">Country</label>
+                  <select
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px]"
+                  >
+                    <option value="all">All Countries</option>
+                    <option value="Canada">Canada</option>
+                    <option value="USA">USA</option>
+                    {countries.filter(c => c !== 'Canada' && c !== 'USA').map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Location Filter */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-muted-foreground">City/State</label>
+                  <select
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[150px]"
+                  >
+                    <option value="all">All Locations</option>
+                    {locations.map(loc => (
+                      <option key={loc} value={loc}>{loc}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Date Range */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-muted-foreground">Date Range</label>
+                  <DateRangePicker
+                    startDate={startDate}
+                    endDate={endDate}
+                    onStartChange={setStartDate}
+                    onEndChange={setEndDate}
+                  />
+                </div>
+              </div>
+              
+              {/* Action Row */}
+              <div className="flex gap-3 flex-wrap items-center justify-between">
+                <div className="flex gap-3 items-center">
+                  <button
+                    onClick={() => fetchData()}
+                    disabled={loading}
+                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors flex items-center gap-2"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </button>
+                  <button
+                    onClick={clearFilters}
+                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+                <span className="text-muted-foreground text-sm">
+                  {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {loading ? (
@@ -316,7 +576,7 @@ const JobAlertsPage: React.FC = () => {
           <div>
             {filteredAndSortedData.length === 0 ? (
               <div className="volumetric-glass rounded-3xl p-8 text-center">
-                <p className="text-muted-foreground">No jobs found for the selected filter.</p>
+                <p className="text-muted-foreground">No jobs found for the selected filters.</p>
               </div>
             ) : (
               filteredAndSortedData.map((job, index) => (
@@ -329,7 +589,7 @@ const JobAlertsPage: React.FC = () => {
           <div className="volumetric-glass rounded-3xl overflow-hidden">
             <TableContainer 
               sx={{ 
-                maxHeight: 'calc(100vh - 350px)',
+                maxHeight: 'calc(100vh - 450px)',
                 backgroundColor: 'transparent',
                 '& .MuiTable-root': {
                   backgroundColor: 'transparent',
@@ -381,7 +641,7 @@ const JobAlertsPage: React.FC = () => {
                           borderBottom: 'none',
                         }}
                       >
-                        No jobs found for the selected filter.
+                        No jobs found for the selected filters.
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -397,9 +657,6 @@ const JobAlertsPage: React.FC = () => {
                       >
                         {columns.map((column) => {
                           const value = row[column.id];
-                          const displayValue = column.truncate 
-                            ? truncateText(value, column.truncate)
-                            : value;
                           
                           return (
                             <TableCell 
@@ -410,12 +667,10 @@ const JobAlertsPage: React.FC = () => {
                                 backgroundColor: 'transparent',
                               }}
                             >
-                              {column.truncate && value.length > column.truncate ? (
-                                <Tooltip title={value} arrow placement="top">
-                                  <span style={{ cursor: 'help' }}>{displayValue}</span>
-                                </Tooltip>
+                              {column.truncate ? (
+                                <ExpandableText text={value} maxLength={column.truncate} />
                               ) : (
-                                displayValue
+                                value
                               )}
                             </TableCell>
                           );
