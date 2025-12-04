@@ -262,10 +262,10 @@ const JobAlertsPage: React.FC = () => {
   }, [data, orderBy, order, dateFilter]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden flex flex-col">
       <TopNav />
       
-      <main className="px-4 md:px-6 pb-12 pt-24">
+      <main className="flex-1 px-4 md:px-6 pb-6 pt-24">
         {/* Header Section */}
         <div className="volumetric-glass rounded-3xl p-6 md:p-8 mb-6">
           <h1 className="text-2xl md:text-4xl font-bold mb-3" style={{ color: '#FFDD40' }}>
@@ -419,8 +419,8 @@ const JobAlertsPage: React.FC = () => {
         )}
       </main>
 
-      <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
-        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
+      <footer className="glass-effect rounded-t-3xl mt-auto py-4 px-4">
+        <div className="max-w-7xl mx-auto text-center text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} The Deadly Consultant. All rights reserved.</p>
         </div>
       </footer>
