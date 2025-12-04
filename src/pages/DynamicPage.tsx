@@ -124,7 +124,8 @@ const DynamicPage = () => {
               )}
 
               <div
-                className="prose prose-invert prose-lg max-w-none text-foreground"
+                className="prose prose-invert prose-lg max-w-none text-foreground
+                  prose-headings:text-[#F4C903] prose-headings:font-bold"
                 dangerouslySetInnerHTML={{ __html: content.html || "" }}
               />
             </div>
