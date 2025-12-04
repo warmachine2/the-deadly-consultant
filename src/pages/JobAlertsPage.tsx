@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -9,26 +8,14 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Typography,
-  TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
   Tooltip,
-  CircularProgress,
-  Chip,
-  ThemeProvider,
-  createTheme,
-  CssBaseline,
   IconButton,
   Collapse,
   useMediaQuery,
-  Card,
-  CardContent,
   Stack,
 } from '@mui/material';
-import { KeyboardArrowDown, KeyboardArrowUp, FilterList } from '@mui/icons-material';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import { Filter, Loader2 } from 'lucide-react';
 import TopNav from '@/components/TopNav';
 
 interface JobData {
@@ -53,66 +40,16 @@ type Order = 'asc' | 'desc';
 const SHEET_ID = '1OUBXFK8WOfAccM1iDn59S8tkc6YBWocORuX5pCY3uT8';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#FFDD40',
-    },
-    background: {
-      default: 'transparent',
-      paper: 'rgba(17, 24, 39, 0.8)',
-    },
-    text: {
-      primary: '#e5e7eb',
-      secondary: '#9ca3af',
-    },
-  },
-  components: {
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          borderColor: 'rgba(75, 85, 99, 0.4)',
-        },
-        head: {
-          backgroundColor: 'rgba(31, 41, 55, 0.9)',
-          color: '#FFDD40',
-          fontWeight: 600,
-        },
-      },
-    },
-    MuiTableRow: {
-      styleOverrides: {
-        root: {
-          '&:hover': {
-            backgroundColor: 'rgba(255, 221, 64, 0.08) !important',
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-          backdropFilter: 'blur(10px)',
-        },
-      },
-    },
-  },
-});
-
 const parseCSV = (csvText: string): JobData[] => {
   const lines = csvText.split('\n');
   if (lines.length < 2) return [];
   
   const rows: JobData[] = [];
   
-  // Skip header row (index 0)
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
     
-    // Parse CSV considering quoted fields
     const values: string[] = [];
     let current = '';
     let inQuotes = false;
@@ -187,74 +124,80 @@ const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card sx={{ mb: 2, backgroundColor: 'rgba(31, 41, 55, 0.8)', border: '1px solid rgba(75, 85, 99, 0.4)' }}>
-      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="subtitle1" sx={{ color: '#FFDD40', fontWeight: 600 }}>
-              {job.role}
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#9ca3af' }}>
-              {job.company} • {job.date}
-            </Typography>
-            <Box sx={{ mt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-              <Chip label={job.term} size="small" sx={{ backgroundColor: 'rgba(255, 221, 64, 0.2)', color: '#FFDD40' }} />
-              <Chip label={job.workType} size="small" sx={{ backgroundColor: 'rgba(0, 212, 255, 0.2)', color: '#00d4ff' }} />
-            </Box>
-          </Box>
-          <IconButton size="small" onClick={() => setExpanded(!expanded)} sx={{ color: '#9ca3af' }}>
-            {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        </Box>
-        
-        <Collapse in={expanded}>
-          <Stack spacing={1.5} sx={{ mt: 2 }}>
-            <Box>
-              <Typography variant="caption" sx={{ color: '#FFDD40' }}>Duties</Typography>
-              <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.duties}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ color: '#FFDD40' }}>Required Experience</Typography>
-              <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.requiredExperience}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ color: '#FFDD40' }}>Required Skills</Typography>
-              <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.requiredSkills}</Typography>
-            </Box>
-            {job.additionalRequirements && (
-              <Box>
-                <Typography variant="caption" sx={{ color: '#FFDD40' }}>Additional Requirements</Typography>
-                <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.additionalRequirements}</Typography>
-              </Box>
-            )}
-            {job.comments && (
-              <Box>
-                <Typography variant="caption" sx={{ color: '#FFDD40' }}>Comments</Typography>
-                <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.comments}</Typography>
-              </Box>
-            )}
-            <Box>
-              <Typography variant="caption" sx={{ color: '#FFDD40' }}>Strategy</Typography>
-              <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.strategy}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ color: '#FFDD40' }}>Earning Estimate</Typography>
-              <Typography variant="body2" sx={{ color: '#e5e7eb' }}>{job.earningEstimate}</Typography>
-            </Box>
-            {(job.recruiterEmail || job.recruiterPhone) && (
-              <Box>
-                <Typography variant="caption" sx={{ color: '#FFDD40' }}>Contact</Typography>
-                <Typography variant="body2" sx={{ color: '#e5e7eb' }}>
-                  {job.recruiterEmail && <span>{job.recruiterEmail}</span>}
-                  {job.recruiterEmail && job.recruiterPhone && <span> • </span>}
-                  {job.recruiterPhone && <span>{job.recruiterPhone}</span>}
-                </Typography>
-              </Box>
-            )}
-          </Stack>
-        </Collapse>
-      </CardContent>
-    </Card>
+    <div className="volumetric-glass rounded-2xl p-4 mb-4">
+      <div className="flex justify-between items-start">
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold" style={{ color: '#FFDD40' }}>
+            {job.role}
+          </h3>
+          <p className="text-muted-foreground text-sm">
+            {job.company} • {job.date}
+          </p>
+          <div className="mt-2 flex gap-2 flex-wrap">
+            <span className="px-2 py-1 text-xs rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.2)', color: '#FFDD40' }}>
+              {job.term}
+            </span>
+            <span className="px-2 py-1 text-xs rounded-full" style={{ backgroundColor: 'rgba(0, 212, 255, 0.2)', color: '#00d4ff' }}>
+              {job.workType}
+            </span>
+          </div>
+        </div>
+        <IconButton 
+          size="small" 
+          onClick={() => setExpanded(!expanded)} 
+          sx={{ color: 'rgba(255,255,255,0.6)' }}
+        >
+          {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+        </IconButton>
+      </div>
+      
+      <Collapse in={expanded}>
+        <Stack spacing={3} sx={{ mt: 3 }}>
+          <div>
+            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Duties</p>
+            <p className="text-sm text-foreground/80">{job.duties}</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Required Experience</p>
+            <p className="text-sm text-foreground/80">{job.requiredExperience}</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Required Skills</p>
+            <p className="text-sm text-foreground/80">{job.requiredSkills}</p>
+          </div>
+          {job.additionalRequirements && (
+            <div>
+              <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Additional Requirements</p>
+              <p className="text-sm text-foreground/80">{job.additionalRequirements}</p>
+            </div>
+          )}
+          {job.comments && (
+            <div>
+              <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Comments</p>
+              <p className="text-sm text-foreground/80">{job.comments}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Strategy</p>
+            <p className="text-sm text-foreground/80">{job.strategy}</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Earning Estimate</p>
+            <p className="text-sm text-foreground/80">{job.earningEstimate}</p>
+          </div>
+          {(job.recruiterEmail || job.recruiterPhone) && (
+            <div>
+              <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Contact</p>
+              <p className="text-sm text-foreground/80">
+                {job.recruiterEmail && <span>{job.recruiterEmail}</span>}
+                {job.recruiterEmail && job.recruiterPhone && <span> • </span>}
+                {job.recruiterPhone && <span>{job.recruiterPhone}</span>}
+              </p>
+            </div>
+          )}
+        </Stack>
+      </Collapse>
+    </div>
   );
 };
 
@@ -296,14 +239,10 @@ const JobAlertsPage: React.FC = () => {
   const filteredAndSortedData = useMemo(() => {
     let filtered = [...data];
     
-    // Apply date filter
     if (dateFilter === 'this-month') {
       filtered = filtered.filter(row => isThisMonth(row.date));
-    } else if (dateFilter === 'all') {
-      // Show all
     }
     
-    // Sort
     filtered.sort((a, b) => {
       const aValue = a[orderBy] || '';
       const bValue = b[orderBy] || '';
@@ -323,82 +262,67 @@ const JobAlertsPage: React.FC = () => {
   }, [data, orderBy, order, dateFilter]);
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <div className="min-h-screen bg-background">
-        <TopNav />
-        
-        <main className="container mx-auto px-4 py-8 pt-24">
-          <Box sx={{ mb: 4 }}>
-            <Typography 
-              variant="h4" 
-              component="h1" 
-              sx={{ 
-                color: '#FFDD40', 
-                fontWeight: 700,
-                mb: 2,
-                fontSize: { xs: '1.5rem', md: '2.125rem' }
-              }}
+    <div className="min-h-screen overflow-x-hidden">
+      <TopNav />
+      
+      <main className="px-4 md:px-6 pb-12 pt-24">
+        {/* Header Section */}
+        <div className="volumetric-glass rounded-3xl p-6 md:p-8 mb-6">
+          <h1 className="text-2xl md:text-4xl font-bold mb-3" style={{ color: '#FFDD40' }}>
+            Deadly Job Alerts: BI-FinTech / AI Deployment PM Consulting Gigs
+          </h1>
+          <p className="text-muted-foreground mb-6">
+            Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
+          </p>
+          
+          {/* Filters */}
+          <div className="flex gap-3 flex-wrap items-center">
+            <Filter className="w-5 h-5" style={{ color: '#FFDD40' }} />
+            <select
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors"
             >
-              Deadly Job Alerts: BI-FinTech / AI Deployment PM Consulting Gigs
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#9ca3af', mb: 3 }}>
-              Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
-            </Typography>
-            
-            {/* Filters */}
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mb: 3 }}>
-              <FilterList sx={{ color: '#FFDD40' }} />
-              <FormControl size="small" sx={{ minWidth: 150 }}>
-                <InputLabel sx={{ color: '#9ca3af' }}>Date Filter</InputLabel>
-                <Select
-                  value={dateFilter}
-                  label="Date Filter"
-                  onChange={(e) => setDateFilter(e.target.value)}
-                  sx={{ 
-                    color: '#e5e7eb',
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(75, 85, 99, 0.6)' },
-                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#FFDD40' },
-                  }}
-                >
-                  <MenuItem value="this-month">This Month</MenuItem>
-                  <MenuItem value="all">All Time</MenuItem>
-                </Select>
-              </FormControl>
-              <Typography variant="body2" sx={{ color: '#9ca3af' }}>
-                {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
-              </Typography>
-            </Box>
-          </Box>
+              <option value="this-month">This Month</option>
+              <option value="all">All Time</option>
+            </select>
+            <span className="text-muted-foreground text-sm">
+              {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
+            </span>
+          </div>
+        </div>
 
-          {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress sx={{ color: '#FFDD40' }} />
-            </Box>
-          ) : error ? (
-            <Paper sx={{ p: 4, textAlign: 'center' }}>
-              <Typography color="error">{error}</Typography>
-            </Paper>
-          ) : isMobile ? (
-            // Mobile view - cards
-            <Box>
-              {filteredAndSortedData.length === 0 ? (
-                <Paper sx={{ p: 4, textAlign: 'center' }}>
-                  <Typography sx={{ color: '#9ca3af' }}>No jobs found for the selected filter.</Typography>
-                </Paper>
-              ) : (
-                filteredAndSortedData.map((job, index) => (
-                  <MobileJobCard key={index} job={job} />
-                ))
-              )}
-            </Box>
-          ) : (
-            // Desktop view - table
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[400px]">
+            <Loader2 className="w-8 h-8 text-accent animate-spin" />
+          </div>
+        ) : error ? (
+          <div className="volumetric-glass rounded-3xl p-8 text-center">
+            <p className="text-red-400">{error}</p>
+          </div>
+        ) : isMobile ? (
+          // Mobile view - cards
+          <div>
+            {filteredAndSortedData.length === 0 ? (
+              <div className="volumetric-glass rounded-3xl p-8 text-center">
+                <p className="text-muted-foreground">No jobs found for the selected filter.</p>
+              </div>
+            ) : (
+              filteredAndSortedData.map((job, index) => (
+                <MobileJobCard key={index} job={job} />
+              ))
+            )}
+          </div>
+        ) : (
+          // Desktop view - table
+          <div className="volumetric-glass rounded-3xl overflow-hidden">
             <TableContainer 
-              component={Paper} 
               sx={{ 
-                maxHeight: 'calc(100vh - 300px)',
-                border: '1px solid rgba(75, 85, 99, 0.4)',
+                maxHeight: 'calc(100vh - 350px)',
+                backgroundColor: 'transparent',
+                '& .MuiTable-root': {
+                  backgroundColor: 'transparent',
+                }
               }}
             >
               <Table stickyHeader size="small">
@@ -409,6 +333,12 @@ const JobAlertsPage: React.FC = () => {
                         key={column.id}
                         style={{ minWidth: column.minWidth }}
                         sortDirection={orderBy === column.id ? order : false}
+                        sx={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                          color: '#FFDD40',
+                          fontWeight: 600,
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        }}
                       >
                         <TableSortLabel
                           active={orderBy === column.id}
@@ -430,13 +360,30 @@ const JobAlertsPage: React.FC = () => {
                 <TableBody>
                   {filteredAndSortedData.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={columns.length} sx={{ textAlign: 'center', py: 4 }}>
-                        <Typography sx={{ color: '#9ca3af' }}>No jobs found for the selected filter.</Typography>
+                      <TableCell 
+                        colSpan={columns.length} 
+                        sx={{ 
+                          textAlign: 'center', 
+                          py: 6, 
+                          color: 'rgba(255,255,255,0.6)',
+                          backgroundColor: 'transparent',
+                          borderBottom: 'none',
+                        }}
+                      >
+                        No jobs found for the selected filter.
                       </TableCell>
                     </TableRow>
                   ) : (
                     filteredAndSortedData.map((row, index) => (
-                      <TableRow hover key={index}>
+                      <TableRow 
+                        hover 
+                        key={index}
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 221, 64, 0.05) !important',
+                          },
+                        }}
+                      >
                         {columns.map((column) => {
                           const value = row[column.id];
                           const displayValue = column.truncate 
@@ -444,7 +391,14 @@ const JobAlertsPage: React.FC = () => {
                             : value;
                           
                           return (
-                            <TableCell key={column.id}>
+                            <TableCell 
+                              key={column.id}
+                              sx={{
+                                color: 'rgba(255,255,255,0.8)',
+                                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                                backgroundColor: 'transparent',
+                              }}
+                            >
                               {column.truncate && value.length > column.truncate ? (
                                 <Tooltip title={value} arrow placement="top">
                                   <span style={{ cursor: 'help' }}>{displayValue}</span>
@@ -461,14 +415,16 @@ const JobAlertsPage: React.FC = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          )}
-        </main>
+          </div>
+        )}
+      </main>
 
-        <footer className="py-8 text-center text-muted-foreground border-t border-border/40">
+      <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
+        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} The Deadly Consultant. All rights reserved.</p>
-        </footer>
-      </div>
-    </ThemeProvider>
+        </div>
+      </footer>
+    </div>
   );
 };
 
