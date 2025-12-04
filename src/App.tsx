@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import RoadmapPage from "./pages/RoadmapPage";
 import AboutPage from "./pages/AboutPage";
 import DynamicPage from "./pages/DynamicPage";
+import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/2026-bi-fintech-consulting-roadmap-pdf-unlock" element={<RoadmapPage />} />
           <Route path="/about-post" element={<AboutPage />} />
+          <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="/:slug" element={<DynamicPage />} />
           <Route path="*" element={<NotFound />} />
