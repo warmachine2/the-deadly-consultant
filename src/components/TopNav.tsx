@@ -128,7 +128,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-gray-900 border border-white/20 min-w-[200px]">
               <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/3KS-Tracker" className="w-full">
+                <Link to="/3ks-tracker" className="w-full">
                   3KS Productivity Tracker
                 </Link>
               </DropdownMenuItem>
