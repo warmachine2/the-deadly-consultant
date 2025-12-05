@@ -41,8 +41,9 @@ const HeroSection = () => {
           </a>
 
           {/* Second CTA Button - Job Alerts */}
-          <button 
-            className="flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-not-allowed min-h-[100px] md:min-h-[120px]" 
+          <a 
+            href="/ai-bi-fintech-pm-job-alerts-repo"
+            className="flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[100px] md:min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -50,10 +51,9 @@ const HeroSection = () => {
             }}
           >
             <span className="block">Weekly $10k/mo+</span>
-            <span className="block"><span className="text-[#F4C903]">Job Alerts</span> (Members Only)</span>
+            <span className="block"><span className="text-[#F4C903]">Job Alerts</span> + New PM Contract Job Board</span>
             <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
-            <span className="text-[8px] sm:text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
-          </button>
+          </a>
 
           {/* Third CTA Button - Strategy Guide */}
           <button 
