@@ -290,7 +290,7 @@ const JobCard: React.FC<{
             </a>
             <span className="text-[10px] mt-1" style={{
             color: 'rgba(255, 255, 255, 0.5)'
-          }}>Pivot &amp; Training Call  Hassan</span>
+          }}>Pivot & Training Call w/ Hassan Khan</span>
           </div>
           <IconButton size="medium" onClick={() => setExpanded(!expanded)} sx={{
           color: '#FFDD40',
