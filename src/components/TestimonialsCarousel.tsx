@@ -3,14 +3,14 @@ import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "Hassan's systems landed me $12k/mo gig",
-    author: "Pilot Student",
+    quote: "The strategy session with Hassan was a game-changer – he delivered an ultra-actionable AI-Proof 90-day roadmap that's fast-tracking my pivot to $10k/mo+ BI-FinTech PM consulting. Invaluable insights on CPMAI trifecta and $60k tools. Following it now!",
+    author: "Jeffrey Osarfo",
     filled: true,
   },
   {
-    quote: "",
-    author: "",
-    filled: false,
+    quote: "Hassan's systems landed me $12k/mo gig",
+    author: "Pilot Student",
+    filled: true,
   },
   {
     quote: "",
