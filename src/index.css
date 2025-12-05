@@ -657,7 +657,7 @@ All colors MUST be HSL.
       1px -1px 0 #000,
       -1px 1px 0 #000,
       1px 1px 0 #000,
-      0 0 20px rgba(244, 201, 3, 0.5);
+      0 0 20px rgba(0, 0, 0, 0.5);
     -webkit-text-stroke: 1px #000;
   }
 
@@ -799,7 +799,7 @@ All colors MUST be HSL.
       1px -1px 0 #000,
       -1px 1px 0 #000,
       1px 1px 0 #000,
-      0 0 20px rgba(244, 201, 3, 0.5);
+      0 0 20px rgba(0, 0, 0, 0.5);
     -webkit-text-stroke: 1px #000;
   }
 }
