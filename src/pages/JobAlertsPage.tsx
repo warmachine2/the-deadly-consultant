@@ -538,8 +538,18 @@ const JobAlertsPage: React.FC = () => {
           )}
           
           {/* Filters Section */}
-          {showFilters && (
-            <div className="space-y-4">
+          {showFilters ? (
+            <div 
+              className="space-y-4 cursor-pointer"
+              onClick={(e) => {
+                // Only collapse if clicking on the container background, not on interactive elements
+                const target = e.target as HTMLElement;
+                const isInteractive = target.closest('input, select, button, a, [role="button"]');
+                if (!isInteractive) {
+                  setShowFilters(false);
+                }
+              }}
+            >
               {/* Search Bar */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -621,6 +631,24 @@ const JobAlertsPage: React.FC = () => {
                 </span>
               </div>
             </div>
+          ) : (
+            <div 
+              className="volumetric-glass-inner rounded-2xl p-4 cursor-pointer hover:border-[#FFDD40]/50 transition-all mt-4"
+              onClick={() => setShowFilters(true)}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Filter className="w-5 h-5" style={{ color: '#FFDD40' }} />
+                  <span className="text-sm font-medium" style={{ color: '#FFDD40' }}>
+                    Filters & Search
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    (Click to expand)
+                  </span>
+                </div>
+                <ChevronDown className="w-4 h-4" style={{ color: '#FFDD40' }} />
+              </div>
+            </div>
           )}
         </div>
 
@@ -628,12 +656,24 @@ const JobAlertsPage: React.FC = () => {
         {!loading && data.length > 0 && (
           <div className="mb-6">
             {showAnalytics ? (
-              <JobAnalyticsCharts
-                data={data}
-                onRoleFilterClick={handleRoleFilterClick}
-                onCountryFilterClick={handleCountryFilterClick}
-                onDateRangeClick={handleDateRangeClick}
-              />
+              <div 
+                className="cursor-pointer"
+                onClick={(e) => {
+                  // Only collapse if clicking on empty area, not on interactive chart elements
+                  const target = e.target as HTMLElement;
+                  const isInteractive = target.closest('canvas, button, a, [role="button"], .recharts-wrapper');
+                  if (!isInteractive) {
+                    setShowAnalytics(false);
+                  }
+                }}
+              >
+                <JobAnalyticsCharts
+                  data={data}
+                  onRoleFilterClick={handleRoleFilterClick}
+                  onCountryFilterClick={handleCountryFilterClick}
+                  onDateRangeClick={handleDateRangeClick}
+                />
+              </div>
             ) : (
               <div 
                 className="volumetric-glass rounded-2xl p-4 cursor-pointer hover:border-[#00d4ff]/50 transition-all"
