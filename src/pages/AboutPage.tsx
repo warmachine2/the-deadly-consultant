@@ -88,7 +88,7 @@ const AboutPage = () => {
             )}
 
             <div className="p-6 md:p-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#F4C903] mb-6">
                 {content.title}
               </h1>
 
@@ -108,7 +108,9 @@ const AboutPage = () => {
               )}
 
               <div
-                className="prose prose-invert prose-lg max-w-none text-foreground"
+                className="prose prose-invert prose-lg max-w-none text-foreground
+                  [&_h1]:text-[#F4C903] [&_h2]:text-[#F4C903] [&_h3]:text-[#F4C903] [&_h4]:text-[#F4C903] [&_h5]:text-[#F4C903] [&_h6]:text-[#F4C903]
+                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold"
                 dangerouslySetInnerHTML={{ __html: content.html || "" }}
               />
             </div>
