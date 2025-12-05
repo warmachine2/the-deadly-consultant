@@ -99,7 +99,7 @@ const AboutPage = () => {
                     .map((tag) => (
                       <span
                         key={tag.slug}
-                        className="px-3 py-1 volumetric-glass-button rounded-full text-sm text-white/80"
+                        className="px-3 py-1 volumetric-glass-button rounded-full text-sm text-white/80 hover:text-[#F4C903] hover:font-bold transition-all cursor-default"
                       >
                         {tag.name}
                       </span>
