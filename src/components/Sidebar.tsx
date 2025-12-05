@@ -67,6 +67,28 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
         {/* Testimonials - compact */}
         <TestimonialsCarousel />
 
+        {/* Strategy Session CTA */}
+        <div className="border-t border-white/10 pt-4 mb-4">
+          <a
+            href="https://calendly.com/hassankhalidkhan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full px-4 py-4 rounded-xl text-center transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-cyan-400/60"
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
+          >
+            <span className="block text-sm font-bold text-white hover:text-[#F4C903] transition-colors">
+              Book Free 45-Min Strategy Session
+            </span>
+            <span className="block text-[10px] text-white/70 mt-2 leading-tight">
+              Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
+            </span>
+          </a>
+        </div>
+
         <div className="border-t border-white/10 pt-4">
           <h2 className="text-lg font-bold text-white mb-4 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16 hover:text-[#F4C903] transition-colors cursor-default">
             Filter by Tags
