@@ -14,7 +14,7 @@ import {
   Stack,
 } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3 } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
+
+const ITEMS_PER_PAGE = 50;
 
 interface JobData {
   date: string;
@@ -321,6 +329,8 @@ const JobAlertsPage: React.FC = () => {
   const [endDate, setEndDate] = useState<Date | undefined>(endOfMonth(new Date()));
   const [showFilters, setShowFilters] = useState(true);
   const [showAnalytics, setShowAnalytics] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showStrategyModal, setShowStrategyModal] = useState(false);
 
   // Role categorization helper
   const categorizeRole = (role: string): string => {
@@ -475,6 +485,18 @@ const JobAlertsPage: React.FC = () => {
     return filtered;
   }, [data, orderBy, order, searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate]);
 
+  // Pagination
+  const totalPages = Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE);
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredAndSortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredAndSortedData, currentPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate]);
+
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedRoleType('all');
@@ -482,6 +504,7 @@ const JobAlertsPage: React.FC = () => {
     setSelectedLocation('all');
     setStartDate(startOfMonth(new Date()));
     setEndDate(endOfMonth(new Date()));
+    setCurrentPage(1);
   };
 
   return (
@@ -494,8 +517,11 @@ const JobAlertsPage: React.FC = () => {
           <h1 className="text-2xl md:text-4xl font-bold mb-3" style={{ color: '#FFDD40' }}>
             Deadly Job Alerts: BI-FinTech / AI Deployment PM Consulting Gigs
           </h1>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-2">
             Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
+          </p>
+          <p className="text-sm mb-6" style={{ color: '#00d4ff' }}>
+            Only recruiter-sourced gigs shown. AI-parsed for AI/BI-FinTech PM fits.
           </p>
           
           {/* Toggle Buttons Row */}
@@ -650,7 +676,56 @@ const JobAlertsPage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* CTA Button */}
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setShowStrategyModal(true)}
+              className="px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
+                boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
+                border: '1px solid rgba(0, 150, 255, 0.4)',
+              }}
+            >
+              <CalendarCheck className="inline-block w-5 h-5 mr-2" />
+              Book Free 45-Min Strategy Session
+            </button>
+            <p className="text-sm text-muted-foreground mt-2">
+              Discuss career pivot and training options to these roles from your current position with me personally
+            </p>
+          </div>
         </div>
+
+        {/* Strategy Session Modal */}
+        <Dialog open={showStrategyModal} onOpenChange={setShowStrategyModal}>
+          <DialogContent className="volumetric-glass border-[#00d4ff]/30 max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold" style={{ color: '#FFDD40' }}>
+                Discuss your AI-Proof Pivot: Certs, Tools, $10k/mo Gigs
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <p className="text-muted-foreground">
+                Book a free 45-minute strategy session to discuss your career pivot, certification paths, and how to land these high-paying consulting gigs.
+              </p>
+              <a
+                href="https://calendly.com/hassankhalidkhan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full px-6 py-4 rounded-xl font-bold text-white text-center transition-all duration-300 hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
+                  boxShadow: '0 0 20px rgba(0, 150, 255, 0.4)',
+                  border: '1px solid rgba(0, 150, 255, 0.4)',
+                }}
+              >
+                <CalendarCheck className="inline-block w-5 h-5 mr-2" />
+                Schedule on Calendly
+              </a>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Analytics Section */}
         {!loading && data.length > 0 && (
@@ -712,9 +787,33 @@ const JobAlertsPage: React.FC = () => {
                 <p className="text-muted-foreground">No jobs found for the selected filters.</p>
               </div>
             ) : (
-              filteredAndSortedData.map((job, index) => (
-                <MobileJobCard key={index} job={job} />
-              ))
+              <>
+                {paginatedData.map((job, index) => (
+                  <MobileJobCard key={index} job={job} />
+                ))}
+                {/* Pagination for Mobile */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-4 mt-6 mb-4">
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <span className="text-sm text-muted-foreground">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         ) : (
@@ -778,7 +877,7 @@ const JobAlertsPage: React.FC = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredAndSortedData.map((row, index) => (
+                    paginatedData.map((row, index) => (
                       <TableRow 
                         hover 
                         key={index}
@@ -814,6 +913,30 @@ const JobAlertsPage: React.FC = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            {/* Pagination for Desktop */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-4 py-4 border-t border-white/10">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Previous
+                </button>
+                <span className="text-sm text-muted-foreground">
+                  Page {currentPage} of {totalPages} ({filteredAndSortedData.length} total)
+                </span>
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </main>
