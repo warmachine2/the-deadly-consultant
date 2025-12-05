@@ -342,6 +342,24 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
           )}
         </div>
       </Collapse>
+      
+      {/* Mini CTA */}
+      <div className="mt-5 pt-4 border-t border-white/10">
+        <a 
+          href="https://calendly.com/hassankhalidkhan" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.15), rgba(255, 221, 64, 0.08))',
+            border: '1px solid rgba(255, 221, 64, 0.4)',
+            color: '#FFDD40',
+          }}
+        >
+          <CalendarCheck className="w-4 h-4" />
+          Discuss Pivot & Training — Free Strategy Session
+        </a>
+      </div>
     </div>
   );
 };
