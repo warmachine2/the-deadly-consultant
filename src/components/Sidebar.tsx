@@ -96,11 +96,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
                         : "volumetric-glass-button text-white/80 hover:text-[#F4C903] hover:font-bold"}
                     `}
                   >
-                    <span
-                      style={selectedTags.includes(tag) ? { color: "#F4C903" } : {}}
-                    >
-                      {tag}
-                    </span>
+                    {tag}
                   </button>
                 ))
               )}
