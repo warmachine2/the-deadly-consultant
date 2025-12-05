@@ -9,7 +9,6 @@ import Sidebar from "@/components/Sidebar";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2, Filter } from "lucide-react";
 import RoadmapCard from "@/components/RoadmapCard";
-import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -201,8 +200,6 @@ const Index = () => {
           isLoading={modalLoading}
         />
       )}
-
-      <TestimonialsCarousel />
 
       <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
