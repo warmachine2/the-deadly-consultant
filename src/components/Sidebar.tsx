@@ -63,7 +63,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
           </button>
         )}
 
-        <h2 className="text-xl font-bold text-white mt-4 mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16">
+        <h2 className="text-xl font-bold text-white mt-4 mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16 hover:text-[#F4C903] transition-colors cursor-default">
           Filter by Tags
         </h2>
 
@@ -71,7 +71,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
         <div>
           <button
             onClick={() => setShowTags(!showTags)}
-            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]"
+            className="flex items-center justify-between w-full mb-3 text-sm font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(59,130,246,0.4)] hover:text-[#F4C903] transition-colors"
           >
             Tags
             <ChevronDown
@@ -91,7 +91,9 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
                     onClick={() => onTagToggle(tag)}
                     className={`
                       px-4 py-3 rounded-2xl text-xs font-medium italic transition-all
-                      ${selectedTags.includes(tag) ? "volumetric-glass-active" : "volumetric-glass-button text-white/80"}
+                      ${selectedTags.includes(tag) 
+                        ? "volumetric-glass-active text-[#F4C903] font-bold" 
+                        : "volumetric-glass-button text-white/80 hover:text-[#F4C903] hover:font-bold"}
                     `}
                   >
                     <span
