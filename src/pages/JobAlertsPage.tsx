@@ -237,10 +237,10 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
 
       {/* Tags */}
       <div className="mt-4 flex gap-3 flex-wrap">
-        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.15)', color: '#FFDD40', border: '1px solid rgba(255, 221, 64, 0.3)' }}>
+        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
           {job.term}
         </span>
-        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.15)', color: '#FFDD40', border: '1px solid rgba(255, 221, 64, 0.3)' }}>
+        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
           {job.workType}
         </span>
         {job.earningEstimate && (
@@ -253,7 +253,7 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
       {/* Preview (always visible) */}
       {job.duties && (
         <div className="mt-5">
-          <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Duties</p>
+          <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Duties</p>
           <p className="text-base md:text-lg text-white line-clamp-2">{job.duties}</p>
         </div>
       )}
@@ -263,40 +263,40 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
         <div className="mt-5 pt-5 border-t border-white/10 space-y-5">
           {job.requiredExperience && (
             <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Required Experience</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Required Experience</p>
               <p className="text-base md:text-lg text-white">{job.requiredExperience}</p>
             </div>
           )}
           {job.requiredSkills && (
             <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Required Skills</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Required Skills</p>
               <p className="text-base md:text-lg text-white">{job.requiredSkills}</p>
             </div>
           )}
           {job.additionalRequirements && (
             <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Additional Requirements</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Additional Requirements</p>
               <p className="text-base md:text-lg text-white">{job.additionalRequirements}</p>
             </div>
           )}
           {job.comments && (
             <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Comments</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Comments</p>
               <p className="text-base md:text-lg text-white">{job.comments}</p>
             </div>
           )}
           {job.strategy && (
-            <div className="p-4 md:p-5 rounded-xl" style={{ backgroundColor: 'rgba(255, 221, 64, 0.08)', border: '1px solid rgba(255, 221, 64, 0.2)' }}>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Strategy</p>
+            <div className="p-4 md:p-5 rounded-xl" style={{ backgroundColor: 'rgba(0, 212, 255, 0.08)', border: '1px solid rgba(0, 212, 255, 0.2)' }}>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Strategy</p>
               <p className="text-base md:text-lg text-white">{job.strategy}</p>
             </div>
           )}
           {(job.recruiterEmail || job.recruiterPhone) && (
             <div className="pt-3 border-t border-white/10">
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-3" style={{ color: '#FFDD40' }}>Recruiter Contact</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-3" style={{ color: '#00d4ff' }}>Recruiter Contact</p>
               <div className="flex flex-wrap gap-4 text-base md:text-lg">
                 {job.recruiterEmail && (
-                  <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#FFDD40] transition-colors">
+                  <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
                     {job.recruiterEmail}
                   </a>
                 )}
@@ -738,20 +738,22 @@ const JobAlertsPage: React.FC = () => {
 
           {/* CTA Button */}
           <div className="mt-6 text-center">
-            <button
-              onClick={() => setShowStrategyModal(true)}
-              className="px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105"
+            <a
+              href="https://calendly.com/hassankhalidkhan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
                 boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
                 border: '1px solid rgba(0, 150, 255, 0.4)',
               }}
             >
-              <CalendarCheck className="inline-block w-5 h-5 mr-2" />
+              <CalendarCheck className="w-5 h-5 mr-2" />
               Book Free 45-Min Strategy Session
-            </button>
-            <p className="text-sm mt-2" style={{ color: '#FFDD40' }}>
-              Let's map your career pivot and explore tailored training paths to land these roles — one-on-one with me
+            </a>
+            <p className="text-base md:text-lg mt-3" style={{ color: '#FFDD40' }}>
+              Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
             </p>
           </div>
         </div>
