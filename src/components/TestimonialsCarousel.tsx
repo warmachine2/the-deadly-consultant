@@ -41,58 +41,54 @@ const TestimonialsCarousel = () => {
   const current = testimonials[currentIndex];
 
   return (
-    <section className="py-16 px-4">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          What Our Students Say
-        </h2>
-        
-        <div className="relative volumetric-glass rounded-2xl p-8 md:p-12 min-h-[200px] flex flex-col items-center justify-center">
-          {/* Quote Icon */}
-          <Quote className="w-12 h-12 text-[hsl(var(--accent))] opacity-50 mb-6" />
-          
+    <section className="py-12 px-4">
+      <div className="w-[75%] mx-auto">
+        <div className="relative volumetric-glass rounded-2xl px-16 py-8 flex items-center justify-center">
+          {/* Left Arrow */}
+          <button
+            onClick={goToPrev}
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#FFDD40]/20 hover:bg-[#FFDD40]/40 transition-colors border border-[#FFDD40]/30"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="w-5 h-5 text-[#FFDD40]" />
+          </button>
+
           {/* Testimonial Content */}
-          <div className="text-center">
+          <div className="text-center flex items-center gap-4">
+            <Quote className="w-8 h-8 text-[#FFDD40] opacity-60 flex-shrink-0" />
             {current.filled ? (
-              <>
-                <p className="text-xl md:text-2xl text-foreground/90 italic mb-6">
+              <div className="flex items-center gap-3">
+                <p className="text-lg md:text-xl text-foreground/90 italic">
                   "{current.quote}"
                 </p>
-                <p className="text-[hsl(var(--accent))] font-semibold">
+                <span className="text-[#FFDD40] font-semibold whitespace-nowrap">
                   – {current.author}
-                </p>
-              </>
+                </span>
+              </div>
             ) : (
-              <p className="text-muted-foreground italic">
+              <p className="text-muted-foreground italic text-lg">
                 Your success story could be here...
               </p>
             )}
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={goToPrev}
-            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/20 hover:bg-background/40 transition-colors"
-            aria-label="Previous testimonial"
-          >
-            <ChevronLeft className="w-6 h-6 text-foreground" />
-          </button>
+          {/* Right Arrow */}
           <button
             onClick={goToNext}
-            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/20 hover:bg-background/40 transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-[#FFDD40]/20 hover:bg-[#FFDD40]/40 transition-colors border border-[#FFDD40]/30"
             aria-label="Next testimonial"
           >
-            <ChevronRight className="w-6 h-6 text-foreground" />
+            <ChevronRight className="w-5 h-5 text-[#FFDD40]" />
           </button>
 
           {/* Dots Indicator */}
-          <div className="flex gap-2 mt-8">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-[hsl(var(--accent))]' : 'bg-foreground/30'
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                  index === currentIndex ? 'bg-[#FFDD40]' : 'bg-foreground/30'
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
               />
@@ -101,13 +97,13 @@ const TestimonialsCarousel = () => {
         </div>
 
         {/* CTA Button */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-6">
           <a
             href="https://www.skool.com/bi-fintech-consultant-academy/about"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button className="volumetric-glass-button text-lg px-8 py-6">
+            <Button className="volumetric-glass-button px-6 py-3 text-base">
               See More Success Stories
             </Button>
           </a>
