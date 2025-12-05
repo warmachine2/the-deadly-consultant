@@ -662,6 +662,22 @@ All colors MUST be HSL.
     -webkit-text-stroke: 0.5px #000;
   }
 
+  /* Ensure italicized text within headings also uses gold yellow */
+  .prose h1 em,
+  .prose h1 i,
+  .prose h2 em,
+  .prose h2 i,
+  .prose h3 em,
+  .prose h3 i,
+  .prose h4 em,
+  .prose h4 i,
+  .prose h5 em,
+  .prose h5 i,
+  .prose h6 em,
+  .prose h6 i {
+    color: #F4C903 !important;
+  }
+
   .prose h1 {
     font-size: 3.5rem;
   }
