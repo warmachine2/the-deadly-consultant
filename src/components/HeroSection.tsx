@@ -41,8 +41,8 @@ const HeroSection = () => {
           backdropFilter: "blur(9px) saturate(150%)",
           WebkitBackdropFilter: "blur(9px) saturate(150%)"
         }}>
-            <span className="block"> $10k/mo+</span>
-            <span className="block"><span className="text-[#F4C903]">Job Alerts</span> + New PM Contract Job Board</span>
+            <span className="block">$10k/mo+ Job Alerts</span>
+            <span className="block">+ AI/BI-FinTech <span className="text-[#F4C903]">PM Job Board</span></span>
             <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
           </a>
 
