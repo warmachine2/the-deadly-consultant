@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Pie, Bar, Line } from 'react-chartjs-2';
 import { useMediaQuery } from '@mui/material';
-import { format, parseISO, parse } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 ChartJS.register(
   CategoryScale,
