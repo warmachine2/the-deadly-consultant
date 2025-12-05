@@ -1,4 +1,4 @@
-import { X, ChevronDown } from "lucide-react";
+import { X, ChevronDown, Calendar } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
@@ -73,20 +73,16 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
             href="https://calendly.com/hassankhalidkhan"
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full px-4 py-4 rounded-xl text-center transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-cyan-400/60"
-            style={{
-              background: "rgba(15, 15, 15, 0.85)",
-              backdropFilter: "blur(9px) saturate(150%)",
-              WebkitBackdropFilter: "blur(9px) saturate(150%)"
-            }}
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full text-center transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] bg-[#1e6091] hover:bg-[#2980b9]"
           >
-            <span className="block text-sm font-bold text-white hover:text-[#F4C903] transition-colors">
+            <Calendar className="w-4 h-4 text-white" />
+            <span className="text-sm font-bold text-white">
               Book Free 45-Min Strategy Session
             </span>
-            <span className="block text-[10px] text-white/70 mt-2 leading-tight">
-              Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
-            </span>
           </a>
+          <p className="text-[10px] text-[#F4C903] mt-3 leading-tight text-center">
+            Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
+          </p>
         </div>
 
         <div className="border-t border-white/10 pt-4">
