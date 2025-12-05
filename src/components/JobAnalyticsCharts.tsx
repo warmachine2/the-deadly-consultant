@@ -32,8 +32,19 @@ ChartJS.register(
 interface JobData {
   date: string;
   role: string;
+  term: string;
+  duties: string;
+  requiredExperience: string;
+  requiredSkills: string;
+  additionalRequirements: string;
+  comments: string;
+  workType: string;
+  company: string;
+  recruiterEmail: string;
+  recruiterPhone: string;
+  strategy: string;
+  earningEstimate: string;
   location: string;
-  [key: string]: string;
 }
 
 interface JobAnalyticsChartsProps {
