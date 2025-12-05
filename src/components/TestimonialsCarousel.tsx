@@ -42,8 +42,8 @@ const TestimonialsCarousel = () => {
   return (
     <div className="mb-6">
       <div className="flex flex-col items-center">
-        {/* Quote and Content */}
-        <div className="text-center px-2">
+        {/* Quote and Content - Fixed height container */}
+        <div className="text-center px-2 min-h-[80px] flex flex-col justify-center">
           <Quote className="w-5 h-5 text-[#FFDD40] opacity-60 mx-auto mb-2" />
           {current.filled ? (
             <>
