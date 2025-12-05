@@ -59,49 +59,83 @@ const SHEET_ID = '1OUBXFK8WOfAccM1iDn59S8tkc6YBWocORuX5pCY3uT8';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
 const parseCSV = (csvText: string): JobData[] => {
-  const lines = csvText.split('\n');
-  if (lines.length < 2) return [];
-  
+  // Handle multi-line quoted fields properly
   const rows: JobData[] = [];
+  const chars = csvText.split('');
+  let currentField = '';
+  let currentRow: string[] = [];
+  let inQuotes = false;
+  let isFirstRow = true;
   
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
+  for (let i = 0; i < chars.length; i++) {
+    const char = chars[i];
+    const nextChar = chars[i + 1];
     
-    const values: string[] = [];
-    let current = '';
-    let inQuotes = false;
-    
-    for (let j = 0; j < line.length; j++) {
-      const char = line[j];
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
-        values.push(current.trim());
-        current = '';
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        // Escaped quote
+        currentField += '"';
+        i++; // Skip next quote
       } else {
-        current += char;
+        // Toggle quote state
+        inQuotes = !inQuotes;
       }
+    } else if (char === ',' && !inQuotes) {
+      currentRow.push(currentField.trim());
+      currentField = '';
+    } else if ((char === '\n' || (char === '\r' && nextChar === '\n')) && !inQuotes) {
+      // End of row
+      if (char === '\r') i++; // Skip \n in \r\n
+      currentRow.push(currentField.trim());
+      currentField = '';
+      
+      if (isFirstRow) {
+        isFirstRow = false;
+      } else if (currentRow.length >= 14 && currentRow.some(v => v)) {
+        rows.push({
+          date: currentRow[0] || '',
+          role: currentRow[1] || '',
+          term: currentRow[2] || '',
+          duties: currentRow[3] || '',
+          requiredExperience: currentRow[4] || '',
+          requiredSkills: currentRow[5] || '',
+          additionalRequirements: currentRow[6] || '',
+          comments: currentRow[7] || '',
+          workType: currentRow[8] || '',
+          company: currentRow[9] || '',
+          recruiterEmail: currentRow[10] || '',
+          recruiterPhone: currentRow[11] || '',
+          strategy: currentRow[12] || '',
+          earningEstimate: currentRow[13] || '',
+          location: currentRow[14] || '',
+        });
+      }
+      currentRow = [];
+    } else {
+      currentField += char;
     }
-    values.push(current.trim());
-    
-    if (values.length >= 14) {
+  }
+  
+  // Handle last row if no trailing newline
+  if (currentRow.length > 0 || currentField) {
+    currentRow.push(currentField.trim());
+    if (!isFirstRow && currentRow.length >= 14 && currentRow.some(v => v)) {
       rows.push({
-        date: values[0] || '',
-        role: values[1] || '',
-        term: values[2] || '',
-        duties: values[3] || '',
-        requiredExperience: values[4] || '',
-        requiredSkills: values[5] || '',
-        additionalRequirements: values[6] || '',
-        comments: values[7] || '',
-        workType: values[8] || '',
-        company: values[9] || '',
-        recruiterEmail: values[10] || '',
-        recruiterPhone: values[11] || '',
-        strategy: values[12] || '',
-        earningEstimate: values[13] || '',
-        location: values[14] || '', // New location column (index 14, column O)
+        date: currentRow[0] || '',
+        role: currentRow[1] || '',
+        term: currentRow[2] || '',
+        duties: currentRow[3] || '',
+        requiredExperience: currentRow[4] || '',
+        requiredSkills: currentRow[5] || '',
+        additionalRequirements: currentRow[6] || '',
+        comments: currentRow[7] || '',
+        workType: currentRow[8] || '',
+        company: currentRow[9] || '',
+        recruiterEmail: currentRow[10] || '',
+        recruiterPhone: currentRow[11] || '',
+        strategy: currentRow[12] || '',
+        earningEstimate: currentRow[13] || '',
+        location: currentRow[14] || '',
       });
     }
   }
