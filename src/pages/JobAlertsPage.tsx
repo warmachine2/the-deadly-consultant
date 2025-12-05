@@ -326,15 +326,15 @@ const DateRangePicker: React.FC<{
           <Button
             variant="outline"
             className={cn(
-              "w-[140px] justify-start text-left font-normal bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#FFDD40]/50",
-              !startDate && "text-muted-foreground"
+              "w-[140px] justify-start text-left font-normal bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white",
+              !startDate && "text-white/60"
             )}
           >
             <Calendar className="mr-2 h-4 w-4" />
             {startDate ? format(startDate, "MMM d, yyyy") : "Start date"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-background border-white/10" align="start">
+        <PopoverContent className="w-auto p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
           <CalendarComponent
             mode="single"
             selected={startDate}
@@ -344,21 +344,21 @@ const DateRangePicker: React.FC<{
           />
         </PopoverContent>
       </Popover>
-      <span className="text-muted-foreground">to</span>
+      <span className="text-white/60">to</span>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             className={cn(
-              "w-[140px] justify-start text-left font-normal bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#FFDD40]/50",
-              !endDate && "text-muted-foreground"
+              "w-[140px] justify-start text-left font-normal bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white",
+              !endDate && "text-white/60"
             )}
           >
             <Calendar className="mr-2 h-4 w-4" />
             {endDate ? format(endDate, "MMM d, yyyy") : "End date"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-background border-white/10" align="start">
+        <PopoverContent className="w-auto p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
           <CalendarComponent
             mode="single"
             selected={endDate}
@@ -651,32 +651,32 @@ const JobAlertsPage: React.FC = () => {
               <div className="flex gap-3 flex-wrap items-center">
                 {/* Country Filter */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-muted-foreground">Country</label>
+                  <label className="text-xs text-white/60">Country</label>
                   <select
                     value={selectedCountry}
                     onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px]"
+                    className="px-4 py-2 rounded-xl bg-gray-900 border border-white/20 text-white focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px] cursor-pointer"
                   >
-                    <option value="all">All Countries</option>
-                    <option value="Canada">Canada</option>
-                    <option value="USA">USA</option>
+                    <option value="all" className="bg-gray-900 text-white">All Countries</option>
+                    <option value="Canada" className="bg-gray-900 text-white">Canada</option>
+                    <option value="USA" className="bg-gray-900 text-white">USA</option>
                     {countries.filter(c => c !== 'Canada' && c !== 'USA').map(country => (
-                      <option key={country} value={country}>{country}</option>
+                      <option key={country} value={country} className="bg-gray-900 text-white">{country}</option>
                     ))}
                   </select>
                 </div>
                 
                 {/* Location Filter */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-muted-foreground">City/State</label>
+                  <label className="text-xs text-white/60">City/State</label>
                   <select
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
-                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[150px]"
+                    className="px-4 py-2 rounded-xl bg-gray-900 border border-white/20 text-white focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[150px] cursor-pointer"
                   >
-                    <option value="all">All Locations</option>
+                    <option value="all" className="bg-gray-900 text-white">All Locations</option>
                     {locations.map(loc => (
-                      <option key={loc} value={loc}>{loc}</option>
+                      <option key={loc} value={loc} className="bg-gray-900 text-white">{loc}</option>
                     ))}
                   </select>
                 </div>
