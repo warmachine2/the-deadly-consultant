@@ -88,7 +88,7 @@ const AboutPage = () => {
             )}
 
             <div className="p-6 md:p-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-[#F4C903] mb-6" style={{ textShadow: '-0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0 0 20px rgba(0, 0, 0, 0.5)', WebkitTextStroke: '0.5px #000' }}>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#F4C903] mb-6" style={{ textShadow: '-0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0 4px 12px rgba(0, 0, 0, 0.8), 0 8px 24px rgba(0, 0, 0, 0.6)', WebkitTextStroke: '0.5px #000' }}>
                 {content.title}
               </h1>
 
