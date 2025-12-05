@@ -253,7 +253,7 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
       {/* Preview (always visible) */}
       {job.duties && (
         <div className="mt-5">
-          <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Duties</p>
+          <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Duties</p>
           <p className="text-base md:text-lg text-white line-clamp-2">{job.duties}</p>
         </div>
       )}
@@ -287,13 +287,13 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
           )}
           {job.strategy && (
             <div className="p-4 md:p-5 rounded-xl" style={{ backgroundColor: 'rgba(0, 212, 255, 0.08)', border: '1px solid rgba(0, 212, 255, 0.2)' }}>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Strategy</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Strategy</p>
               <p className="text-base md:text-lg text-white">{job.strategy}</p>
             </div>
           )}
           {(job.recruiterEmail || job.recruiterPhone) && (
             <div className="pt-3 border-t border-white/10">
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-3" style={{ color: '#00d4ff' }}>Recruiter Contact</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-3" style={{ color: '#FFDD40' }}>Recruiter Contact</p>
               <div className="flex flex-wrap gap-4 text-base md:text-lg">
                 {job.recruiterEmail && (
                   <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
