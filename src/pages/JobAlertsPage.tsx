@@ -189,12 +189,12 @@ const calculateJobAge = (dateStr: string): string => {
 
 // Job card component (used for both mobile and desktop)
 const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDesktop = false }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const jobAge = calculateJobAge(job.date);
 
   return (
     <div 
-      className={`volumetric-glass rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-[#FFDD40]/30 ${isDesktop ? 'h-full' : 'mb-5'}`}
+      className={`volumetric-glass rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-[#FFDD40]/30 w-full ${isDesktop ? '' : 'mb-5'}`}
       style={{
         background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
@@ -884,7 +884,7 @@ const JobAlertsPage: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="flex flex-col gap-6">
                   {paginatedData.map((job, index) => (
                     <JobCard key={index} job={job} isDesktop />
                   ))}
