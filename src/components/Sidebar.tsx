@@ -1,6 +1,7 @@
 import { X, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -63,9 +64,14 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
           </button>
         )}
 
-        <h2 className="text-xl font-bold text-white mt-4 mb-6 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16 hover:text-[#F4C903] transition-colors cursor-default">
-          Filter by Tags
-        </h2>
+        {/* Testimonials - compact */}
+        <TestimonialsCarousel />
+
+        <div className="border-t border-white/10 pt-4">
+          <h2 className="text-lg font-bold text-white mb-4 tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] pr-16 hover:text-[#F4C903] transition-colors cursor-default">
+            Filter by Tags
+          </h2>
+        </div>
 
         {/* Tags */}
         <div>
