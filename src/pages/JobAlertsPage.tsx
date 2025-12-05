@@ -256,17 +256,38 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
             )}
           </div>
         </div>
-        <IconButton 
-          size="medium" 
-          onClick={() => setExpanded(!expanded)} 
-          sx={{ 
-            color: '#FFDD40',
-            backgroundColor: 'rgba(255, 221, 64, 0.1)',
-            '&:hover': { backgroundColor: 'rgba(255, 221, 64, 0.2)' }
-          }}
-        >
-          {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-        </IconButton>
+        <div className="flex items-start gap-3">
+          {/* Mini CTA */}
+          <div className="flex flex-col items-center">
+            <a 
+              href="https://calendly.com/hassankhalidkhan" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap"
+              style={{
+                background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
+                border: '1px solid rgba(255, 221, 64, 0.5)',
+                color: '#FFDD40',
+                boxShadow: '0 2px 8px rgba(255, 221, 64, 0.2)',
+              }}
+            >
+              <CalendarCheck className="w-3.5 h-3.5" />
+              Book Free Strategy Session
+            </a>
+            <span className="text-[10px] mt-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>with Hassan</span>
+          </div>
+          <IconButton 
+            size="medium" 
+            onClick={() => setExpanded(!expanded)} 
+            sx={{ 
+              color: '#FFDD40',
+              backgroundColor: 'rgba(255, 221, 64, 0.1)',
+              '&:hover': { backgroundColor: 'rgba(255, 221, 64, 0.2)' }
+            }}
+          >
+            {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
+        </div>
       </div>
 
       {/* Tags */}
@@ -342,24 +363,6 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
           )}
         </div>
       </Collapse>
-      
-      {/* Mini CTA */}
-      <div className="mt-5 pt-4 border-t border-white/10">
-        <a 
-          href="https://calendly.com/hassankhalidkhan" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.15), rgba(255, 221, 64, 0.08))',
-            border: '1px solid rgba(255, 221, 64, 0.4)',
-            color: '#FFDD40',
-          }}
-        >
-          <CalendarCheck className="w-4 h-4" />
-          Discuss Pivot & Training — Free Strategy Session
-        </a>
-      </div>
     </div>
   );
 };
