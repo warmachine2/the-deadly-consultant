@@ -168,29 +168,52 @@ const ExpandableText: React.FC<{ text: string; maxLength: number }> = ({ text, m
   );
 };
 
+// Calculate job age helper
+const calculateJobAge = (dateStr: string): string => {
+  const jobDate = parseDate(dateStr);
+  if (!jobDate) return 'N/A';
+  
+  const today = new Date();
+  const diffTime = today.getTime() - jobDate.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays < 0) return 'Future';
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return '1 day ago';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 14) return '1 week ago';
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 60) return '1 month ago';
+  return `${Math.floor(diffDays / 30)} months ago`;
+};
+
 // Job card component (used for both mobile and desktop)
 const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDesktop = false }) => {
   const [expanded, setExpanded] = useState(false);
+  const jobAge = calculateJobAge(job.date);
 
   return (
     <div 
-      className={`volumetric-glass rounded-2xl p-5 transition-all duration-300 hover:border-[#FFDD40]/30 ${isDesktop ? 'h-full' : 'mb-4'}`}
+      className={`volumetric-glass rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-[#FFDD40]/30 ${isDesktop ? 'h-full' : 'mb-5'}`}
       style={{
         background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
       }}
     >
       {/* Header */}
-      <div className="flex justify-between items-start gap-3">
+      <div className="flex justify-between items-start gap-4">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-bold leading-tight truncate" style={{ color: '#FFDD40' }}>
+          <h3 className="text-xl md:text-2xl font-bold leading-tight" style={{ color: '#FFDD40' }}>
             {job.role}
           </h3>
-          <p className="text-foreground/90 font-medium text-sm mt-1">
+          <p className="text-white font-semibold text-base md:text-lg mt-2">
             {job.company}
           </p>
-          <div className="flex items-center gap-2 text-muted-foreground text-xs mt-1">
+          <div className="flex items-center gap-3 text-white/90 text-sm md:text-base mt-2">
             <span>{job.date}</span>
+            <span className="px-2 py-0.5 rounded-full text-xs md:text-sm font-medium" style={{ backgroundColor: 'rgba(255, 221, 64, 0.2)', color: '#FFDD40' }}>
+              {jobAge}
+            </span>
             {job.location && (
               <>
                 <span>•</span>
@@ -200,7 +223,7 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
           </div>
         </div>
         <IconButton 
-          size="small" 
+          size="medium" 
           onClick={() => setExpanded(!expanded)} 
           sx={{ 
             color: '#FFDD40',
@@ -213,15 +236,15 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
       </div>
 
       {/* Tags */}
-      <div className="mt-3 flex gap-2 flex-wrap">
-        <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.15)', color: '#FFDD40', border: '1px solid rgba(255, 221, 64, 0.3)' }}>
+      <div className="mt-4 flex gap-3 flex-wrap">
+        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.15)', color: '#FFDD40', border: '1px solid rgba(255, 221, 64, 0.3)' }}>
           {job.term}
         </span>
-        <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.15)', color: '#FFDD40', border: '1px solid rgba(255, 221, 64, 0.3)' }}>
           {job.workType}
         </span>
         {job.earningEstimate && (
-          <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ backgroundColor: 'rgba(76, 175, 80, 0.15)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+          <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{ backgroundColor: 'rgba(76, 175, 80, 0.15)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
             {job.earningEstimate}
           </span>
         )}
@@ -229,56 +252,56 @@ const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDeskt
 
       {/* Preview (always visible) */}
       {job.duties && (
-        <div className="mt-4">
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Duties</p>
-          <p className="text-sm text-foreground/80 line-clamp-2">{job.duties}</p>
+        <div className="mt-5">
+          <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Duties</p>
+          <p className="text-base md:text-lg text-white line-clamp-2">{job.duties}</p>
         </div>
       )}
       
       {/* Expanded Content */}
       <Collapse in={expanded}>
-        <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
+        <div className="mt-5 pt-5 border-t border-white/10 space-y-5">
           {job.requiredExperience && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Required Experience</p>
-              <p className="text-sm text-foreground/80">{job.requiredExperience}</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Required Experience</p>
+              <p className="text-base md:text-lg text-white">{job.requiredExperience}</p>
             </div>
           )}
           {job.requiredSkills && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Required Skills</p>
-              <p className="text-sm text-foreground/80">{job.requiredSkills}</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Required Skills</p>
+              <p className="text-base md:text-lg text-white">{job.requiredSkills}</p>
             </div>
           )}
           {job.additionalRequirements && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Additional Requirements</p>
-              <p className="text-sm text-foreground/80">{job.additionalRequirements}</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Additional Requirements</p>
+              <p className="text-base md:text-lg text-white">{job.additionalRequirements}</p>
             </div>
           )}
           {job.comments && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Comments</p>
-              <p className="text-sm text-foreground/80">{job.comments}</p>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Comments</p>
+              <p className="text-base md:text-lg text-white">{job.comments}</p>
             </div>
           )}
           {job.strategy && (
-            <div className="p-3 rounded-xl" style={{ backgroundColor: 'rgba(255, 221, 64, 0.08)', border: '1px solid rgba(255, 221, 64, 0.2)' }}>
-              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#FFDD40' }}>Strategy</p>
-              <p className="text-sm text-foreground/90">{job.strategy}</p>
+            <div className="p-4 md:p-5 rounded-xl" style={{ backgroundColor: 'rgba(255, 221, 64, 0.08)', border: '1px solid rgba(255, 221, 64, 0.2)' }}>
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{ color: '#FFDD40' }}>Strategy</p>
+              <p className="text-base md:text-lg text-white">{job.strategy}</p>
             </div>
           )}
           {(job.recruiterEmail || job.recruiterPhone) && (
-            <div className="pt-2 border-t border-white/10">
-              <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Contact</p>
-              <div className="flex flex-wrap gap-3 text-sm">
+            <div className="pt-3 border-t border-white/10">
+              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-3" style={{ color: '#FFDD40' }}>Recruiter Contact</p>
+              <div className="flex flex-wrap gap-4 text-base md:text-lg">
                 {job.recruiterEmail && (
-                  <a href={`mailto:${job.recruiterEmail}`} className="text-foreground/80 hover:text-[#FFDD40] transition-colors">
+                  <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#FFDD40] transition-colors">
                     {job.recruiterEmail}
                   </a>
                 )}
                 {job.recruiterPhone && (
-                  <span className="text-foreground/80">{job.recruiterPhone}</span>
+                  <span className="text-white">{job.recruiterPhone}</span>
                 )}
               </div>
             </div>
@@ -549,14 +572,14 @@ const JobAlertsPage: React.FC = () => {
       
       <main className="flex-1 px-4 md:px-6 pb-6 pt-24">
         {/* Header Section */}
-        <div className="volumetric-glass rounded-3xl p-6 md:p-8 mb-6">
-          <h1 className="text-2xl md:text-4xl font-bold mb-3" style={{ color: '#FFDD40' }}>
+        <div className="volumetric-glass rounded-3xl p-6 md:p-10 mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{ color: '#FFDD40' }}>
             Deadly Job Alerts: BI-FinTech / AI Deployment PM Consulting Gigs
           </h1>
-          <p className="text-muted-foreground mb-2">
+          <p className="text-white text-lg md:text-xl mb-3">
             Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
           </p>
-          <p className="text-sm mb-6" style={{ color: '#00d4ff' }}>
+          <p className="text-base md:text-lg mb-6" style={{ color: '#FFDD40' }}>
             Only recruiter-sourced gigs shown. AI-parsed for AI/BI-FinTech PM fits.
           </p>
           
