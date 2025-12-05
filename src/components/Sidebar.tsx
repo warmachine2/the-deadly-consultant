@@ -73,10 +73,10 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
             href="https://calendly.com/hassankhalidkhan"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-md text-center transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
+            className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-md text-center transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
             style={{
               background: "linear-gradient(135deg, #0562AD 0%, #0478c8 100%)",
-              boxShadow: "0 4px 12px rgba(5, 98, 173, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2)",
+              boxShadow: "0 0 20px rgba(5, 98, 173, 0.5), 0 4px 12px rgba(5, 98, 173, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2)",
             }}
           >
             <Calendar className="w-5 h-5 text-white" />
