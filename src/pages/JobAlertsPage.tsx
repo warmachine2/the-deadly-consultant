@@ -168,86 +168,122 @@ const ExpandableText: React.FC<{ text: string; maxLength: number }> = ({ text, m
   );
 };
 
-// Mobile card row component
-const MobileJobCard: React.FC<{ job: JobData }> = ({ job }) => {
+// Job card component (used for both mobile and desktop)
+const JobCard: React.FC<{ job: JobData; isDesktop?: boolean }> = ({ job, isDesktop = false }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="volumetric-glass rounded-2xl p-4 mb-4">
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold" style={{ color: '#FFDD40' }}>
+    <div 
+      className={`volumetric-glass rounded-2xl p-5 transition-all duration-300 hover:border-[#FFDD40]/30 ${isDesktop ? 'h-full' : 'mb-4'}`}
+      style={{
+        background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+      }}
+    >
+      {/* Header */}
+      <div className="flex justify-between items-start gap-3">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-bold leading-tight truncate" style={{ color: '#FFDD40' }}>
             {job.role}
           </h3>
-          <p className="text-muted-foreground text-sm">
-            {job.company} • {job.date}
+          <p className="text-foreground/90 font-medium text-sm mt-1">
+            {job.company}
           </p>
-          {job.location && (
-            <p className="text-muted-foreground text-xs mt-1">{job.location}</p>
-          )}
-          <div className="mt-2 flex gap-2 flex-wrap">
-            <span className="px-2 py-1 text-xs rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.2)', color: '#FFDD40' }}>
-              {job.term}
-            </span>
-            <span className="px-2 py-1 text-xs rounded-full" style={{ backgroundColor: 'rgba(0, 212, 255, 0.2)', color: '#00d4ff' }}>
-              {job.workType}
-            </span>
+          <div className="flex items-center gap-2 text-muted-foreground text-xs mt-1">
+            <span>{job.date}</span>
+            {job.location && (
+              <>
+                <span>•</span>
+                <span className="truncate">{job.location}</span>
+              </>
+            )}
           </div>
         </div>
         <IconButton 
           size="small" 
           onClick={() => setExpanded(!expanded)} 
-          sx={{ color: 'rgba(255,255,255,0.6)' }}
+          sx={{ 
+            color: '#FFDD40',
+            backgroundColor: 'rgba(255, 221, 64, 0.1)',
+            '&:hover': { backgroundColor: 'rgba(255, 221, 64, 0.2)' }
+          }}
         >
           {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
         </IconButton>
       </div>
+
+      {/* Tags */}
+      <div className="mt-3 flex gap-2 flex-wrap">
+        <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ backgroundColor: 'rgba(255, 221, 64, 0.15)', color: '#FFDD40', border: '1px solid rgba(255, 221, 64, 0.3)' }}>
+          {job.term}
+        </span>
+        <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+          {job.workType}
+        </span>
+        {job.earningEstimate && (
+          <span className="px-3 py-1 text-xs font-medium rounded-full" style={{ backgroundColor: 'rgba(76, 175, 80, 0.15)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+            {job.earningEstimate}
+          </span>
+        )}
+      </div>
+
+      {/* Preview (always visible) */}
+      {job.duties && (
+        <div className="mt-4">
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Duties</p>
+          <p className="text-sm text-foreground/80 line-clamp-2">{job.duties}</p>
+        </div>
+      )}
       
+      {/* Expanded Content */}
       <Collapse in={expanded}>
-        <Stack spacing={3} sx={{ mt: 3 }}>
-          <div>
-            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Duties</p>
-            <p className="text-sm text-foreground/80">{job.duties}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Required Experience</p>
-            <p className="text-sm text-foreground/80">{job.requiredExperience}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Required Skills</p>
-            <p className="text-sm text-foreground/80">{job.requiredSkills}</p>
-          </div>
+        <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
+          {job.requiredExperience && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Required Experience</p>
+              <p className="text-sm text-foreground/80">{job.requiredExperience}</p>
+            </div>
+          )}
+          {job.requiredSkills && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Required Skills</p>
+              <p className="text-sm text-foreground/80">{job.requiredSkills}</p>
+            </div>
+          )}
           {job.additionalRequirements && (
             <div>
-              <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Additional Requirements</p>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Additional Requirements</p>
               <p className="text-sm text-foreground/80">{job.additionalRequirements}</p>
             </div>
           )}
           {job.comments && (
             <div>
-              <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Comments</p>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#00d4ff' }}>Comments</p>
               <p className="text-sm text-foreground/80">{job.comments}</p>
             </div>
           )}
-          <div>
-            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Strategy</p>
-            <p className="text-sm text-foreground/80">{job.strategy}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Earning Estimate</p>
-            <p className="text-sm text-foreground/80">{job.earningEstimate}</p>
-          </div>
-          {(job.recruiterEmail || job.recruiterPhone) && (
-            <div>
-              <p className="text-xs font-medium mb-1" style={{ color: '#FFDD40' }}>Contact</p>
-              <p className="text-sm text-foreground/80">
-                {job.recruiterEmail && <span>{job.recruiterEmail}</span>}
-                {job.recruiterEmail && job.recruiterPhone && <span> • </span>}
-                {job.recruiterPhone && <span>{job.recruiterPhone}</span>}
-              </p>
+          {job.strategy && (
+            <div className="p-3 rounded-xl" style={{ backgroundColor: 'rgba(255, 221, 64, 0.08)', border: '1px solid rgba(255, 221, 64, 0.2)' }}>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#FFDD40' }}>Strategy</p>
+              <p className="text-sm text-foreground/90">{job.strategy}</p>
             </div>
           )}
-        </Stack>
+          {(job.recruiterEmail || job.recruiterPhone) && (
+            <div className="pt-2 border-t border-white/10">
+              <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#00d4ff' }}>Contact</p>
+              <div className="flex flex-wrap gap-3 text-sm">
+                {job.recruiterEmail && (
+                  <a href={`mailto:${job.recruiterEmail}`} className="text-foreground/80 hover:text-[#FFDD40] transition-colors">
+                    {job.recruiterEmail}
+                  </a>
+                )}
+                {job.recruiterPhone && (
+                  <span className="text-foreground/80">{job.recruiterPhone}</span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </Collapse>
     </div>
   );
@@ -691,8 +727,8 @@ const JobAlertsPage: React.FC = () => {
               <CalendarCheck className="inline-block w-5 h-5 mr-2" />
               Book Free 45-Min Strategy Session
             </button>
-            <p className="text-sm text-muted-foreground mt-2">
-              Discuss career pivot and training options to these roles from your current position with me personally
+            <p className="text-sm mt-2" style={{ color: '#FFDD40' }}>
+              Let's map your career pivot and explore tailored training paths to land these roles — one-on-one with me
             </p>
           </div>
         </div>
@@ -789,7 +825,7 @@ const JobAlertsPage: React.FC = () => {
             ) : (
               <>
                 {paginatedData.map((job, index) => (
-                  <MobileJobCard key={index} job={job} />
+                  <JobCard key={index} job={job} />
                 ))}
                 {/* Pagination for Mobile */}
                 {totalPages > 1 && (
@@ -817,125 +853,76 @@ const JobAlertsPage: React.FC = () => {
             )}
           </div>
         ) : (
-          // Desktop view - table
-          <div className="volumetric-glass rounded-3xl overflow-hidden">
-            <TableContainer 
-              sx={{ 
-                maxHeight: 'calc(100vh - 450px)',
-                backgroundColor: 'transparent',
-                '& .MuiTable-root': {
-                  backgroundColor: 'transparent',
-                }
-              }}
-            >
-              <Table stickyHeader size="small">
-                <TableHead>
-                  <TableRow>
-                    {columns.map((column) => (
-                      <TableCell
-                        key={column.id}
-                        style={{ minWidth: column.minWidth }}
-                        sortDirection={orderBy === column.id ? order : false}
-                        sx={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                          color: '#FFDD40',
-                          fontWeight: 600,
-                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        }}
-                      >
-                        <TableSortLabel
-                          active={orderBy === column.id}
-                          direction={orderBy === column.id ? order : 'asc'}
-                          onClick={() => handleSort(column.id)}
-                          sx={{
-                            '&.MuiTableSortLabel-root': { color: '#FFDD40' },
-                            '&.MuiTableSortLabel-root:hover': { color: '#FFDD40' },
-                            '&.Mui-active': { color: '#FFDD40' },
-                            '& .MuiTableSortLabel-icon': { color: '#FFDD40 !important' },
-                          }}
-                        >
-                          {column.label}
-                        </TableSortLabel>
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredAndSortedData.length === 0 ? (
-                    <TableRow>
-                      <TableCell 
-                        colSpan={columns.length} 
-                        sx={{ 
-                          textAlign: 'center', 
-                          py: 6, 
-                          color: 'rgba(255,255,255,0.6)',
-                          backgroundColor: 'transparent',
-                          borderBottom: 'none',
-                        }}
-                      >
-                        No jobs found for the selected filters.
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    paginatedData.map((row, index) => (
-                      <TableRow 
-                        hover 
-                        key={index}
-                        sx={{
-                          '&:hover': {
-                            backgroundColor: 'rgba(255, 221, 64, 0.05) !important',
-                          },
-                        }}
-                      >
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          
-                          return (
-                            <TableCell 
-                              key={column.id}
-                              sx={{
-                                color: 'rgba(255,255,255,0.8)',
-                                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                                backgroundColor: 'transparent',
-                              }}
-                            >
-                              {column.truncate ? (
-                                <ExpandableText text={value} maxLength={column.truncate} />
-                              ) : (
-                                value
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {/* Pagination for Desktop */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-4 py-4 border-t border-white/10">
-                <button
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Previous
-                </button>
-                <span className="text-sm text-muted-foreground">
-                  Page {currentPage} of {totalPages} ({filteredAndSortedData.length} total)
-                </span>
-                <button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+          // Desktop view - cards grid
+          <div>
+            {filteredAndSortedData.length === 0 ? (
+              <div className="volumetric-glass rounded-3xl p-8 text-center">
+                <p className="text-muted-foreground">No jobs found for the selected filters.</p>
               </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {paginatedData.map((job, index) => (
+                    <JobCard key={index} job={job} isDesktop />
+                  ))}
+                </div>
+                {/* Pagination for Desktop */}
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Previous
+                    </button>
+                    
+                    {/* Page numbers */}
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`w-10 h-10 rounded-xl text-sm font-medium transition-all ${
+                              currentPage === pageNum
+                                ? 'text-black'
+                                : 'bg-white/5 border border-white/10 hover:border-[#FFDD40]/50'
+                            }`}
+                            style={currentPage === pageNum ? { backgroundColor: '#FFDD40' } : {}}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors"
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                    
+                    <span className="text-sm text-muted-foreground ml-2">
+                      ({filteredAndSortedData.length} total)
+                    </span>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
