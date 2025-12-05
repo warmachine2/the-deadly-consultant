@@ -22,12 +22,7 @@ const testimonials = [
 const TestimonialsCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  // Manual navigation only - no auto-rotation
 
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
