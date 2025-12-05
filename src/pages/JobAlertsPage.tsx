@@ -14,7 +14,7 @@ import {
   Stack,
 } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3 } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
 
 interface JobData {
   date: string;
@@ -315,9 +316,35 @@ const JobAlertsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
+  const [selectedRoleType, setSelectedRoleType] = useState<string>('all');
   const [startDate, setStartDate] = useState<Date | undefined>(startOfMonth(new Date()));
   const [endDate, setEndDate] = useState<Date | undefined>(endOfMonth(new Date()));
   const [showFilters, setShowFilters] = useState(true);
+  const [showAnalytics, setShowAnalytics] = useState(true);
+
+  // Role categorization helper
+  const categorizeRole = (role: string): string => {
+    const roleLower = role.toLowerCase();
+    if (roleLower.includes('fintech') || roleLower.includes('finance') || roleLower.includes('financial')) return 'FinTech';
+    if (roleLower.includes('bi') || roleLower.includes('business intelligence') || roleLower.includes('data') || roleLower.includes('analytics')) return 'BI/Data';
+    if (roleLower.includes('ai') || roleLower.includes('artificial') || roleLower.includes('machine learning') || roleLower.includes('ml')) return 'AI/ML';
+    if (roleLower.includes('pm') || roleLower.includes('project manager') || roleLower.includes('product manager') || roleLower.includes('program')) return 'PM';
+    return 'Other';
+  };
+
+  // Chart click handlers
+  const handleRoleFilterClick = (roleType: string) => {
+    setSelectedRoleType(roleType);
+  };
+
+  const handleCountryFilterClick = (country: string) => {
+    setSelectedCountry(country);
+  };
+
+  const handleDateRangeClick = (start: Date, end: Date) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
   
   const isMobile = useMediaQuery('(max-width:768px)');
 
@@ -389,6 +416,11 @@ const JobAlertsPage: React.FC = () => {
       );
     }
     
+    // Role type filter (from chart click)
+    if (selectedRoleType !== 'all') {
+      filtered = filtered.filter(row => categorizeRole(row.role) === selectedRoleType);
+    }
+    
     // Country filter
     if (selectedCountry !== 'all') {
       filtered = filtered.filter(row => {
@@ -441,10 +473,11 @@ const JobAlertsPage: React.FC = () => {
     });
     
     return filtered;
-  }, [data, orderBy, order, searchQuery, selectedCountry, selectedLocation, startDate, endDate]);
+  }, [data, orderBy, order, searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate]);
 
   const clearFilters = () => {
     setSearchQuery('');
+    setSelectedRoleType('all');
     setSelectedCountry('all');
     setSelectedLocation('all');
     setStartDate(startOfMonth(new Date()));
@@ -465,16 +498,44 @@ const JobAlertsPage: React.FC = () => {
             Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
           </p>
           
-          {/* Toggle Filters Button */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 mb-4 text-sm font-medium hover:opacity-80 transition-opacity"
-            style={{ color: '#FFDD40' }}
-          >
-            <Filter className="w-4 h-4" />
-            {showFilters ? 'Hide Filters' : 'Show Filters'}
-            {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+          {/* Toggle Buttons Row */}
+          <div className="flex gap-4 flex-wrap mb-4">
+            <button
+              onClick={() => setShowAnalytics(!showAnalytics)}
+              className="flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity"
+              style={{ color: '#00d4ff' }}
+            >
+              <BarChart3 className="w-4 h-4" />
+              {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
+              {showAnalytics ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+            
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 text-sm font-medium hover:opacity-80 transition-opacity"
+              style={{ color: '#FFDD40' }}
+            >
+              <Filter className="w-4 h-4" />
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+              {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+          </div>
+          
+          {/* Active Role Filter Indicator */}
+          {selectedRoleType !== 'all' && (
+            <div className="mb-4 flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Filtered by role:</span>
+              <span className="px-3 py-1 rounded-full text-sm font-medium" style={{ backgroundColor: 'rgba(255, 221, 64, 0.2)', color: '#FFDD40' }}>
+                {selectedRoleType}
+              </span>
+              <button
+                onClick={() => setSelectedRoleType('all')}
+                className="text-xs text-muted-foreground hover:text-white underline"
+              >
+                Clear
+              </button>
+            </div>
+          )}
           
           {/* Filters Section */}
           {showFilters && (
@@ -562,6 +623,16 @@ const JobAlertsPage: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Analytics Section */}
+        {showAnalytics && !loading && data.length > 0 && (
+          <JobAnalyticsCharts
+            data={data}
+            onRoleFilterClick={handleRoleFilterClick}
+            onCountryFilterClick={handleCountryFilterClick}
+            onDateRangeClick={handleDateRangeClick}
+          />
+        )}
 
         {loading ? (
           <div className="flex justify-center items-center min-h-[400px]">
