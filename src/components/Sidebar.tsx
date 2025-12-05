@@ -73,16 +73,21 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
             href="https://calendly.com/hassankhalidkhan"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full text-center transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] bg-[#1e6091] hover:bg-[#2980b9]"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg text-center transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cta-glow-pulse"
+            style={{
+              background: "#0562AD",
+            }}
           >
-            <Calendar className="w-4 h-4 text-white" />
+            <Calendar className="w-5 h-5 text-white" />
             <span className="text-sm font-bold text-white">
               Book Free 45-Min Strategy Session
             </span>
           </a>
-          <p className="text-[10px] text-[#F4C903] mt-3 leading-tight text-center">
-            Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
-          </p>
+          <div className="mt-3 px-2 py-2 rounded-md" style={{ background: "rgba(0, 0, 0, 0.4)" }}>
+            <p className="text-[10px] text-[#F4C903] leading-tight text-center">
+              Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
+            </p>
+          </div>
         </div>
 
         <div className="border-t border-white/10 pt-4">
