@@ -104,7 +104,7 @@ const DynamicPage = () => {
             )}
 
             <div className="p-6 md:p-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-[#F4C903] mb-6" style={{ textShadow: '0 0 20px rgba(244, 201, 3, 0.5), 0 4px 8px rgba(0, 0, 0, 0.4)' }}>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#F4C903] mb-6" style={{ textShadow: '-3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0 0 10px rgba(244, 201, 3, 0.3)', WebkitTextStroke: '1px #000' }}>
                 {content.title}
               </h1>
 
