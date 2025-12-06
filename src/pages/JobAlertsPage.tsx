@@ -621,10 +621,13 @@ const JobAlertsPage: React.FC = () => {
           <p className="text-white text-lg md:text-xl mb-3">
             Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
           </p>
-          <p className="text-base md:text-lg mb-6" style={{
+          <p className="text-base md:text-lg mb-2" style={{
           color: '#FFDD40'
         }}>
             Only recruiter-sourced gigs shown. AI-parsed for AI/BI-FinTech PM fits.
+          </p>
+          <p className="text-sm md:text-base mb-6 text-red-400 italic">
+            ⚠️ Skip roles older than 48 hours — recruiters submit top candidates within this window.
           </p>
           
           {/* Toggle Buttons Row */}
