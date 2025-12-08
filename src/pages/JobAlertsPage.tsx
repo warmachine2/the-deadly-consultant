@@ -220,6 +220,33 @@ const ExpandableText: React.FC<{
     </div>;
 };
 
+// Duties text component with expandable full content
+const DutiesText: React.FC<{
+  text: string;
+}> = ({ text }) => {
+  const [expanded, setExpanded] = useState(false);
+  const previewLength = 200;
+  
+  if (!text || text.length <= previewLength) {
+    return <p className="text-base md:text-lg text-white">{text}</p>;
+  }
+  
+  return (
+    <div>
+      <p className="text-base md:text-lg text-white">
+        {expanded ? text : text.substring(0, previewLength) + '...'}
+      </p>
+      <button 
+        onClick={() => setExpanded(!expanded)} 
+        className="mt-2 text-sm font-medium hover:underline transition-colors"
+        style={{ color: '#FFDD40' }}
+      >
+        {expanded ? '▲ Show Less' : '▼ Show More'}
+      </button>
+    </div>
+  );
+};
+
 // Calculate job age helper
 const calculateJobAge = (dateStr: string): string => {
   const jobDate = parseDate(dateStr);
@@ -334,7 +361,7 @@ const JobCard: React.FC<{
           <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{
         color: '#FFDD40'
       }}>Duties</p>
-          <p className="text-base md:text-lg text-white line-clamp-2">{job.duties}</p>
+          <DutiesText text={job.duties} />
         </div>}
       
       {/* Expanded Content */}
