@@ -57,8 +57,8 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
       title: "Success!",
       description: "Thank you for signing up. Check your email for confirmation.",
     });
-    if (window.formkit?.show) {
-      window.formkit.show("fbd8fa5d1b");
+    if ((window as any).formkit?.show) {
+      (window as any).formkit.show("fbd8fa5d1b");
     }
   };
 

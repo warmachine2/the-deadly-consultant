@@ -24,9 +24,9 @@ const SignupButton = ({ formId, fallbackHref, className = "", label = "Sign Up" 
       description: "Thank you for signing up. Check your email for confirmation.",
     });
 
-    // If formId is provided, trigger FormKit popup
-    if (formId && window.formkit?.show) {
-      window.formkit.show(formId);
+    // If formId is provided, trigger Kit popup
+    if (formId && (window as any).formkit?.show) {
+      (window as any).formkit.show(formId);
     }
   };
 

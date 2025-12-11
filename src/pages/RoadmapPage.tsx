@@ -1,134 +1,13 @@
-import { useState, useEffect, useRef, useCallback, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
-import useFormkitPopup from "@/hooks/useFormkitPopup";
-
 
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  // FIXED: Use the actual ConvertKit form UID from embed code
   const formId = "fbd8fa5d1b";
-  // FIXED: Use the subdomain from embed code
-  const creatorSubdomain = "bi-fintech-consultant-academy";
-  const autoTriggeredRef = useRef(false);
-  const ctaTriggeredRef = useRef(false);
-  const triggerRef = useRef<HTMLAnchorElement | null>(null);
-  const scriptLoadedRef = useRef(false); // Ensure single script load
-  const refocusObserverRef = useRef<MutationObserver | null>(null);
-  const cleanupTimeoutRef = useRef<number | null>(null); // For force cleanup
 
-  const { ready, showAuto, showDebounced } = useFormkitPopup(formId, triggerRef); // Destructure correctly
-
-  // Dynamic Script Load - ConvertKit embed script
-  useLayoutEffect(() => {
-    if (scriptLoadedRef.current) return;
-    console.log("Loading ConvertKit script dynamically");
-
-    const existingScript = document.querySelector(`script[data-uid="${formId}"]`);
-    if (existingScript) {
-      console.log("ConvertKit script already present");
-      scriptLoadedRef.current = true;
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = `https://${creatorSubdomain}.kit.com/${formId}/index.js`;
-    script.async = true;
-    script.setAttribute("data-uid", formId);
-    script.onload = () => {
-      console.log("ConvertKit script loaded - marking as ready");
-      scriptLoadedRef.current = true;
-      // Mark ready after short delay to ensure ConvertKit initializes
-      setTimeout(() => {
-        console.log("ConvertKit initialized, triggering ready state");
-        if (window.formkitReady) {
-          window.formkitReady[formId] = true;
-        }
-      }, 500);
-    };
-    script.onerror = () => {
-      console.error("Failed to load ConvertKit script");
-      scriptLoadedRef.current = true;
-    };
-    document.head.appendChild(script);
-  }, [formId, creatorSubdomain]);
-
-  useEffect(() => {
-    if (autoTriggeredRef.current || !ready) return;
-    console.log("Auto effect fired");
-    autoTriggeredRef.current = true;
-    setTimeout(() => {
-      console.log(`Auto-show attempt: ready=${ready}`);
-      showAuto();
-    }, 2000);
-  }, [showAuto, ready]);
-
-  useEffect(() => {
-    return () => {
-      if (cleanupTimeoutRef.current) {
-        clearTimeout(cleanupTimeoutRef.current);
-        cleanupTimeoutRef.current = null;
-      }
-    };
-  }, []);
-
-  const forceCleanup = useCallback(() => {
-    console.log("Force cleanup: Removing all ConvertKit elements");
-    const ckElements = document.querySelectorAll('[class*="ck-"], [data-formkit-toggle]');
-    ckElements.forEach((el) => el.remove());
-    document.body.focus();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  // Observer for modal close (enhanced: clear all CK elements)
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === "childList") {
-          const modalRemoved = Array.from(mutation.removedNodes).some(
-            (node) =>
-              node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains("ck-subscription-form"),
-          );
-          if (modalRemoved) {
-            console.log("Modal removed, refocusing + full cleanup");
-            forceCleanup(); // FIXED: Force remove all
-            observer.disconnect();
-            // Reconnect observer for next show
-            setTimeout(() => observer.observe(document.body, { childList: true, subtree: true }), 100);
-          }
-        }
-      });
-    });
-    refocusObserverRef.current = observer;
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, [forceCleanup]);
-
-  // Escape listener (enhanced: full cleanup)
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        const modal = document.querySelector(".ck-subscription-form");
-        if (modal) {
-          modal.remove();
-          console.log("Escape closed modal, full cleanup");
-          forceCleanup(); // FIXED: Force remove all
-        }
-      }
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [forceCleanup]);
-
-  // FIXED: Set force cleanup timeout after show (10s safety net)
-  const setCleanupTimeout = useCallback(() => {
-    if (cleanupTimeoutRef.current) clearTimeout(cleanupTimeoutRef.current);
-    cleanupTimeoutRef.current = setTimeout(forceCleanup, 10000) as unknown as number; // 10s force close
-  }, [forceCleanup]);
-
-  // Page load (unchanged)
   useEffect(() => {
     const loadPage = async () => {
       const cacheKey = "ghost:page:2026-bi-fintech-consulting-roadmap-pdf-unlock";
@@ -180,25 +59,6 @@ const RoadmapPage = () => {
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
 
-  const handleCTAClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (ctaTriggeredRef.current) {
-        console.log("CTA already triggered, skipping");
-        return;
-      }
-      console.log("CTA onClick fired");
-      ctaTriggeredRef.current = true;
-      showDebounced(1000);
-      setCleanupTimeout();
-      console.log("CTA triggered");
-    },
-    [showDebounced, setCleanupTimeout],
-  );
-
-  const formHref = "https://bifintechconsulting.com/roadmap-signup"; // FIXED: Use the href from embed code
-
   return (
     <div className="min-h-screen overflow-x-hidden">
       <style>{`
@@ -223,7 +83,6 @@ const RoadmapPage = () => {
             padding: 1rem !important;
           }
           
-          /* Scale down text and form elements inside ConvertKit modal on mobile */
           .ck-subscription-form h1,
           .ck-subscription-form h2,
           .ck-subscription-form h3,
@@ -259,7 +118,6 @@ const RoadmapPage = () => {
             padding: 0.75rem 1.25rem !important;
           }
           
-          /* Ensure proper spacing and prevent overflow */
           .ck-subscription-form *,
           [class*="formkit"] * {
             max-width: 100% !important;
@@ -268,18 +126,6 @@ const RoadmapPage = () => {
         }
       `}</style>
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
-
-      {/* FIXED: Static Hidden Trigger with correct href */}
-      <a
-        ref={triggerRef}
-        href={formHref}
-        data-formkit-toggle={formId}
-        style={{
-          display: "none",
-          position: "absolute",
-          left: "-9999px",
-        }}
-      />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-20 lg:mt-24">
         <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8">
@@ -334,8 +180,8 @@ const RoadmapPage = () => {
                 Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
               </p>
               <a
-                href={formHref} // FIXED: Correct fallback URL
-                onClick={handleCTAClick}
+                href="https://bifintechconsulting.com/roadmap-signup"
+                data-formkit-toggle={formId}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
                 Get Your Free Roadmap PDF
