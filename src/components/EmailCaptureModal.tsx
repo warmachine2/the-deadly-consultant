@@ -1,15 +1,13 @@
-import { useState, FormEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
 interface EmailCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { name: string; email: string }) => void;
 }
 
-const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps) => {
+const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Lock body scroll when open
   useEffect(() => {
@@ -25,23 +23,6 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address");
-      setIsSubmitting(false);
-      return;
-    }
-
-    await onSubmit(formData);
-    setFormData({ name: "", email: "" });
-    setIsSubmitting(false);
-  };
-
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -50,78 +31,95 @@ const EmailCaptureModal = ({ isOpen, onClose, onSubmit }: EmailCaptureModalProps
 
   return (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md h-screen overflow-hidden"
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
       onClick={handleBackdropClick}
-      style={{ alignItems: "center", justifyContent: "center" }}
     >
       <div
-        className="volumetric-glass rounded-3xl p-8 max-w-md w-full relative animate-in fade-in zoom-in duration-200"
+        className="relative max-w-md w-full animate-in fade-in zoom-in duration-200 rounded-2xl p-8"
         style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          zIndex: 10001,
+          background: "linear-gradient(145deg, rgba(60, 60, 60, 0.4), rgba(30, 30, 30, 0.6))",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          boxShadow: `
+            0 8px 32px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2)
+          `,
         }}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
           aria-label="Close modal"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5" />
         </button>
 
-        {/* Modal content - Updated to match photo with favicon logo */}
-        <div className="text-center mb-6">
-          {/* Injected Favicon as Logo */}
-          <img src="/favicon.ico" alt="The Deadly Consultant Logo" className="mx-auto mb-4 w-12 h-12" />
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-wide">The Deadly Consultant</h2>
+        {/* Modal content */}
+        <div className="text-center mb-8">
+          {/* Logo */}
+          <img 
+            src="/favicon.ico" 
+            alt="The Deadly Consultant Logo" 
+            className="mx-auto mb-4 w-16 h-16 opacity-90" 
+          />
+          {/* Slogan */}
+          <h2 className="text-2xl font-bold text-white tracking-wide">
+            The Deadly Consultant
+          </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full p-3 volumetric-glass-button rounded-xl text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-              aria-label="Name"
-            />
-          </div>
+        <div className="space-y-4">
+          {/* Name input */}
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="w-full p-3.5 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.2)",
+            }}
+            aria-label="Name"
+          />
 
-          <div>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full p-3 volumetric-glass-button rounded-xl text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-              aria-label="Email"
-            />
-          </div>
+          {/* Email input */}
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            className="w-full p-3.5 rounded-xl text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.2)",
+            }}
+            aria-label="Email"
+          />
 
+          {/* Submit button */}
           <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            type="button"
+            className="w-full py-3.5 rounded-xl font-semibold text-white transition-all hover:scale-[1.02]"
+            style={{
+              background: "linear-gradient(145deg, rgba(80, 80, 80, 0.6), rgba(40, 40, 40, 0.8))",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              boxShadow: `
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1)
+              `,
+            }}
           >
-            {isSubmitting ? "Submitting..." : "Sign up"}
+            Subscribe
           </button>
-        </form>
-
-        <p className="text-xs text-white/70 text-center mt-4">
-          Already a member?{" "}
-          <a href="/signin" className="text-blue-400 hover:underline">
-            Sign in
-          </a>
-        </p>
+        </div>
       </div>
     </div>
   );
