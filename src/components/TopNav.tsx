@@ -178,8 +178,6 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                     Log-in
                   </button>
                   <SignupButton
-                    formId="fbd8fa5d1b"
-                    fallbackHref="https://bifintechconsulting.com/case-study-signup"
                     className="w-full px-4 py-2 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90"
                     label="Subscribe"
                   />
@@ -377,8 +375,6 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               Log-in
             </button>
             <SignupButton
-              formId="fbd8fa5d1b"
-              fallbackHref="https://bifintechconsulting.com/case-study-signup"
               className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90 hover:text-white border-none cta-glow-pulse-subtle"
               label="Subscribe"
             />
@@ -387,7 +383,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
       </div>
 
       {/* Mobile Sign Up Modal */}
-      <EmailCaptureModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleMobileSignup} />
+      <EmailCaptureModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </nav>
   );
 };
