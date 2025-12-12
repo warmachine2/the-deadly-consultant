@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 interface EmailCaptureModalProps {
@@ -8,6 +9,13 @@ interface EmailCaptureModalProps {
 
 const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're mounted before using portal
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   // Lock body scroll when open
   useEffect(() => {
@@ -21,7 +29,7 @@ const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) => {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -29,10 +37,16 @@ const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) => {
     }
   };
 
-  return (
+  const modalContent = (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+      className="fixed inset-0 flex items-center justify-center p-4"
       onClick={handleBackdropClick}
+      style={{
+        zIndex: 99999,
+        background: "rgba(0, 0, 0, 0.6)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+      }}
     >
       <div
         className="relative max-w-md w-full animate-in fade-in zoom-in duration-200 rounded-2xl p-8"
@@ -47,6 +61,7 @@ const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) => {
             inset 0 -1px 0 rgba(0, 0, 0, 0.2)
           `,
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
@@ -123,6 +138,9 @@ const EmailCaptureModal = ({ isOpen, onClose }: EmailCaptureModalProps) => {
       </div>
     </div>
   );
+
+  // Render modal to document.body using portal
+  return createPortal(modalContent, document.body);
 };
 
 export default EmailCaptureModal;
