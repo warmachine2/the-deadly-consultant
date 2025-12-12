@@ -29,7 +29,7 @@ interface JobData {
   location: string; // City/State/Province/Country
 }
 type Order = 'asc' | 'desc';
-const SHEET_ID = '1OUBXFK8WOfAccM1iDn59S8tkc6YBWocORuX5pCY3uT8';
+const SHEET_ID = '1JFNwjbOjAWCO3ewxN1qLyA0ewLOLMjkkKzJibpscm0Y';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 const parseCSV = (csvText: string): JobData[] => {
   // Handle multi-line quoted fields properly
