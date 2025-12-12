@@ -127,13 +127,16 @@ const DynamicPage = () => {
                 <style>{`
                   .roadmap-thank-you-content h1,
                   .roadmap-thank-you-content h2 {
-                    color: #FCECA3 !important;
+                    color: #FCDC49 !important;
                   }
                   .roadmap-thank-you-content p:first-of-type {
                     color: white !important;
                   }
                   .roadmap-thank-you-content p:nth-of-type(2) {
                     color: #a3a3a3 !important;
+                  }
+                  .roadmap-thank-you-content a {
+                    color: #FCDC49 !important;
                   }
                 `}</style>
               )}
@@ -143,10 +146,12 @@ const DynamicPage = () => {
                   [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
                 dangerouslySetInnerHTML={{ 
                   __html: slug === 'roadmap-thank-you' 
-                    ? (content.html || "").replace(
-                        /href="[^"]*"([^>]*>Back to Video)/gi,
-                        'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
-                      )
+                    ? (content.html || "")
+                        .replace(
+                          /href="[^"]*"([^>]*>Back to Video)/gi,
+                          'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
+                        )
+                        .replace(/Accelerate to mastery/gi, 'Accelerate To Mastery')
                     : (content.html || "")
                 }}
               />
