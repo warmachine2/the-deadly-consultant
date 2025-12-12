@@ -127,7 +127,7 @@ const DynamicPage = () => {
                 <style>{`
                   .roadmap-thank-you-content h1,
                   .roadmap-thank-you-content h2 {
-                    color: #FCDC49 !important;
+                    color: white !important;
                   }
                   .roadmap-thank-you-content p:first-of-type {
                     color: white !important;
