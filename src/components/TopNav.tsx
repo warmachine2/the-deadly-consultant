@@ -211,6 +211,15 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               </span>
             </div>
           </Link>
+
+          {/* PM Consulting Job Board Button - Desktop */}
+          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden lg:block">
+            <button
+              className="px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300 whitespace-nowrap bg-[#0562AD] text-white hover:text-[#F4C903] border border-cyan-400/40 active:scale-95 cta-glow-pulse-blue-subtle"
+            >
+              PM CONSULTING JOB BOARD
+            </button>
+          </Link>
         </div>
 
         {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}

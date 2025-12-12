@@ -533,6 +533,26 @@ All colors MUST be HSL.
     box-shadow: 0 0 20px rgba(244, 201, 3, 0.4);
   }
 
+  /* Blue subtle CTA glow pulse for Job Board button */
+  @keyframes cta-glow-pulse-blue-subtle {
+    0%, 100% {
+      box-shadow: 0 0 8px rgba(5, 98, 173, 0.4), 0 0 15px rgba(0, 212, 255, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 12px rgba(5, 98, 173, 0.5), 0 0 25px rgba(0, 212, 255, 0.3);
+    }
+  }
+
+  .cta-glow-pulse-blue-subtle {
+    animation: cta-glow-pulse-blue-subtle 3s ease-in-out infinite;
+  }
+
+  .cta-glow-pulse-blue-subtle:hover {
+    animation: none;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  }
+
+
   /* Bokeh orbs effect for hero section */
   .bokeh-orbs {
     position: absolute;
