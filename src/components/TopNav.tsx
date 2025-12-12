@@ -26,10 +26,9 @@ import { toast } from "@/hooks/use-toast";
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
   onToggleSidebar?: () => void;
-  hideSubscribe?: boolean;
 }
 
-const TopNav = ({ onSearchChange, onToggleSidebar, hideSubscribe = false }: TopNavProps) => {
+const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
@@ -384,12 +383,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar, hideSubscribe = false }: TopN
             >
               Log-in
             </button>
-            {!hideSubscribe && (
-              <SignupButton
-                className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90 hover:text-white border-none cta-glow-pulse-subtle"
-                label="Subscribe"
-              />
-            )}
+            <SignupButton
+              className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90 hover:text-white border-none cta-glow-pulse-subtle"
+              label="Subscribe"
+            />
           </div>
         </div>
       </div>

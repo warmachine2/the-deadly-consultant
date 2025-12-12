@@ -86,7 +86,7 @@ const DynamicPage = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} hideSubscribe={slug === 'roadmap-thank-you'} />
+      <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
       
       <div className="pt-20 lg:pt-24 px-4 md:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
