@@ -152,6 +152,10 @@ const DynamicPage = () => {
                           'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
                         )
                         .replace(/Accelerate to mastery/gi, 'Accelerate To Mastery')
+                        .replace(
+                          /href="[^"]*"([^>]*>Join Now)/gi,
+                          'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
+                        )
                     : (content.html || "")
                 }}
               />
