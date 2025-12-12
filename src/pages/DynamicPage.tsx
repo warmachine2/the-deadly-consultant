@@ -123,10 +123,24 @@ const DynamicPage = () => {
                 </div>
               )}
 
+              {slug === 'roadmap-thank-you' && (
+                <style>{`
+                  .roadmap-thank-you-content h1,
+                  .roadmap-thank-you-content h2 {
+                    color: #FCECA3 !important;
+                  }
+                  .roadmap-thank-you-content p:first-of-type {
+                    color: white !important;
+                  }
+                  .roadmap-thank-you-content p:nth-of-type(2) {
+                    color: #a3a3a3 !important;
+                  }
+                `}</style>
+              )}
               <div
-                className="prose prose-invert prose-lg max-w-none text-foreground
+                className={`prose prose-invert prose-lg max-w-none text-foreground
                   [&_h1]:text-[#F4C903] [&_h2]:text-[#F4C903] [&_h3]:text-[#F4C903] [&_h4]:text-[#F4C903] [&_h5]:text-[#F4C903] [&_h6]:text-[#F4C903]
-                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold"
+                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
                 dangerouslySetInnerHTML={{ 
                   __html: slug === 'roadmap-thank-you' 
                     ? (content.html || "").replace(
