@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X } from 'lucide-react';
+import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
@@ -355,6 +356,9 @@ const JobCard: React.FC<{
             {job.earningEstimate}
           </span>}
       </div>
+
+      {/* Job Freshness Timeline */}
+      <JobFreshnessGraph dateStr={job.date} />
 
       {/* Preview (always visible) */}
       {job.duties && <div className="mt-5">
