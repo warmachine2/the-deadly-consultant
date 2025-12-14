@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
+import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 const ITEMS_PER_PAGE = 50;
 interface JobData {
   date: string;
@@ -373,7 +374,7 @@ const JobCard: React.FC<{
             const amount = parseInt(earning) || 0;
             const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
             return (
-              <span className="inline-flex">
+              <span className="inline-flex" style={{ color: '#FFDD40' }}>
                 {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3.5 h-3.5 -mx-0.5" />)}
               </span>
             );
@@ -508,6 +509,12 @@ const JobAlertsPage: React.FC = () => {
   const [showAnalytics, setShowAnalytics] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [showStrategyModal, setShowStrategyModal] = useState(false);
+  
+  // New filter states
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [experienceFilter, setExperienceFilter] = useState<string>('all');
+  const [salaryFilter, setSalaryFilter] = useState<string>('all');
+  const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
 
   // Role categorization helper
   const categorizeRole = (role: string): string => {
@@ -557,14 +564,20 @@ const JobAlertsPage: React.FC = () => {
     setOrderBy(property);
   };
 
-  // Extract unique locations from data
+  // Extract unique locations and role types from data
   const {
     countries,
-    locations
+    locations,
+    uniqueRoleTypes
   } = useMemo(() => {
     const countrySet = new Set<string>();
     const locationSet = new Set<string>();
+    const roleTypeSet = new Set<string>();
+    
     data.forEach(job => {
+      // Extract role type
+      roleTypeSet.add(categorizeRole(job.role));
+      
       if (job.location) {
         locationSet.add(job.location);
         // Try to extract country (assume last part after comma is country)
@@ -581,7 +594,8 @@ const JobAlertsPage: React.FC = () => {
     });
     return {
       countries: Array.from(countrySet).sort(),
-      locations: Array.from(locationSet).sort()
+      locations: Array.from(locationSet).sort(),
+      uniqueRoleTypes: Array.from(roleTypeSet).sort()
     };
   }, [data]);
   const filteredAndSortedData = useMemo(() => {
@@ -593,7 +607,7 @@ const JobAlertsPage: React.FC = () => {
       filtered = filtered.filter(row => row.role.toLowerCase().includes(query) || row.duties.toLowerCase().includes(query) || row.company.toLowerCase().includes(query));
     }
 
-    // Role type filter (from chart click)
+    // Role type filter (from chart click or dropdown)
     if (selectedRoleType !== 'all') {
       filtered = filtered.filter(row => categorizeRole(row.role) === selectedRoleType);
     }
@@ -614,6 +628,54 @@ const JobAlertsPage: React.FC = () => {
     // Location filter
     if (selectedLocation !== 'all') {
       filtered = filtered.filter(row => row.location === selectedLocation);
+    }
+    
+    // Experience filter
+    if (experienceFilter !== 'all') {
+      filtered = filtered.filter(row => {
+        const expText = row.requiredExperience.toLowerCase();
+        const yearMatch = expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
+        const years = yearMatch ? parseInt(yearMatch[1]) : 0;
+        
+        if (experienceFilter === 'less5') {
+          return years < 5;
+        } else if (experienceFilter === 'more5') {
+          return years >= 5;
+        }
+        return true;
+      });
+    }
+    
+    // Salary filter
+    if (salaryFilter !== 'all') {
+      filtered = filtered.filter(row => {
+        const earning = row.earningEstimate.replace(/[^0-9]/g, '');
+        const amount = parseInt(earning) || 0;
+        
+        if (salaryFilter === 'less15') {
+          return amount <= 15000;
+        } else if (salaryFilter === '15to18') {
+          return amount > 15000 && amount < 18000;
+        } else if (salaryFilter === 'more18') {
+          return amount >= 18000;
+        }
+        return true;
+      });
+    }
+    
+    // Work type filter
+    if (workTypeFilter !== 'all') {
+      filtered = filtered.filter(row => {
+        const workLower = row.workType.toLowerCase();
+        if (workTypeFilter === 'remote') {
+          return workLower.includes('remote');
+        } else if (workTypeFilter === 'hybrid') {
+          return workLower.includes('hybrid');
+        } else if (workTypeFilter === 'onsite') {
+          return !workLower.includes('remote') && !workLower.includes('hybrid');
+        }
+        return true;
+      });
     }
 
     // Date range filter
@@ -648,7 +710,7 @@ const JobAlertsPage: React.FC = () => {
       return order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
     return filtered;
-  }, [data, orderBy, order, searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate]);
+  }, [data, orderBy, order, searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate, experienceFilter, salaryFilter, workTypeFilter]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE);
@@ -660,7 +722,7 @@ const JobAlertsPage: React.FC = () => {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate]);
+  }, [searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate, experienceFilter, salaryFilter, workTypeFilter]);
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedRoleType('all');
@@ -668,6 +730,9 @@ const JobAlertsPage: React.FC = () => {
     setSelectedLocation('all');
     setStartDate(startOfMonth(new Date()));
     setEndDate(endOfMonth(new Date()));
+    setExperienceFilter('all');
+    setSalaryFilter('all');
+    setWorkTypeFilter('all');
     setCurrentPage(1);
   };
   return <div className="min-h-screen overflow-x-hidden flex flex-col">
@@ -883,11 +948,252 @@ const JobAlertsPage: React.FC = () => {
               </div>}
           </div>}
 
+        {/* Enhanced Filter Panel - Between Analytics and Job Cards */}
+        {!loading && data.length > 0 && (
+          <div className="volumetric-glass rounded-2xl p-5 mb-6">
+            <div className="flex flex-wrap gap-4 items-end">
+              {/* Experience Filter */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60 flex items-center gap-1">
+                  <Briefcase className="w-3 h-3" />
+                  Experience
+                </label>
+                <select 
+                  value={experienceFilter} 
+                  onChange={e => setExperienceFilter(e.target.value)} 
+                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[140px] cursor-pointer"
+                >
+                  <option value="all" className="bg-gray-900 text-white">All Experience</option>
+                  <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
+                  <option value="more5" className="bg-gray-900 text-white">≥ 5 Years</option>
+                </select>
+              </div>
+              
+              {/* Salary Filter */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60 flex items-center gap-1">
+                  <DollarSign className="w-3 h-3" style={{ color: '#FFDD40' }} />
+                  Salary Range
+                </label>
+                <select 
+                  value={salaryFilter} 
+                  onChange={e => setSalaryFilter(e.target.value)} 
+                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[140px] cursor-pointer"
+                >
+                  <option value="all" className="bg-gray-900 text-white">All Salaries</option>
+                  <option value="less15" className="bg-gray-900 text-white">≤ $15k/mo</option>
+                  <option value="15to18" className="bg-gray-900 text-white">$15k - $18k/mo</option>
+                  <option value="more18" className="bg-gray-900 text-white">≥ $18k/mo</option>
+                </select>
+              </div>
+              
+              {/* Work Type Filter */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60 flex items-center gap-1">
+                  <Home className="w-3 h-3" />
+                  Work Type
+                </label>
+                <select 
+                  value={workTypeFilter} 
+                  onChange={e => setWorkTypeFilter(e.target.value)} 
+                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px] cursor-pointer"
+                >
+                  <option value="all" className="bg-gray-900 text-white">All Types</option>
+                  <option value="remote" className="bg-gray-900 text-white">Remote</option>
+                  <option value="hybrid" className="bg-gray-900 text-white">Hybrid</option>
+                  <option value="onsite" className="bg-gray-900 text-white">On-site</option>
+                </select>
+              </div>
+              
+              {/* Role Type Dropdown */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60 flex items-center gap-1">
+                  <Users className="w-3 h-3" />
+                  Role Type
+                </label>
+                <select 
+                  value={selectedRoleType} 
+                  onChange={e => setSelectedRoleType(e.target.value)} 
+                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px] cursor-pointer"
+                >
+                  <option value="all" className="bg-gray-900 text-white">All Roles</option>
+                  {uniqueRoleTypes.map(role => (
+                    <option key={role} value={role} className="bg-gray-900 text-white">{role}</option>
+                  ))}
+                </select>
+              </div>
+              
+              {/* View Mode Toggle */}
+              <div className="flex flex-col gap-1 ml-auto">
+                <label className="text-xs text-white/60">View</label>
+                <div className="flex rounded-xl overflow-hidden border border-white/20">
+                  <button 
+                    onClick={() => setViewMode('card')}
+                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'card' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+                    style={viewMode === 'card' ? { backgroundColor: '#FFDD40' } : {}}
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                    Card
+                  </button>
+                  <button 
+                    onClick={() => setViewMode('table')}
+                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'table' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+                    style={viewMode === 'table' ? { backgroundColor: '#FFDD40' } : {}}
+                  >
+                    <TableIcon className="w-4 h-4" />
+                    Table
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {loading ? <div className="flex justify-center items-center min-h-[400px]">
             <Loader2 className="w-8 h-8 text-accent animate-spin" />
           </div> : error ? <div className="volumetric-glass rounded-3xl p-8 text-center">
             <p className="text-red-400">{error}</p>
-          </div> : isMobile ?
+          </div> : viewMode === 'table' ? (
+          // Table View
+          <div className="volumetric-glass rounded-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-white/10 hover:bg-transparent">
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Date</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Role</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Company</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Location</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Term</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Work Type</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Salary</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Experience</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Status</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Contact</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredAndSortedData.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
+                        No jobs found for the selected filters.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    paginatedData.map((job, index) => {
+                      const jobDate = parseDate(job.date);
+                      const hoursAgo = jobDate ? Math.round((Date.now() - jobDate.getTime()) / (1000 * 60 * 60)) : 0;
+                      const status = hoursAgo <= 6 ? 'HOT' : hoursAgo <= 24 ? 'Ideal' : hoursAgo <= 48 ? 'Hurry' : 'Stale';
+                      const statusColor = hoursAgo <= 6 ? '#ff4444' : hoursAgo <= 24 ? '#4ade80' : hoursAgo <= 48 ? '#FFDD40' : '#ef4444';
+                      
+                      const earning = job.earningEstimate.replace(/[^0-9]/g, '');
+                      const amount = parseInt(earning) || 0;
+                      const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
+                      const locationLower = job.location?.toLowerCase() || '';
+                      const currency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
+                      
+                      return (
+                        <TableRow key={index} className="border-white/10 hover:bg-white/5">
+                          <TableCell className="text-white whitespace-nowrap">
+                            <div className="flex flex-col">
+                              <span>{job.date}</span>
+                              <span className="text-xs text-white/50">{hoursAgo}h ago</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-white font-medium max-w-[200px]">
+                            <span className="line-clamp-2">{job.role}</span>
+                          </TableCell>
+                          <TableCell className="text-white whitespace-nowrap">{job.company}</TableCell>
+                          <TableCell className="text-white/80 whitespace-nowrap max-w-[150px] truncate">{job.location}</TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+                              {job.term}
+                            </span>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <span className="px-2 py-1 rounded-full text-xs inline-flex items-center gap-1" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+                              {job.workType.toLowerCase().includes('remote') ? <Plane className="w-3 h-3" /> : job.workType.toLowerCase().includes('hybrid') ? <Home className="w-3 h-3" /> : <Car className="w-3 h-3" />}
+                              {job.workType}
+                            </span>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            {job.earningEstimate && (
+                              <span className="px-2 py-1 rounded-full text-xs inline-flex items-center gap-1" style={{ backgroundColor: 'rgba(76, 175, 80, 0.15)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+                                <span className="inline-flex" style={{ color: '#FFDD40' }}>
+                                  {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3 h-3 -mx-0.5" />)}
+                                </span>
+                                {job.earningEstimate} {currency}
+                              </span>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-white/80 max-w-[120px] truncate text-xs">{job.requiredExperience}</TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <span 
+                              className="px-2 py-1 rounded-full text-xs font-bold"
+                              style={{ 
+                                backgroundColor: `${statusColor}20`,
+                                color: statusColor,
+                                boxShadow: `0 0 8px ${statusColor}40`
+                              }}
+                            >
+                              {status}
+                            </span>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            {job.recruiterEmail && (
+                              <a href={`mailto:${job.recruiterEmail}`} className="text-[#00d4ff] hover:underline text-xs">
+                                Email
+                              </a>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+            
+            {/* Pagination for Table */}
+            {totalPages > 1 && <div className="flex justify-center items-center gap-2 p-4 border-t border-white/10 flex-wrap">
+              <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors">
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </button>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum: number;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  return (
+                    <button 
+                      key={pageNum} 
+                      onClick={() => setCurrentPage(pageNum)} 
+                      className={`w-10 h-10 rounded-xl text-sm font-medium transition-all ${currentPage === pageNum ? 'text-black' : 'bg-white/5 border border-white/10 hover:border-[#FFDD40]/50'}`} 
+                      style={currentPage === pageNum ? { backgroundColor: '#FFDD40' } : {}}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+              <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="flex items-center gap-1 px-4 py-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors">
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              <span className="text-sm text-muted-foreground ml-2">
+                ({filteredAndSortedData.length} total)
+              </span>
+            </div>}
+          </div>
+        ) : isMobile ?
       // Mobile view - cards
       <div>
             {filteredAndSortedData.length === 0 ? <div className="volumetric-glass rounded-3xl p-8 text-center">
