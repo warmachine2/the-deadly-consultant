@@ -376,17 +376,17 @@ const JobCard: React.FC<{
       {/* Header */}
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1 min-w-0">
-          <h3 className="text-xl md:text-2xl font-bold leading-tight" style={{
+          <h3 className="text-2xl md:text-3xl font-bold leading-tight" style={{
           color: '#FFDD40'
         }}>
             {job.role}
           </h3>
-          <p className="text-white font-semibold text-base md:text-lg mt-2">
+          <p className="text-white font-semibold text-lg md:text-xl mt-2">
             {job.company}
           </p>
-          <div className="flex items-center gap-3 text-white/90 text-sm md:text-base mt-2">
+          <div className="flex items-center gap-3 text-white/90 text-base md:text-lg mt-2">
             <span>{job.date}</span>
-            <span className="px-2 py-0.5 rounded-full text-xs md:text-sm font-medium" style={{
+            <span className="px-2 py-0.5 rounded-full text-sm md:text-base font-medium" style={{
             backgroundColor: 'rgba(255, 221, 64, 0.2)',
             color: '#FFDD40'
           }}>
@@ -436,16 +436,16 @@ const JobCard: React.FC<{
           boxShadow: '0 4px 16px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
         }}>
           <div className="flex items-center gap-2 mb-3">
-            <Briefcase className="w-4 h-4" style={{ color: '#00d4ff' }} />
-            <p className="text-sm font-semibold uppercase tracking-wider" style={{
+            <Briefcase className="w-5 h-5" style={{ color: '#00d4ff' }} />
+            <p className="text-base font-semibold uppercase tracking-wider" style={{
               color: '#00d4ff'
             }}>About {job.company}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
             {job.companyInfo.map((info, index) => (
               <div key={index} className="flex items-start gap-2">
-                <span className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#FFDD40' }} />
-                <span className="text-sm text-white/90 leading-relaxed">{info}</span>
+                <span className="mt-2.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#FFDD40' }} />
+                <span className="text-base text-white/90 leading-relaxed">{info}</span>
               </div>
             ))}
           </div>
@@ -454,7 +454,7 @@ const JobCard: React.FC<{
 
       {/* Tags */}
       <div className="mt-4 flex gap-3 flex-wrap">
-        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full inline-flex items-center gap-2" style={{
+        <span className="px-4 py-2 text-base md:text-lg font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(0, 212, 255, 0.15)',
         color: '#00d4ff',
         border: '1px solid rgba(0, 212, 255, 0.3)'
@@ -464,26 +464,26 @@ const JobCard: React.FC<{
             const hasYear = termLower.includes('year') || termLower.includes('12 month');
             const monthMatch = termLower.match(/(\d+)\s*month/);
             const months = monthMatch ? parseInt(monthMatch[1]) : (hasYear ? 12 : 0);
-            if (months >= 12) return <Clock className="w-4 h-4" />;
-            if (months >= 6) return <Clock8 className="w-4 h-4" />;
-            return <Clock4 className="w-4 h-4" />;
+            if (months >= 12) return <Clock className="w-5 h-5" />;
+            if (months >= 6) return <Clock8 className="w-5 h-5" />;
+            return <Clock4 className="w-5 h-5" />;
           })()}
           {job.term}
         </span>
-        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full inline-flex items-center gap-2" style={{
+        <span className="px-4 py-2 text-base md:text-lg font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(0, 212, 255, 0.15)',
         color: '#00d4ff',
         border: '1px solid rgba(0, 212, 255, 0.3)'
       }}>
           {(() => {
             const workLower = job.workType.toLowerCase();
-            if (workLower.includes('remote')) return <Plane className="w-4 h-4" />;
-            if (workLower.includes('hybrid')) return <Home className="w-4 h-4" />;
-            return <Car className="w-4 h-4" />;
+            if (workLower.includes('remote')) return <Plane className="w-5 h-5" />;
+            if (workLower.includes('hybrid')) return <Home className="w-5 h-5" />;
+            return <Car className="w-5 h-5" />;
           })()}
           {job.workType}
         </span>
-        {job.earningEstimate && <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full inline-flex items-center gap-2" style={{
+        {job.earningEstimate && <span className="px-4 py-2 text-base md:text-lg font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(76, 175, 80, 0.15)',
         color: '#4caf50',
         border: '1px solid rgba(76, 175, 80, 0.3)'
@@ -494,7 +494,7 @@ const JobCard: React.FC<{
             const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
             return (
               <span className="inline-flex" style={{ color: '#FFDD40' }}>
-                {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3.5 h-3.5 -mx-0.5" />)}
+                {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-4 h-4 -mx-0.5" />)}
               </span>
             );
           })()}
@@ -502,9 +502,9 @@ const JobCard: React.FC<{
           {(() => {
             const locationLower = job.location?.toLowerCase() || '';
             if (locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa')) {
-              return <span className="ml-1 text-xs opacity-80">CAD</span>;
+              return <span className="ml-1 text-sm opacity-80">CAD</span>;
             }
-            return <span className="ml-1 text-xs opacity-80">USD</span>;
+            return <span className="ml-1 text-sm opacity-80">USD</span>;
           })()}
           </span>}
       </div>
@@ -514,7 +514,7 @@ const JobCard: React.FC<{
 
       {/* Preview (always visible) */}
       {job.duties && <div className="mt-5">
-          <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{
+          <p className="text-base md:text-lg font-semibold uppercase tracking-wider mb-2" style={{
         color: '#FFDD40'
       }}>Duties</p>
           <DutiesText text={job.duties} />
@@ -524,35 +524,35 @@ const JobCard: React.FC<{
       <Collapse in={expanded}>
         <div className="mt-5 pt-5 border-t border-white/10 space-y-5">
           {job.requiredExperience && <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{
+              <p className="text-base md:text-lg font-semibold uppercase tracking-wider mb-2" style={{
             color: '#00d4ff'
           }}>Required Experience</p>
-              <p className="text-base md:text-lg text-white">{job.requiredExperience}</p>
+              <p className="text-lg md:text-xl text-white">{job.requiredExperience}</p>
             </div>}
           {job.requiredSkills && <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{
+              <p className="text-base md:text-lg font-semibold uppercase tracking-wider mb-2" style={{
             color: '#00d4ff'
           }}>Required Skills</p>
-              <p className="text-base md:text-lg text-white">{job.requiredSkills}</p>
+              <p className="text-lg md:text-xl text-white">{job.requiredSkills}</p>
             </div>}
           {job.additionalRequirements && <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{
+              <p className="text-base md:text-lg font-semibold uppercase tracking-wider mb-2" style={{
             color: '#00d4ff'
           }}>Additional Requirements</p>
-              <p className="text-base md:text-lg text-white">{job.additionalRequirements}</p>
+              <p className="text-lg md:text-xl text-white">{job.additionalRequirements}</p>
             </div>}
           {job.comments && <div>
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-2" style={{
+              <p className="text-base md:text-lg font-semibold uppercase tracking-wider mb-2" style={{
             color: '#00d4ff'
           }}>Comments</p>
-              <p className="text-base md:text-lg text-white">{job.comments}</p>
+              <p className="text-lg md:text-xl text-white">{job.comments}</p>
             </div>}
           {job.strategy && <TipsSection strategy={job.strategy} />}
           {(job.recruiterEmail || job.recruiterPhone) && <div className="pt-3 border-t border-white/10">
-              <p className="text-sm md:text-base font-semibold uppercase tracking-wider mb-3" style={{
+              <p className="text-base md:text-lg font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
-              <div className="flex flex-wrap gap-4 text-base md:text-lg">
+              <div className="flex flex-wrap gap-4 text-lg md:text-xl">
                 {job.recruiterEmail && <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
                     {job.recruiterEmail}
                   </a>}
