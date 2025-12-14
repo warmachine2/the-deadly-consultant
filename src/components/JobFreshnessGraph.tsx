@@ -88,8 +88,8 @@ const JobFreshnessGraph: React.FC<JobFreshnessGraphProps> = ({ dateStr }) => {
   const warningMarkerPos = (48 / 72) * 100; // 66.67%
 
   return (
-    <div className="w-full mt-4 flex flex-col items-center">
-      {/* Container for centered, shortened graph */}
+    <div className="w-full mt-4">
+      {/* Container for left-aligned, shortened graph */}
       <div className="w-1/4 min-w-[180px]">
         {/* Status Badge */}
         <div className="flex items-center justify-between mb-2">
