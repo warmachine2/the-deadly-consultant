@@ -331,21 +331,26 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
               </div>
               
               {/* CTA Button */}
-              <a 
-                href="https://calendly.com/hassankhalidkhan" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(5, 98, 173, 0.9), rgba(5, 98, 173, 0.7))',
-                  border: '1px solid rgba(0, 212, 255, 0.4)',
-                  color: 'white',
-                  boxShadow: '0 4px 12px rgba(5, 98, 173, 0.3), 0 0 20px rgba(0, 212, 255, 0.1)'
-                }}
-              >
-                <CalendarCheck className="w-4 h-4" />
-                Book 45-Min Strategy Session
-              </a>
+              <div className="flex flex-col items-center md:items-end">
+                <a 
+                  href="https://calendly.com/hassankhalidkhan" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(5, 98, 173, 0.9), rgba(5, 98, 173, 0.7))',
+                    border: '1px solid rgba(0, 212, 255, 0.4)',
+                    color: 'white'
+                  }}
+                >
+                  <CalendarCheck className="w-4 h-4" />
+                  <span className="flex flex-col items-start leading-tight">
+                    <span>Discuss your pivot:</span>
+                    <span>Book 45m Strategy Session</span>
+                  </span>
+                </a>
+                <span className="text-xs mt-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Free</span>
+              </div>
             </div>
           </div>
         </div>
@@ -397,18 +402,20 @@ const JobCard: React.FC<{
           {/* Mini CTA */}
           <div className="flex items-start gap-3">
             <div className="flex flex-col items-center">
-              <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap" style={{
+              <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow" style={{
               background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
               border: '1px solid rgba(255, 221, 64, 0.5)',
-              color: '#FFDD40',
-              boxShadow: '0 2px 8px rgba(255, 221, 64, 0.2)'
+              color: '#FFDD40'
             }}>
                 <CalendarCheck className="w-3.5 h-3.5" />
-                Book Free Strategy Session
+                <span className="flex flex-col items-start leading-tight">
+                  <span>Discuss your pivot:</span>
+                  <span>Book 45m Strategy Session</span>
+                </span>
               </a>
               <span className="text-[10px] mt-1" style={{
               color: 'rgba(255, 255, 255, 0.5)'
-            }}>Pivot & Training Call w/ Hassan Khan</span>
+            }}>Free</span>
             </div>
             <IconButton size="medium" onClick={() => setExpanded(!expanded)} sx={{
             color: '#FFDD40',
