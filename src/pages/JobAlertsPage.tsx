@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -334,26 +334,58 @@ const JobCard: React.FC<{
 
       {/* Tags */}
       <div className="mt-4 flex gap-3 flex-wrap">
-        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{
+        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(0, 212, 255, 0.15)',
         color: '#00d4ff',
         border: '1px solid rgba(0, 212, 255, 0.3)'
       }}>
+          {(() => {
+            const termLower = job.term.toLowerCase();
+            const hasYear = termLower.includes('year') || termLower.includes('12 month');
+            const monthMatch = termLower.match(/(\d+)\s*month/);
+            const months = monthMatch ? parseInt(monthMatch[1]) : (hasYear ? 12 : 0);
+            if (months >= 12) return <Clock className="w-4 h-4" />;
+            if (months >= 6) return <Clock8 className="w-4 h-4" />;
+            return <Clock4 className="w-4 h-4" />;
+          })()}
           {job.term}
         </span>
-        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{
+        <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(0, 212, 255, 0.15)',
         color: '#00d4ff',
         border: '1px solid rgba(0, 212, 255, 0.3)'
       }}>
+          {(() => {
+            const workLower = job.workType.toLowerCase();
+            if (workLower.includes('remote')) return <Plane className="w-4 h-4" />;
+            if (workLower.includes('hybrid')) return <Home className="w-4 h-4" />;
+            return <Car className="w-4 h-4" />;
+          })()}
           {job.workType}
         </span>
-        {job.earningEstimate && <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full" style={{
+        {job.earningEstimate && <span className="px-4 py-1.5 text-sm md:text-base font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(76, 175, 80, 0.15)',
         color: '#4caf50',
         border: '1px solid rgba(76, 175, 80, 0.3)'
       }}>
-            {job.earningEstimate}
+          {(() => {
+            const earning = job.earningEstimate.replace(/[^0-9]/g, '');
+            const amount = parseInt(earning) || 0;
+            const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
+            return (
+              <span className="inline-flex">
+                {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3.5 h-3.5 -mx-0.5" />)}
+              </span>
+            );
+          })()}
+          {job.earningEstimate}
+          {(() => {
+            const locationLower = job.location?.toLowerCase() || '';
+            if (locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa')) {
+              return <span className="ml-1 text-xs opacity-80">CAD</span>;
+            }
+            return <span className="ml-1 text-xs opacity-80">USD</span>;
+          })()}
           </span>}
       </div>
 
