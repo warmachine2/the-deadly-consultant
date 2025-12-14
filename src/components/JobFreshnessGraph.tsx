@@ -88,103 +88,106 @@ const JobFreshnessGraph: React.FC<JobFreshnessGraphProps> = ({ dateStr }) => {
   const warningMarkerPos = (48 / 72) * 100; // 66.67%
 
   return (
-    <div className="w-full mt-4">
-      {/* Status Badge */}
-      <div className="flex items-center justify-between mb-2">
-        <span 
-          className="text-xs md:text-sm font-bold px-3 py-1 rounded-full"
-          style={{ 
-            backgroundColor: `${statusColor}20`,
-            color: statusColor,
-            boxShadow: `0 0 12px ${glowColor}`
-          }}
-        >
-          {statusLabel}
-        </span>
-        <span className="text-xs text-white/60">
-          {hoursAgo}h ago
-        </span>
-      </div>
-
-      {/* Timeline Graph */}
-      <div className="relative h-8 rounded-lg overflow-hidden" style={{
-        background: 'linear-gradient(90deg, rgba(74, 222, 128, 0.15) 0%, rgba(74, 222, 128, 0.15) 33.33%, rgba(255, 221, 64, 0.15) 33.33%, rgba(255, 221, 64, 0.15) 66.67%, rgba(239, 68, 68, 0.15) 66.67%, rgba(239, 68, 68, 0.15) 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
-        {/* Zone Labels */}
-        <div className="absolute inset-0 flex text-[10px] font-medium">
-          <div className="flex-1 flex items-center justify-center text-[#4ade80]/80">
-            Ideal
-          </div>
-          <div className="flex-1 flex items-center justify-center text-[#FFDD40]/80">
-            Hurry
-          </div>
-          <div className="flex-1 flex items-center justify-center text-[#ef4444]/80">
-            Stale
-          </div>
+    <div className="w-full mt-4 flex flex-col items-center">
+      {/* Container for centered, shortened graph */}
+      <div className="w-1/4 min-w-[180px]">
+        {/* Status Badge */}
+        <div className="flex items-center justify-between mb-2">
+          <span 
+            className="text-xs font-bold px-2 py-0.5 rounded-full"
+            style={{ 
+              backgroundColor: `${statusColor}20`,
+              color: statusColor,
+              boxShadow: `0 0 8px ${glowColor}`
+            }}
+          >
+            {statusLabel}
+          </span>
+          <span className="text-[10px] text-white/60">
+            {hoursAgo}h ago
+          </span>
         </div>
 
-        {/* Progress Fill */}
-        <div 
-          className="absolute left-0 top-0 h-full transition-all duration-500 ease-out"
-          style={{
-            width: `${percentage}%`,
-            background: status === 'hot' 
-              ? 'linear-gradient(90deg, rgba(255, 68, 68, 0.4), rgba(255, 68, 68, 0.6))'
-              : status === 'ideal'
-              ? 'linear-gradient(90deg, rgba(74, 222, 128, 0.3), rgba(74, 222, 128, 0.5))'
-              : status === 'warning'
-              ? 'linear-gradient(90deg, rgba(74, 222, 128, 0.3) 0%, rgba(255, 221, 64, 0.5) 100%)'
-              : 'linear-gradient(90deg, rgba(74, 222, 128, 0.3) 0%, rgba(255, 221, 64, 0.4) 50%, rgba(239, 68, 68, 0.5) 100%)',
-            borderRight: `2px solid ${statusColor}`,
-            boxShadow: `0 0 10px ${glowColor}`
-          }}
-        />
+        {/* Timeline Graph */}
+        <div className="relative h-6 rounded-md overflow-hidden" style={{
+          background: 'linear-gradient(90deg, rgba(74, 222, 128, 0.15) 0%, rgba(74, 222, 128, 0.15) 33.33%, rgba(255, 221, 64, 0.15) 33.33%, rgba(255, 221, 64, 0.15) 66.67%, rgba(239, 68, 68, 0.15) 66.67%, rgba(239, 68, 68, 0.15) 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          {/* Zone Labels */}
+          <div className="absolute inset-0 flex text-[8px] font-medium">
+            <div className="flex-1 flex items-center justify-center text-[#4ade80]/80">
+              Ideal
+            </div>
+            <div className="flex-1 flex items-center justify-center text-[#FFDD40]/80">
+              Hurry
+            </div>
+            <div className="flex-1 flex items-center justify-center text-[#ef4444]/80">
+              Stale
+            </div>
+          </div>
 
-        {/* Current Position Indicator */}
-        <div 
-          className="absolute top-0 h-full w-0.5 transition-all duration-500"
-          style={{ 
-            left: `${Math.min(percentage, 99)}%`,
-            background: statusColor,
-            boxShadow: `0 0 8px ${glowColor}, 0 0 16px ${glowColor}`
-          }}
-        >
-          {/* Pulse dot */}
+          {/* Progress Fill */}
           <div 
-            className="absolute -top-1 -left-1.5 w-3 h-3 rounded-full animate-pulse"
+            className="absolute left-0 top-0 h-full transition-all duration-500 ease-out"
+            style={{
+              width: `${percentage}%`,
+              background: status === 'hot' 
+                ? 'linear-gradient(90deg, rgba(255, 68, 68, 0.4), rgba(255, 68, 68, 0.6))'
+                : status === 'ideal'
+                ? 'linear-gradient(90deg, rgba(74, 222, 128, 0.3), rgba(74, 222, 128, 0.5))'
+                : status === 'warning'
+                ? 'linear-gradient(90deg, rgba(74, 222, 128, 0.3) 0%, rgba(255, 221, 64, 0.5) 100%)'
+                : 'linear-gradient(90deg, rgba(74, 222, 128, 0.3) 0%, rgba(255, 221, 64, 0.4) 50%, rgba(239, 68, 68, 0.5) 100%)',
+              borderRight: `2px solid ${statusColor}`,
+              boxShadow: `0 0 8px ${glowColor}`
+            }}
+          />
+
+          {/* Current Position Indicator */}
+          <div 
+            className="absolute top-0 h-full w-0.5 transition-all duration-500"
             style={{ 
-              backgroundColor: statusColor,
-              boxShadow: `0 0 12px ${glowColor}`
+              left: `${Math.min(percentage, 99)}%`,
+              background: statusColor,
+              boxShadow: `0 0 6px ${glowColor}, 0 0 12px ${glowColor}`
+            }}
+          >
+            {/* Pulse dot */}
+            <div 
+              className="absolute -top-0.5 -left-1 w-2 h-2 rounded-full animate-pulse"
+              style={{ 
+                backgroundColor: statusColor,
+                boxShadow: `0 0 8px ${glowColor}`
+              }}
+            />
+          </div>
+
+          {/* 24h Marker */}
+          <div 
+            className="absolute top-0 h-full w-px"
+            style={{ 
+              left: `${idealMarkerPos}%`,
+              background: 'rgba(255, 255, 255, 0.3)'
+            }}
+          />
+
+          {/* 48h Marker */}
+          <div 
+            className="absolute top-0 h-full w-px"
+            style={{ 
+              left: `${warningMarkerPos}%`,
+              background: 'rgba(255, 255, 255, 0.3)'
             }}
           />
         </div>
 
-        {/* 24h Marker */}
-        <div 
-          className="absolute top-0 h-full w-px"
-          style={{ 
-            left: `${idealMarkerPos}%`,
-            background: 'rgba(255, 255, 255, 0.3)'
-          }}
-        />
-
-        {/* 48h Marker */}
-        <div 
-          className="absolute top-0 h-full w-px"
-          style={{ 
-            left: `${warningMarkerPos}%`,
-            background: 'rgba(255, 255, 255, 0.3)'
-          }}
-        />
-      </div>
-
-      {/* Time Labels */}
-      <div className="flex justify-between mt-1 text-[10px] text-white/40">
-        <span>0h</span>
-        <span style={{ marginLeft: '30%' }}>24h</span>
-        <span style={{ marginLeft: '30%' }}>48h</span>
-        <span>72h+</span>
+        {/* Time Labels */}
+        <div className="flex justify-between mt-1 text-[8px] text-white/40">
+          <span>0h</span>
+          <span>24h</span>
+          <span>48h</span>
+          <span>72h+</span>
+        </div>
       </div>
     </div>
   );
