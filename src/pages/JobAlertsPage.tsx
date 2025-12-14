@@ -59,6 +59,36 @@ const parseCSV = (csvText: string): JobData[] => {
   let currentRow: string[] = [];
   let inQuotes = false;
   let isFirstRow = true;
+  let rowNumber = 0;
+  
+  const addRow = (row: string[]) => {
+    rowNumber++;
+    // Only require that there's at least a date and role (first 2 columns)
+    if (row.length >= 2 && row[0] && row[1]) {
+      rows.push({
+        date: row[0] || '',
+        role: row[1] || '',
+        term: row[2] || '',
+        duties: row[3] || '',
+        requiredExperience: row[4] || '',
+        requiredSkills: row[5] || '',
+        additionalRequirements: row[6] || '',
+        comments: row[7] || '',
+        workType: row[8] || '',
+        company: row[9] || '',
+        recruiterEmail: row[10] || '',
+        recruiterPhone: row[11] || '',
+        strategy: row[12] || '',
+        earningEstimate: row[13] || '',
+        location: row[14] || '',
+        companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined
+      });
+      console.log(`Parsed row ${rowNumber}: ${row[1]} at ${row[9]}`);
+    } else {
+      console.log(`Skipped row ${rowNumber}: insufficient data`, row.slice(0, 3));
+    }
+  };
+
   for (let i = 0; i < chars.length; i++) {
     const char = chars[i];
     const nextChar = chars[i + 1];
@@ -81,25 +111,9 @@ const parseCSV = (csvText: string): JobData[] => {
       currentField = '';
       if (isFirstRow) {
         isFirstRow = false;
-      } else if (currentRow.length >= 14 && currentRow.some(v => v)) {
-        rows.push({
-          date: currentRow[0] || '',
-          role: currentRow[1] || '',
-          term: currentRow[2] || '',
-          duties: currentRow[3] || '',
-          requiredExperience: currentRow[4] || '',
-          requiredSkills: currentRow[5] || '',
-          additionalRequirements: currentRow[6] || '',
-          comments: currentRow[7] || '',
-          workType: currentRow[8] || '',
-          company: currentRow[9] || '',
-          recruiterEmail: currentRow[10] || '',
-          recruiterPhone: currentRow[11] || '',
-          strategy: currentRow[12] || '',
-          earningEstimate: currentRow[13] || '',
-          location: currentRow[14] || '',
-          companyInfo: currentRow[16] ? parseCompanyInfo(currentRow[16]) : undefined
-        });
+        console.log('CSV Header columns:', currentRow.length, currentRow);
+      } else {
+        addRow(currentRow);
       }
       currentRow = [];
     } else {
@@ -110,27 +124,12 @@ const parseCSV = (csvText: string): JobData[] => {
   // Handle last row if no trailing newline
   if (currentRow.length > 0 || currentField) {
     currentRow.push(currentField.trim());
-    if (!isFirstRow && currentRow.length >= 14 && currentRow.some(v => v)) {
-      rows.push({
-        date: currentRow[0] || '',
-        role: currentRow[1] || '',
-        term: currentRow[2] || '',
-        duties: currentRow[3] || '',
-        requiredExperience: currentRow[4] || '',
-        requiredSkills: currentRow[5] || '',
-        additionalRequirements: currentRow[6] || '',
-        comments: currentRow[7] || '',
-        workType: currentRow[8] || '',
-        company: currentRow[9] || '',
-        recruiterEmail: currentRow[10] || '',
-        recruiterPhone: currentRow[11] || '',
-        strategy: currentRow[12] || '',
-        earningEstimate: currentRow[13] || '',
-        location: currentRow[14] || '',
-        companyInfo: currentRow[16] ? parseCompanyInfo(currentRow[16]) : undefined
-      });
+    if (!isFirstRow) {
+      addRow(currentRow);
     }
   }
+  
+  console.log(`Total rows parsed: ${rows.length}`);
   return rows;
 };
 const parseDate = (dateStr: string): Date | null => {
