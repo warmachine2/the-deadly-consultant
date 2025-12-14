@@ -497,7 +497,7 @@ const JobCard: React.FC<{
               </span>
             );
           })()}
-          {job.earningEstimate}
+          {job.earningEstimate.replace(/\s*(CAD|USD)\s*/gi, ' ').trim()}
           {(() => {
             const locationLower = job.location?.toLowerCase() || '';
             if (locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa')) {
@@ -1240,7 +1240,7 @@ const JobAlertsPage: React.FC = () => {
                                 <span className="inline-flex" style={{ color: '#FFDD40' }}>
                                   {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3 h-3 -mx-0.5" />)}
                                 </span>
-                                {job.earningEstimate} {currency} *Est.
+                                {job.earningEstimate.replace(/\s*(CAD|USD)\s*/gi, ' ').trim()} {currency} *Est.
                               </span>
                             )}
                           </TableCell>
