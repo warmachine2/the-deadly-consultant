@@ -614,8 +614,8 @@ const JobAlertsPage: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [selectedRoleType, setSelectedRoleType] = useState<string>('all');
-  const [startDate, setStartDate] = useState<Date | undefined>(startOfMonth(new Date()));
-  const [endDate, setEndDate] = useState<Date | undefined>(endOfMonth(new Date()));
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [showFilters, setShowFilters] = useState(true);
   const [showAnalytics, setShowAnalytics] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
