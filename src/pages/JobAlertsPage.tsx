@@ -29,10 +29,28 @@ interface JobData {
   strategy: string;
   earningEstimate: string;
   location: string; // City/State/Province/Country
+  companyInfo?: string[]; // Array of company info bullet points (optional)
 }
 type Order = 'asc' | 'desc';
 const SHEET_ID = '1JFNwjbOjAWCO3ewxN1qLyA0ewLOLMjkkKzJibpscm0Y';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+
+// Parse Company Info JSON string to array
+const parseCompanyInfo = (infoStr: string): string[] => {
+  if (!infoStr) return [];
+  try {
+    // Try parsing as JSON array
+    const parsed = JSON.parse(infoStr);
+    if (Array.isArray(parsed)) {
+      return parsed.filter(item => typeof item === 'string' && item.trim());
+    }
+  } catch {
+    // If not valid JSON, split by newlines or semicolons
+    return infoStr.split(/[;\n]/).map(s => s.trim()).filter(Boolean);
+  }
+  return [];
+};
+
 const parseCSV = (csvText: string): JobData[] => {
   // Handle multi-line quoted fields properly
   const rows: JobData[] = [];
@@ -79,7 +97,8 @@ const parseCSV = (csvText: string): JobData[] => {
           recruiterPhone: currentRow[11] || '',
           strategy: currentRow[12] || '',
           earningEstimate: currentRow[13] || '',
-          location: currentRow[14] || ''
+          location: currentRow[14] || '',
+          companyInfo: currentRow[15] ? parseCompanyInfo(currentRow[15]) : undefined
         });
       }
       currentRow = [];
@@ -107,7 +126,8 @@ const parseCSV = (csvText: string): JobData[] => {
         recruiterPhone: currentRow[11] || '',
         strategy: currentRow[12] || '',
         earningEstimate: currentRow[13] || '',
-        location: currentRow[14] || ''
+        location: currentRow[14] || '',
+        companyInfo: currentRow[15] ? parseCompanyInfo(currentRow[15]) : undefined
       });
     }
   }
@@ -448,6 +468,30 @@ const JobCard: React.FC<{
                 {job.recruiterPhone && <span className="text-white">{job.recruiterPhone}</span>}
               </div>
             </div>}
+
+          {/* Company Info Mini-Card */}
+          {job.companyInfo && job.companyInfo.length > 0 && (
+            <div className="mt-4 p-4 md:p-5 rounded-xl" style={{
+              background: 'linear-gradient(145deg, rgba(30, 30, 45, 0.8), rgba(15, 15, 25, 0.9))',
+              border: '1px solid rgba(255, 221, 64, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
+            }}>
+              <div className="flex items-center gap-2 mb-3">
+                <Briefcase className="w-4 h-4" style={{ color: '#FFDD40' }} />
+                <p className="text-sm md:text-base font-semibold uppercase tracking-wider" style={{
+                  color: '#FFDD40'
+                }}>Company Info</p>
+              </div>
+              <ul className="space-y-2">
+                {job.companyInfo.map((info, index) => (
+                  <li key={index} className="flex items-start gap-2 text-sm md:text-base text-white/90">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#00d4ff' }} />
+                    <span>{info}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </Collapse>
     </div>;
@@ -700,14 +744,21 @@ const JobAlertsPage: React.FC = () => {
 
     // Sort
     filtered.sort((a, b) => {
-      const aValue = a[orderBy] || '';
-      const bValue = b[orderBy] || '';
+      const aValue = a[orderBy];
+      const bValue = b[orderBy];
+      
+      // Skip sorting if companyInfo field (array type)
+      if (orderBy === 'companyInfo') return 0;
+      
       if (orderBy === 'date') {
-        const dateA = parseDate(aValue)?.getTime() || 0;
-        const dateB = parseDate(bValue)?.getTime() || 0;
+        const dateA = parseDate(aValue as string)?.getTime() || 0;
+        const dateB = parseDate(bValue as string)?.getTime() || 0;
         return order === 'asc' ? dateA - dateB : dateB - dateA;
       }
-      return order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      
+      const aStr = (aValue as string) || '';
+      const bStr = (bValue as string) || '';
+      return order === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
     });
     return filtered;
   }, [data, orderBy, order, searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate, experienceFilter, salaryFilter, workTypeFilter]);
