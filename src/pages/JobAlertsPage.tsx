@@ -98,7 +98,7 @@ const parseCSV = (csvText: string): JobData[] => {
           strategy: currentRow[12] || '',
           earningEstimate: currentRow[13] || '',
           location: currentRow[14] || '',
-          companyInfo: currentRow[15] ? parseCompanyInfo(currentRow[15]) : undefined
+          companyInfo: currentRow[16] ? parseCompanyInfo(currentRow[16]) : undefined
         });
       }
       currentRow = [];
@@ -127,7 +127,7 @@ const parseCSV = (csvText: string): JobData[] => {
         strategy: currentRow[12] || '',
         earningEstimate: currentRow[13] || '',
         location: currentRow[14] || '',
-        companyInfo: currentRow[15] ? parseCompanyInfo(currentRow[15]) : undefined
+        companyInfo: currentRow[16] ? parseCompanyInfo(currentRow[16]) : undefined
       });
     }
   }
