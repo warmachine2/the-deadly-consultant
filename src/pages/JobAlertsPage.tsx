@@ -398,64 +398,59 @@ const JobCard: React.FC<{
               </>}
           </div>
         </div>
-        <div className="flex flex-col items-end gap-3">
+        <div className="flex items-start gap-3">
           {/* Mini CTA */}
-          <div className="flex items-start gap-3">
-            <div className="flex flex-col items-center">
-              <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow" style={{
+          <div className="flex flex-col items-center">
+            <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow" style={{
               background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
               border: '1px solid rgba(255, 221, 64, 0.5)',
               color: '#FFDD40'
             }}>
-                <CalendarCheck className="w-3.5 h-3.5" />
-                <span className="flex flex-col items-start leading-tight">
-                  <span>Discuss your pivot:</span>
-                  <span>Book 45m Strategy Session</span>
-                </span>
-              </a>
-              <span className="text-[10px] mt-1" style={{
+              <CalendarCheck className="w-3.5 h-3.5" />
+              <span className="flex flex-col items-start leading-tight">
+                <span>Discuss your pivot:</span>
+                <span>Book 45m Strategy Session</span>
+              </span>
+            </a>
+            <span className="text-[10px] mt-1" style={{
               color: 'rgba(255, 255, 255, 0.5)'
             }}>Free</span>
-            </div>
-            <IconButton size="medium" onClick={() => setExpanded(!expanded)} sx={{
+          </div>
+          <IconButton size="medium" onClick={() => setExpanded(!expanded)} sx={{
             color: '#FFDD40',
             backgroundColor: 'rgba(255, 221, 64, 0.1)',
             '&:hover': {
               backgroundColor: 'rgba(255, 221, 64, 0.2)'
             }
           }}>
-              {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>
-          </div>
-          
-          {/* Company Info Mini-Card (Upper Right) */}
-          {job.companyInfo && job.companyInfo.length > 0 && (
-            <div className="p-3 rounded-xl max-w-[280px]" style={{
-              background: 'linear-gradient(145deg, rgba(30, 30, 45, 0.8), rgba(15, 15, 25, 0.9))',
-              border: '1px solid rgba(255, 221, 64, 0.2)',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
-            }}>
-              <div className="flex items-center gap-2 mb-2">
-                <Briefcase className="w-3.5 h-3.5" style={{ color: '#FFDD40' }} />
-                <p className="text-xs font-semibold uppercase tracking-wider" style={{
-                  color: '#FFDD40'
-                }}>Company Info</p>
-              </div>
-              <ul className="space-y-1.5">
-                {job.companyInfo.slice(0, 3).map((info, index) => (
-                  <li key={index} className="flex items-start gap-1.5 text-xs text-white/90">
-                    <span className="mt-1 w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: '#00d4ff' }} />
-                    <span className="line-clamp-2">{info}</span>
-                  </li>
-                ))}
-                {job.companyInfo.length > 3 && (
-                  <li className="text-xs text-white/50 pl-2.5">+{job.companyInfo.length - 3} more</li>
-                )}
-              </ul>
-            </div>
-          )}
+            {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
         </div>
       </div>
+
+      {/* Company Info Banner - Centered below header */}
+      {job.companyInfo && job.companyInfo.length > 0 && (
+        <div className="mt-4 p-4 md:p-5 rounded-xl" style={{
+          background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 180, 0.05))',
+          border: '1px solid rgba(0, 212, 255, 0.25)',
+          boxShadow: '0 4px 16px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+        }}>
+          <div className="flex items-center gap-2 mb-3">
+            <Briefcase className="w-4 h-4" style={{ color: '#00d4ff' }} />
+            <p className="text-sm font-semibold uppercase tracking-wider" style={{
+              color: '#00d4ff'
+            }}>About {job.company}</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
+            {job.companyInfo.map((info, index) => (
+              <div key={index} className="flex items-start gap-2">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#FFDD40' }} />
+                <span className="text-sm text-white/90 leading-relaxed">{info}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Tags */}
       <div className="mt-4 flex gap-3 flex-wrap">
