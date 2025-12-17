@@ -1,3 +1,4 @@
+// Index page - Main blog home
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash/debounce";
@@ -165,9 +166,11 @@ const Index = () => {
               <>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
                   <RoadmapCard />
-                  {filteredPosts.map((post) => (
-                    <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
-                  ))}
+                  {filteredPosts
+                    .filter((post) => !post.title.toLowerCase().includes('deadly job alerts'))
+                    .map((post) => (
+                      <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
+                    ))}
                 </div>
 
                 {filteredPosts.length === 0 && !loading && (
