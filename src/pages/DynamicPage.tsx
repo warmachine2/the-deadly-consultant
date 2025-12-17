@@ -92,9 +92,9 @@ const DynamicPage = () => {
         <div className="max-w-4xl mx-auto">
           {/* Content Card */}
           <article className="volumetric-glass rounded-3xl overflow-hidden">
-            {/* Featured Image */}
+            {/* Featured Image - Hidden visually but kept for thumbnail/preview generation */}
             {content.feature_image && (
-              <div className="w-full h-64 md:h-80 overflow-hidden">
+              <div className="sr-only">
                 <img 
                   src={content.feature_image} 
                   alt={content.title} 
