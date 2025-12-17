@@ -104,7 +104,7 @@ const DynamicPage = () => {
             )}
 
             <div className="p-6 md:p-10">
-              <h1 className="text-3xl md:text-4xl font-bold text-[#F4C903] mb-6" style={{ textShadow: '-0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0 4px 12px rgba(0, 0, 0, 0.8), 0 8px 24px rgba(0, 0, 0, 0.6)', WebkitTextStroke: '0.5px #000' }}>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#FFE361] mb-6" style={{ textShadow: '-0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0 4px 12px rgba(0, 0, 0, 0.8), 0 8px 24px rgba(0, 0, 0, 0.6)', WebkitTextStroke: '0.5px #000' }}>
                 {content.title}
               </h1>
 
@@ -142,8 +142,10 @@ const DynamicPage = () => {
               )}
               <div
                 className={`prose prose-invert prose-lg max-w-none text-foreground
-                  [&_h1]:text-[#F4C903] [&_h2]:text-[#F4C903] [&_h3]:text-[#F4C903] [&_h4]:text-[#F4C903] [&_h5]:text-[#F4C903] [&_h6]:text-[#F4C903]
-                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
+                  [&_h1]:text-[#FFE361] [&_h2]:text-[#FFE361] [&_h3]:text-[#FFE361] [&_h4]:text-[#FFE361] [&_h5]:text-[#FFE361] [&_h6]:text-[#FFE361]
+                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold 
+                  [&_iframe]:mx-auto [&_iframe]:block [&_iframe[src*="youtube.com/embed"]]:w-full [&_iframe[src*="youtube.com/embed"]]:max-w-[400px] [&_iframe[src*="youtube.com/embed"]]:h-[700px] [&_iframe[src*="youtube.com/embed"]]:md:max-w-[450px] [&_iframe[src*="youtube.com/embed"]]:md:h-[800px]
+                  ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
                 dangerouslySetInnerHTML={{ 
                   __html: slug === 'roadmap-thank-you' 
                     ? (content.html || "")

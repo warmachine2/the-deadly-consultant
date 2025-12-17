@@ -125,7 +125,10 @@ const Index = () => {
 
       {/* Fixed overlap + perfect mobile spacing */}
       <div className="px-0 md:px-6 pb-12 pt-20 lg:pt-20">
-        <HeroSection />
+        {/* Hidden visually but kept in DOM for thumbnail/preview generation */}
+        <div className="sr-only">
+          <HeroSection />
+        </div>
 
         {/* Mobile filter button */}
         <div className="md:hidden px-4 mb-4 mt-4">
