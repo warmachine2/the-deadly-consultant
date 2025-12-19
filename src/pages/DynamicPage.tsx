@@ -161,14 +161,31 @@ const DynamicPage = () => {
                 .dynamic-page-content h6[style] {
                   color: #FFE361 !important;
                 }
-                /* Body text and list items - white */
+                /* Body text and list items - white - override all inline styles */
                 .dynamic-page-content p,
+                .dynamic-page-content p[style],
+                .dynamic-page-content p *,
                 .dynamic-page-content li,
+                .dynamic-page-content li[style],
+                .dynamic-page-content li *,
                 .dynamic-page-content ul,
                 .dynamic-page-content ol,
                 .dynamic-page-content span,
-                .dynamic-page-content div {
+                .dynamic-page-content span[style],
+                .dynamic-page-content div:not(.dynamic-page-content),
+                .dynamic-page-content div[style],
+                .dynamic-page-content strong,
+                .dynamic-page-content em,
+                .dynamic-page-content b,
+                .dynamic-page-content i,
+                .dynamic-page-content a,
+                .dynamic-page-content blockquote,
+                .dynamic-page-content blockquote * {
                   color: white !important;
+                }
+                /* Links can have accent color on hover */
+                .dynamic-page-content a:hover {
+                  color: #FFE361 !important;
                 }
                 /* Bullet points */
                 .dynamic-page-content ul li::marker,
