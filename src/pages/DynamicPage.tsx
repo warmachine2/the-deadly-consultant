@@ -146,7 +146,19 @@ const DynamicPage = () => {
                 .dynamic-page-content h3,
                 .dynamic-page-content h4,
                 .dynamic-page-content h5,
-                .dynamic-page-content h6 {
+                .dynamic-page-content h6,
+                .dynamic-page-content h1 *,
+                .dynamic-page-content h2 *,
+                .dynamic-page-content h3 *,
+                .dynamic-page-content h4 *,
+                .dynamic-page-content h5 *,
+                .dynamic-page-content h6 *,
+                .dynamic-page-content h1[style],
+                .dynamic-page-content h2[style],
+                .dynamic-page-content h3[style],
+                .dynamic-page-content h4[style],
+                .dynamic-page-content h5[style],
+                .dynamic-page-content h6[style] {
                   color: #FFE361 !important;
                 }
               `}</style>
@@ -156,18 +168,24 @@ const DynamicPage = () => {
                   [&_iframe]:mx-auto [&_iframe]:block [&_iframe[src*="youtube.com/embed"]]:w-full [&_iframe[src*="youtube.com/embed"]]:max-w-[400px] [&_iframe[src*="youtube.com/embed"]]:h-[700px] [&_iframe[src*="youtube.com/embed"]]:md:max-w-[450px] [&_iframe[src*="youtube.com/embed"]]:md:h-[800px]
                   ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
                 dangerouslySetInnerHTML={{ 
-                  __html: slug === 'roadmap-thank-you' 
-                    ? (content.html || "")
-                        .replace(
-                          /href="[^"]*"([^>]*>Back to Video)/gi,
-                          'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
-                        )
-                        .replace(/Accelerate to mastery/gi, 'Accelerate To Mastery')
-                        .replace(
-                          /href="[^"]*"([^>]*>Join Now)/gi,
-                          'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
-                        )
-                    : (content.html || "")
+                  __html: (() => {
+                    let html = slug === 'roadmap-thank-you' 
+                      ? (content.html || "")
+                          .replace(
+                            /href="[^"]*"([^>]*>Back to Video)/gi,
+                            'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
+                          )
+                          .replace(/Accelerate to mastery/gi, 'Accelerate To Mastery')
+                          .replace(
+                            /href="[^"]*"([^>]*>Join Now)/gi,
+                            'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
+                          )
+                      : (content.html || "");
+                    // Strip inline color styles from headings
+                    html = html.replace(/<(h[1-6])([^>]*?)style="[^"]*color[^"]*"([^>]*)>/gi, '<$1$2$3>');
+                    html = html.replace(/<(h[1-6])([^>]*?)style='[^']*color[^']*'([^>]*)>/gi, '<$1$2$3>');
+                    return html;
+                  })()
                 }}
               />
             </div>
