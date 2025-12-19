@@ -161,11 +161,46 @@ const DynamicPage = () => {
                 .dynamic-page-content h6[style] {
                   color: #FFE361 !important;
                 }
+                /* Body text and list items - white */
+                .dynamic-page-content p,
+                .dynamic-page-content li,
+                .dynamic-page-content ul,
+                .dynamic-page-content ol,
+                .dynamic-page-content span,
+                .dynamic-page-content div {
+                  color: white !important;
+                }
+                /* Bullet points */
+                .dynamic-page-content ul li::marker,
+                .dynamic-page-content ol li::marker {
+                  color: white !important;
+                }
+                /* Default YouTube embeds - landscape 16:9 */
+                .dynamic-page-content iframe[src*="youtube.com/embed"] {
+                  display: block;
+                  margin: 0 auto;
+                  width: 100%;
+                  max-width: 800px;
+                  aspect-ratio: 16 / 9;
+                  height: auto;
+                }
+                /* YouTube Shorts - vertical 9:16 */
+                .dynamic-page-content iframe[src*="youtube.com/embed/shorts"],
+                .dynamic-page-content .youtube-short iframe {
+                  max-width: 400px;
+                  aspect-ratio: 9 / 16;
+                  height: auto;
+                }
+                @media (min-width: 768px) {
+                  .dynamic-page-content iframe[src*="youtube.com/embed/shorts"],
+                  .dynamic-page-content .youtube-short iframe {
+                    max-width: 450px;
+                  }
+                }
               `}</style>
               <div
                 className={`prose prose-invert prose-lg max-w-none text-foreground dynamic-page-content
-                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold 
-                  [&_iframe]:mx-auto [&_iframe]:block [&_iframe[src*="youtube.com/embed"]]:w-full [&_iframe[src*="youtube.com/embed"]]:max-w-[400px] [&_iframe[src*="youtube.com/embed"]]:h-[700px] [&_iframe[src*="youtube.com/embed"]]:md:max-w-[450px] [&_iframe[src*="youtube.com/embed"]]:md:h-[800px]
+                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold
                   ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
                 dangerouslySetInnerHTML={{ 
                   __html: (() => {
