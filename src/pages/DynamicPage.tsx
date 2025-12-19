@@ -140,9 +140,18 @@ const DynamicPage = () => {
                   }
                 `}</style>
               )}
+              <style>{`
+                .dynamic-page-content h1,
+                .dynamic-page-content h2,
+                .dynamic-page-content h3,
+                .dynamic-page-content h4,
+                .dynamic-page-content h5,
+                .dynamic-page-content h6 {
+                  color: #FFE361 !important;
+                }
+              `}</style>
               <div
-                className={`prose prose-invert prose-lg max-w-none text-foreground
-                  [&_h1]:text-[#FFE361] [&_h2]:text-[#FFE361] [&_h3]:text-[#FFE361] [&_h4]:text-[#FFE361] [&_h5]:text-[#FFE361] [&_h6]:text-[#FFE361]
+                className={`prose prose-invert prose-lg max-w-none text-foreground dynamic-page-content
                   [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold 
                   [&_iframe]:mx-auto [&_iframe]:block [&_iframe[src*="youtube.com/embed"]]:w-full [&_iframe[src*="youtube.com/embed"]]:max-w-[400px] [&_iframe[src*="youtube.com/embed"]]:h-[700px] [&_iframe[src*="youtube.com/embed"]]:md:max-w-[450px] [&_iframe[src*="youtube.com/embed"]]:md:h-[800px]
                   ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
