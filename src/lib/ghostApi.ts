@@ -127,6 +127,7 @@ export const fetchPageBySlug = async (slug: string): Promise<GhostPost | null> =
         endpoint: `/pages/slug/${slug}/`,
         params: {
           include: "tags,authors",
+          fields: "id,title,html,slug,excerpt,custom_excerpt,feature_image,published_at,reading_time",
         },
       },
     });
