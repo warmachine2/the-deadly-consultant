@@ -2,27 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { fetchPostBySlug, fetchPageBySlug, GhostPost } from "@/lib/ghostApi";
-import { Loader2, CalendarCheck } from "lucide-react";
-
-// Strategy Session Button Component
-const StrategySessionButton = () => (
-  <div className="my-8 text-center">
-    <a
-      href="https://calendly.com/hassankhalidkhan"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 strategy-session-glow"
-      style={{
-        background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
-        boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
-        border: '1px solid rgba(0, 150, 255, 0.4)'
-      }}
-    >
-      <CalendarCheck className="w-5 h-5 mr-2" />
-      Book Free 45-Min Strategy Session
-    </a>
-  </div>
-);
+import { Loader2 } from "lucide-react";
 
 const DynamicPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -237,15 +217,42 @@ const DynamicPage = () => {
                 /* Strategy session button glow animation */
                 @keyframes strategyGlow {
                   0%, 100% {
-                    box-shadow: 0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3);
+                    box-shadow: 0 0 26px rgba(0, 150, 255, 0.35), 0 0 48px rgba(0, 150, 255, 0.18);
                   }
                   50% {
-                    box-shadow: 0 0 40px rgba(0, 150, 255, 0.7), 0 0 80px rgba(0, 150, 255, 0.5), 0 0 100px rgba(0, 150, 255, 0.3);
+                    box-shadow: 0 0 34px rgba(0, 150, 255, 0.55), 0 0 72px rgba(0, 150, 255, 0.28);
                   }
                 }
-                .strategy-session-btn {
-                  animation: strategyGlow 2s ease-in-out infinite;
+
+                .strategy-session-wrap {
+                  margin: 2rem 0;
+                  text-align: center;
                 }
+
+                .strategy-session-btn {
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                  padding: 1rem 2rem;
+                  border-radius: 1rem;
+                  font-weight: 800;
+                  color: white;
+                  text-decoration: none;
+                  background: linear-gradient(135deg, rgba(0, 100, 200, 0.82), rgba(0, 150, 255, 0.62));
+                  border: 1px solid rgba(0, 150, 255, 0.35);
+                  animation: strategyGlow 2.2s ease-in-out infinite;
+                  transition: transform 200ms ease, filter 200ms ease;
+                }
+
+                .strategy-session-btn:hover {
+                  transform: scale(1.04);
+                  filter: brightness(1.05);
+                }
+
+                .strategy-session-icon {
+                  display: inline-flex;
+                }
+
               `}</style>
 
               {/* Render content with injected strategy buttons */}
@@ -270,38 +277,31 @@ const DynamicPage = () => {
                 })();
 
                 // Find position of "Your AI-Proof" heading to insert button before it
-                const aiProofMatch = rawHtml.match(/<h[2-4][^>]*>[^<]*Your AI-Proof/i);
+                const aiProofMatch = rawHtml.match(/<h[2-6][^>]*>[\s\S]*?Your AI-Proof[\s\S]*?<\/h[2-6]>/i);
                 const aiProofIndex = aiProofMatch ? rawHtml.indexOf(aiProofMatch[0]) : -1;
+
+                // Find the "Mini-Roadmap Overview" figure (caption) if present
+                const miniRoadmapFigureMatch = rawHtml.match(/<figure[^>]*>[\s\S]*?Mini-Roadmap Overview[\s\S]*?<\/figure>/i);
 
                 // Find the last image in the content to insert button before it
                 const imgMatches = [...rawHtml.matchAll(/<figure[^>]*>[\s\S]*?<img[^>]*>[\s\S]*?<\/figure>|<img[^>]*>/gi)];
                 const lastImgMatch = imgMatches.length > 0 ? imgMatches[imgMatches.length - 1] : null;
-                const lastImgIndex = lastImgMatch ? rawHtml.lastIndexOf(lastImgMatch[0]) : -1;
 
-                // Strategy button HTML
+                const STRATEGY_URL = "https://calendly.com/hassankhalidkhan/30min";
+
+                // Strategy button HTML (medium-big, subtle glow)
                 const strategyButtonHtml = `
-                  <div style="margin: 2rem 0; text-align: center;">
+                  <div class="strategy-session-wrap">
                     <a 
-                      href="https://calendly.com/hassankhalidkhan" 
+                      href="${STRATEGY_URL}" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       class="strategy-session-btn"
-                      style="
-                        display: inline-flex;
-                        align-items: center;
-                        padding: 1rem 2rem;
-                        border-radius: 1rem;
-                        font-weight: bold;
-                        color: white;
-                        text-decoration: none;
-                        transition: transform 0.3s ease;
-                        background: linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6));
-                        border: 1px solid rgba(0, 150, 255, 0.4);
-                      "
-                      onmouseover="this.style.transform='scale(1.05)'"
-                      onmouseout="this.style.transform='scale(1)'"
+                      aria-label="Book Free 45-Min Strategy Session"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+                      <span class="strategy-session-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+                      </span>
                       Book Free 45-Min Strategy Session
                     </a>
                   </div>
@@ -309,18 +309,17 @@ const DynamicPage = () => {
 
                 // Build final HTML with injected buttons
                 let finalHtml = rawHtml;
-                
-                // Insert before "Your AI-Proof" heading (if found)
+
+                // 1) Preferred: insert right before the "Your AI-Proof" heading
                 if (aiProofIndex > 0) {
                   finalHtml = finalHtml.slice(0, aiProofIndex) + strategyButtonHtml + finalHtml.slice(aiProofIndex);
+                } else if (miniRoadmapFigureMatch) {
+                  // Fallback: insert right after the "Mini-Roadmap Overview" figure if heading match isn't found
+                  finalHtml = finalHtml.replace(miniRoadmapFigureMatch[0], `${miniRoadmapFigureMatch[0]}${strategyButtonHtml}`);
                 }
 
-                // Insert before the last image (if found and different from aiProofIndex area)
-                // Recalculate index since we may have inserted content
-                const adjustedLastImgIndex = lastImgMatch 
-                  ? finalHtml.lastIndexOf(lastImgMatch[0]) 
-                  : -1;
-                
+                // 2) Insert before the last image in the article (bottom picture)
+                const adjustedLastImgIndex = lastImgMatch ? finalHtml.lastIndexOf(lastImgMatch[0]) : -1;
                 if (adjustedLastImgIndex > 0 && lastImgMatch) {
                   finalHtml = finalHtml.slice(0, adjustedLastImgIndex) + strategyButtonHtml + finalHtml.slice(adjustedLastImgIndex);
                 }
