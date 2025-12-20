@@ -862,7 +862,7 @@ const JobAlertsPage: React.FC = () => {
           <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{
           color: '#FFDD40'
         }}>
-            Deadly Job Alerts: BI-FinTech / AI Deployment PM Consulting Gigs
+            $10k+/mo BI-FinTech & AI PM Job Board/Alerts
           </h1>
           <p className="text-white text-lg md:text-xl mb-3">
             Curated consulting opportunities with strategy insights on how the BI-FinTech Accelerator bridges skill gaps.
