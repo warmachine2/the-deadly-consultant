@@ -120,7 +120,7 @@ export const fetchPostBySlug = async (slug: string): Promise<GhostPost | null> =
 };
 
 export const fetchPageBySlug = async (slug: string): Promise<GhostPost | null> => {
-  const cacheKey = `ghost:page:${slug}`;
+  const cacheKey = `ghost:page:v2:${slug}`;
   try {
     const { data, error } = await supabase.functions.invoke("fetch-ghost-posts", {
       body: {

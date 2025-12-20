@@ -16,6 +16,14 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
   const isMobile = useIsMobile();
   const sidebarRef = useRef<HTMLElement>(null);
 
+  const visibleTags = availableTags.filter((t) => {
+    const normalized = t.trim().toLowerCase();
+    return normalized !== "#featured-static" &&
+      normalized !== "featured-static" &&
+      normalized !== "#no-hero" &&
+      normalized !== "no-hero";
+  });
+
   useEffect(() => {
     if (isOpen && isMobile) {
       sidebarRef.current?.scrollTo({ top: 0, behavior: "instant" });
@@ -112,17 +120,17 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
           </button>
           {showTags && (
             <div className="flex flex-wrap gap-2">
-              {availableTags.length === 0 ? (
+              {visibleTags.length === 0 ? (
                 <p className="text-white/60 text-sm">No tags available</p>
               ) : (
-                availableTags.map((tag) => (
+                visibleTags.map((tag) => (
                   <button
                     key={tag}
                     onClick={() => onTagToggle(tag)}
                     className={`
                       px-4 py-3 rounded-2xl text-xs font-medium italic transition-all
-                      ${selectedTags.includes(tag) 
-                        ? "volumetric-glass-active text-[#F4C903] font-bold" 
+                      ${selectedTags.includes(tag)
+                        ? "volumetric-glass-active text-[#F4C903] font-bold"
                         : "volumetric-glass-button text-white/80 hover:text-[#F4C903] hover:font-bold"}
                     `}
                   >
