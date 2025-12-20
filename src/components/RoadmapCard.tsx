@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
+import fallbackRoadmapThumb from "@/assets/roadmap-tile.png";
 
 const RoadmapCard = ({ className }: { className?: string }) => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
@@ -36,7 +37,9 @@ const RoadmapCard = ({ className }: { className?: string }) => {
   };
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
-  const thumbnail = youtubeUrl ? getYoutubeThumbnail(youtubeUrl) : "";
+  const thumbnail = youtubeUrl
+    ? getYoutubeThumbnail(youtubeUrl)
+    : pageContent?.feature_image || fallbackRoadmapThumb;
 
   // Teaser data (dynamic from fetched content)
   const teaser = {
