@@ -2,7 +2,27 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { fetchPostBySlug, fetchPageBySlug, GhostPost } from "@/lib/ghostApi";
-import { Loader2 } from "lucide-react";
+import { Loader2, CalendarCheck } from "lucide-react";
+
+// Strategy Session Button Component
+const StrategySessionButton = () => (
+  <div className="my-8 text-center">
+    <a
+      href="https://calendly.com/hassankhalidkhan"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 strategy-session-glow"
+      style={{
+        background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
+        boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
+        border: '1px solid rgba(0, 150, 255, 0.4)'
+      }}
+    >
+      <CalendarCheck className="w-5 h-5 mr-2" />
+      Book Free 45-Min Strategy Session
+    </a>
+  </div>
+);
 
 const DynamicPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -214,32 +234,106 @@ const DynamicPage = () => {
                     max-width: 450px;
                   }
                 }
+                /* Strategy session button glow animation */
+                @keyframes strategyGlow {
+                  0%, 100% {
+                    box-shadow: 0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3);
+                  }
+                  50% {
+                    box-shadow: 0 0 40px rgba(0, 150, 255, 0.7), 0 0 80px rgba(0, 150, 255, 0.5), 0 0 100px rgba(0, 150, 255, 0.3);
+                  }
+                }
+                .strategy-session-btn {
+                  animation: strategyGlow 2s ease-in-out infinite;
+                }
               `}</style>
-              <div
-                className={`prose prose-invert prose-lg max-w-none text-foreground dynamic-page-content
-                  [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold
-                  ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
-                dangerouslySetInnerHTML={{ 
-                  __html: (() => {
-                    let html = slug === 'roadmap-thank-you' 
-                      ? (content.html || "")
-                          .replace(
-                            /href="[^"]*"([^>]*>Back to Video)/gi,
-                            'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
-                          )
-                          .replace(/Accelerate to mastery/gi, 'Accelerate To Mastery')
-                          .replace(
-                            /href="[^"]*"([^>]*>Join Now)/gi,
-                            'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
-                          )
-                      : (content.html || "");
-                    // Strip inline color styles from headings
-                    html = html.replace(/<(h[1-6])([^>]*?)style="[^"]*color[^"]*"([^>]*)>/gi, '<$1$2$3>');
-                    html = html.replace(/<(h[1-6])([^>]*?)style='[^']*color[^']*'([^>]*)>/gi, '<$1$2$3>');
-                    return html;
-                  })()
-                }}
-              />
+
+              {/* Render content with injected strategy buttons */}
+              {(() => {
+                const rawHtml = (() => {
+                  let html = slug === 'roadmap-thank-you' 
+                    ? (content.html || "")
+                        .replace(
+                          /href="[^"]*"([^>]*>Back to Video)/gi,
+                          'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
+                        )
+                        .replace(/Accelerate to mastery/gi, 'Accelerate To Mastery')
+                        .replace(
+                          /href="[^"]*"([^>]*>Join Now)/gi,
+                          'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
+                        )
+                    : (content.html || "");
+                  // Strip inline color styles from headings
+                  html = html.replace(/<(h[1-6])([^>]*?)style="[^"]*color[^"]*"([^>]*)>/gi, '<$1$2$3>');
+                  html = html.replace(/<(h[1-6])([^>]*?)style='[^']*color[^']*'([^>]*)>/gi, '<$1$2$3>');
+                  return html;
+                })();
+
+                // Find position of "Your AI-Proof" heading to insert button before it
+                const aiProofMatch = rawHtml.match(/<h[2-4][^>]*>[^<]*Your AI-Proof/i);
+                const aiProofIndex = aiProofMatch ? rawHtml.indexOf(aiProofMatch[0]) : -1;
+
+                // Find the last image in the content to insert button before it
+                const imgMatches = [...rawHtml.matchAll(/<figure[^>]*>[\s\S]*?<img[^>]*>[\s\S]*?<\/figure>|<img[^>]*>/gi)];
+                const lastImgMatch = imgMatches.length > 0 ? imgMatches[imgMatches.length - 1] : null;
+                const lastImgIndex = lastImgMatch ? rawHtml.lastIndexOf(lastImgMatch[0]) : -1;
+
+                // Strategy button HTML
+                const strategyButtonHtml = `
+                  <div style="margin: 2rem 0; text-align: center;">
+                    <a 
+                      href="https://calendly.com/hassankhalidkhan" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="strategy-session-btn"
+                      style="
+                        display: inline-flex;
+                        align-items: center;
+                        padding: 1rem 2rem;
+                        border-radius: 1rem;
+                        font-weight: bold;
+                        color: white;
+                        text-decoration: none;
+                        transition: transform 0.3s ease;
+                        background: linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6));
+                        border: 1px solid rgba(0, 150, 255, 0.4);
+                      "
+                      onmouseover="this.style.transform='scale(1.05)'"
+                      onmouseout="this.style.transform='scale(1)'"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+                      Book Free 45-Min Strategy Session
+                    </a>
+                  </div>
+                `;
+
+                // Build final HTML with injected buttons
+                let finalHtml = rawHtml;
+                
+                // Insert before "Your AI-Proof" heading (if found)
+                if (aiProofIndex > 0) {
+                  finalHtml = finalHtml.slice(0, aiProofIndex) + strategyButtonHtml + finalHtml.slice(aiProofIndex);
+                }
+
+                // Insert before the last image (if found and different from aiProofIndex area)
+                // Recalculate index since we may have inserted content
+                const adjustedLastImgIndex = lastImgMatch 
+                  ? finalHtml.lastIndexOf(lastImgMatch[0]) 
+                  : -1;
+                
+                if (adjustedLastImgIndex > 0 && lastImgMatch) {
+                  finalHtml = finalHtml.slice(0, adjustedLastImgIndex) + strategyButtonHtml + finalHtml.slice(adjustedLastImgIndex);
+                }
+
+                return (
+                  <div
+                    className={`prose prose-invert prose-lg max-w-none text-foreground dynamic-page-content
+                      [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold
+                      ${slug === 'roadmap-thank-you' ? 'roadmap-thank-you-content' : ''}`}
+                    dangerouslySetInnerHTML={{ __html: finalHtml }}
+                  />
+                );
+              })()}
             </div>
           </article>
 
