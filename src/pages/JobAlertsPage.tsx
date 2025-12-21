@@ -627,29 +627,6 @@ const JobAlertsPage: React.FC = () => {
   const [salaryFilter, setSalaryFilter] = useState<string>('all');
   const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
 
-  // Load ConvertKit script only on this page
-  useEffect(() => {
-    const scriptId = 'convertkit-script-9f6802bbd1';
-    
-    // Check if script already exists
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://bi-fintech-consultant-academy.kit.com/9f6802bbd1/index.js';
-      script.async = true;
-      script.setAttribute('data-uid', '9f6802bbd1');
-      document.body.appendChild(script);
-    }
-
-    // Cleanup on unmount
-    return () => {
-      const existingScript = document.getElementById(scriptId);
-      if (existingScript) {
-        existingScript.remove();
-      }
-    };
-  }, []);
-
   // Function to manually trigger ConvertKit modal
   const openSubscribeModal = () => {
     if (window.formkit?.show) {
