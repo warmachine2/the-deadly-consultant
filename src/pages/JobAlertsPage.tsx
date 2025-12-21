@@ -1182,8 +1182,8 @@ const JobAlertsPage: React.FC = () => {
                     <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Role</TableHead>
                     <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Company</TableHead>
                     <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Location</TableHead>
-                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Term</TableHead>
-                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Work Type</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap w-[80px]">Term</TableHead>
+                    <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap w-[120px]">Work Type</TableHead>
                     <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Salary</TableHead>
                     <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Experience</TableHead>
                     <TableHead className="text-[#FFDD40] font-bold whitespace-nowrap">Status</TableHead>
