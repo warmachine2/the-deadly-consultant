@@ -627,6 +627,36 @@ const JobAlertsPage: React.FC = () => {
   const [salaryFilter, setSalaryFilter] = useState<string>('all');
   const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
 
+  // Load ConvertKit script only on this page
+  useEffect(() => {
+    const scriptId = 'convertkit-script-9f6802bbd1';
+    
+    // Check if script already exists
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://bi-fintech-consultant-academy.kit.com/9f6802bbd1/index.js';
+      script.async = true;
+      script.setAttribute('data-uid', '9f6802bbd1');
+      document.body.appendChild(script);
+    }
+
+    // Cleanup on unmount
+    return () => {
+      const existingScript = document.getElementById(scriptId);
+      if (existingScript) {
+        existingScript.remove();
+      }
+    };
+  }, []);
+
+  // Function to manually trigger ConvertKit modal
+  const openSubscribeModal = () => {
+    if (window.formkit?.show) {
+      window.formkit.show('9f6802bbd1');
+    }
+  };
+
   // Role categorization helper
   const categorizeRole = (role: string): string => {
     const roleLower = role.toLowerCase();
@@ -989,16 +1019,26 @@ const JobAlertsPage: React.FC = () => {
               </div>
             </div>}
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <div className="mt-6 text-center">
-            <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105" style={{
-            background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
-            boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
-            border: '1px solid rgba(0, 150, 255, 0.4)'
-          }}>
-              <CalendarCheck className="w-5 h-5 mr-2" />
-              Book Free 45-Min Strategy Session
-            </a>
+            <div className="flex flex-wrap gap-4 justify-center items-center">
+              <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105" style={{
+              background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
+              boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
+              border: '1px solid rgba(0, 150, 255, 0.4)'
+            }}>
+                <CalendarCheck className="w-5 h-5 mr-2" />
+                Book Free 45-Min Strategy Session
+              </a>
+              <button onClick={openSubscribeModal} className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-black transition-all duration-300 hover:scale-105" style={{
+              background: 'linear-gradient(135deg, #FFDD40, #FFB800)',
+              boxShadow: '0 0 30px rgba(255, 221, 64, 0.5), 0 0 60px rgba(255, 221, 64, 0.3)',
+              border: '1px solid rgba(255, 221, 64, 0.6)'
+            }}>
+                <Users className="w-5 h-5 mr-2" />
+                Get Job Alerts
+              </button>
+            </div>
             <p className="text-base md:text-lg mt-3" style={{
             color: '#FFDD40'
           }}>
