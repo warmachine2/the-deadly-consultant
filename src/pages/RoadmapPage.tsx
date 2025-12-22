@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
-import ConvertKitModal from "@/components/ConvertKitModal";
+
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
@@ -128,7 +128,6 @@ const RoadmapPage = () => {
           </div>
         )}
       </main>
-      <ConvertKitModal />
     </div>
   );
 };
