@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 import { Loader2 } from "lucide-react";
+import ConvertKitModal from "@/components/ConvertKitModal";
 
 const AboutPage = () => {
   const [content, setContent] = useState<GhostPost | null>(null);
@@ -133,6 +134,7 @@ const AboutPage = () => {
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
         </div>
       </footer>
+      <ConvertKitModal />
     </div>
   );
 };

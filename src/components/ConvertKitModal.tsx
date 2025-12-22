@@ -21,7 +21,7 @@ export default function ConvertKitModal() {
       const script = document.createElement("script");
       script.async = true;
       script.setAttribute("data-uid", "9f6802bbd1");
-      script.src = "https://bi-fintech-consultant-academy.kit.com/9f6802bbd1/index.js?v=" + Date.now();
+      script.src = "https://bi-fintech-consultant-academy.kit.com/9f6802bbd1/index.js";
       formContainerRef.current.appendChild(script);
     }
   }, [isOpen]);
@@ -92,25 +92,25 @@ export default function ConvertKitModal() {
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={closeModal}
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-md animate-scale-in">
+      <div className="relative z-10 w-full max-w-lg animate-scale-in">
         {/* Close button */}
         <button
           onClick={closeModal}
-          className="absolute -top-3 -right-3 z-20 p-2 rounded-full bg-card border border-border hover:bg-muted text-foreground transition-colors shadow-lg"
+          className="absolute -top-3 -right-3 z-20 p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-100 text-gray-800 transition-colors shadow-lg"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* ConvertKit Form Container */}
+        {/* ConvertKit Form Container - let ConvertKit handle styling */}
         <div 
           ref={formContainerRef}
-          className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden min-h-[200px] p-4"
+          className="min-h-[100px]"
         />
       </div>
     </div>
