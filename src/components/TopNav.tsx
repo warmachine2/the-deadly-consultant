@@ -19,9 +19,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import SignupButton from "@/components/SignupButton";
-import EmailCaptureModal from "@/components/EmailCaptureModal";
-import { toast } from "@/hooks/use-toast";
+
 
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
@@ -30,7 +28,6 @@ interface TopNavProps {
 
 const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -48,18 +45,6 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
     const value = e.target.value;
     setSearchQuery(value);
     onSearchChange?.(value);
-  };
-
-  const handleMobileSignup = async (data: { name: string; email: string }) => {
-    console.log("Form submitted:", data);
-    setIsModalOpen(false);
-    toast({
-      title: "Success!",
-      description: "Thank you for signing up. Check your email for confirmation.",
-    });
-    if ((window as any).formkit?.show) {
-      (window as any).formkit.show("fbd8fa5d1b");
-    }
   };
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -177,10 +162,6 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   <button className="w-full px-4 py-2 text-sm font-semibold rounded-xl bg-transparent border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10">
                     Log-in
                   </button>
-                  <SignupButton
-                    className="w-full px-4 py-2 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90"
-                    label="Subscribe"
-                  />
                 </div>
               </div>
             </SheetContent>
@@ -383,16 +364,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             >
               Log-in
             </button>
-            <SignupButton
-              className="px-4 py-1.5 text-sm font-semibold bg-[#F4C903] text-white hover:bg-[#F4C903]/90 hover:text-white border-none cta-glow-pulse-subtle"
-              label="Subscribe"
-            />
           </div>
         </div>
       </div>
-
-      {/* Mobile Sign Up Modal */}
-      <EmailCaptureModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </nav>
   );
 };

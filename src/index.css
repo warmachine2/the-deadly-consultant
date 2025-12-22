@@ -645,15 +645,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* FIXED: ConvertKit modal backdrop - transparent with roadmap visible behind */
-  .ck-subscription-form {
-    background: rgba(0, 0, 0, 0.5) !important; /* Semi-transparent backdrop */
-    z-index: 9999;
-  }
-
-  .ck-subscription-form .ck-subscription-form-modal {
-    backdrop-filter: blur(0) !important; /* No blur on content */
-  }
 
   /* Prose styling for Ghost content on dark backgrounds */
   .prose {
