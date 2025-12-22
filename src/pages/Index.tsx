@@ -164,37 +164,31 @@ const Index = () => {
               <>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
                   <RoadmapCard />
-                  {filteredPosts
-                    .filter((post) => !post.title.toLowerCase().includes('deadly job alerts'))
-                    .sort((a, b) => {
-                      // Custom ordering: Hassan Hammer should be after "Reviving an e39 door" and before "WARNING: Don't pivot"
-                      const hassanTitle = 'introducing "hassan hammer" fitness';
-                      const e39Title = 'reviving an e39 door';
-                      const warningTitle = "warning: don't pivot careers in the ai era";
-                      
-                      const aLower = a.title.toLowerCase();
-                      const bLower = b.title.toLowerCase();
-                      
-                      const aIsHassan = aLower.includes(hassanTitle);
-                      const bIsHassan = bLower.includes(hassanTitle);
-                      const aIsE39 = aLower.includes(e39Title);
-                      const bIsE39 = bLower.includes(e39Title);
-                      const aIsWarning = aLower.includes(warningTitle);
-                      const bIsWarning = bLower.includes(warningTitle);
-                      
-                      // If comparing Hassan with e39, Hassan should come after
-                      if (aIsHassan && bIsE39) return 1;
-                      if (bIsHassan && aIsE39) return -1;
-                      
-                      // If comparing Hassan with Warning, Hassan should come before
-                      if (aIsHassan && bIsWarning) return -1;
-                      if (bIsHassan && aIsWarning) return 1;
-                      
-                      return 0; // Keep original order for other posts
-                    })
-                    .map((post) => (
+                  {(() => {
+                    // Filter out job alerts first
+                    let postsToShow = filteredPosts.filter(
+                      (post) => !post.title.toLowerCase().includes('deadly job alerts')
+                    );
+                    
+                    // Find and reposition Hassan Hammer post
+                    const hassanIndex = postsToShow.findIndex(p => 
+                      p.title.toLowerCase().includes('introducing') && 
+                      p.title.toLowerCase().includes('hassan hammer')
+                    );
+                    
+                    if (hassanIndex !== -1) {
+                      const hassanPost = postsToShow[hassanIndex];
+                      // Remove from current position
+                      postsToShow = postsToShow.filter((_, i) => i !== hassanIndex);
+                      // Insert second to last (before the last item)
+                      const insertPosition = Math.max(0, postsToShow.length - 1);
+                      postsToShow.splice(insertPosition, 0, hassanPost);
+                    }
+                    
+                    return postsToShow.map((post) => (
                       <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
-                    ))}
+                    ));
+                  })()}
                 </div>
 
                 {filteredPosts.length === 0 && !loading && (
