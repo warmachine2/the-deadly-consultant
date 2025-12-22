@@ -21,7 +21,7 @@ export default function ConvertKitModal() {
       const script = document.createElement("script");
       script.async = true;
       script.setAttribute("data-uid", "9f6802bbd1");
-      script.src = "https://deadly-consultant.kit.com/9f6802bbd1/index.js?v=" + Date.now();
+      script.src = "https://bi-fintech-consultant-academy.kit.com/9f6802bbd1/index.js?v=" + Date.now();
       formContainerRef.current.appendChild(script);
     }
   }, [isOpen]);
