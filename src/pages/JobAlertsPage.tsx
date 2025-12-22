@@ -5,7 +5,6 @@ import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, B
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
-import ConvertKitModal from '@/components/ConvertKitModal';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -1392,7 +1391,6 @@ const JobAlertsPage: React.FC = () => {
           <p>© {new Date().getFullYear()} The Deadly Consultant. All rights reserved.</p>
         </div>
       </footer>
-      <ConvertKitModal />
     </div>;
 };
 export default JobAlertsPage;

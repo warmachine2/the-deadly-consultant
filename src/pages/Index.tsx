@@ -10,7 +10,6 @@ import Sidebar from "@/components/Sidebar";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2, Filter } from "lucide-react";
 import RoadmapCard from "@/components/RoadmapCard";
-import ConvertKitModal from "@/components/ConvertKitModal";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -205,9 +204,6 @@ const Index = () => {
           isLoading={modalLoading}
         />
       )}
-
-      <ConvertKitModal />
-
       <footer className="glass-effect rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© 2025 The Deadly Consultant. All rights reserved.</p>
