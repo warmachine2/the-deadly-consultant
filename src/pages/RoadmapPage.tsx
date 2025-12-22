@@ -6,7 +6,6 @@ import TopNav from "@/components/TopNav";
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const formId = "fbd8fa5d1b";
 
   useEffect(() => {
     const loadPage = async () => {
@@ -61,70 +60,6 @@ const RoadmapPage = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <style>{`
-        /* Mobile-only full-screen ConvertKit modal */
-        @media (max-width: 767px) {
-          [data-formkit-toggle] ~ .formkit-slide-in,
-          .ck-subscription-form,
-          [class*="formkit-modal"],
-          [class*="ck-modal"] {
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            transform: none !important;
-            margin: 0 !important;
-            overflow-y: auto !important;
-            padding: 1rem !important;
-          }
-          
-          .ck-subscription-form h1,
-          .ck-subscription-form h2,
-          .ck-subscription-form h3,
-          [class*="formkit"] h1,
-          [class*="formkit"] h2,
-          [class*="formkit"] h3 {
-            font-size: 1.5rem !important;
-            line-height: 1.3 !important;
-            margin-bottom: 0.75rem !important;
-          }
-          
-          .ck-subscription-form p,
-          .ck-subscription-form label,
-          .ck-subscription-form div,
-          [class*="formkit"] p,
-          [class*="formkit"] label,
-          [class*="formkit"] div {
-            font-size: 0.875rem !important;
-            line-height: 1.4 !important;
-          }
-          
-          .ck-subscription-form input,
-          .ck-subscription-form button,
-          [class*="formkit"] input,
-          [class*="formkit"] button {
-            font-size: 0.875rem !important;
-            padding: 0.625rem 0.875rem !important;
-          }
-          
-          .ck-subscription-form button,
-          [class*="formkit"] button {
-            font-size: 1rem !important;
-            padding: 0.75rem 1.25rem !important;
-          }
-          
-          .ck-subscription-form *,
-          [class*="formkit"] * {
-            max-width: 100% !important;
-            word-wrap: break-word !important;
-          }
-        }
-      `}</style>
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-20 lg:mt-24">
@@ -181,7 +116,6 @@ const RoadmapPage = () => {
               </p>
               <a
                 href="https://bifintechconsulting.com/roadmap-signup"
-                data-formkit-toggle={formId}
                 className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
               >
                 Get Your Free Roadmap PDF
