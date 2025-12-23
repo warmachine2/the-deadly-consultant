@@ -15,7 +15,7 @@ import TopNav from "@/components/TopNav";
 
 const DASHBOARD_PASSWORD = "BIFINTECHLEADS123!@#";
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxIYg4H3bPtonZVSMxp-5xCKOfaFCWt4VlOjgXoUZjtuiaXcr8dLcX0UUGsp3YIAPgz/exec";
+  "https://script.google.com/macros/s/AKfycbzSbicZVOIE_oFhdlUiQrnRAbVGg9PxP0cIzAAZ1cWa7MbQRVbBM-W4kYPM15m_zsCY/exec";
 
 interface Lead {
   timestamp: string;
@@ -61,10 +61,25 @@ const DashboardPage = () => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
-      setLeads(Array.isArray(data) ? data : []);
+      console.log("Dashboard response.submissions:", data.submissions);
+      
+      // Map GSheet column names to our Lead interface
+      const mappedLeads: Lead[] = (data.submissions || []).map((row: Record<string, unknown>) => ({
+        timestamp: row["Timestamp"] || "",
+        name: row["Name"] || "",
+        email: row["Email"] || "",
+        current_role: row["Current Role"] || "",
+        years_experience: Number(row["Years Experience"]) || 0,
+        biggest_pain_point: row["Biggest Pain Point"] || "",
+        pivot_timeline: row["Pivot Timeline"] || "",
+        whatsapp_number: row["WhatsApp Number"] || "",
+        education_certifications: row["Education Certifications"] || "",
+      }));
+      
+      setLeads(mappedLeads);
       toast({
         title: "Data refreshed",
-        description: `Loaded ${Array.isArray(data) ? data.length : 0} leads`,
+        description: `Loaded ${mappedLeads.length} leads`,
       });
     } catch (error) {
       toast({
