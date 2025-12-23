@@ -78,9 +78,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
         {/* Strategy Session CTA */}
         <div className="border-t border-white/10 pt-4 mb-4">
           <a
-            href="https://calendly.com/hassankhalidkhan"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/book-session"
             className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-md text-center transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
             style={{
               background: "linear-gradient(135deg, #0562AD 0%, #0478c8 100%)",
