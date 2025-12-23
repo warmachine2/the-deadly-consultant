@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Lightbulb } from 'lucide-react';
@@ -332,8 +331,10 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
               
               {/* CTA Button */}
               <div className="flex flex-col items-center md:items-end">
-                <Link 
-                  to="/book-session" 
+                <a 
+                  href="https://calendly.com/hassankhalidkhan" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
                   className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow"
                   style={{
                     background: 'linear-gradient(135deg, rgba(5, 98, 173, 0.9), rgba(5, 98, 173, 0.7))',
@@ -346,7 +347,7 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
                     <span>Discuss your pivot:</span>
                     <span>Book 45m Strategy Session</span>
                   </span>
-                </Link>
+                </a>
                 <span className="text-xs mt-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Free</span>
               </div>
             </div>
@@ -399,7 +400,7 @@ const JobCard: React.FC<{
         <div className="flex items-start gap-3">
           {/* Mini CTA */}
           <div className="flex flex-col items-center">
-            <Link to="/book-session" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow" style={{
+            <a href="https://calendly.com/hassankhalidkhan" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow" style={{
               background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
               border: '1px solid rgba(255, 221, 64, 0.5)',
               color: '#FFDD40'
@@ -409,7 +410,7 @@ const JobCard: React.FC<{
                 <span>Discuss your pivot:</span>
                 <span>Book 45m Strategy Session</span>
               </span>
-            </Link>
+            </a>
             <span className="text-[10px] mt-1" style={{
               color: 'rgba(255, 255, 255, 0.5)'
             }}>Free</span>

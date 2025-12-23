@@ -50,13 +50,15 @@ const DynamicPage = () => {
     fetchContent();
   }, [slug]);
 
+  const STRATEGY_URL = "https://calendly.com/hassankhalidkhan/30min";
+
   const StrategySessionCTA = (
     <div className="my-8 flex justify-center">
       <Button asChild size="lg" className="animate-glow-pulse">
-        <Link to="/book-session">
+        <a href={STRATEGY_URL} target="_blank" rel="noopener noreferrer">
           <CalendarCheck className="mr-2" />
           Book Free 45-Min Strategy Session
-        </Link>
+        </a>
       </Button>
     </div>
   );
