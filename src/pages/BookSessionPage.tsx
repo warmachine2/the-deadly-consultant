@@ -89,7 +89,7 @@ const BookSessionPage = () => {
           description: "Redirecting you to book your strategy session...",
         });
         // Redirect immediately after a short delay for toast visibility
-        window.location.href = "https://calendly.com/hassankhalidkhan/45min";
+        window.location.href = "https://calendly.com/hassankhalidkhan/30min";
       } else {
         console.log("User does not qualify (< 3 years), showing thank you message");
         toast({
