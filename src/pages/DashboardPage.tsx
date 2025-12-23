@@ -35,7 +35,7 @@ type SortField = keyof StrategySession;
 type SortDirection = "asc" | "desc";
 
 export default function DashboardPage() {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, adminLoading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,11 +44,11 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Redirect if not logged in or not admin
+  // Redirect if not logged in or not admin (wait for admin check to complete)
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth");
-    } else if (!loading && user && !isAdmin) {
+    } else if (!loading && !adminLoading && user && !isAdmin) {
       toast({
         title: "Access Denied",
         description: "You need admin privileges to access this page.",
@@ -56,7 +56,7 @@ export default function DashboardPage() {
       });
       navigate("/");
     }
-  }, [user, loading, isAdmin, navigate]);
+  }, [user, loading, isAdmin, adminLoading, navigate]);
 
   // Fetch strategy sessions
   const { data: sessions, isLoading, error, refetch } = useQuery({
@@ -171,7 +171,7 @@ export default function DashboardPage() {
     </TableHead>
   );
 
-  if (loading) {
+  if (loading || adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <p className="text-muted-foreground">Loading...</p>
