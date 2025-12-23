@@ -144,6 +144,11 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   </CollapsibleContent>
                 </Collapsible>
 
+                {/* Book Strategy Session */}
+                <Link to="/book-session" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                  Book Strategy Session
+                </Link>
+
                 {/* About */}
                 <Link to="/about-post" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
                   About
@@ -331,6 +336,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Link to="/book-session" className="hidden lg:block">
+            <button
+              className="px-3 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+            >
+              Book Session
+            </button>
+          </Link>
 
           <Link to="/about-post" className="hidden lg:block">
             <button
