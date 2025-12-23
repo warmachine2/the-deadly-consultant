@@ -64,7 +64,10 @@ const BookSessionPage = () => {
         params.append(key, String(value ?? ""));
       });
 
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      console.log("Submitting form data:", data);
+      console.log("Years experience:", data.years_experience, "Type:", typeof data.years_experience);
+
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -73,30 +76,36 @@ const BookSessionPage = () => {
         mode: "no-cors",
       });
 
-      // With no-cors mode, we can't read the response, so we assume success
-      // Data is saved, now handle qualification logic
-      if (data.years_experience >= 3) {
+      console.log("Form submitted successfully");
+
+      // Parse years_experience as integer to ensure proper comparison
+      const yearsExp = parseInt(String(data.years_experience), 10);
+      console.log("Parsed years experience:", yearsExp);
+
+      if (yearsExp >= 3) {
+        console.log("User qualifies (>= 3 years), redirecting to Calendly...");
         toast({
           title: "Qualified!",
           description: "Redirecting you to book your strategy session...",
         });
-        setTimeout(() => {
-          window.location.href = "https://calendly.com/hassankhalidkhan/30min";
-        }, 1500);
+        // Redirect immediately after a short delay for toast visibility
+        window.location.href = "https://calendly.com/hassankhalidkhan/45min";
       } else {
+        console.log("User does not qualify (< 3 years), showing thank you message");
         toast({
           title: "Thanks!",
           description: "I'll review your info and follow up if it's a strong fit.",
         });
         form.reset();
+        setIsSubmitting(false);
       }
     } catch (error) {
+      console.error("Form submission error:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
