@@ -21,8 +21,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const checkAdminStatus = async () => {
-    if (!user) {
+  const checkAdminStatus = async (userId?: string) => {
+    const userIdToCheck = userId || user?.id;
+    if (!userIdToCheck) {
       setIsAdmin(false);
       return;
     }
@@ -31,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", user.id)
+        .eq("user_id", userIdToCheck)
         .eq("role", "admin")
         .maybeSingle();
 
@@ -56,10 +57,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
         setLoading(false);
 
-        // Defer admin check with setTimeout to avoid deadlock
+        // Defer admin check with setTimeout to avoid deadlock - pass userId directly
         if (session?.user) {
           setTimeout(() => {
-            checkAdminStatus();
+            checkAdminStatus(session.user.id);
           }, 0);
         } else {
           setIsAdmin(false);
@@ -75,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (session?.user) {
         setTimeout(() => {
-          checkAdminStatus();
+          checkAdminStatus(session.user.id);
         }, 0);
       }
     });
