@@ -1,7 +1,6 @@
-import { Search, Menu, User, ChevronDown, X, LogOut } from "lucide-react";
+import { Search, Menu, User, ChevronDown, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,13 +20,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
+
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
   onToggleSidebar?: () => void;
 }
 
 const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
-  const { user, signOut } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -35,11 +34,6 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [articlesOpen, setArticlesOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const handleSignOut = async () => {
-    await signOut();
-    closeMobileMenu();
-  };
 
   useEffect(() => {
     if (isSearchExpanded && searchInputRef.current) {
@@ -165,26 +159,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                       Free $10k/mo+ Roadmap
                     </button>
                   </Link>
-                  {user ? (
-                    <div className="space-y-2">
-                      <p className="text-xs text-white/70 truncate px-1">
-                        Logged in as {user.email}
-                      </p>
-                      <button 
-                        onClick={handleSignOut}
-                        className="w-full px-4 py-2 text-sm font-semibold rounded-xl bg-transparent border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10 flex items-center justify-center gap-2"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Log out
-                      </button>
-                    </div>
-                  ) : (
-                    <Link to="/auth" onClick={closeMobileMenu}>
-                      <button className="w-full px-4 py-2 text-sm font-semibold rounded-xl bg-transparent border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10">
-                        Log-in
-                      </button>
-                    </Link>
-                  )}
+                  <button className="w-full px-4 py-2 text-sm font-semibold rounded-xl bg-transparent border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10">
+                    Log-in
+                  </button>
                 </div>
               </div>
             </SheetContent>
@@ -380,40 +357,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </button>
           </Link>
 
-          {/* Login/Logout Button - desktop only */}
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="hidden lg:flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl volumetric-glass-button text-white hover:text-[#F4C903] transition-all duration-300 border border-white/20">
-                  <User className="w-4 h-4" />
-                  <span className="max-w-[120px] truncate">{user.email}</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-gray-900 border border-white/20 min-w-[160px] z-[100]">
-                <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                  <Link to="/dashboard" className="w-full">
-                    Dashboard
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={() => signOut()}
-                  className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Link to="/auth">
-              <button
-                className="hidden lg:flex px-4 py-1.5 text-sm font-semibold rounded-xl bg-transparent backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all duration-300"
-              >
-                Log-in
-              </button>
-            </Link>
-          )}
+          {/* Desktop: Login + Subscribe buttons */}
+          <div className="hidden lg:flex items-center gap-2">
+            <button
+              className="px-4 py-1.5 text-sm font-semibold rounded-xl bg-transparent backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all duration-300"
+            >
+              Log-in
+            </button>
+          </div>
         </div>
       </div>
     </nav>
