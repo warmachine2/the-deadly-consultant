@@ -1,5 +1,6 @@
 import { X, ChevronDown, Calendar } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 
@@ -77,10 +78,8 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
 
         {/* Strategy Session CTA */}
         <div className="border-t border-white/10 pt-4 mb-4">
-          <a
-            href="https://calendly.com/hassankhalidkhan"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/book-session"
             className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-md text-center transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
             style={{
               background: "linear-gradient(135deg, #0562AD 0%, #0478c8 100%)",
@@ -91,7 +90,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
             <span className="text-sm font-bold text-white">
               Book Free 45-Min Strategy Session
             </span>
-          </a>
+          </Link>
           <div className="mt-3 px-2 py-2 rounded-md" style={{ background: "rgba(0, 0, 0, 0.4)" }}>
             <p className="text-[11px] text-[#F4C903] leading-tight text-center">
               Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles
