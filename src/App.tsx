@@ -13,6 +13,7 @@ import JobAlertsPage from "./pages/JobAlertsPage";
 import AuthPage from "./pages/AuthPage";
 import AdminSetupPage from "./pages/AdminSetupPage";
 import BookSessionPage from "./pages/BookSessionPage";
+import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/admin-setup" element={<AdminSetupPage />} />
             <Route path="/book-session" element={<BookSessionPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/2026-bi-fintech-consulting-roadmap-pdf-unlock" element={<RoadmapPage />} />
             <Route path="/about-post" element={<AboutPage />} />
             <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
