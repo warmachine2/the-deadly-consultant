@@ -31,7 +31,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwid_l9jpOvycxDAkNDALR4Rd91wIcudOW_DKuoHOkL4k_mKe8SXNp_plgxQsKeV8fs/exec";
+  "https://script.google.com/macros/s/AKfycbxIYg4H3bPtonZVSMxp-5xCKOfaFCWt4VlOjgXoUZjtuiaXcr8dLcX0UUGsp3YIAPgz/exec";
 
 const BookSessionPage = () => {
   const { toast } = useToast();
