@@ -74,6 +74,7 @@ const BookSessionPage = () => {
       });
 
       // With no-cors mode, we can't read the response, so we assume success
+      // Data is saved, now handle qualification logic
       if (data.years_experience >= 3) {
         toast({
           title: "Qualified!",
@@ -85,7 +86,7 @@ const BookSessionPage = () => {
       } else {
         toast({
           title: "Thanks!",
-          description: "I'll review your submission and get back to you.",
+          description: "I'll review your info and follow up if it's a strong fit.",
         });
         form.reset();
       }
