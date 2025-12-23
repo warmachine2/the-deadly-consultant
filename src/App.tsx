@@ -10,6 +10,7 @@ import DynamicPage from "./pages/DynamicPage";
 import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
+import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
           <Route path="/ai-bi-fintech-pm-job-alerts-repo" element={<JobAlertsPage />} />
           <Route path="/book-session" element={<BookSessionPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="/:slug" element={<DynamicPage />} />
           <Route path="*" element={<NotFound />} />
