@@ -12,6 +12,7 @@ import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import AuthPage from "./pages/AuthPage";
 import AdminSetupPage from "./pages/AdminSetupPage";
+import BookSessionPage from "./pages/BookSessionPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/admin-setup" element={<AdminSetupPage />} />
+            <Route path="/book-session" element={<BookSessionPage />} />
             <Route path="/2026-bi-fintech-consulting-roadmap-pdf-unlock" element={<RoadmapPage />} />
             <Route path="/about-post" element={<AboutPage />} />
             <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
