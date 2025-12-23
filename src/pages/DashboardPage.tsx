@@ -13,7 +13,7 @@ import {
 import { RefreshCw, Search, ArrowUpDown } from "lucide-react";
 import TopNav from "@/components/TopNav";
 
-const DASHBOARD_PASSWORD = "secret2025";
+const DASHBOARD_PASSWORD = "BIFINTECHLEADS123!@#";
 const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbwid_l9jpOvycxDAkNDALR4Rd91wIcudOW_DKuoHOkL4k_mKe8SXNp_plgxQsKeV8fs/exec";
 
