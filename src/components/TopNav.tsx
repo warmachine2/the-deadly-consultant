@@ -193,7 +193,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 Consultant
               </h1>
               <span className="text-[8px] text-white/70 tracking-wide text-center bg-black/60 px-2 py-0.5 rounded">
-                By Hassan Khan B.Eng., PMP, AZ305
+                By Hassan Hammer B.Eng., PMP, AZ305
               </span>
             </div>
           </Link>
