@@ -32,25 +32,6 @@ interface Lead {
 type SortField = keyof Lead;
 type SortDirection = "asc" | "desc";
 
-// Format timestamp for display
-const formatTimestamp = (value: string): string => {
-  if (!value) return "-";
-  try {
-    const date = new Date(value);
-    if (isNaN(date.getTime())) return value;
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-  } catch {
-    return value;
-  }
-};
-
 const DashboardPage = () => {
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -258,7 +239,7 @@ const DashboardPage = () => {
                 ) : (
                   filteredAndSortedLeads.map((lead, index) => (
                     <TableRow key={index}>
-                      <TableCell className="whitespace-nowrap">{formatTimestamp(lead.timestamp)}</TableCell>
+                      <TableCell className="whitespace-nowrap">{lead.timestamp || "-"}</TableCell>
                       <TableCell className="whitespace-nowrap">{lead.name || "-"}</TableCell>
                       <TableCell className="whitespace-nowrap">{lead.email || "-"}</TableCell>
                       <TableCell className="whitespace-nowrap">{lead.current_role || "-"}</TableCell>
