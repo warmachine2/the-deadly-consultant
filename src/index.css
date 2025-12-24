@@ -561,6 +561,22 @@ All colors MUST be HSL.
       0 6px 24px rgba(0, 0, 0, 0.35);
   }
 
+  /* Subtle glow backdrop pulse for strategy button */
+  @keyframes glow-backdrop-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 0.7;
+    }
+  }
+
+  .animate-glow-backdrop {
+    animation: glow-backdrop-pulse 4s ease-in-out infinite;
+  }
+
   /* Blue subtle CTA glow pulse for Job Board button */
   @keyframes cta-glow-pulse-blue-subtle {
     0%, 100% {
