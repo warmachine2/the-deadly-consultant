@@ -52,12 +52,19 @@ const DynamicPage = () => {
 
   const StrategySessionCTA = (
     <div className="my-8 flex justify-center">
-      <Button asChild size="lg" className="animate-glow-pulse">
-        <a href="/book-session">
-          <CalendarCheck className="mr-2" />
-          Book Free 45-Min Strategy Session
-        </a>
-      </Button>
+      <a 
+        href="/book-session"
+        className="inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl transition-all duration-300 
+          bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400
+          text-gray-900 hover:text-gray-800
+          border-2 border-amber-300/60
+          hover:scale-105 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300
+          active:scale-95
+          cta-glow-pulse-gentle"
+      >
+        <CalendarCheck className="w-6 h-6" />
+        Book Free 45-Min Strategy Session
+      </a>
     </div>
   );
 
