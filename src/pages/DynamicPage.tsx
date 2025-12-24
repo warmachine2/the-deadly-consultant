@@ -51,7 +51,7 @@ const DynamicPage = () => {
   }, [slug]);
 
   const StrategySessionCTA = (
-    <div className="my-8 flex justify-center">
+    <div className="my-8 flex flex-col items-center">
       <div className="relative group">
         {/* Pulsing glow backdrop */}
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-500/40 via-yellow-400/50 to-amber-500/40 blur-xl animate-glow-backdrop opacity-60 group-hover:opacity-80 transition-opacity" />
@@ -65,9 +65,10 @@ const DynamicPage = () => {
             active:scale-95"
         >
           <CalendarCheck className="w-6 h-6" />
-          Book Free 45-Min Strategy Session
+          Book Your Free 45m Pivot Strategy Session
         </a>
       </div>
+      <span className="mt-2 text-xs text-white/70 font-light tracking-wide">with Hassan</span>
     </div>
   );
 
