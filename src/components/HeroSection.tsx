@@ -54,8 +54,8 @@ const HeroSection = () => {
         }}>
             <span className="block">AI-Proof BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
-            <span className="block text-[9px] sm:text-[10px] md:text-xs">(Members Only)</span>
-            <span className="text-[8px] sm:text-[9px] text-white/70 tracking-wide mt-1">coming soon</span>
+            
+            
           </button>
 
           {/* Fourth CTA Button - Accelerator */}
