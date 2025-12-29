@@ -33,7 +33,21 @@
 
   <body>
     <div id="root"></div>
-    <script async data-uid="27ad03da2d" src="https://bi-fintech-consultant-academy.kit.com/27ad03da2d/index.js"></script>
+    <script>
+      (function() {
+        var isMobile = window.innerWidth < 768;
+        var script = document.createElement('script');
+        script.async = true;
+        if (isMobile) {
+          script.setAttribute('data-uid', '0edbc71770');
+          script.src = 'https://bi-fintech-consultant-academy.kit.com/0edbc71770/index.js';
+        } else {
+          script.setAttribute('data-uid', '27ad03da2d');
+          script.src = 'https://bi-fintech-consultant-academy.kit.com/27ad03da2d/index.js';
+        }
+        document.body.appendChild(script);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
