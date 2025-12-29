@@ -49,9 +49,10 @@ const HeroSection = () => {
           {/* Third CTA Button - Strategy Guide */}
           <button 
             onClick={() => {
-              // Trigger ConvertKit modal
+              // Trigger ConvertKit modal - use mobile or desktop form based on device
               if (typeof window !== 'undefined' && (window as any).formkit) {
-                (window as any).formkit.openModal('27ad03da2d');
+                const isMobile = window.innerWidth < 768;
+                (window as any).formkit.openModal(isMobile ? '0edbc71770' : '27ad03da2d');
               }
             }}
             className="flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-pointer min-h-[100px] md:min-h-[120px]" 

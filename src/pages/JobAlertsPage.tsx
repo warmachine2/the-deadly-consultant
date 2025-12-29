@@ -1002,7 +1002,8 @@ const JobAlertsPage: React.FC = () => {
               <button 
                 onClick={() => {
                   if (typeof window !== 'undefined' && (window as any).formkit) {
-                    (window as any).formkit.openModal('27ad03da2d');
+                    const isMobile = window.innerWidth < 768;
+                    (window as any).formkit.openModal(isMobile ? '0edbc71770' : '27ad03da2d');
                   }
                 }}
                 className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 cursor-pointer" 
