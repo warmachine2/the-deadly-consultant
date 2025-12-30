@@ -58,7 +58,7 @@ const HeroSection = () => {
             }}
           >
             <span className="block">AI-Proof BI-FinTech PM</span>
-            <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
+            <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
           </a>
           
           {/* Third CTA Button - Strategy Guide - Desktop Link */}
@@ -73,7 +73,7 @@ const HeroSection = () => {
             }}
           >
             <span className="block">AI-Proof BI-FinTech PM</span>
-            <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
+            <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
           </a>
 
           {/* Fourth CTA Button - Accelerator */}
