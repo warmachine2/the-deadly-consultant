@@ -46,16 +46,11 @@ const HeroSection = () => {
             <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">Scanned BI/AI PM Gigs - Land Your First Contract Fast</span>
           </a>
 
-          {/* Third CTA Button - Strategy Guide */}
-          <button 
-            onClick={() => {
-              // Trigger ConvertKit modal - use mobile or desktop form based on device
-              if (typeof window !== 'undefined' && (window as any).formkit) {
-                const isMobile = window.innerWidth < 768;
-                (window as any).formkit.openModal(isMobile ? '0edbc71770' : '27ad03da2d');
-              }
-            }}
-            className="flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-pointer min-h-[100px] md:min-h-[120px]" 
+          {/* Third CTA Button - Strategy Guide - Mobile Link */}
+          <a 
+            data-formkit-toggle="0edbc71770"
+            href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
+            className="flex md:hidden flex-col justify-center px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -64,7 +59,22 @@ const HeroSection = () => {
           >
             <span className="block">AI-Proof BI-FinTech PM</span>
             <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
-          </button>
+          </a>
+          
+          {/* Third CTA Button - Strategy Guide - Desktop Link */}
+          <a 
+            data-formkit-toggle="27ad03da2d"
+            href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
+            className="hidden md:flex flex-col justify-center px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-pointer min-h-[120px]" 
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
+          >
+            <span className="block">AI-Proof BI-FinTech PM</span>
+            <span className="block"><span className="text-[#F4C903]">Contracts Strategy Guide</span></span>
+          </a>
 
           {/* Fourth CTA Button - Accelerator */}
           <a href="https://skool.com/bi-fintech-consultant-academy/about" target="_blank" rel="noopener noreferrer" className="flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[100px] md:min-h-[120px]" style={{
@@ -74,7 +84,7 @@ const HeroSection = () => {
         }}>
             <span className="block">AI-Proof 10k/mo+</span>
             <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
-            <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">50 spots left at $799 - Book Strategy Session with me for Free Pivot Analysis</span>
+            <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">Book free pivot analysis Strategy Session with Hassan to see if you qualify</span>
           </a>
         </div>
 
