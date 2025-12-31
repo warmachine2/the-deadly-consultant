@@ -130,7 +130,7 @@ const BookSessionPage = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name (required)</FormLabel>
+                      <FormLabel className="text-white">First Name (required)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="First Name"
@@ -148,7 +148,7 @@ const BookSessionPage = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email Address (required)</FormLabel>
+                      <FormLabel className="text-white">Email Address (required)</FormLabel>
                       <FormControl>
                         <Input
                           type="email"
@@ -167,7 +167,7 @@ const BookSessionPage = () => {
                   name="current_role"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Role (e.g., Engineer, PM, Developer)</FormLabel>
+                      <FormLabel className="text-white">Current Role (e.g., Engineer, PM, Developer)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="e.g., Software Engineer, Tactical PM, Business Analyst"
@@ -185,7 +185,7 @@ const BookSessionPage = () => {
                   name="years_experience"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Years of Professional Experience *</FormLabel>
+                      <FormLabel className="text-white">Years of Professional Experience *</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -205,7 +205,7 @@ const BookSessionPage = () => {
                   name="education_certifications"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Key Education/Certs</FormLabel>
+                      <FormLabel className="text-white">Key Education/Certs</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="e.g., BS Computer Science, PMP, AWS Certified..."
@@ -223,7 +223,7 @@ const BookSessionPage = () => {
                   name="biggest_pain_point"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Biggest Career Pain Point Right Now (e.g., AI threats, low pay, no freedom) *</FormLabel>
+                      <FormLabel className="text-white">Biggest Career Pain Point Right Now (e.g., AI threats, low pay, no freedom) *</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Describe your biggest pain point..."
@@ -241,7 +241,7 @@ const BookSessionPage = () => {
                   name="pivot_timeline"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Ideal Timeline to Land $10k+/mo Contract (e.g., 3-6 months; optional)</FormLabel>
+                      <FormLabel className="text-white">Ideal Timeline to Land $10k+/mo Contract (e.g., 3-6 months; optional)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="e.g., Next 90 days, 6 months"
@@ -259,7 +259,7 @@ const BookSessionPage = () => {
                   name="whatsapp_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>WhatsApp # for Quick Follow-Up (optional)</FormLabel>
+                      <FormLabel className="text-white">WhatsApp # for Quick Follow-Up (optional)</FormLabel>
                       <FormControl>
                         <Input
                           type="tel"
