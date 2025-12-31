@@ -116,11 +116,11 @@ const BookSessionPage = () => {
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-2xl mx-auto">
           <div className="volumetric-glass rounded-2xl p-8 md:p-12">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-center">
-              Quick Qualifier: Unlock Your Free Strategy Session
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ color: '#FFE361' }}>
+              Quick Qualifier: Escape AI Job Extinction - Unlock your $10k/mo Pivot Strategy Session
             </h1>
             <p className="text-muted-foreground text-center mb-8">
-              Tell me about your grind—I'll vet if you're a fit for the AI-Proof Pivot (spots limited).
+              Share your grind - I'll personally vet if you're ready for the AI-Proof PM Pivot (limited spots; my $15k/mo system got me ocean-side Focus Zone freedom)
             </p>
 
             <Form {...form}>
@@ -130,10 +130,10 @@ const BookSessionPage = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name *</FormLabel>
+                      <FormLabel>First Name (required)</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Your full name"
+                          placeholder="First Name"
                           className="bg-input border-border"
                           {...field}
                         />
@@ -148,7 +148,7 @@ const BookSessionPage = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email *</FormLabel>
+                      <FormLabel>Email Address (required)</FormLabel>
                       <FormControl>
                         <Input
                           type="email"
@@ -167,7 +167,7 @@ const BookSessionPage = () => {
                   name="current_role"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>What's your current role? *</FormLabel>
+                      <FormLabel>Current Role (e.g., Engineer, PM, Developer)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="e.g., Software Engineer, Tactical PM, Business Analyst"
@@ -185,7 +185,7 @@ const BookSessionPage = () => {
                   name="years_experience"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Years of Experience *</FormLabel>
+                      <FormLabel>Years of Professional Experience *</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -205,7 +205,7 @@ const BookSessionPage = () => {
                   name="education_certifications"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Education & Certifications (optional)</FormLabel>
+                      <FormLabel>Key Education/Certs</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="e.g., BS Computer Science, PMP, AWS Certified..."
@@ -223,7 +223,7 @@ const BookSessionPage = () => {
                   name="biggest_pain_point"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>What's your #1 challenge right now? *</FormLabel>
+                      <FormLabel>Biggest Career Pain Point Right Now (e.g., AI threats, low pay, no freedom) *</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Describe your biggest pain point..."
@@ -241,7 +241,7 @@ const BookSessionPage = () => {
                   name="pivot_timeline"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>When do you want to land your first $10k+/mo contract? (optional)</FormLabel>
+                      <FormLabel>Ideal Timeline to Land $10k+/mo Contract (e.g., 3-6 months; optional)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="e.g., Next 90 days, 6 months"
@@ -259,7 +259,7 @@ const BookSessionPage = () => {
                   name="whatsapp_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>WhatsApp Number (optional)</FormLabel>
+                      <FormLabel>WhatsApp # for Quick Follow-Up (optional)</FormLabel>
                       <FormControl>
                         <Input
                           type="tel"
@@ -276,9 +276,13 @@ const BookSessionPage = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full volumetric-glass-button text-foreground font-semibold py-6 text-lg"
+                  className="w-full font-semibold py-6 text-lg text-white hover:scale-105 transition-transform"
+                  style={{
+                    background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                    boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
+                  }}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit & See If You Qualify"}
+                  {isSubmitting ? "Submitting..." : "Submit & Claim $999 USD Founders Spot Now"}
                 </Button>
               </form>
             </Form>
