@@ -282,7 +282,7 @@ const BookSessionPage = () => {
                     boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
                   }}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit & Claim $999 USD Founders Spot Now"}
+                  {isSubmitting ? "Submitting..." : "Book Free Pivot & Roadmap Discussion with Hassan"}
                 </Button>
               </form>
             </Form>
