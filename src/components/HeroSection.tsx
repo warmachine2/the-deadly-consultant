@@ -1,4 +1,5 @@
 import strategyGuideThumbnail from "@/assets/strategy-guide-thumbnail.jpg";
+import acceleratorThumbnail from "@/assets/accelerator-thumbnail.png";
 
 const HeroSection = () => {
   return <section className="volumetric-glass rounded-3xl p-4 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden mx-2 md:mx-0">
@@ -108,15 +109,68 @@ const HeroSection = () => {
             </div>
           </a>
 
-          {/* Fourth CTA Button - Accelerator */}
-          <a href="https://skool.com/bi-fintech-consultant-academy/about" target="_blank" rel="noopener noreferrer" className="flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[100px] md:min-h-[120px]" style={{
-          background: "rgba(15, 15, 15, 0.85)",
-          backdropFilter: "blur(9px) saturate(150%)",
-          WebkitBackdropFilter: "blur(9px) saturate(150%)"
-        }}>
-            <span className="block">AI-Proof 10k/mo+</span>
-            <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
-            <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">Book free pivot analysis Strategy Session with Hassan to see if you qualify</span>
+          {/* Fourth CTA Button - Accelerator - Mobile */}
+          <a 
+            href="https://skool.com/bi-fintech-consultant-academy/about" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
+          >
+            <div className="relative flex-shrink-0">
+              <div 
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
+                }}
+              />
+              <img 
+                src={acceleratorThumbnail} 
+                alt="BI-FinTech Accelerator" 
+                className="w-16 h-16 object-contain rounded-lg relative z-10"
+              />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="block">AI-Proof 10k/mo+</span>
+              <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
+              <span className="block text-[9px] sm:text-[10px] text-white/80 mt-1">Book free pivot analysis with Hassan</span>
+            </div>
+          </a>
+          
+          {/* Fourth CTA Button - Accelerator - Desktop */}
+          <a 
+            href="https://skool.com/bi-fintech-consultant-academy/about" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
+          >
+            <div className="relative flex-shrink-0">
+              <div 
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
+                }}
+              />
+              <img 
+                src={acceleratorThumbnail} 
+                alt="BI-FinTech Accelerator" 
+                className="w-20 h-20 object-contain rounded-lg relative z-10"
+              />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="block">AI-Proof 10k/mo+</span>
+              <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
+              <span className="block text-xs text-white/80 mt-1">Book free pivot analysis Strategy Session with Hassan to see if you qualify</span>
+            </div>
           </a>
         </div>
 
