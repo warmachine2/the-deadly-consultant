@@ -73,7 +73,8 @@ const HeroSection = () => {
                 className="w-16 h-20 object-cover rounded-lg relative z-10"
               />
             </div>
-            <div className="flex flex-col text-left">
+            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
+            <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof BI-FinTech PM</span>
               <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
             </div>
@@ -103,7 +104,8 @@ const HeroSection = () => {
                 className="w-20 h-24 object-cover rounded-lg relative z-10"
               />
             </div>
-            <div className="flex flex-col text-left">
+            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
+            <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof BI-FinTech PM</span>
               <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
             </div>
@@ -131,7 +133,8 @@ const HeroSection = () => {
                 }}
               />
             </div>
-            <div className="flex flex-col text-left">
+            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
+            <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof 10k/mo+</span>
               <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
               <span className="block text-[9px] sm:text-[10px] text-white/80 mt-1">Book free pivot analysis with Hassan</span>
@@ -160,7 +163,8 @@ const HeroSection = () => {
                 }}
               />
             </div>
-            <div className="flex flex-col text-left">
+            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
+            <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof 10k/mo+</span>
               <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
               <span className="block text-xs text-white/80 mt-1">Book free pivot analysis Strategy Session with Hassan to see if you qualify</span>
