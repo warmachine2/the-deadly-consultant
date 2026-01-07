@@ -125,7 +125,7 @@ const HeroSection = () => {
               <img 
                 src={acceleratorThumbnail} 
                 alt="BI-FinTech Accelerator" 
-                className="w-16 h-16 object-contain relative z-10"
+                className="w-[74px] h-[74px] object-contain relative z-10"
                 style={{
                   filter: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 10px rgba(0, 212, 255, 0.7))",
                 }}
@@ -154,7 +154,7 @@ const HeroSection = () => {
               <img 
                 src={acceleratorThumbnail} 
                 alt="BI-FinTech Accelerator" 
-                className="w-20 h-20 object-contain relative z-10"
+                className="w-[92px] h-[92px] object-contain relative z-10"
                 style={{
                   filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 12px rgba(0, 212, 255, 0.7))",
                 }}
