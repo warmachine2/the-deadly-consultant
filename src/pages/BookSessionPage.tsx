@@ -110,34 +110,11 @@ const BookSessionPage = () => {
     }
   };
 
-  const ReadyToStartCard = () => (
-    <div className="volumetric-glass rounded-2xl p-8 text-center mb-8">
-      <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#FFE361' }}>
-        Ready to Get Started?
-      </h2>
-      <p className="text-muted-foreground mb-6">
-        Take the first step toward your AI-Proof $10k/mo+ BI-FinTech PM career pivot.
-      </p>
-      <Button
-        asChild
-        className="font-semibold py-6 px-8 text-lg text-white hover:scale-105 transition-transform"
-        style={{
-          background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
-          boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
-        }}
-      >
-        <a href="/book-session">Book Free 45-Min Pivot Strategy Session</a>
-      </Button>
-    </div>
-  );
-
   return (
     <div className="min-h-screen">
       <TopNav />
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-2xl mx-auto">
-          {/* Top CTA Card */}
-          <ReadyToStartCard />
 
           <div className="volumetric-glass rounded-2xl p-8 md:p-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ color: '#FFE361' }}>
@@ -312,10 +289,6 @@ const BookSessionPage = () => {
             </Form>
           </div>
 
-          {/* Bottom CTA Card */}
-          <div className="mt-8">
-            <ReadyToStartCard />
-          </div>
         </div>
       </main>
     </div>
