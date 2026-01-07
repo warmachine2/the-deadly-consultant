@@ -1,3 +1,5 @@
+import strategyGuideThumbnail from "@/assets/strategy-guide-thumbnail.jpg";
+
 const HeroSection = () => {
   return <section className="volumetric-glass rounded-3xl p-4 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden mx-2 md:mx-0">
       {/* Bokeh orbs layer */}
@@ -50,30 +52,44 @@ const HeroSection = () => {
           <a 
             data-formkit-toggle="0edbc71770"
             href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-            className="flex md:hidden flex-col justify-center px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <span className="block">AI-Proof BI-FinTech PM</span>
-            <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
+            <img 
+              src={strategyGuideThumbnail} 
+              alt="Strategy Guide Preview" 
+              className="w-16 h-20 object-cover rounded-lg flex-shrink-0"
+            />
+            <div className="flex flex-col text-left">
+              <span className="block">AI-Proof BI-FinTech PM</span>
+              <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
+            </div>
           </a>
           
           {/* Third CTA Button - Strategy Guide - Desktop Link */}
           <a 
             data-formkit-toggle="27ad03da2d"
             href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-            className="hidden md:flex flex-col justify-center px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <span className="block">AI-Proof BI-FinTech PM</span>
-            <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
+            <img 
+              src={strategyGuideThumbnail} 
+              alt="Strategy Guide Preview" 
+              className="w-20 h-24 object-cover rounded-lg flex-shrink-0"
+            />
+            <div className="flex flex-col text-left">
+              <span className="block">AI-Proof BI-FinTech PM</span>
+              <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
+            </div>
           </a>
 
           {/* Fourth CTA Button - Accelerator */}
