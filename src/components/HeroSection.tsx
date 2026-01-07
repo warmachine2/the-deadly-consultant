@@ -137,7 +137,6 @@ const HeroSection = () => {
             <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof 10k/mo+</span>
               <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
-              <span className="block text-[9px] sm:text-[10px] text-white/80 mt-1">Book free pivot analysis with Hassan</span>
             </div>
           </a>
           
@@ -167,7 +166,6 @@ const HeroSection = () => {
             <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof 10k/mo+</span>
               <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
-              <span className="block text-xs text-white/80 mt-1">Book free pivot analysis Strategy Session with Hassan to see if you qualify</span>
             </div>
           </a>
         </div>
