@@ -59,11 +59,19 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <img 
-              src={strategyGuideThumbnail} 
-              alt="Strategy Guide Preview" 
-              className="w-16 h-20 object-cover rounded-lg flex-shrink-0"
-            />
+            <div className="relative flex-shrink-0">
+              <div 
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  boxShadow: "0 0 12px 3px rgba(251, 191, 36, 0.3), 0 0 20px 5px rgba(59, 130, 246, 0.2)",
+                }}
+              />
+              <img 
+                src={strategyGuideThumbnail} 
+                alt="Strategy Guide Preview" 
+                className="w-16 h-20 object-cover rounded-lg relative z-10"
+              />
+            </div>
             <div className="flex flex-col text-left">
               <span className="block">AI-Proof BI-FinTech PM</span>
               <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
@@ -81,11 +89,19 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <img 
-              src={strategyGuideThumbnail} 
-              alt="Strategy Guide Preview" 
-              className="w-20 h-24 object-cover rounded-lg flex-shrink-0"
-            />
+            <div className="relative flex-shrink-0">
+              <div 
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  boxShadow: "0 0 14px 4px rgba(251, 191, 36, 0.3), 0 0 24px 6px rgba(59, 130, 246, 0.2)",
+                }}
+              />
+              <img 
+                src={strategyGuideThumbnail} 
+                alt="Strategy Guide Preview" 
+                className="w-20 h-24 object-cover rounded-lg relative z-10"
+              />
+            </div>
             <div className="flex flex-col text-left">
               <span className="block">AI-Proof BI-FinTech PM</span>
               <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
