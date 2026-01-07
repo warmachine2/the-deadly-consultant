@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Lightbulb } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Lightbulb, Play } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -357,6 +357,72 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
   );
 };
 
+// Strategy Video Section with expandable YouTube embed
+const StrategyVideoSection: React.FC = () => {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  
+  return (
+    <div className="mt-5">
+      {!isVideoOpen ? (
+        <button
+          onClick={() => setIsVideoOpen(true)}
+          className="w-full flex items-center justify-center gap-3 px-4 py-4 md:py-5 rounded-xl transition-all duration-300 hover:scale-[1.01] group"
+          style={{
+            background: 'linear-gradient(135deg, rgba(244, 201, 3, 0.15), rgba(255, 227, 97, 0.08))',
+            border: '1px solid rgba(244, 201, 3, 0.4)',
+            boxShadow: '0 4px 20px rgba(244, 201, 3, 0.15)'
+          }}
+        >
+          {/* Play Button */}
+          <div 
+            className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+            style={{
+              background: 'linear-gradient(135deg, #F4C903, #FFE361)',
+              boxShadow: '0 0 20px rgba(244, 201, 3, 0.5)'
+            }}
+          >
+            <Play className="w-5 h-5 md:w-6 md:h-6 text-black ml-0.5" fill="black" />
+          </div>
+          
+          {/* Text */}
+          <span className="text-base md:text-lg font-bold text-white group-hover:text-[#F4C903] transition-colors">
+            <span className="text-[#F4C903]">10k/mo+</span> AI / BI-FinTech PM Strategy Guide - Full Video <span className="text-white/70">[55min]</span>
+          </span>
+        </button>
+      ) : (
+        <div className="rounded-xl overflow-hidden" style={{
+          background: 'linear-gradient(135deg, rgba(244, 201, 3, 0.1), rgba(255, 227, 97, 0.05))',
+          border: '1px solid rgba(244, 201, 3, 0.3)'
+        }}>
+          {/* Header with close button */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+            <span className="text-sm md:text-base font-bold text-white">
+              <span className="text-[#F4C903]">10k/mo+</span> AI / BI-FinTech PM Strategy Guide - Full Video <span className="text-white/70">[55min]</span>
+            </span>
+            <button
+              onClick={() => setIsVideoOpen(false)}
+              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <X className="w-5 h-5 text-white/70 hover:text-white" />
+            </button>
+          </div>
+          
+          {/* Video Embed */}
+          <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
+            <iframe
+              src="https://www.youtube.com/embed/LSrDL3mKecg?autoplay=1"
+              title="10k/mo+ AI / BI-FinTech PM Strategy Guide"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Job card component (used for both mobile and desktop)
 const JobCard: React.FC<{
   job: JobData;
@@ -509,6 +575,9 @@ const JobCard: React.FC<{
 
       {/* Job Freshness Timeline */}
       <JobFreshnessGraph dateStr={job.date} />
+
+      {/* Strategy Video Section */}
+      <StrategyVideoSection />
 
       {/* Preview (always visible) */}
       {job.duties && <div className="mt-5">
