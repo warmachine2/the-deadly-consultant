@@ -857,67 +857,57 @@ const JobAlertsPage: React.FC = () => {
       <TopNav />
       
       <main className="flex-1 px-4 md:px-6 pb-6 pt-24">
-        {/* Strategy Guide Banner */}
-        <a 
-          data-formkit-toggle="0edbc71770"
-          href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-          className="flex md:hidden flex-row items-center gap-3 px-4 py-3 mb-4 text-sm font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer" 
+        {/* Strategy Guide Banner - Mobile */}
+        <div 
+          className="flex md:hidden flex-row items-center gap-3 px-4 py-3 mb-4 rounded-xl border border-white/20" 
           style={{
             background: "rgba(15, 15, 15, 0.85)",
             backdropFilter: "blur(9px) saturate(150%)",
             WebkitBackdropFilter: "blur(9px) saturate(150%)"
           }}
         >
-          <div className="w-px h-10 bg-white/20 flex-shrink-0" />
-          <div className="relative flex-shrink-0">
-            <div 
-              className="absolute inset-0 rounded-lg"
-              style={{
-                boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
-              }}
-            />
-            <img 
-              src={strategyGuideThumbnail} 
-              alt="Strategy Guide Preview" 
-              className="w-12 h-14 object-cover rounded-lg relative z-10"
-            />
-          </div>
-          <div className="w-px h-10 bg-white/20 flex-shrink-0" />
-          <div className="flex flex-col text-center flex-1">
-            <span className="block">AI-Proof BI-FinTech PM <span className="text-[#F4C903]">Strategy PDF</span></span>
-          </div>
-        </a>
+          <img 
+            src={strategyGuideThumbnail} 
+            alt="Strategy Guide Preview" 
+            className="w-10 h-12 object-cover rounded-md flex-shrink-0"
+          />
+          <span className="text-base font-bold text-white flex-1">
+            AI-Proof BI-FinTech PM <span className="text-[#F4C903]">Strategy PDF</span>
+          </span>
+          <a 
+            data-formkit-toggle="0edbc71770"
+            href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
+            className="px-4 py-2 text-sm font-bold rounded-lg bg-[#00d4ff] text-black hover:bg-[#00b8e0] transition-colors flex-shrink-0"
+          >
+            Download
+          </a>
+        </div>
         
         {/* Strategy Guide Banner - Desktop */}
-        <a 
-          data-formkit-toggle="27ad03da2d"
-          href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-          className="hidden md:flex flex-row items-center gap-4 px-6 py-3 mb-6 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.01] active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer" 
+        <div 
+          className="hidden md:flex flex-row items-center gap-5 px-6 py-4 mb-6 rounded-xl border border-white/20" 
           style={{
             background: "rgba(15, 15, 15, 0.85)",
             backdropFilter: "blur(9px) saturate(150%)",
             WebkitBackdropFilter: "blur(9px) saturate(150%)"
           }}
         >
-          <div className="w-px h-12 bg-white/20 flex-shrink-0" />
-          <div className="relative flex-shrink-0">
-            <div 
-              className="absolute inset-0 rounded-lg"
-              style={{
-                boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
-              }}
-            />
-            <img 
-              src={strategyGuideThumbnail} 
-              alt="Strategy Guide Preview" 
-              className="w-14 h-16 object-cover rounded-lg relative z-10"
-            />
-          </div>
-          <div className="w-px h-12 bg-white/20 flex-shrink-0" />
-          <div className="flex flex-col text-center flex-1">
-            <span className="block">AI-Proof BI-FinTech PM <span className="text-[#F4C903]">Strategy PDF</span></span>
-          </div>
-        </a>
+          <img 
+            src={strategyGuideThumbnail} 
+            alt="Strategy Guide Preview" 
+            className="w-12 h-14 object-cover rounded-md flex-shrink-0"
+          />
+          <span className="text-xl font-bold text-white flex-1">
+            AI-Proof BI-FinTech PM <span className="text-[#F4C903]">Strategy PDF</span>
+          </span>
+          <a 
+            data-formkit-toggle="27ad03da2d"
+            href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
+            className="px-6 py-2.5 text-base font-bold rounded-lg bg-[#00d4ff] text-black hover:bg-[#00b8e0] transition-colors flex-shrink-0"
+          >
+            Download Free
+          </a>
+        </div>
         {/* Header Section */}
         <div className="volumetric-glass rounded-3xl p-6 md:p-10 mb-6">
           <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{
