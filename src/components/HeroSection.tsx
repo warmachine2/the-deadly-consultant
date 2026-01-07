@@ -1,6 +1,7 @@
 import strategyGuideThumbnail from "@/assets/strategy-guide-thumbnail.jpg";
 import acceleratorThumbnail from "@/assets/accelerator-thumbnail.png";
 import jobBoardThumbnail from "@/assets/job-board-tile-icon.jpg";
+import roadmapThumbnail from "@/assets/roadmap-tile-icon.png";
 
 const HeroSection = () => {
   return <section className="volumetric-glass rounded-3xl p-4 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden mx-2 md:mx-0">
@@ -28,15 +29,66 @@ const HeroSection = () => {
 
         {/* CTA Buttons - 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-2 md:mt-4 w-full max-w-4xl">
-          {/* Main CTA Button */}
-          <a href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="inline-flex flex-col justify-center px-4 md:px-6 py-3 md:py-4 text-base sm:text-lg md:text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 text-center cta-glow-pulse min-h-[100px] md:min-h-[120px]" style={{
-          background: "rgba(15, 15, 15, 0.85)",
-          backdropFilter: "blur(9px) saturate(150%)",
-          WebkitBackdropFilter: "blur(9px) saturate(150%)"
-        }}>
-            <span className="block">Get Free Instant Access to</span>
-            <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
-            <span className="block text-[9px] sm:text-[10px] md:text-xs text-white/80 mt-1">PMP/PSM/CPMAI Trifecta + build $60k Tools - Escape AI Now</span>
+          {/* Main CTA Button - Roadmap - Mobile */}
+          <a 
+            href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
+            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
+          >
+            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
+            <div className="relative flex-shrink-0">
+              <div 
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
+                }}
+              />
+              <img 
+                src={roadmapThumbnail} 
+                alt="90-Day Roadmap Preview" 
+                className="w-16 h-20 object-cover rounded-lg relative z-10"
+              />
+            </div>
+            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
+            <div className="flex flex-col text-center flex-1">
+              <span className="block">Get Free Instant Access to</span>
+              <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
+            </div>
+          </a>
+          
+          {/* Main CTA Button - Roadmap - Desktop */}
+          <a 
+            href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
+            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
+          >
+            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
+            <div className="relative flex-shrink-0">
+              <div 
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
+                }}
+              />
+              <img 
+                src={roadmapThumbnail} 
+                alt="90-Day Roadmap Preview" 
+                className="w-20 h-24 object-cover rounded-lg relative z-10"
+              />
+            </div>
+            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
+            <div className="flex flex-col text-center flex-1">
+              <span className="block">Get Free Instant Access to</span>
+              <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
+            </div>
           </a>
 
           {/* Second CTA Button - Job Alerts - Mobile */}
