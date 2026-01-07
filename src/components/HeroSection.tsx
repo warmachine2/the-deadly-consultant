@@ -60,6 +60,7 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
+            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
             <div className="relative flex-shrink-0">
               <div 
                 className="absolute inset-0 rounded-lg"
@@ -91,6 +92,7 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
+            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
             <div className="relative flex-shrink-0">
               <div 
                 className="absolute inset-0 rounded-lg"
@@ -123,6 +125,7 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
+            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
             <div className="relative flex-shrink-0">
               <img 
                 src={acceleratorThumbnail} 
@@ -152,6 +155,7 @@ const HeroSection = () => {
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
+            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
             <div className="relative flex-shrink-0">
               <img 
                 src={acceleratorThumbnail} 
