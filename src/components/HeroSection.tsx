@@ -122,16 +122,13 @@ const HeroSection = () => {
             }}
           >
             <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
-                }}
-              />
               <img 
                 src={acceleratorThumbnail} 
                 alt="BI-FinTech Accelerator" 
-                className="w-16 h-16 object-contain rounded-lg relative z-10"
+                className="w-16 h-16 object-contain relative z-10"
+                style={{
+                  filter: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 10px rgba(0, 212, 255, 0.7))",
+                }}
               />
             </div>
             <div className="flex flex-col text-left">
@@ -154,16 +151,13 @@ const HeroSection = () => {
             }}
           >
             <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
-                }}
-              />
               <img 
                 src={acceleratorThumbnail} 
                 alt="BI-FinTech Accelerator" 
-                className="w-20 h-20 object-contain rounded-lg relative z-10"
+                className="w-20 h-20 object-contain relative z-10"
+                style={{
+                  filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 12px rgba(0, 212, 255, 0.7))",
+                }}
               />
             </div>
             <div className="flex flex-col text-left">
