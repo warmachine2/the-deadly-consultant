@@ -872,12 +872,12 @@ const JobAlertsPage: React.FC = () => {
             className="w-10 h-12 object-cover rounded-md flex-shrink-0"
           />
           <span className="text-base font-bold text-white flex-1">
-            AI-Proof BI-FinTech PM <span className="text-[#F4C903]">Strategy PDF</span>
+            <span className="text-[#F4C903]">FREE</span> 15 Page AI-Proof BI-FinTech 10k/mo+ PM <span className="text-[#F4C903]">Strategy Guide PDF</span>
           </span>
           <a 
             data-formkit-toggle="0edbc71770"
             href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-            className="px-4 py-2 text-sm font-bold rounded-lg bg-[#00d4ff] text-black hover:bg-[#00b8e0] transition-colors flex-shrink-0"
+            className="px-4 py-2 text-sm font-bold rounded-lg bg-gradient-to-r from-[#F4C903] to-[#FFE361] text-black hover:from-[#FFE361] hover:to-[#F4C903] transition-all shadow-[0_0_12px_rgba(244,201,3,0.5)] hover:shadow-[0_0_20px_rgba(244,201,3,0.7)] flex-shrink-0"
           >
             Download
           </a>
@@ -897,15 +897,15 @@ const JobAlertsPage: React.FC = () => {
             alt="Strategy Guide Preview" 
             className="w-12 h-14 object-cover rounded-md flex-shrink-0"
           />
-          <span className="text-xl font-bold text-white flex-1">
-            AI-Proof BI-FinTech PM <span className="text-[#F4C903]">Strategy PDF</span>
+          <span className="text-2xl font-bold text-white flex-1">
+            <span className="text-[#F4C903]">FREE</span> 15 Page AI-Proof BI-FinTech 10k/mo+ PM <span className="text-[#F4C903]">Strategy Guide PDF</span>
           </span>
           <a 
             data-formkit-toggle="27ad03da2d"
             href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-            className="px-6 py-2.5 text-base font-bold rounded-lg bg-[#00d4ff] text-black hover:bg-[#00b8e0] transition-colors flex-shrink-0"
+            className="px-7 py-3 text-lg font-bold rounded-lg bg-gradient-to-r from-[#F4C903] to-[#FFE361] text-black hover:from-[#FFE361] hover:to-[#F4C903] transition-all shadow-[0_0_15px_rgba(244,201,3,0.5)] hover:shadow-[0_0_25px_rgba(244,201,3,0.7)] flex-shrink-0"
           >
-            Download Free
+            Download
           </a>
         </div>
         {/* Header Section */}
