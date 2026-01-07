@@ -859,7 +859,7 @@ const JobAlertsPage: React.FC = () => {
       <main className="flex-1 px-4 md:px-6 pb-6 pt-24">
         {/* Strategy Guide Banner - Mobile */}
         <div 
-          className="flex md:hidden flex-row items-center gap-3 px-4 py-3 mb-4 rounded-xl border border-white/20" 
+          className="flex md:hidden flex-row items-center gap-3 px-4 py-2 mb-4 rounded-xl border border-white/20" 
           style={{
             background: "rgba(15, 15, 15, 0.85)",
             backdropFilter: "blur(9px) saturate(150%)",
@@ -869,7 +869,7 @@ const JobAlertsPage: React.FC = () => {
           <img 
             src={strategyGuideThumbnail} 
             alt="Strategy Guide Preview" 
-            className="w-10 h-12 object-cover rounded-md flex-shrink-0"
+            className="w-12 h-14 object-cover rounded-md flex-shrink-0 -my-1"
           />
           <span className="text-base font-bold text-white flex-1">
             <span className="text-[#F4C903]">FREE</span> 15 Page AI-Proof BI-FinTech 10k/mo+ PM <span className="text-[#F4C903]">Strategy Guide PDF</span>
@@ -885,7 +885,7 @@ const JobAlertsPage: React.FC = () => {
         
         {/* Strategy Guide Banner - Desktop */}
         <div 
-          className="hidden md:flex flex-row items-center gap-5 px-6 py-4 mb-6 rounded-xl border border-white/20" 
+          className="hidden md:flex flex-row items-center gap-5 px-6 py-2 mb-6 rounded-xl border border-white/20" 
           style={{
             background: "rgba(15, 15, 15, 0.85)",
             backdropFilter: "blur(9px) saturate(150%)",
@@ -895,7 +895,7 @@ const JobAlertsPage: React.FC = () => {
           <img 
             src={strategyGuideThumbnail} 
             alt="Strategy Guide Preview" 
-            className="w-12 h-14 object-cover rounded-md flex-shrink-0"
+            className="w-16 h-20 object-cover rounded-md flex-shrink-0 -my-1"
           />
           <span className="text-2xl font-bold text-white flex-1">
             <span className="text-[#F4C903]">FREE</span> 15 Page AI-Proof BI-FinTech 10k/mo+ PM <span className="text-[#F4C903]">Strategy Guide PDF</span>
