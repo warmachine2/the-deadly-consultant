@@ -58,11 +58,33 @@ const RoadmapPage = () => {
 
   const youtubeUrl = pageContent?.html ? extractYoutubeUrl(pageContent.html) : null;
 
+  const CtaCard = () => (
+    <section className="volumetric-glass rounded-3xl p-8 md:p-12 text-center mb-8">
+      <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
+      <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+        Book a free strategy session to walk through the roadmap and map your personalized pivot plan.
+      </p>
+      <a
+        href="/book-session"
+        className="inline-block text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105"
+        style={{
+          background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+          boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
+        }}
+      >
+        Book Your Free Strategy Session
+      </a>
+    </section>
+  );
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl mt-20 lg:mt-24">
+        {/* Top CTA Card */}
+        <CtaCard />
+
         <section className="volumetric-glass rounded-3xl p-8 md:p-12 mb-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
@@ -109,18 +131,8 @@ const RoadmapPage = () => {
               />
             </section>
 
-            <section className="volumetric-glass rounded-3xl p-8 md:p-12 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
-              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Download your free roadmap PDF and start your journey to becoming a successful BI-FinTech consultant.
-              </p>
-              <a
-                href="https://bifintechconsulting.com/roadmap-signup"
-                className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 shadow-lg"
-              >
-                Get Your Free Roadmap PDF
-              </a>
-            </section>
+            {/* Bottom CTA Card */}
+            <CtaCard />
           </>
         ) : (
           <div className="glass rounded-3xl p-12 text-center">
