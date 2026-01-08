@@ -647,24 +647,24 @@ const DateRangePicker: React.FC<{
   return <div className="flex gap-2 items-center">
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-xs px-2", !startDate && "text-white/60")}>
-            <Calendar className="mr-1 h-3 w-3 shrink-0" />
+          <Button variant="outline" className={cn("w-[115px] justify-start text-left font-medium bg-gray-800/80 border-[#FFDD40]/30 hover:bg-gray-700 hover:border-[#FFDD40] text-[#FFDD40] text-xs px-2.5 py-2 h-auto", !startDate && "text-[#FFDD40]/60")}>
+            <Calendar className="mr-1.5 h-3.5 w-3.5 shrink-0" />
             {startDate ? format(startDate, "MMM d") : "Start"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
+        <PopoverContent className="w-auto p-0 bg-gray-900 border border-[#FFDD40]/30 z-[100]" align="start">
           <CalendarComponent mode="single" selected={startDate} onSelect={onStartChange} initialFocus className="p-3 pointer-events-auto" />
         </PopoverContent>
       </Popover>
-      <span className="text-white/60 text-xs">–</span>
+      <span className="text-[#FFDD40]/50 text-sm font-medium">→</span>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" className={cn("w-[120px] justify-start text-left font-normal bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-xs px-2", !endDate && "text-white/60")}>
-            <Calendar className="mr-1 h-3 w-3 shrink-0" />
+          <Button variant="outline" className={cn("w-[115px] justify-start text-left font-medium bg-gray-800/80 border-[#FFDD40]/30 hover:bg-gray-700 hover:border-[#FFDD40] text-[#FFDD40] text-xs px-2.5 py-2 h-auto", !endDate && "text-[#FFDD40]/60")}>
+            <Calendar className="mr-1.5 h-3.5 w-3.5 shrink-0" />
             {endDate ? format(endDate, "MMM d") : "End"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
+        <PopoverContent className="w-auto p-0 bg-gray-900 border border-[#FFDD40]/30 z-[100]" align="start">
           <CalendarComponent mode="single" selected={endDate} onSelect={onEndChange} initialFocus className="p-3 pointer-events-auto" />
         </PopoverContent>
       </Popover>
