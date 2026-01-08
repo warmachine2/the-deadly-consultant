@@ -1224,7 +1224,7 @@ const JobAlertsPage: React.FC = () => {
                                   <CommandItem
                                     key={source}
                                     onSelect={() => toggleSource(source)}
-                                    className="cursor-pointer"
+                                    className="cursor-pointer hover:bg-[#FFDD40]/20 data-[selected=true]:bg-[#FFDD40]/20"
                                   >
                                     <div className="flex items-center gap-2 w-full">
                                       <Checkbox
