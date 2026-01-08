@@ -954,7 +954,7 @@ const JobAlertsPage: React.FC = () => {
   return <div className="min-h-screen overflow-x-hidden flex flex-col">
       <TopNav />
       
-      <main className="flex-1 px-4 md:px-6 pb-6 pt-20">
+      <main className="flex-1 px-4 md:px-6 pb-6 pt-16">
         {/* Search Bar - Under TopNav */}
         <div className="relative mb-3">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
