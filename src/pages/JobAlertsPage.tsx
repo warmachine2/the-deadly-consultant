@@ -781,16 +781,11 @@ const JobAlertsPage: React.FC = () => {
         }
       }
     });
-    
-    const sources = Array.from(sourceSet).sort();
-    console.log('📋 Unique Sources Found:', sources);
-    console.log('📋 Total jobs with source:', data.filter(j => j.source && j.source.trim()).length);
-    
     return {
       countries: Array.from(countrySet).sort(),
       locations: Array.from(locationSet).sort(),
       uniqueRoleTypes: Array.from(roleTypeSet).sort(),
-      uniqueSources: sources
+      uniqueSources: Array.from(sourceSet).sort()
     };
   }, [data]);
   const filteredAndSortedData = useMemo(() => {
