@@ -955,18 +955,6 @@ const JobAlertsPage: React.FC = () => {
       <TopNav />
       
       <main className="flex-1 px-4 md:px-6 pb-6 pt-3">
-        {/* Search Bar - Under TopNav */}
-        <div className="relative mb-3">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input 
-            type="text" 
-            placeholder="Search by Role, Duties, or Company..." 
-            value={searchQuery} 
-            onChange={e => setSearchQuery(e.target.value)} 
-            className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors text-base" 
-          />
-        </div>
-
         {/* Strategy Guide Banner - Mobile */}
         <div 
           className="flex md:hidden flex-row items-center gap-3 px-4 py-2 mb-4 rounded-xl border border-white/20"
@@ -1033,10 +1021,6 @@ const JobAlertsPage: React.FC = () => {
         }}>
             Only recruiter-sourced gigs shown. AI-parsed for AI/BI-FinTech PM fits.
           </p>
-          <p className="text-sm md:text-base mb-6 text-red-400 italic">
-            ⚠️ Skip roles older than 48 hours — recruiters submit top candidates within this window.
-          </p>
-
           {/* CTA Buttons */}
           <div className="text-center">
             <div className="flex flex-wrap gap-4 justify-center items-center">
@@ -1048,6 +1032,24 @@ const JobAlertsPage: React.FC = () => {
                 <CalendarCheck className="w-5 h-5 mr-2" />
                 Book Free 45-Min Strategy Session
               </a>
+
+              {/* Search Bar */}
+              <div className="relative w-full md:w-auto md:flex-1 md:max-w-md">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input 
+                  type="text" 
+                  placeholder="Search by Role, Duties, or Company..." 
+                  value={searchQuery} 
+                  onChange={e => setSearchQuery(e.target.value)} 
+                  className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors text-base" 
+                />
+              </div>
+
+              <p className="w-full md:w-auto text-sm md:text-base text-red-400 italic">
+                ⚠️ Skip roles older than 48 hours — recruiters submit top candidates within this window.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-4 justify-center items-center mt-4">
               {/* Mobile Link */}
               <a 
                 data-formkit-toggle="0edbc71770"
