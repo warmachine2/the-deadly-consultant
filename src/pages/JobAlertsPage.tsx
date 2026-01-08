@@ -954,7 +954,7 @@ const JobAlertsPage: React.FC = () => {
   return <div className="min-h-screen overflow-x-hidden flex flex-col">
       <TopNav />
       
-      <main className="flex-1 px-4 md:px-6 pb-6 pt-3">
+      <main className="flex-1 px-4 md:px-6 pb-6 pt-16">
         {/* Strategy Guide Banner - Mobile */}
         <div 
           className="flex md:hidden flex-row items-center gap-3 px-4 py-2 mb-4 rounded-xl border border-white/20"
