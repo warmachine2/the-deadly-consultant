@@ -1,8 +1,3 @@
-import strategyGuideThumbnail from "@/assets/strategy-guide-thumbnail.jpg";
-import acceleratorThumbnail from "@/assets/accelerator-thumbnail.png";
-import jobBoardThumbnail from "@/assets/job-board-tile-icon.jpg";
-import roadmapThumbnail from "@/assets/roadmap-tile-icon.png";
-
 const HeroSection = () => {
   return <section className="volumetric-glass rounded-3xl p-4 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden mx-2 md:mx-0">
       {/* Bokeh orbs layer */}
@@ -32,28 +27,13 @@ const HeroSection = () => {
           {/* Main CTA Button - Roadmap - Mobile */}
           <a 
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
-                }}
-              />
-              <img 
-                src={roadmapThumbnail} 
-                alt="90-Day Roadmap Preview" 
-                className="w-16 h-20 object-cover rounded-lg relative z-10"
-              />
-            </div>
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">Get Free Instant Access to</span>
               <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
@@ -63,28 +43,13 @@ const HeroSection = () => {
           {/* Main CTA Button - Roadmap - Desktop */}
           <a 
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
-                }}
-              />
-              <img 
-                src={roadmapThumbnail} 
-                alt="90-Day Roadmap Preview" 
-                className="w-20 h-24 object-cover rounded-lg relative z-10"
-              />
-            </div>
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">Get Free Instant Access to</span>
               <span className="block"><span className="text-[#F4C903]">90-Day Roadmap</span></span>
@@ -94,28 +59,13 @@ const HeroSection = () => {
           {/* Second CTA Button - Job Alerts - Mobile */}
           <a 
             href="/ai-bi-fintech-pm-job-alerts-repo" 
-            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
-                }}
-              />
-              <img 
-                src={jobBoardThumbnail} 
-                alt="Job Board Preview" 
-                className="w-16 h-20 object-cover rounded-lg relative z-10"
-              />
-            </div>
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">$10k/mo+ Job Alerts</span>
               <span className="block">+ AI/BI-FinTech <span className="text-[#F4C903]">PM Job Board</span></span>
@@ -125,28 +75,13 @@ const HeroSection = () => {
           {/* Second CTA Button - Job Alerts - Desktop */}
           <a 
             href="/ai-bi-fintech-pm-job-alerts-repo" 
-            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
-                }}
-              />
-              <img 
-                src={jobBoardThumbnail} 
-                alt="Job Board Preview" 
-                className="w-20 h-24 object-cover rounded-lg relative z-10"
-              />
-            </div>
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">$10k/mo+ Job Alerts</span>
               <span className="block">+ AI/BI-FinTech <span className="text-[#F4C903]">PM Job Board</span></span>
@@ -157,28 +92,13 @@ const HeroSection = () => {
           <a 
             data-formkit-toggle="0edbc71770"
             href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 8px 2px rgba(255, 255, 255, 0.5), 0 0 12px 3px rgba(0, 212, 255, 0.6)",
-                }}
-              />
-              <img 
-                src={strategyGuideThumbnail} 
-                alt="Strategy Guide Preview" 
-                className="w-16 h-20 object-cover rounded-lg relative z-10"
-              />
-            </div>
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof BI-FinTech PM</span>
               <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
@@ -189,28 +109,13 @@ const HeroSection = () => {
           <a 
             data-formkit-toggle="27ad03da2d"
             href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <div 
-                className="absolute inset-0 rounded-lg"
-                style={{
-                  boxShadow: "0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(0, 212, 255, 0.6)",
-                }}
-              />
-              <img 
-                src={strategyGuideThumbnail} 
-                alt="Strategy Guide Preview" 
-                className="w-20 h-24 object-cover rounded-lg relative z-10"
-              />
-            </div>
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof BI-FinTech PM</span>
               <span className="block"><span className="text-[#F4C903]">Strategy PDF</span></span>
@@ -222,25 +127,13 @@ const HeroSection = () => {
             href="https://skool.com/bi-fintech-consultant-academy/about" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex md:hidden flex-row items-center gap-3 px-4 py-3 text-base sm:text-lg font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <img 
-                src={acceleratorThumbnail} 
-                alt="BI-FinTech Accelerator" 
-                className="w-[74px] h-[74px] object-contain relative z-10"
-                style={{
-                  filter: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 10px rgba(0, 212, 255, 0.7))",
-                }}
-              />
-            </div>
-            <div className="w-px h-12 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof 10k/mo+</span>
               <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
@@ -252,25 +145,13 @@ const HeroSection = () => {
             href="https://skool.com/bi-fintech-consultant-academy/about" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hidden md:flex flex-row items-center gap-4 px-6 py-4 text-2xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
               WebkitBackdropFilter: "blur(9px) saturate(150%)"
             }}
           >
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
-            <div className="relative flex-shrink-0">
-              <img 
-                src={acceleratorThumbnail} 
-                alt="BI-FinTech Accelerator" 
-                className="w-[92px] h-[92px] object-contain relative z-10"
-                style={{
-                  filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 12px rgba(0, 212, 255, 0.7))",
-                }}
-              />
-            </div>
-            <div className="w-px h-16 bg-white/20 flex-shrink-0" />
             <div className="flex flex-col text-center flex-1">
               <span className="block">AI-Proof 10k/mo+</span>
               <span className="block"><span className="text-[#F4C903]">BI-FinTech PM</span> Accelerator</span>
