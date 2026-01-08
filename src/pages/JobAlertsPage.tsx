@@ -1101,302 +1101,7 @@ const JobAlertsPage: React.FC = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Filters Section - Collapsible */}
-        {!loading && data.length > 0 && (
-          <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="mb-6">
-            <div className="volumetric-glass rounded-2xl overflow-hidden">
-              <CollapsibleTrigger asChild>
-                <button className="w-full flex items-center justify-between p-4 md:p-5 hover:bg-white/5 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <Filter className="w-5 h-5" style={{ color: '#FFDD40' }} />
-                    <span className="text-lg font-bold" style={{ color: '#FFDD40' }}>
-                      Filters
-                    </span>
-                    {(selectedSources.length > 0 || selectedRoleType !== 'all' || selectedCountry !== 'all' || selectedLocation !== 'all' || experienceFilter !== 'all' || salaryFilter !== 'all' || workTypeFilter !== 'all' || searchQuery) && (
-                      <span className="px-2 py-0.5 text-xs rounded-full bg-[#FFDD40]/20 text-[#FFDD40]">
-                        Active
-                      </span>
-                    )}
-                    <span className="text-sm text-white/60">
-                      {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
-                    </span>
-                  </div>
-                  {filtersOpen ? (
-                    <ChevronUp className="w-5 h-5" style={{ color: '#FFDD40' }} />
-                  ) : (
-                    <ChevronDown className="w-5 h-5" style={{ color: '#FFDD40' }} />
-                  )}
-                </button>
-              </CollapsibleTrigger>
-              
-              <CollapsibleContent>
-                <div className="px-4 pb-5 md:px-5 md:pb-6 border-t border-white/10 space-y-5">
-                  {/* Search Bar */}
-                  <div className="relative mt-4">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input 
-                      type="text" 
-                      placeholder="Search by Role, Duties, or Company..." 
-                      value={searchQuery} 
-                      onChange={e => setSearchQuery(e.target.value)} 
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors" 
-                    />
-                  </div>
-                  
-                  {/* Filter Grid - Responsive */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Sources Multi-Select - First/Prominent - Wider on md+ */}
-                    <div className="flex flex-col gap-1 col-span-1 sm:col-span-2">
-                      <label className="text-sm font-bold text-[#FFDD40] flex items-center gap-1.5">
-                        <Users className="w-4 h-4" />
-                        Sources
-                      </label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button 
-                            variant="outline" 
-                            className="w-full justify-between px-4 py-2.5 h-auto rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-sm"
-                          >
-                            <span className="truncate">
-                              {selectedSources.length === 0 
-                                ? 'All Sources' 
-                                : selectedSources.length <= 2
-                                  ? selectedSources.join(', ')
-                                  : `${selectedSources.length} selected`
-                              }
-                            </span>
-                            <ChevronDown className="w-4 h-4 ml-2 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[280px] p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
-                          <Command className="bg-transparent">
-                            <CommandInput placeholder="Search sources..." className="border-b border-white/10" />
-                            <CommandList>
-                              <CommandEmpty>No sources found.</CommandEmpty>
-                              <CommandGroup>
-                                {/* Clear All option */}
-                                {selectedSources.length > 0 && (
-                                  <CommandItem
-                                    onSelect={() => setSelectedSources([])}
-                                    className="cursor-pointer text-white/70 hover:text-white"
-                                  >
-                                    <X className="mr-2 h-4 w-4" />
-                                    Clear all ({selectedSources.length})
-                                  </CommandItem>
-                                )}
-                                {uniqueSources.map(source => (
-                                  <CommandItem
-                                    key={source}
-                                    onSelect={() => toggleSource(source)}
-                                    className="cursor-pointer"
-                                  >
-                                    <div className={cn(
-                                      "mr-2 flex h-4 w-4 items-center justify-center rounded border",
-                                      selectedSources.includes(source) 
-                                        ? "bg-[#FFDD40] border-[#FFDD40] text-black" 
-                                        : "border-white/30"
-                                    )}>
-                                      {selectedSources.includes(source) && <Check className="h-3 w-3" />}
-                                    </div>
-                                    <span className="text-white">{source}</span>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    
-                    {/* Country Filter */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs text-white/60">Country</label>
-                      <select 
-                        value={selectedCountry} 
-                        onChange={e => setSelectedCountry(e.target.value)} 
-                        className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
-                      >
-                        <option value="all" className="bg-gray-900 text-white">All Countries</option>
-                        <option value="Canada" className="bg-gray-900 text-white">Canada</option>
-                        <option value="USA" className="bg-gray-900 text-white">USA</option>
-                        {countries.filter(c => c !== 'Canada' && c !== 'USA').map(country => (
-                          <option key={country} value={country} className="bg-gray-900 text-white">{country}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    {/* Location Filter */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs text-white/60">City/State</label>
-                      <select 
-                        value={selectedLocation} 
-                        onChange={e => setSelectedLocation(e.target.value)} 
-                        className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
-                      >
-                        <option value="all" className="bg-gray-900 text-white">All Locations</option>
-                        {locations.map(loc => (
-                          <option key={loc} value={loc} className="bg-gray-900 text-white">{loc}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    {/* Experience Filter */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs text-white/60 flex items-center gap-1">
-                        <Briefcase className="w-3 h-3" />
-                        Experience
-                      </label>
-                      <select 
-                        value={experienceFilter} 
-                        onChange={e => setExperienceFilter(e.target.value)} 
-                        className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
-                      >
-                        <option value="all" className="bg-gray-900 text-white">All Experience</option>
-                        <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
-                        <option value="more5" className="bg-gray-900 text-white">≥ 5 Years</option>
-                      </select>
-                    </div>
-                    
-                    {/* Salary Filter */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs text-white/60 flex items-center gap-1">
-                        <DollarSign className="w-3 h-3" style={{ color: '#FFDD40' }} />
-                        Salary Range
-                      </label>
-                      <select 
-                        value={salaryFilter} 
-                        onChange={e => setSalaryFilter(e.target.value)} 
-                        className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
-                      >
-                        <option value="all" className="bg-gray-900 text-white">All Salaries</option>
-                        <option value="less15" className="bg-gray-900 text-white">≤ $15k/mo</option>
-                        <option value="15to18" className="bg-gray-900 text-white">$15k - $18k/mo</option>
-                        <option value="more18" className="bg-gray-900 text-white">≥ $18k/mo</option>
-                      </select>
-                    </div>
-                    
-                    {/* Work Type Filter */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs text-white/60 flex items-center gap-1">
-                        <Home className="w-3 h-3" />
-                        Work Type
-                      </label>
-                      <select 
-                        value={workTypeFilter} 
-                        onChange={e => setWorkTypeFilter(e.target.value)} 
-                        className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
-                      >
-                        <option value="all" className="bg-gray-900 text-white">All Types</option>
-                        <option value="remote" className="bg-gray-900 text-white">Remote</option>
-                        <option value="hybrid" className="bg-gray-900 text-white">Hybrid</option>
-                        <option value="onsite" className="bg-gray-900 text-white">On-site</option>
-                      </select>
-                    </div>
-                    
-                    {/* Role Type Dropdown */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-xs text-white/60 flex items-center gap-1">
-                        <Users className="w-3 h-3" />
-                        Role Type
-                      </label>
-                      <select 
-                        value={selectedRoleType} 
-                        onChange={e => setSelectedRoleType(e.target.value)} 
-                        className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
-                      >
-                        <option value="all" className="bg-gray-900 text-white">All Roles</option>
-                        {uniqueRoleTypes.map(role => (
-                          <option key={role} value={role} className="bg-gray-900 text-white">{role}</option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    {/* Date Range */}
-                    <div className="flex flex-col gap-1 sm:col-span-2 lg:col-span-1">
-                      <label className="text-xs text-white/60">Date Range</label>
-                      <DateRangePicker 
-                        startDate={startDate} 
-                        endDate={endDate} 
-                        onStartChange={setStartDate} 
-                        onEndChange={setEndDate} 
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Action Row */}
-                  <div className="flex gap-3 flex-wrap items-center justify-between pt-2">
-                    <div className="flex gap-3 items-center flex-wrap">
-                      <button 
-                        onClick={() => fetchData()} 
-                        disabled={loading} 
-                        className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors flex items-center gap-2"
-                      >
-                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                        Refresh
-                      </button>
-                      <button 
-                        onClick={clearFilters} 
-                        className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors"
-                      >
-                        Clear Filters
-                      </button>
-                      
-                      {/* View Mode Toggle */}
-                      <div className="flex rounded-xl overflow-hidden border border-white/20">
-                        <button 
-                          onClick={() => setViewMode('card')}
-                          className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'card' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
-                          style={viewMode === 'card' ? { backgroundColor: '#FFDD40' } : {}}
-                        >
-                          <LayoutGrid className="w-4 h-4" />
-                          Card
-                        </button>
-                        <button 
-                          onClick={() => setViewMode('table')}
-                          className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'table' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
-                          style={viewMode === 'table' ? { backgroundColor: '#FFDD40' } : {}}
-                        >
-                          <TableIcon className="w-4 h-4" />
-                          Table
-                        </button>
-                      </div>
-                    </div>
-                    
-                    {/* Active Filters Display */}
-                    {(selectedRoleType !== 'all' || selectedSources.length > 0) && (
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {selectedRoleType !== 'all' && (
-                          <span className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1" style={{
-                            backgroundColor: 'rgba(255, 221, 64, 0.2)',
-                            color: '#FFDD40'
-                          }}>
-                            {selectedRoleType}
-                            <button onClick={() => setSelectedRoleType('all')} className="ml-1 hover:opacity-70">
-                              <X className="w-3 h-3" />
-                            </button>
-                          </span>
-                        )}
-                        {selectedSources.length > 0 && (
-                          <span className="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1" style={{
-                            backgroundColor: 'rgba(255, 221, 64, 0.2)',
-                            color: '#FFDD40'
-                          }}>
-                            {selectedSources.length} source{selectedSources.length !== 1 ? 's' : ''}
-                            <button onClick={() => setSelectedSources([])} className="ml-1 hover:opacity-70">
-                              <X className="w-3 h-3" />
-                            </button>
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-        )}
-
-        {/* Analytics Section - Collapsible */}
+        {/* Analytics Section - Collapsible (Above Filters) */}
         {!loading && data.length > 0 && (
           <Collapsible open={showAnalytics} onOpenChange={setShowAnalytics} className="mb-6">
             <div className="volumetric-glass rounded-2xl overflow-hidden">
@@ -1425,6 +1130,299 @@ const JobAlertsPage: React.FC = () => {
                       onCountryFilterClick={handleCountryFilterClick} 
                       onDateRangeClick={handleDateRangeClick} 
                     />
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Filters Section - Collapsible (Below Analytics, Above Job List) */}
+        {!loading && data.length > 0 && (
+          <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="mb-6">
+            <div className="volumetric-glass rounded-2xl overflow-hidden shadow-lg sticky top-20 z-40">
+              <CollapsibleTrigger asChild>
+                <button className="w-full flex items-center justify-between p-5 md:p-6 hover:bg-white/5 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Filter className="w-6 h-6" style={{ color: '#FFDD40' }} />
+                    <span className="text-xl md:text-2xl font-bold" style={{ color: '#FFDD40' }}>
+                      Filters
+                    </span>
+                    {(selectedSources.length > 0 || selectedRoleType !== 'all' || selectedCountry !== 'all' || selectedLocation !== 'all' || experienceFilter !== 'all' || salaryFilter !== 'all' || workTypeFilter !== 'all' || searchQuery) && (
+                      <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-[#FFDD40]/20 text-[#FFDD40]">
+                        Active
+                      </span>
+                    )}
+                    <span className="text-sm text-white/60 ml-2">
+                      {filteredAndSortedData.length} job{filteredAndSortedData.length !== 1 ? 's' : ''} found
+                    </span>
+                  </div>
+                  {filtersOpen ? (
+                    <ChevronUp className="w-6 h-6" style={{ color: '#FFDD40' }} />
+                  ) : (
+                    <ChevronDown className="w-6 h-6" style={{ color: '#FFDD40' }} />
+                  )}
+                </button>
+              </CollapsibleTrigger>
+              
+              <CollapsibleContent>
+                <div className="px-5 pb-6 md:px-6 md:pb-8 border-t border-white/10 space-y-5">
+                  {/* Search Bar */}
+                  <div className="relative mt-5">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <input 
+                      type="text" 
+                      placeholder="Search by Role, Duties, or Company..." 
+                      value={searchQuery} 
+                      onChange={e => setSearchQuery(e.target.value)} 
+                      className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-[#FFDD40]/50 transition-colors text-base" 
+                    />
+                  </div>
+                  
+                  {/* Filter Grid - Responsive */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Sources Multi-Select - First/Prominent - Full width mobile, 2 cols on md+ */}
+                    <div className="flex flex-col gap-1.5 col-span-1 md:col-span-2">
+                      <label className="text-sm font-bold text-[#FFDD40] flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        Sources
+                      </label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button 
+                            variant="outline" 
+                            className="w-full justify-between px-4 py-3 h-auto rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-base"
+                          >
+                            <span className="truncate">
+                              {selectedSources.length === 0 
+                                ? 'All Sources' 
+                                : selectedSources.length <= 2
+                                  ? selectedSources.join(', ')
+                                  : `${selectedSources.length} selected`
+                              }
+                            </span>
+                            <ChevronDown className="w-4 h-4 ml-2 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[320px] p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
+                          <Command className="bg-transparent">
+                            <CommandInput placeholder="Search sources..." className="border-b border-white/10" />
+                            <CommandList>
+                              <CommandEmpty>No sources found.</CommandEmpty>
+                              <CommandGroup>
+                                {/* Clear All option */}
+                                {selectedSources.length > 0 && (
+                                  <CommandItem
+                                    onSelect={() => setSelectedSources([])}
+                                    className="cursor-pointer text-white/70 hover:text-white"
+                                  >
+                                    <X className="w-4 h-4 mr-2" />
+                                    Clear selection ({selectedSources.length})
+                                  </CommandItem>
+                                )}
+                                {uniqueSources.map(source => (
+                                  <CommandItem
+                                    key={source}
+                                    onSelect={() => toggleSource(source)}
+                                    className="cursor-pointer"
+                                  >
+                                    <div className="flex items-center gap-2 w-full">
+                                      <Checkbox
+                                        checked={selectedSources.includes(source)}
+                                        className="border-white/30 data-[state=checked]:bg-[#FFDD40] data-[state=checked]:border-[#FFDD40]"
+                                      />
+                                      <span className="text-white">{source}</span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    
+                    {/* Country Filter */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-white/60">Country</label>
+                      <select 
+                        value={selectedCountry} 
+                        onChange={e => setSelectedCountry(e.target.value)} 
+                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                      >
+                        <option value="all" className="bg-gray-900 text-white">All Countries</option>
+                        <option value="Canada" className="bg-gray-900 text-white">Canada</option>
+                        <option value="USA" className="bg-gray-900 text-white">USA</option>
+                        {countries.filter(c => c !== 'Canada' && c !== 'USA').map(country => (
+                          <option key={country} value={country} className="bg-gray-900 text-white">{country}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    {/* Location Filter */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-white/60">City/State</label>
+                      <select 
+                        value={selectedLocation} 
+                        onChange={e => setSelectedLocation(e.target.value)} 
+                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                      >
+                        <option value="all" className="bg-gray-900 text-white">All Locations</option>
+                        {locations.map(loc => (
+                          <option key={loc} value={loc} className="bg-gray-900 text-white">{loc}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    {/* Experience Filter */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-white/60 flex items-center gap-1">
+                        <Briefcase className="w-3 h-3" />
+                        Experience
+                      </label>
+                      <select 
+                        value={experienceFilter} 
+                        onChange={e => setExperienceFilter(e.target.value)} 
+                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                      >
+                        <option value="all" className="bg-gray-900 text-white">All Experience</option>
+                        <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
+                        <option value="more5" className="bg-gray-900 text-white">≥ 5 Years</option>
+                      </select>
+                    </div>
+                    
+                    {/* Salary Filter */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-white/60 flex items-center gap-1">
+                        <DollarSign className="w-3 h-3" style={{ color: '#FFDD40' }} />
+                        Salary Range
+                      </label>
+                      <select 
+                        value={salaryFilter} 
+                        onChange={e => setSalaryFilter(e.target.value)} 
+                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                      >
+                        <option value="all" className="bg-gray-900 text-white">All Salaries</option>
+                        <option value="less15" className="bg-gray-900 text-white">≤ $15k/mo</option>
+                        <option value="15to18" className="bg-gray-900 text-white">$15k - $18k/mo</option>
+                        <option value="more18" className="bg-gray-900 text-white">≥ $18k/mo</option>
+                      </select>
+                    </div>
+                    
+                    {/* Work Type Filter */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-white/60 flex items-center gap-1">
+                        <Home className="w-3 h-3" />
+                        Work Type
+                      </label>
+                      <select 
+                        value={workTypeFilter} 
+                        onChange={e => setWorkTypeFilter(e.target.value)} 
+                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                      >
+                        <option value="all" className="bg-gray-900 text-white">All Types</option>
+                        <option value="remote" className="bg-gray-900 text-white">Remote</option>
+                        <option value="hybrid" className="bg-gray-900 text-white">Hybrid</option>
+                        <option value="onsite" className="bg-gray-900 text-white">On-site</option>
+                      </select>
+                    </div>
+                    
+                    {/* Role Type Dropdown */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs text-white/60 flex items-center gap-1">
+                        <Users className="w-3 h-3" />
+                        Role Type
+                      </label>
+                      <select 
+                        value={selectedRoleType} 
+                        onChange={e => setSelectedRoleType(e.target.value)} 
+                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                      >
+                        <option value="all" className="bg-gray-900 text-white">All Roles</option>
+                        {uniqueRoleTypes.map(role => (
+                          <option key={role} value={role} className="bg-gray-900 text-white">{role}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    {/* Date Range */}
+                    <div className="flex flex-col gap-1.5 md:col-span-2 lg:col-span-1">
+                      <label className="text-xs text-white/60">Date Range</label>
+                      <DateRangePicker 
+                        startDate={startDate} 
+                        endDate={endDate} 
+                        onStartChange={setStartDate} 
+                        onEndChange={setEndDate} 
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Action Row */}
+                  <div className="flex gap-3 flex-wrap items-center justify-between pt-3">
+                    <div className="flex gap-3 items-center flex-wrap">
+                      <button 
+                        onClick={() => fetchData()} 
+                        disabled={loading} 
+                        className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors flex items-center gap-2 font-medium"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                        Refresh
+                      </button>
+                      <button 
+                        onClick={clearFilters} 
+                        className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors font-medium"
+                      >
+                        Clear Filters
+                      </button>
+                      
+                      {/* View Mode Toggle */}
+                      <div className="flex rounded-xl overflow-hidden border border-white/20">
+                        <button 
+                          onClick={() => setViewMode('card')}
+                          className={`px-4 py-2.5 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'card' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+                          style={viewMode === 'card' ? { backgroundColor: '#FFDD40' } : {}}
+                        >
+                          <LayoutGrid className="w-4 h-4" />
+                          Card
+                        </button>
+                        <button 
+                          onClick={() => setViewMode('table')}
+                          className={`px-4 py-2.5 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'table' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+                          style={viewMode === 'table' ? { backgroundColor: '#FFDD40' } : {}}
+                        >
+                          <TableIcon className="w-4 h-4" />
+                          Table
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Active Filters Display */}
+                    {(selectedRoleType !== 'all' || selectedSources.length > 0) && (
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {selectedRoleType !== 'all' && (
+                          <span className="px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1" style={{
+                            backgroundColor: 'rgba(255, 221, 64, 0.2)',
+                            color: '#FFDD40'
+                          }}>
+                            {selectedRoleType}
+                            <button onClick={() => setSelectedRoleType('all')} className="ml-1 hover:opacity-70">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        )}
+                        {selectedSources.length > 0 && (
+                          <span className="px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1" style={{
+                            backgroundColor: 'rgba(255, 221, 64, 0.2)',
+                            color: '#FFDD40'
+                          }}>
+                            {selectedSources.length} source{selectedSources.length !== 1 ? 's' : ''}
+                            <button onClick={() => setSelectedSources([])} className="ml-1 hover:opacity-70">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </CollapsibleContent>
