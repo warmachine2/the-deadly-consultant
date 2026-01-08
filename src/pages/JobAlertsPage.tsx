@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Lightbulb, Play, Check } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Lightbulb, Play, Check, Globe, MapPin } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -1244,7 +1244,10 @@ const JobAlertsPage: React.FC = () => {
                     
                     {/* Country Filter */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-white/60">Country</label>
+                      <label className="text-xs text-white/60 flex items-center gap-1">
+                        <Globe className="w-3 h-3" />
+                        Country
+                      </label>
                       <select 
                         value={selectedCountry} 
                         onChange={e => setSelectedCountry(e.target.value)} 
@@ -1261,7 +1264,10 @@ const JobAlertsPage: React.FC = () => {
                     
                     {/* Location Filter */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs text-white/60">City/State</label>
+                      <label className="text-xs text-white/60 flex items-center gap-1">
+                        <MapPin className="w-3 h-3" />
+                        City/State
+                      </label>
                       <select 
                         value={selectedLocation} 
                         onChange={e => setSelectedLocation(e.target.value)} 
