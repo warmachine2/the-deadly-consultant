@@ -1220,21 +1220,35 @@ const JobAlertsPage: React.FC = () => {
                                     Clear selection ({selectedSources.length})
                                   </CommandItem>
                                 )}
-                                {uniqueSources.map(source => (
-                                  <CommandItem
-                                    key={source}
-                                    onSelect={() => toggleSource(source)}
-                                    className="cursor-pointer hover:bg-[#FFDD40]/20 data-[selected=true]:bg-[#FFDD40]/20"
-                                  >
-                                    <div className="flex items-center gap-2 w-full">
-                                      <Checkbox
-                                        checked={selectedSources.includes(source)}
-                                        className="border-white/30 data-[state=checked]:bg-[#FFDD40] data-[state=checked]:border-[#FFDD40]"
-                                      />
-                                      <span className="text-white">{source}</span>
-                                    </div>
-                                  </CommandItem>
-                                ))}
+                                {uniqueSources.map(source => {
+                                  const sourceDescriptions: Record<string, string> = {
+                                    "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
+                                    "ProViso": "Toronto-based IT staffing agency supporting technology and business teams across Canada's financial industry for 15+ years.",
+                                    "Insight Global": "Global staffing and professional services agency founded in 2001, specializing in IT, healthcare, finance, and engineering talent.",
+                                    "SI Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
+                                  };
+                                  const description = sourceDescriptions[source] || `Staffing agency providing professional recruitment services.`;
+                                  const isSelected = selectedSources.includes(source);
+                                  
+                                  return (
+                                    <CommandItem
+                                      key={source}
+                                      onSelect={() => toggleSource(source)}
+                                      className="cursor-pointer hover:bg-cyan-500/20 data-[selected=true]:bg-cyan-500/20 flex-col items-start gap-1 py-2"
+                                    >
+                                      <div className="flex items-center gap-2 w-full">
+                                        <Checkbox
+                                          checked={isSelected}
+                                          className="border-white/30 data-[state=checked]:bg-[#FFDD40] data-[state=checked]:border-[#FFDD40]"
+                                        />
+                                        <span className="text-white font-medium">{source}</span>
+                                      </div>
+                                      {isSelected && (
+                                        <p className="text-white/50 text-xs pl-6 leading-relaxed">{description}</p>
+                                      )}
+                                    </CommandItem>
+                                  );
+                                })}
                               </CommandGroup>
                             </CommandList>
                           </Command>
