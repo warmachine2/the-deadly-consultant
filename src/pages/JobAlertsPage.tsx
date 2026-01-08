@@ -86,7 +86,7 @@ const parseCSV = (csvText: string): JobData[] => {
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
-        source: row[15] || '',
+        source: row[17] || '', // Sources is column 18 (index 17)
         companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined
       });
       console.log(`Parsed row ${rowNumber}: ${row[1]} at ${row[9]}`);
