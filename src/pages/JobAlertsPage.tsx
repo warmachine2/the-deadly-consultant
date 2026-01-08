@@ -983,7 +983,7 @@ const JobAlertsPage: React.FC = () => {
         
         {/* Strategy Guide Banner - Desktop */}
         <div 
-          className="hidden md:flex flex-row items-center gap-5 px-6 py-2 mb-6 rounded-xl border border-white/20" 
+          className="hidden md:flex flex-row items-center gap-5 px-6 py-2 mb-4 mt-2 rounded-xl border border-white/20"
           style={{
             background: "rgba(15, 15, 15, 0.85)",
             backdropFilter: "blur(9px) saturate(150%)",
