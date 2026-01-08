@@ -1369,7 +1369,7 @@ const JobAlertsPage: React.FC = () => {
                       <button 
                         onClick={() => fetchData()} 
                         disabled={loading} 
-                        className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-foreground hover:border-[#FFDD40]/50 transition-colors flex items-center gap-2 font-medium"
+                        className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white transition-colors flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/25"
                       >
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                         Refresh
