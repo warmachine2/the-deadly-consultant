@@ -1145,23 +1145,23 @@ const JobAlertsPage: React.FC = () => {
                   
                   {/* Filter Grid - Responsive */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Sources Multi-Select - First/Prominent */}
-                    <div className="flex flex-col gap-1 sm:col-span-2 lg:col-span-1">
-                      <label className="text-xs text-white/60 flex items-center gap-1">
-                        <Users className="w-3 h-3" style={{ color: '#FFDD40' }} />
+                    {/* Sources Multi-Select - First/Prominent - Wider on md+ */}
+                    <div className="flex flex-col gap-1 col-span-1 sm:col-span-2">
+                      <label className="text-sm font-bold text-[#FFDD40] flex items-center gap-1.5">
+                        <Users className="w-4 h-4" />
                         Sources
                       </label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button 
                             variant="outline" 
-                            className="w-full justify-between px-3 py-2 h-auto rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white"
+                            className="w-full justify-between px-4 py-2.5 h-auto rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-sm"
                           >
                             <span className="truncate">
                               {selectedSources.length === 0 
                                 ? 'All Sources' 
-                                : selectedSources.length === 1 
-                                  ? selectedSources[0]
+                                : selectedSources.length <= 2
+                                  ? selectedSources.join(', ')
                                   : `${selectedSources.length} selected`
                               }
                             </span>
@@ -1432,106 +1432,6 @@ const JobAlertsPage: React.FC = () => {
           </Collapsible>
         )}
 
-        {/* Enhanced Filter Panel - Between Analytics and Job Cards */}
-        {!loading && data.length > 0 && (
-          <div className="volumetric-glass rounded-2xl p-5 mb-6">
-            <div className="flex flex-wrap gap-4 items-end">
-              {/* Experience Filter */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-white/60 flex items-center gap-1">
-                  <Briefcase className="w-3 h-3" />
-                  Experience
-                </label>
-                <select 
-                  value={experienceFilter} 
-                  onChange={e => setExperienceFilter(e.target.value)} 
-                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[140px] cursor-pointer"
-                >
-                  <option value="all" className="bg-gray-900 text-white">All Experience</option>
-                  <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
-                  <option value="more5" className="bg-gray-900 text-white">≥ 5 Years</option>
-                </select>
-              </div>
-              
-              {/* Salary Filter */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-white/60 flex items-center gap-1">
-                  <DollarSign className="w-3 h-3" style={{ color: '#FFDD40' }} />
-                  Salary Range
-                </label>
-                <select 
-                  value={salaryFilter} 
-                  onChange={e => setSalaryFilter(e.target.value)} 
-                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[140px] cursor-pointer"
-                >
-                  <option value="all" className="bg-gray-900 text-white">All Salaries</option>
-                  <option value="less15" className="bg-gray-900 text-white">≤ $15k/mo</option>
-                  <option value="15to18" className="bg-gray-900 text-white">$15k - $18k/mo</option>
-                  <option value="more18" className="bg-gray-900 text-white">≥ $18k/mo</option>
-                </select>
-              </div>
-              
-              {/* Work Type Filter */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-white/60 flex items-center gap-1">
-                  <Home className="w-3 h-3" />
-                  Work Type
-                </label>
-                <select 
-                  value={workTypeFilter} 
-                  onChange={e => setWorkTypeFilter(e.target.value)} 
-                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px] cursor-pointer"
-                >
-                  <option value="all" className="bg-gray-900 text-white">All Types</option>
-                  <option value="remote" className="bg-gray-900 text-white">Remote</option>
-                  <option value="hybrid" className="bg-gray-900 text-white">Hybrid</option>
-                  <option value="onsite" className="bg-gray-900 text-white">On-site</option>
-                </select>
-              </div>
-              
-              {/* Role Type Dropdown */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-white/60 flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  Role Type
-                </label>
-                <select 
-                  value={selectedRoleType} 
-                  onChange={e => setSelectedRoleType(e.target.value)} 
-                  className="px-3 py-2 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors min-w-[120px] cursor-pointer"
-                >
-                  <option value="all" className="bg-gray-900 text-white">All Roles</option>
-                  {uniqueRoleTypes.map(role => (
-                    <option key={role} value={role} className="bg-gray-900 text-white">{role}</option>
-                  ))}
-                </select>
-              </div>
-              
-              {/* View Mode Toggle */}
-              <div className="flex flex-col gap-1 ml-auto">
-                <label className="text-xs text-white/60">View</label>
-                <div className="flex rounded-xl overflow-hidden border border-white/20">
-                  <button 
-                    onClick={() => setViewMode('card')}
-                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'card' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
-                    style={viewMode === 'card' ? { backgroundColor: '#FFDD40' } : {}}
-                  >
-                    <LayoutGrid className="w-4 h-4" />
-                    Card
-                  </button>
-                  <button 
-                    onClick={() => setViewMode('table')}
-                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'table' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
-                    style={viewMode === 'table' ? { backgroundColor: '#FFDD40' } : {}}
-                  >
-                    <TableIcon className="w-4 h-4" />
-                    Table
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {loading ? <div className="flex justify-center items-center min-h-[400px]">
             <Loader2 className="w-8 h-8 text-accent animate-spin" />
