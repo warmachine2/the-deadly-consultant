@@ -89,7 +89,7 @@ const BookSessionPage = () => {
           description: "Redirecting you to book your strategy session...",
         });
         // Redirect immediately after a short delay for toast visibility
-        window.location.href = "https://calendly.com/hassankhalidkhan/30min";
+        window.location.href = "https://calendly.com/hassan-hammer/30min";
       } else {
         console.log("User does not qualify (< 3 years), showing thank you message");
         toast({
@@ -242,7 +242,7 @@ const BookSessionPage = () => {
                   name="pivot_timeline"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">Ideal Timeline to Land $10k+/mo Contract (e.g., 3-6 months; optional)</FormLabel>
+                      <FormLabel className="text-white text-base font-medium mb-1">How soon are you ready to start your AI-proof pivot? (e.g., immediately, 1-3 months)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="e.g., Next 90 days, 6 months"
@@ -260,7 +260,7 @@ const BookSessionPage = () => {
                   name="whatsapp_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">WhatsApp # for Quick Follow-Up (optional)</FormLabel>
+                      <FormLabel className="text-white text-base font-medium mb-1">WhatsApp Number (Enables Founder's Cohort Access & Direct Q&A with Me)</FormLabel>
                       <FormControl>
                         <Input
                           type="tel"
