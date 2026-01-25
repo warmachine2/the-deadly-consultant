@@ -69,7 +69,7 @@ const RoadmapCard = ({ className }: { className?: string }) => {
             <img
               src={thumbnail}
               alt={teaser.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover transition-transform duration-300"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           </div>
@@ -81,7 +81,7 @@ const RoadmapCard = ({ className }: { className?: string }) => {
 
         {/* Content (Teaser Only – ~half the full page) */}
         <div className="p-5">
-          <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 group-hover:text-cyan-300 transition-all">
+          <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 transition-colors">
             {teaser.title}
           </h3>
           
@@ -91,10 +91,10 @@ const RoadmapCard = ({ className }: { className?: string }) => {
 
           {/* CTA Button: Plain red, enticing link to full page */}
           <span
-            className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 shadow-lg group-hover:shadow-glow-pulse"
+            className="w-full flex items-center justify-center gap-2 bg-red-600 text-white px-6 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg"
           >
             Unlock Full Roadmap
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 transition-transform" />
           </span>
         </div>
       </article>

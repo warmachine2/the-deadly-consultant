@@ -220,22 +220,6 @@ All colors MUST be HSL.
     transition: var(--transition-smooth);
   }
 
-  .hover-lift:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow:
-      0 12px 48px rgba(0, 0, 0, 0.5),
-      0 0 20px hsla(0, 0%, 100%, 0.3);
-  }
-
-  .hover-glow:hover {
-    box-shadow:
-      0 0 30px hsla(0, 0%, 100%, 0.4),
-      0 0 60px hsla(180, 100%, 50%, 0.2),
-      0 0 90px hsla(280, 100%, 50%, 0.15);
-    border-color: rgba(255, 255, 255, 0.5);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   /* Smoky frosted glass with vignette and entrance animation */
   .volumetric-glass {
     background: rgba(20, 20, 20, 0.55);
@@ -303,11 +287,30 @@ All colors MUST be HSL.
     -webkit-backdrop-filter: blur(24px) saturate(180%);
   }
 
-  .volumetric-glass:hover {
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.25),
-      0 0 25px rgba(0, 212, 255, 0.6),
-      0 0 50px rgba(0, 212, 255, 0.3);
+  /* Desktop-only hover effects - wrapped in media query to prevent mobile flickering */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.5),
+        0 0 20px hsla(0, 0%, 100%, 0.3);
+    }
+
+    .hover-glow:hover {
+      box-shadow:
+        0 0 30px hsla(0, 0%, 100%, 0.4),
+        0 0 60px hsla(180, 100%, 50%, 0.2),
+        0 0 90px hsla(280, 100%, 50%, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .volumetric-glass:hover {
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        0 0 25px rgba(0, 212, 255, 0.6),
+        0 0 50px rgba(0, 212, 255, 0.3);
+    }
   }
 
   .volumetric-glass-button {
@@ -359,12 +362,15 @@ All colors MUST be HSL.
     z-index: 3;
   }
 
-  .volumetric-glass-button:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 6px 24px rgba(0, 0, 0, 0.25),
-      0 0 20px rgba(244, 201, 3, 0.4),
-      inset 0 0 60px rgba(0, 0, 0, 0.2);
+  /* Desktop-only hover for glass buttons */
+  @media (hover: hover) and (pointer: fine) {
+    .volumetric-glass-button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 6px 24px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(244, 201, 3, 0.4),
+        inset 0 0 60px rgba(0, 0, 0, 0.2);
+    }
   }
 
   .volumetric-glass-active {
@@ -502,16 +508,8 @@ All colors MUST be HSL.
     animation: cta-glow-pulse-cyan 2s ease-in-out infinite;
   }
 
-  .cta-glow-pulse:hover {
-    animation: none;
-  }
-
   .cta-glow-pulse-red {
     animation: cta-glow-pulse-red 2s ease-in-out infinite;
-  }
-
-  .cta-glow-pulse-red:hover {
-    animation: none;
   }
 
   /* Subtle CTA glow pulse - 50% reduced intensity */
@@ -526,11 +524,6 @@ All colors MUST be HSL.
 
   .cta-glow-pulse-subtle {
     animation: cta-glow-pulse-subtle 2s ease-in-out infinite;
-  }
-
-  .cta-glow-pulse-subtle:hover {
-    animation: none;
-    box-shadow: 0 0 20px rgba(244, 201, 3, 0.4);
   }
 
   /* Gentle strategy session CTA pulse - warm gold/amber tones */
@@ -551,14 +544,6 @@ All colors MUST be HSL.
 
   .cta-glow-pulse-gentle {
     animation: cta-glow-pulse-gentle 4s ease-in-out infinite;
-  }
-
-  .cta-glow-pulse-gentle:hover {
-    animation: none;
-    box-shadow: 
-      0 0 20px rgba(251, 191, 36, 0.5),
-      0 0 35px rgba(251, 191, 36, 0.3),
-      0 6px 24px rgba(0, 0, 0, 0.35);
   }
 
   /* Subtle glow backdrop pulse for strategy button */
@@ -591,9 +576,33 @@ All colors MUST be HSL.
     animation: cta-glow-pulse-blue-subtle 3s ease-in-out infinite;
   }
 
-  .cta-glow-pulse-blue-subtle:hover {
-    animation: none;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  /* Desktop-only hover effects for CTA pulses */
+  @media (hover: hover) and (pointer: fine) {
+    .cta-glow-pulse:hover {
+      animation: none;
+    }
+
+    .cta-glow-pulse-red:hover {
+      animation: none;
+    }
+
+    .cta-glow-pulse-subtle:hover {
+      animation: none;
+      box-shadow: 0 0 20px rgba(244, 201, 3, 0.4);
+    }
+
+    .cta-glow-pulse-gentle:hover {
+      animation: none;
+      box-shadow: 
+        0 0 20px rgba(251, 191, 36, 0.5),
+        0 0 35px rgba(251, 191, 36, 0.3),
+        0 6px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .cta-glow-pulse-blue-subtle:hover {
+      animation: none;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
   }
 
 
@@ -661,10 +670,6 @@ All colors MUST be HSL.
     animation-delay: 1.5s;
   }
 
-  .hero-bokeh:hover .bokeh-orb {
-    animation: bokeh-pulse-hover 3s ease-in-out infinite;
-  }
-
   @keyframes bokeh-pulse {
     0%,
     100% {
@@ -686,6 +691,13 @@ All colors MUST be HSL.
     50% {
       transform: scale(1.15) translateY(-15px);
       opacity: 0.35;
+    }
+  }
+
+  /* Desktop-only bokeh hover animation */
+  @media (hover: hover) and (pointer: fine) {
+    .hero-bokeh:hover .bokeh-orb {
+      animation: bokeh-pulse-hover 3s ease-in-out infinite;
     }
   }
 
