@@ -27,7 +27,7 @@ const HeroSection = () => {
           {/* Main CTA Button - Roadmap - Mobile */}
           <a 
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -43,7 +43,7 @@ const HeroSection = () => {
           {/* Main CTA Button - Roadmap - Desktop */}
           <a 
             href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
-            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -59,7 +59,7 @@ const HeroSection = () => {
           {/* Second CTA Button - Job Alerts - Mobile */}
           <a 
             href="/ai-bi-fintech-pm-job-alerts-repo" 
-            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -75,7 +75,7 @@ const HeroSection = () => {
           {/* Second CTA Button - Job Alerts - Desktop */}
           <a 
             href="/ai-bi-fintech-pm-job-alerts-repo" 
-            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -92,7 +92,7 @@ const HeroSection = () => {
           <a 
             data-formkit-toggle="0edbc71770"
             href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -109,7 +109,7 @@ const HeroSection = () => {
           <a 
             data-formkit-toggle="27ad03da2d"
             href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -127,7 +127,7 @@ const HeroSection = () => {
             href="https://skool.com/bi-fintech-consultant-academy/about" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
+            className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -145,7 +145,7 @@ const HeroSection = () => {
             href="https://skool.com/bi-fintech-consultant-academy/about" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 hover:scale-105 active:scale-95 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
+            className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
