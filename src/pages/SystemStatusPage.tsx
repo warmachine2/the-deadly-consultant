@@ -9,14 +9,25 @@ import {
 } from "@/components/ui/table";
 import { Loader2, RefreshCw } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
+import { Users } from "lucide-react";
+
 interface StatusEntry {
   feature: string;
   timestamp: string;
   status: "up" | "down";
 }
 
+interface VisitorAnalytics {
+  visitorsToday: number;
+  lastUpdated: Date;
+}
+
 const SHEET_ID = "1NdwYdOOS7h2v3yIKKGeb4SNeb7ln-vg-jrcYK0SbQbw";
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+
+// Placeholder visitor count - replace with Vercel Analytics API when ready
+const PLACEHOLDER_VISITORS = 47;
 
 const fallbackData: StatusEntry[] = [
   { feature: "Home Page", timestamp: "8:40 AM", status: "up" },
@@ -51,6 +62,10 @@ const SystemStatusPage = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [visitorAnalytics, setVisitorAnalytics] = useState<VisitorAnalytics>({
+    visitorsToday: PLACEHOLDER_VISITORS,
+    lastUpdated: new Date(),
+  });
 
   const fetchStatus = useCallback(async () => {
     setIsLoading(true);
@@ -79,6 +94,11 @@ const SystemStatusPage = () => {
     } finally {
       setLastUpdated(new Date());
       setIsLoading(false);
+      // Update visitor analytics timestamp on refresh
+      setVisitorAnalytics(prev => ({
+        ...prev,
+        lastUpdated: new Date(),
+      }));
     }
   }, []);
 
@@ -146,6 +166,31 @@ const SystemStatusPage = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
+                  {/* Site Visitors Analytics Row - Highlighted */}
+                  <TableRow className="border-border/30 bg-primary/5">
+                    <TableCell className="font-medium">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-primary" />
+                        <span>Site Visitors Today</span>
+                        <Badge variant="secondary" className="ml-2 text-xs">
+                          Analytics
+                        </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {formatTimestamp(visitorAnalytics.lastUpdated)}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="inline-flex items-center gap-2">
+                        <span className={`w-3 h-3 rounded-full ${visitorAnalytics.visitorsToday > 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`} />
+                        <span className={`text-sm font-bold ${visitorAnalytics.visitorsToday > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                          {visitorAnalytics.visitorsToday} visitors
+                        </span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Regular status entries */}
                   {statusData.map((entry, index) => (
                     <TableRow key={index} className="border-border/30">
                       <TableCell className="font-medium">{entry.feature}</TableCell>
@@ -161,6 +206,27 @@ const SystemStatusPage = () => {
 
             {/* Mobile Stacked Cards */}
             <div className="md:hidden space-y-4">
+              {/* Site Visitors Analytics Card - Highlighted */}
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-5 h-5 text-primary" />
+                    <span className="font-medium text-lg">Site Visitors Today</span>
+                  </div>
+                  <div className="inline-flex items-center gap-2">
+                    <span className={`w-3 h-3 rounded-full ${visitorAnalytics.visitorsToday > 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]'}`} />
+                    <span className={`text-sm font-bold ${visitorAnalytics.visitorsToday > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {visitorAnalytics.visitorsToday} visitors
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <Badge variant="secondary" className="text-xs">Analytics</Badge>
+                  <span>{formatTimestamp(visitorAnalytics.lastUpdated)}</span>
+                </div>
+              </div>
+              
+              {/* Regular status entries */}
               {statusData.map((entry, index) => (
                 <div
                   key={index}
