@@ -220,7 +220,7 @@ All colors MUST be HSL.
     transition: var(--transition-smooth);
   }
 
-  /* Smoky frosted glass with vignette and entrance animation */
+  /* Smoky frosted glass with vignette - entrance animation is desktop-only */
   .volumetric-glass {
     background: rgba(20, 20, 20, 0.55);
     backdrop-filter: blur(9px) saturate(150%);
@@ -233,7 +233,7 @@ All colors MUST be HSL.
       0 0 30px rgba(0, 212, 255, 0.2);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: glass-fade-in 0.5s ease;
+    /* Animation moved to desktop-only media query to prevent mobile flickering */
   }
 
   /* Smoke pattern overlay with gradient */
@@ -289,6 +289,23 @@ All colors MUST be HSL.
 
   /* Desktop-only hover effects - wrapped in media query to prevent mobile flickering */
   @media (hover: hover) and (pointer: fine) {
+    /* Entrance animation only on desktop */
+    .volumetric-glass {
+      animation: glass-fade-in 0.5s ease;
+    }
+    
+    .volumetric-glass-button {
+      animation: glass-fade-in 0.5s ease;
+    }
+    
+    .volumetric-glass-active {
+      animation: glass-fade-in 0.5s ease;
+    }
+    
+    .frosted-glass-subtle {
+      animation: glass-fade-in 0.5s ease;
+    }
+
     .hover-lift:hover {
       transform: translateY(-4px) scale(1.02);
       box-shadow:
@@ -311,6 +328,32 @@ All colors MUST be HSL.
         0 0 25px rgba(0, 212, 255, 0.6),
         0 0 50px rgba(0, 212, 255, 0.3);
     }
+    
+    /* Desktop-only scale utilities - replace inline hover:scale-* classes */
+    .desktop-hover-scale-105:hover {
+      transform: scale(1.05);
+    }
+    
+    .desktop-hover-scale-103:hover {
+      transform: scale(1.03);
+    }
+    
+    .desktop-group-hover-scale-110 .group:hover & {
+      transform: scale(1.10);
+    }
+  }
+  
+  /* Reduced motion preference - disable pulse animations */
+  @media (prefers-reduced-motion: reduce) {
+    .cta-glow-pulse,
+    .cta-glow-pulse-red,
+    .cta-glow-pulse-subtle,
+    .cta-glow-pulse-gentle,
+    .cta-glow-pulse-blue-subtle,
+    .animate-subtle-glow,
+    .animate-glow-backdrop {
+      animation: none !important;
+    }
   }
 
   .volumetric-glass-button {
@@ -323,7 +366,7 @@ All colors MUST be HSL.
       inset 0 0 60px rgba(0, 0, 0, 0.15);
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: glass-fade-in 0.5s ease;
+    /* Animation moved to desktop-only media query to prevent mobile flickering */
   }
 
   /* Smoke pattern for buttons */
@@ -383,7 +426,7 @@ All colors MUST be HSL.
       0 0 20px rgba(0, 255, 255, 0.3),
       inset 0 0 80px rgba(0, 0, 0, 0.15);
     position: relative;
-    animation: glass-fade-in 0.5s ease;
+    /* Animation moved to desktop-only media query to prevent mobile flickering */
   }
 
   .volumetric-glass-active::before {
@@ -435,7 +478,7 @@ All colors MUST be HSL.
       0 4px 16px rgba(0, 0, 0, 0.2),
       inset 0 0 60px rgba(0, 0, 0, 0.15);
     position: relative;
-    animation: glass-fade-in 0.5s ease;
+    /* Animation moved to desktop-only media query to prevent mobile flickering */
   }
 
   .frosted-glass-subtle::before {

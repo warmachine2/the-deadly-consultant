@@ -66,7 +66,7 @@ const RoadmapPage = () => {
       </p>
       <a
         href="/book-session"
-        className="inline-block text-white px-8 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105"
+        className="inline-block text-white px-8 py-4 rounded-xl font-bold text-lg transition-all desktop-hover-scale-105"
         style={{
           background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
           boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',

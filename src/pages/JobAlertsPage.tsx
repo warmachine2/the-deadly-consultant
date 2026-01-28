@@ -344,7 +344,7 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
               <div className="flex flex-col items-center md:items-end">
                 <a 
                   href="/book-session" 
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-nowrap animate-subtle-glow"
                   style={{
                     background: 'linear-gradient(135deg, rgba(5, 98, 173, 0.9), rgba(5, 98, 173, 0.7))',
                     border: '1px solid rgba(0, 212, 255, 0.4)',
@@ -444,7 +444,7 @@ const JobCard: React.FC<{
           <div className="flex items-start gap-3">
           {/* Mini CTA */}
           <div className="flex flex-col items-center">
-            <a href="/book-session" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 hover:scale-105 whitespace-nowrap animate-subtle-glow" style={{
+            <a href="/book-session" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-nowrap animate-subtle-glow" style={{
               background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
               border: '1px solid rgba(255, 221, 64, 0.5)',
               color: '#FFDD40'
@@ -1045,7 +1045,7 @@ const JobAlertsPage: React.FC = () => {
           {/* CTA Buttons */}
           <div className="text-center">
             <div className="flex flex-wrap gap-4 justify-center items-center">
-              <a href="/book-session" className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105" style={{
+              <a href="/book-session" className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 desktop-hover-scale-105" style={{
               background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
               boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
               border: '1px solid rgba(0, 150, 255, 0.4)'
@@ -1057,7 +1057,7 @@ const JobAlertsPage: React.FC = () => {
               <a 
                 data-formkit-toggle="0edbc71770"
                 href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-                className="md:hidden inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 cursor-pointer" 
+                className="md:hidden inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 desktop-hover-scale-105 cursor-pointer" 
                 style={{
                   background: 'linear-gradient(135deg, rgba(244, 201, 3, 0.8), rgba(255, 221, 64, 0.6))',
                   boxShadow: '0 0 30px rgba(244, 201, 3, 0.5), 0 0 60px rgba(244, 201, 3, 0.3)',
@@ -1072,7 +1072,7 @@ const JobAlertsPage: React.FC = () => {
               <a 
                 data-formkit-toggle="27ad03da2d"
                 href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-                className="hidden md:inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 cursor-pointer" 
+                className="hidden md:inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 desktop-hover-scale-105 cursor-pointer" 
                 style={{
                   background: 'linear-gradient(135deg, rgba(244, 201, 3, 0.8), rgba(255, 221, 64, 0.6))',
                   boxShadow: '0 0 30px rgba(244, 201, 3, 0.5), 0 0 60px rgba(244, 201, 3, 0.3)',
@@ -1106,7 +1106,7 @@ const JobAlertsPage: React.FC = () => {
               <p className="text-muted-foreground">
                 Book a free 45-minute strategy session to discuss your career pivot, certification paths, and how to land these high-paying consulting gigs.
               </p>
-              <a href="/book-session" className="block w-full px-6 py-4 rounded-xl font-bold text-white text-center transition-all duration-300 hover:scale-105" style={{
+              <a href="/book-session" className="block w-full px-6 py-4 rounded-xl font-bold text-white text-center transition-all duration-300 desktop-hover-scale-105" style={{
               background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
               boxShadow: '0 0 20px rgba(0, 150, 255, 0.4)',
               border: '1px solid rgba(0, 150, 255, 0.4)'
