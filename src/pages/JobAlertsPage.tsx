@@ -315,7 +315,7 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
               color: '#FFDD40'
             }}>Tips by Hassan</p>
           </div>
-          <p className="text-xs text-white/50 ml-6">
+          <p className="text-sm text-white/50 ml-6">
             AI-generated commentary based on my source files. <a href="/book-session" className="underline hover:text-white/70 transition-colors">Book a free Strategy Session</a> for actual pivot analysis.
           </p>
         </div>
