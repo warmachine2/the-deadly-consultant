@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,23 +13,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { RefreshCw, Search, ArrowUpDown } from "lucide-react";
+import { RefreshCw, Search, ArrowUpDown, LogOut } from "lucide-react";
 import TopNav from "@/components/TopNav";
 
-const DASHBOARD_PASSWORD = "BIFINTECHLEADS123!@#";
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzSbicZVOIE_oFhdlUiQrnRAbVGg9PxP0cIzAAZ1cWa7MbQRVbBM-W4kYPM15m_zsCY/exec";
-
 interface Lead {
-  timestamp: string;
+  id: string;
+  created_at: string;
   name: string;
   email: string;
-  current_role: string;
+  role_current: string;
   years_experience: number;
   biggest_pain_point: string;
-  pivot_timeline: string;
-  whatsapp_number: string;
-  education_certifications: string;
+  pivot_timeline: string | null;
+  whatsapp_number: string | null;
+  education_certifications: string | null;
 }
 
 type SortField = keyof Lead;
@@ -52,53 +52,49 @@ const formatTimestamp = (value: string): string => {
 };
 
 const DashboardPage = () => {
+  const { user, isAdmin, isLoading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [passwordInput, setPasswordInput] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortField, setSortField] = useState<SortField>("timestamp");
+  const [sortField, setSortField] = useState<SortField>("created_at");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passwordInput === DASHBOARD_PASSWORD) {
-      setIsAuthenticated(true);
-      setPasswordError(false);
-    } else {
-      setPasswordError(true);
+  // Redirect if not authenticated or not admin
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        navigate("/auth");
+      } else if (!isAdmin) {
+        toast({
+          title: "Access Denied",
+          description: "You need admin privileges to access this page.",
+          variant: "destructive",
+        });
+        navigate("/");
+      }
     }
-  };
+  }, [user, isAdmin, authLoading, navigate, toast]);
 
   const fetchLeads = async () => {
+    if (!user || !isAdmin) return;
+
     setIsLoading(true);
     try {
-      const response = await fetch(GOOGLE_SCRIPT_URL);
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
+      const { data, error } = await supabase
+        .from("strategy_sessions")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        throw error;
       }
-      const data = await response.json();
-      console.log("Dashboard response.submissions:", data.submissions);
-      
-      // Map GSheet column names to our Lead interface
-      const mappedLeads: Lead[] = (data.submissions || []).map((row: Record<string, unknown>) => ({
-        timestamp: row["Timestamp"] || "",
-        name: row["Name"] || "",
-        email: row["Email"] || "",
-        current_role: row["Current Role"] || "",
-        years_experience: Number(row["Years Experience"]) || 0,
-        biggest_pain_point: row["Biggest Pain Point"] || "",
-        pivot_timeline: row["Pivot Timeline"] || "",
-        whatsapp_number: row["WhatsApp Number"] || "",
-        education_certifications: row["Education Certifications"] || "",
-      }));
-      
-      setLeads(mappedLeads);
+
+      setLeads(data || []);
       toast({
         title: "Data refreshed",
-        description: `Loaded ${mappedLeads.length} leads`,
+        description: `Loaded ${data?.length || 0} leads`,
       });
     } catch (error) {
       toast({
@@ -112,10 +108,10 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (user && isAdmin && !authLoading) {
       fetchLeads();
     }
-  }, [isAuthenticated]);
+  }, [user, isAdmin, authLoading]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -124,6 +120,11 @@ const DashboardPage = () => {
       setSortField(field);
       setSortDirection("desc");
     }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
   };
 
   const filteredAndSortedLeads = useMemo(() => {
@@ -136,7 +137,7 @@ const DashboardPage = () => {
         (lead) =>
           lead.name?.toLowerCase().includes(query) ||
           lead.email?.toLowerCase().includes(query) ||
-          lead.current_role?.toLowerCase().includes(query) ||
+          lead.role_current?.toLowerCase().includes(query) ||
           lead.biggest_pain_point?.toLowerCase().includes(query)
       );
     }
@@ -171,31 +172,18 @@ const DashboardPage = () => {
     </TableHead>
   );
 
-  if (!isAuthenticated) {
+  // Show loading state while checking auth
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="volumetric-glass rounded-2xl p-8 max-w-md w-full mx-4">
-          <h1 className="text-2xl font-bold text-foreground mb-6 text-center">
-            Dashboard Access
-          </h1>
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <Input
-              type="password"
-              placeholder="Enter password"
-              value={passwordInput}
-              onChange={(e) => setPasswordInput(e.target.value)}
-              className="bg-input border-border"
-            />
-            {passwordError && (
-              <p className="text-destructive text-sm font-medium">Access Denied</p>
-            )}
-            <Button type="submit" className="w-full volumetric-glass-button text-foreground">
-              Enter
-            </Button>
-          </form>
-        </div>
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
+  }
+
+  // Don't render anything if not authenticated (redirect will happen)
+  if (!user || !isAdmin) {
+    return null;
   }
 
   return (
@@ -204,17 +192,32 @@ const DashboardPage = () => {
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="volumetric-glass rounded-2xl p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-              Strategy Session Leads (Private Dashboard)
-            </h1>
-            <Button
-              onClick={fetchLeads}
-              disabled={isLoading}
-              className="volumetric-glass-button text-foreground gap-2"
-            >
-              <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
-              Refresh
-            </Button>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                Strategy Session Leads
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                Signed in as {user.email}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={fetchLeads}
+                disabled={isLoading}
+                className="volumetric-glass-button text-foreground gap-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+                Refresh
+              </Button>
+              <Button
+                onClick={handleSignOut}
+                variant="outline"
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </div>
           </div>
 
           <div className="relative mb-6">
@@ -231,10 +234,10 @@ const DashboardPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <SortableHeader field="timestamp">Timestamp</SortableHeader>
+                  <SortableHeader field="created_at">Timestamp</SortableHeader>
                   <SortableHeader field="name">Name</SortableHeader>
                   <SortableHeader field="email">Email</SortableHeader>
-                  <SortableHeader field="current_role">Current Role</SortableHeader>
+                  <SortableHeader field="role_current">Current Role</SortableHeader>
                   <SortableHeader field="years_experience">Years Exp.</SortableHeader>
                   <SortableHeader field="biggest_pain_point">Biggest Pain Point</SortableHeader>
                   <SortableHeader field="pivot_timeline">Pivot Timeline</SortableHeader>
@@ -256,12 +259,12 @@ const DashboardPage = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredAndSortedLeads.map((lead, index) => (
-                    <TableRow key={index}>
-                      <TableCell className="whitespace-nowrap">{formatTimestamp(lead.timestamp)}</TableCell>
+                  filteredAndSortedLeads.map((lead) => (
+                    <TableRow key={lead.id}>
+                      <TableCell className="whitespace-nowrap">{formatTimestamp(lead.created_at)}</TableCell>
                       <TableCell className="whitespace-nowrap">{lead.name || "-"}</TableCell>
                       <TableCell className="whitespace-nowrap">{lead.email || "-"}</TableCell>
-                      <TableCell className="whitespace-nowrap">{lead.current_role || "-"}</TableCell>
+                      <TableCell className="whitespace-nowrap">{lead.role_current || "-"}</TableCell>
                       <TableCell>{lead.years_experience ?? "-"}</TableCell>
                       <TableCell className="font-bold text-destructive max-w-[200px] truncate">
                         {lead.biggest_pain_point || "-"}
