@@ -267,7 +267,7 @@ const BookSessionPage = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full font-semibold py-6 text-lg text-white hover:scale-105 transition-transform"
+                  className="w-full font-semibold py-6 text-lg text-white desktop-hover-scale-105 transition-transform"
                   style={{
                     background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
                     boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
