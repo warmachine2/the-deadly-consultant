@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -18,20 +18,17 @@ import {
 import TopNav from "@/components/TopNav";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100),
-  email: z.string().email("Invalid email address").max(255),
-  current_role: z.string().min(1, "Current role is required").max(200),
-  years_experience: z.coerce.number().min(0, "Must be 0 or greater"),
-  education_certifications: z.string().max(1000).optional(),
-  biggest_pain_point: z.string().min(1, "This field is required").max(1000),
-  pivot_timeline: z.string().max(200).optional(),
-  whatsapp_number: z.string().max(20).optional(),
+  name: z.string().trim().min(1, "Name is required").max(100),
+  email: z.string().trim().email("Invalid email address").max(255),
+  role_current: z.string().trim().min(1, "Current role is required").max(200),
+  years_experience: z.coerce.number().min(0, "Must be 0 or greater").max(100),
+  education_certifications: z.string().trim().max(1000).optional(),
+  biggest_pain_point: z.string().trim().min(1, "This field is required").max(1000),
+  pivot_timeline: z.string().trim().max(200).optional(),
+  whatsapp_number: z.string().trim().max(20).optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxIYg4H3bPtonZVSMxp-5xCKOfaFCWt4VlOjgXoUZjtuiaXcr8dLcX0UUGsp3YIAPgz/exec";
 
 const BookSessionPage = () => {
   const { toast } = useToast();
@@ -42,7 +39,7 @@ const BookSessionPage = () => {
     defaultValues: {
       name: "",
       email: "",
-      current_role: "",
+      role_current: "",
       years_experience: 0,
       education_certifications: "",
       biggest_pain_point: "",
@@ -59,31 +56,26 @@ const BookSessionPage = () => {
     });
 
     try {
-      const params = new URLSearchParams();
-      Object.entries(data).forEach(([key, value]) => {
-        params.append(key, String(value ?? ""));
+      // Insert into Supabase strategy_sessions table (protected by RLS)
+      const { error } = await supabase.from("strategy_sessions").insert({
+        name: data.name,
+        email: data.email,
+        role_current: data.role_current,
+        years_experience: data.years_experience,
+        education_certifications: data.education_certifications || null,
+        biggest_pain_point: data.biggest_pain_point,
+        pivot_timeline: data.pivot_timeline || null,
+        whatsapp_number: data.whatsapp_number || null,
       });
 
-      console.log("Submitting form data:", data);
-      console.log("Years experience:", data.years_experience, "Type:", typeof data.years_experience);
+      if (error) {
+        throw error;
+      }
 
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: params.toString(),
-        mode: "no-cors",
-      });
-
-      console.log("Form submitted successfully");
-
-      // Parse years_experience as integer to ensure proper comparison
-      const yearsExp = parseInt(String(data.years_experience), 10);
-      console.log("Parsed years experience:", yearsExp);
+      // Check years experience for qualification
+      const yearsExp = data.years_experience;
 
       if (yearsExp >= 3) {
-        console.log("User qualifies (>= 3 years), redirecting to Calendly...");
         toast({
           title: "Qualified!",
           description: "Redirecting you to book your strategy session...",
@@ -91,7 +83,6 @@ const BookSessionPage = () => {
         // Redirect immediately after a short delay for toast visibility
         window.location.href = "https://calendly.com/hassan-hammer/30min";
       } else {
-        console.log("User does not qualify (< 3 years), showing thank you message");
         toast({
           title: "Thanks!",
           description: "I'll review your info and follow up if it's a strong fit.",
@@ -100,7 +91,6 @@ const BookSessionPage = () => {
         setIsSubmitting(false);
       }
     } catch (error) {
-      console.error("Form submission error:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
@@ -165,7 +155,7 @@ const BookSessionPage = () => {
 
                 <FormField
                   control={form.control}
-                  name="current_role"
+                  name="role_current"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-white text-base font-medium mb-1">Current Role (e.g., Engineer, PM, Developer)</FormLabel>
