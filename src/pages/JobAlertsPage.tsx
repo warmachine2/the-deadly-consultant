@@ -308,11 +308,16 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
         onClick={() => setTipsExpanded(!tipsExpanded)}
         className="w-full flex items-center justify-between p-4 md:p-5 hover:bg-white/5 transition-colors"
       >
-        <div className="flex items-center gap-2">
-          <Lightbulb className="w-4 h-4" style={{ color: '#FFDD40' }} />
-          <p className="text-sm md:text-base font-semibold uppercase tracking-wider" style={{
-            color: '#FFDD40'
-          }}>Tips by Hassan</p>
+        <div className="flex flex-col items-start gap-1">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="w-4 h-4" style={{ color: '#FFDD40' }} />
+            <p className="text-sm md:text-base font-semibold uppercase tracking-wider" style={{
+              color: '#FFDD40'
+            }}>Tips by Hassan</p>
+          </div>
+          <p className="text-xs text-white/50 ml-6">
+            AI-generated commentary based on my source files. <a href="/book-session" className="underline hover:text-white/70 transition-colors">Book a free Strategy Session</a> for actual pivot analysis.
+          </p>
         </div>
         <KeyboardArrowDown 
           className={`w-5 h-5 transition-transform duration-300 ${tipsExpanded ? 'rotate-180' : ''}`}
