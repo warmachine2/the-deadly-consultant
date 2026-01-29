@@ -189,7 +189,7 @@ const BookSessionPage = () => {
                   name="whatsapp_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">WhatsApp Number (Enables Group Access & Direct Q&A with Me)</FormLabel>
+                      <FormLabel className="text-white text-base font-medium mb-1">WhatsApp Number (Enables Group Access)</FormLabel>
                       <FormControl>
                         <Input
                           type="tel"
