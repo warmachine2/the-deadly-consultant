@@ -1,107 +1,126 @@
 
 
-# Fix Mobile Flickering - Updated Comprehensive Plan
+# Launch Stability Mode - Complete Animation Removal Plan
 
-## Problem Analysis
+## Problem Diagnosis
 
-After a thorough code review, I identified **multiple sources of mobile flickering** that were not fully addressed in the previous fix:
+Your Google Pixel 10 Pro Fold is experiencing a **1 Hz periodic disappearing/reappearing of multiple UI elements** even at idle (no touch required). This is caused by several CSS animations running continuously that are creating GPU compositing conflicts on the Fold's unique display hardware.
 
-### Root Causes Found
+### Animations Causing the Issue
 
-| Issue | Location | Description |
-|-------|----------|-------------|
-| Inline `hover:scale` Tailwind classes | Multiple TSX files | These bypass the CSS media query protection |
-| `group-hover:scale` transforms | JobAlertsPage.tsx | Scale on hover applied to child elements |
-| Entrance animation with `translateY` | index.css `glass-fade-in` | Initial transform on every volumetric element |
-| Constant pulse animations | CTA buttons | May cause rendering jitter on low-end mobile devices |
+| Animation | Cycle | Effect |
+|-----------|-------|--------|
+| `grain-flicker` | 0.3s steps(2) infinite | Film grain overlay literally flickers by design |
+| `mesh-float` | 15s infinite | Background mesh translates/rotates constantly |
+| `cta-glow-pulse-*` | 2-4s infinite | CTA buttons pulsing glow |
+| `bokeh-pulse` | 4s infinite | Hero section orbs pulsing |
+| `subtle-glow` | 2.5s infinite | Additional button glow animations |
+| `animate-pulse` | Tailwind default | Status indicators pulsing |
 
 ---
 
-## Implementation Plan
+## Solution: Full Stability Mode
 
-### Phase 1: Create CSS-Based Desktop-Only Scale Utility
+**Strategy:** Disable ALL animations and hover effects site-wide, replacing dynamic glows with static premium glows. This is reversible via a single toggle after launch.
 
-Instead of using Tailwind's `hover:scale-*` classes (which apply on all devices), we'll create protected CSS classes.
+---
+
+## Phase 1: CSS Stability Overhaul
 
 **File: `src/index.css`**
 
-Add new utility classes inside the existing desktop-only media query block:
+### 1.1 Disable Background Animations
 
-```css
-@media (hover: hover) and (pointer: fine) {
-  /* Existing hover-lift, hover-glow, volumetric-glass hover rules... */
-  
-  /* NEW: Desktop-only scale utilities */
-  .desktop-hover-scale-105:hover {
-    transform: scale(1.05);
-  }
-  
-  .desktop-hover-scale-103:hover {
-    transform: scale(1.03);
-  }
-  
-  .desktop-group-hover-scale-110:hover {
-    transform: scale(1.10);
-  }
+```text
+Changes to body overlays:
+- Remove: animation: grain-flicker ... (line 139)
+- Remove: animation: mesh-float ... (line 182)
+- Keep the static visual appearance (grain texture + mesh gradient)
+```
+
+### 1.2 Create Static Glow Classes
+
+Replace animated pulses with static premium glows:
+
+```text
+NEW classes to add:
+- .cta-glow-static-cyan   -> Static cyan box-shadow (no animation)
+- .cta-glow-static-amber  -> Static amber box-shadow (no animation)
+- .cta-glow-static-red    -> Static red/cyan box-shadow (no animation)
+```
+
+### 1.3 Kill All Pulse Animations
+
+```text
+Add global override:
+.cta-glow-pulse,
+.cta-glow-pulse-red,
+.cta-glow-pulse-subtle,
+.cta-glow-pulse-gentle,
+.cta-glow-pulse-blue-subtle,
+.animate-subtle-glow,
+.animate-glow-backdrop,
+.bokeh-orb {
+  animation: none !important;
 }
 ```
 
----
+### 1.4 Disable All Hover Effects
 
-### Phase 2: Update Components to Use Protected Classes
-
-Replace all inline `hover:scale-*` classes with the new CSS utility classes:
-
-| File | Line | Current | Replace With |
-|------|------|---------|--------------|
-| `Sidebar.tsx` | 82 | `hover:scale-[1.03]` | `desktop-hover-scale-103` |
-| `BookSessionPage.tsx` | 270 | `hover:scale-105` | `desktop-hover-scale-105` |
-| `RoadmapPage.tsx` | 69 | `hover:scale-105` | `desktop-hover-scale-105` |
-| `JobAlertsPage.tsx` | 347, 447, 557, 1048, 1060, 1075, 1109 | `hover:scale-105` | `desktop-hover-scale-105` |
-| `JobAlertsPage.tsx` | 565 | `group-hover:scale-110` | Wrap in desktop-only logic |
+Remove or neutralize:
+- `.hover-lift:hover` transforms
+- `.hover-glow:hover` box-shadow changes
+- `.volumetric-glass:hover` glow intensification
+- `.volumetric-glass-button:hover` transforms
+- All hover effects currently in desktop-only media query
 
 ---
 
-### Phase 3: Stabilize Entrance Animation for Mobile
+## Phase 2: Component Cleanup
 
-Modify the `glass-fade-in` animation to avoid `translateY` on mobile, which can cause layout shifts:
+Remove inline Tailwind `hover:*` classes that cause visual flashes.
 
-**Option A (Recommended):** Make entrance animation desktop-only
-```css
-.volumetric-glass {
-  /* Remove: animation: glass-fade-in 0.5s ease; */
-}
+### TopNav.tsx
 
-@media (hover: hover) and (pointer: fine) {
-  .volumetric-glass {
-    animation: glass-fade-in 0.5s ease;
-  }
-}
-```
+| Line | Current | Replace With |
+|------|---------|--------------|
+| 91 | `hover:text-[#F4C903] hover:bg-white/10` | Remove hover classes |
+| 99 | `hover:text-[#F4C903] hover:bg-white/10` | Remove hover classes |
+| 104-121 | All menu item hovers | Static styling only |
+| 163-167 | Button hover classes | Remove, use focus states |
+| 204 | `cta-glow-pulse` | `cta-glow-static-cyan` |
+| 259, 267, etc. | `hover:text-[#F4C903]` | Remove |
 
-**Option B:** Change animation to use opacity only (no transform)
-```css
-@keyframes glass-fade-in-mobile {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-```
+### HeroSection.tsx
+
+- Remove all `hover:text-[#F4C903]` from CTA tiles
+- Replace any `cta-glow-pulse` with static glow class
+- Disable bokeh orb animations
+
+### JobAlertsPage.tsx
+
+- Remove `hover:bg-*`, `hover:border-*`, `hover:text-*` classes
+- Replace animated buttons with static styling
+- Keep `focus-visible:` states for accessibility
+
+### Other Files
+
+- `DynamicPage.tsx` - Remove tag pill hover effects
+- `AboutPage.tsx` - Remove link hover effects
+- `BookSessionPage.tsx` - Replace animated CTA with static
+- `Sidebar.tsx` - Remove button hover transforms
 
 ---
 
-### Phase 4: Reduce Animation Intensity on Mobile (Optional)
+## Phase 3: Keep Accessibility Intact
 
-For CTA pulse animations, add reduced-motion preference support:
+Preserve keyboard navigation indicators:
 
-```css
-@media (prefers-reduced-motion: reduce) {
-  .cta-glow-pulse,
-  .cta-glow-pulse-red,
-  .cta-glow-pulse-subtle,
-  .cta-glow-pulse-gentle {
-    animation: none;
-  }
-}
+```text
+Keep these for screen readers and keyboard users:
+- focus:ring-*
+- focus-visible:ring-*
+- focus:outline-*
 ```
 
 ---
@@ -109,65 +128,69 @@ For CTA pulse animations, add reduced-motion preference support:
 ## Files to Modify
 
 1. **`src/index.css`**
-   - Add desktop-only scale utility classes
-   - Move entrance animations to desktop-only media query
-   - Add prefers-reduced-motion support
+   - Remove grain-flicker animation
+   - Remove mesh-float animation  
+   - Add static glow utility classes
+   - Add global animation kill override
+   - Remove all hover effect rules
 
-2. **`src/components/Sidebar.tsx`** (line 82)
-   - Replace `hover:scale-[1.03]` with `desktop-hover-scale-103`
+2. **`src/components/TopNav.tsx`**
+   - Strip all `hover:*` classes
+   - Replace `cta-glow-pulse` with static class
 
-3. **`src/pages/BookSessionPage.tsx`** (line 270)
-   - Replace `hover:scale-105` with `desktop-hover-scale-105`
+3. **`src/components/HeroSection.tsx`**
+   - Remove tile hover effects
+   - Disable bokeh orb animations
+   - Use static glows
 
-4. **`src/pages/RoadmapPage.tsx`** (line 69)
-   - Replace `hover:scale-105` with `desktop-hover-scale-105`
+4. **`src/pages/JobAlertsPage.tsx`**
+   - Remove all hover styling
+   - Static button appearance
 
-5. **`src/pages/JobAlertsPage.tsx`** (~8 locations)
-   - Replace all `hover:scale-105` with `desktop-hover-scale-105`
-   - Handle `group-hover:scale-110` case appropriately
+5. **`src/components/Sidebar.tsx`**
+   - Remove hover transforms
+
+6. **`src/pages/BookSessionPage.tsx`**
+   - Remove animated CTA styling
+
+7. **`src/pages/DynamicPage.tsx`**
+   - Remove tag/link hover effects
+
+8. **`src/pages/AboutPage.tsx`**
+   - Remove interactive hover styling
 
 ---
 
-## Technical Details
+## Visual Result
 
-### Why Tailwind `hover:scale-*` Doesn't Work
+| Before | After |
+|--------|-------|
+| Animated film grain flickering | Static grain texture |
+| Floating mesh background | Static mesh gradient |
+| Pulsing CTA glows | Elegant static glows |
+| Hover color changes | Consistent colors |
+| Transform on hover | No movement |
 
-Tailwind generates:
-```css
-.hover\:scale-105:hover { transform: scale(1.05); }
-```
+The site will maintain its premium dark glass aesthetic with static cyan/amber glows, but without any animation or hover-triggered changes that could cause rendering issues.
 
-This applies on ALL devices. Touch events on mobile trigger `:hover` state briefly, causing:
-1. Element scales up on touch
-2. Touch ends, hover state removed
-3. Element scales back down
-4. This happens rapidly = **flickering**
+---
 
-### The Media Query Solution
+## Reversibility
 
-```css
-@media (hover: hover) and (pointer: fine) { ... }
-```
+After launch, when you have time to test on various devices:
 
-- `hover: hover` - Device has true hover capability
-- `pointer: fine` - Device has a precise pointer (mouse, not finger)
-
-Combined, this targets only desktop devices with mice.
+1. Re-enable desktop-only hover effects inside `@media (hover: hover) and (pointer: fine)` block
+2. Optionally re-enable subtle animations for desktop users
+3. Keep mobile fully static
 
 ---
 
 ## Testing Checklist
 
-After implementation, verify on:
-- [ ] iPhone Safari (most common issue)
-- [ ] Android Chrome
-- [ ] iPad (tablet touch)
-- [ ] Desktop Chrome/Firefox/Safari
-
-Elements to test:
-- [ ] Hero CTA buttons - no flicker on tap
-- [ ] Blog cards - no flicker on tap
-- [ ] Sidebar strategy session button - no flicker
-- [ ] Job Alerts page CTA buttons - no flicker
-- [ ] Book Session form submit button - no flicker
+After implementation, verify on your Pixel 10 Pro Fold:
+- [ ] No more 1 Hz flickering at idle
+- [ ] Top nav stays visible continuously
+- [ ] Page elements remain stable
+- [ ] Tapping buttons causes no visual flash
+- [ ] Site still looks premium with static glows
 
