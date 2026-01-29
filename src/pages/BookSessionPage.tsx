@@ -100,7 +100,7 @@ const BookSessionPage = () => {
 
           <div className="volumetric-glass rounded-2xl p-8 md:p-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ color: '#FFE361' }}>
-              Quick Qualifier: Escape AI Job Extinction - Unlock your $10k/mo Pivot Strategy Session
+              Book Free Pivot Strategy Session
             </h1>
             <p className="text-muted-foreground text-center mb-8">
               Share your grind - I'll personally vet if you're ready for the AI-Proof PM Pivot (limited spots; my $15k/mo system got me ocean-side Focus Zone freedom)
