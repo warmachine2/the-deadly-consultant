@@ -22,9 +22,6 @@ const formSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(255),
   role_current: z.string().trim().min(1, "Current role is required").max(200),
   years_experience: z.coerce.number().min(0, "Must be 0 or greater").max(100),
-  education_certifications: z.string().trim().max(1000).optional(),
-  biggest_pain_point: z.string().trim().min(1, "This field is required").max(1000),
-  pivot_timeline: z.string().trim().max(200).optional(),
   whatsapp_number: z.string().trim().max(20).optional(),
 });
 
@@ -41,9 +38,6 @@ const BookSessionPage = () => {
       email: "",
       role_current: "",
       years_experience: 0,
-      education_certifications: "",
-      biggest_pain_point: "",
-      pivot_timeline: "",
       whatsapp_number: "",
     },
   });
@@ -62,9 +56,7 @@ const BookSessionPage = () => {
         email: data.email,
         role_current: data.role_current,
         years_experience: data.years_experience,
-        education_certifications: data.education_certifications || null,
-        biggest_pain_point: data.biggest_pain_point,
-        pivot_timeline: data.pivot_timeline || null,
+        biggest_pain_point: "N/A", // Required by DB but removed from form
         whatsapp_number: data.whatsapp_number || null,
       });
 
@@ -191,59 +183,6 @@ const BookSessionPage = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="education_certifications"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">Key Education/Certs</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="e.g., BS Computer Science, PMP, AWS Certified..."
-                          className="bg-input border-border min-h-[80px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="biggest_pain_point"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">Biggest Career Pain Point Right Now (e.g., AI threats, low pay, no freedom) *</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Describe your biggest pain point..."
-                          className="bg-input border-border min-h-[100px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="pivot_timeline"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">How soon are you ready to start your AI-proof pivot? (e.g., immediately, 1-3 months)</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="e.g., Next 90 days, 6 months"
-                          className="bg-input border-border"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <FormField
                   control={form.control}
