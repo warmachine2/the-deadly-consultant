@@ -291,29 +291,6 @@ const calculateJobAge = (dateStr: string): string => {
   return `${Math.floor(diffDays / 30)} months ago`;
 };
 
-// Tips by Hassan section (content hidden - under revision)
-const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
-  return (
-    <div className="rounded-xl overflow-hidden" style={{
-      background: 'linear-gradient(145deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 180, 0.05))',
-      border: '1px solid rgba(0, 212, 255, 0.2)'
-    }}>
-      <div className="w-full flex items-center justify-between p-4 md:p-5">
-        <div className="flex flex-col items-start gap-1">
-          <div className="flex items-center gap-2">
-            <Lightbulb className="w-4 h-4" style={{ color: '#FFDD40' }} />
-            <p className="text-sm md:text-base font-semibold uppercase tracking-wider" style={{
-              color: '#FFDD40'
-            }}>Tips by Hassan</p>
-          </div>
-          <p className="text-sm text-white/50 ml-6">
-            Coming soon — under revision. <a href="/book-session" className="underline hover:text-white/70 transition-colors">Book a free Strategy Session</a> for personalized pivot analysis.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // Strategy Video Expanded Player
 const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -325,7 +302,7 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
       {/* Header with close button */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
         <span className="text-sm md:text-base font-bold text-white">
-          <span className="text-[#F4C903]">10k/mo+</span> AI / BI-FinTech PM Strategy Guide <span className="text-white/70">[55min]</span>
+          <span className="text-[#F4C903]">10k/mo+</span> AI / BI-FinTech PM Strategy Guide <span className="text-white/70">[12min]</span>
         </span>
         <button
           onClick={onClose}
@@ -338,7 +315,7 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
       {/* Video Embed */}
       <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
         <iframe
-          src="https://www.youtube.com/embed/LSrDL3mKecg?autoplay=1"
+          src="https://www.youtube.com/embed/ydWdjQYqoMc?autoplay=1"
           title="10k/mo+ AI / BI-FinTech PM Strategy Guide"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -522,7 +499,7 @@ const JobCard: React.FC<{
             <span className="hidden md:inline">Strategy Guide</span>
             <span className="md:hidden">Video</span>
           </span>
-          <span className="text-white/60 text-base">[55m]</span>
+          <span className="text-white/60 text-base">[12m]</span>
         </button>
       </div>
 
@@ -567,7 +544,7 @@ const JobCard: React.FC<{
           }}>Comments</p>
               <p className="text-xl md:text-2xl text-white">{job.comments}</p>
             </div>}
-          {job.strategy && <TipsSection strategy={job.strategy} />}
+          
           {(job.recruiterEmail || job.recruiterPhone) && <div className="pt-3 border-t border-white/10">
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
