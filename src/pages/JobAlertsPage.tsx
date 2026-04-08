@@ -291,23 +291,14 @@ const calculateJobAge = (dateStr: string): string => {
   return `${Math.floor(diffDays / 30)} months ago`;
 };
 
-// Tips by Hassan collapsible section
+// Tips by Hassan section (content hidden - under revision)
 const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
-  const [tipsExpanded, setTipsExpanded] = useState(true);
-  
-  // Remove "-Hassan" suffix if present
-  const cleanStrategy = strategy.replace(/-\s*Hassan\s*$/i, '').trim();
-  
   return (
     <div className="rounded-xl overflow-hidden" style={{
       background: 'linear-gradient(145deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 180, 0.05))',
       border: '1px solid rgba(0, 212, 255, 0.2)'
     }}>
-      {/* Collapsible Header */}
-      <button 
-        onClick={() => setTipsExpanded(!tipsExpanded)}
-        className="w-full flex items-center justify-between p-4 md:p-5 hover:bg-white/5 transition-colors"
-      >
+      <div className="w-full flex items-center justify-between p-4 md:p-5">
         <div className="flex flex-col items-start gap-1">
           <div className="flex items-center gap-2">
             <Lightbulb className="w-4 h-4" style={{ color: '#FFDD40' }} />
@@ -316,53 +307,10 @@ const TipsSection: React.FC<{ strategy: string }> = ({ strategy }) => {
             }}>Tips by Hassan</p>
           </div>
           <p className="text-sm text-white/50 ml-6">
-            AI-generated commentary based on my source files. <a href="/book-session" className="underline hover:text-white/70 transition-colors">Book a free Strategy Session</a> for actual pivot analysis.
+            Coming soon — under revision. <a href="/book-session" className="underline hover:text-white/70 transition-colors">Book a free Strategy Session</a> for personalized pivot analysis.
           </p>
         </div>
-        <KeyboardArrowDown 
-          className={`w-5 h-5 transition-transform duration-300 ${tipsExpanded ? 'rotate-180' : ''}`}
-          style={{ color: '#FFDD40' }}
-        />
-      </button>
-      
-      {/* Collapsible Content */}
-      <Collapse in={tipsExpanded}>
-        <div className="px-4 pb-5 md:px-5 md:pb-6 border-t border-white/10">
-          {/* Strategy Content */}
-          <p className="text-base md:text-lg text-white mt-4 leading-relaxed">{cleanStrategy}</p>
-          
-          {/* Signature Block */}
-          <div className="mt-6 pt-5 border-t border-white/10">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-              <div>
-                <p className="font-bold text-white text-base md:text-lg">Hassan K. Khan</p>
-                <p className="text-sm text-white/70 mt-1">Founder & Instructor | B.Eng., PMP, PSM, AZ305</p>
-                <p className="text-sm mt-0.5" style={{ color: '#00d4ff' }}>BI-FinTech Consultant Training Academy | $10k/mo+ AI Proof Pivot</p>
-              </div>
-              
-              {/* CTA Button */}
-              <div className="flex flex-col items-center md:items-end">
-                <a 
-                  href="/book-session" 
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-nowrap animate-subtle-glow"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(5, 98, 173, 0.9), rgba(5, 98, 173, 0.7))',
-                    border: '1px solid rgba(0, 212, 255, 0.4)',
-                    color: 'white'
-                  }}
-                >
-                  <CalendarCheck className="w-4 h-4" />
-                  <span className="flex flex-col items-start leading-tight">
-                    <span>Discuss your pivot:</span>
-                    <span>Book 45m Strategy Session</span>
-                  </span>
-                </a>
-                <span className="text-xs mt-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Free</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Collapse>
+      </div>
     </div>
   );
 };
