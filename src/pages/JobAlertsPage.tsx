@@ -251,7 +251,7 @@ const ExpandableText: React.FC<{
 const DutiesText: React.FC<{
   text: string;
 }> = ({ text }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const previewLength = 200;
   
   if (!text || text.length <= previewLength) {
