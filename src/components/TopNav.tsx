@@ -207,14 +207,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}
         <Link to="/" className="hidden sm:block lg:hidden absolute left-1/2 transform -translate-x-1/2">
           <h1
-            className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
-            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+            className="text-base md:text-lg font-bold cursor-pointer whitespace-nowrap"
+            style={{ color: "#F4C903", filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
           >
-            Zero to{" "}
-            <span style={{ color: "#F4C903" }}>
-              PM
-            </span>{" "}
-            Consultant
+            ZeroToPMConsultant.com
           </h1>
         </Link>
 
