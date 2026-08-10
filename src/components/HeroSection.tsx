@@ -26,7 +26,7 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-2 md:mt-4 w-full max-w-4xl">
           {/* Main CTA Button - Roadmap - Mobile */}
           <a 
-            href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
+            href="https://ZeroToPMConsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
             className="flex md:hidden flex-row items-center justify-center gap-3 px-4 py-3 text-lg sm:text-xl font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[100px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",
@@ -42,7 +42,7 @@ const HeroSection = () => {
           
           {/* Main CTA Button - Roadmap - Desktop */}
           <a 
-            href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
+            href="https://ZeroToPMConsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock" 
             className="hidden md:flex flex-row items-center justify-center gap-4 px-6 py-4 text-[1.625rem] font-bold rounded-xl transition-colors duration-300 text-white hover:text-[#F4C903] border border-cyan-400/60 cta-glow-pulse cursor-pointer min-h-[120px]" 
             style={{
               background: "rgba(15, 15, 15, 0.85)",

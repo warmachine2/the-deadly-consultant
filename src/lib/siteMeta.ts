@@ -28,11 +28,11 @@ const DEFAULT_META: SiteMeta = {
   title: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   description:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
-  ogImage: "https://thedeadlyconsultant.com/og-image.png",
+  ogImage: "https://ZeroToPMConsultant.com/og-image.png",
   ogTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   ogDescription:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
-  twitterImage: "https://thedeadlyconsultant.com/og-image.png",
+  twitterImage: "https://ZeroToPMConsultant.com/og-image.png",
   twitterTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   twitterDescription:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
@@ -48,7 +48,7 @@ export async function getSiteMeta(): Promise<SiteMeta> {
   }
 
   try {
-    const response = await fetch(`https://thedeadlyconsultant.com/ghost/api/content/settings/?key=${ghostApiKey}`);
+    const response = await fetch(`https://ZeroToPMConsultant.com/ghost/api/content/settings/?key=${ghostApiKey}`);
 
     if (!response.ok) {
       throw new Error(`Ghost API returned ${response.status}`);
