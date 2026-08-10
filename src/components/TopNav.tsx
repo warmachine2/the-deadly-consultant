@@ -186,14 +186,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 className="text-xl lg:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
                 style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
               >
-                The{" "}
+                0 to{" "}
                 <span style={{ color: "#F4C903" }}>
-                  Deadly
+                  PM
                 </span>{" "}
                 Consultant
               </h1>
               <span className="text-[8px] text-white/70 tracking-wide text-center bg-black/60 px-2 py-0.5 rounded">
-                By Hassan Hammer B.Eng., PMP, AZ305
+                By Hassan Hammer B.Eng., PMP, CPMAI
               </span>
             </div>
           </Link>
@@ -214,9 +214,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
             style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
           >
-            The{" "}
+            0 to{" "}
             <span style={{ color: "#F4C903" }}>
-              Deadly
+              PM
             </span>{" "}
             Consultant
           </h1>
