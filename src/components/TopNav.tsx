@@ -175,7 +175,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Favicon on mobile/tablet (left side) */}
           <Link to="/" className="lg:hidden">
             <div className="p-2 rounded-xl volumetric-glass-button">
-              <img src="/favicon.ico" alt="0 to PM Consultant Logo" className="w-6 h-6 object-contain" />
+              <img src="/favicon.ico" alt="Zero to PM Consultant Logo" className="w-6 h-6 object-contain" />
             </div>
           </Link>
 
@@ -186,7 +186,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 className="text-xl lg:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
                 style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
               >
-                0 to{" "}
+                Zero to{" "}
                 <span style={{ color: "#F4C903" }}>
                   PM
                 </span>{" "}
@@ -214,7 +214,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
             style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
           >
-            0 to{" "}
+            Zero to{" "}
             <span style={{ color: "#F4C903" }}>
               PM
             </span>{" "}
