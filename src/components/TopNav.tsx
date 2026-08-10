@@ -175,7 +175,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Favicon on mobile/tablet (left side) */}
           <Link to="/" className="lg:hidden">
             <div className="p-2 rounded-xl volumetric-glass-button">
-              <img src="/favicon.ico" alt="Zero to PM Consultant Logo" className="w-6 h-6 object-contain" />
+              <img src="/favicon.ico" alt="ZeroToPMConsultant.com Logo" className="w-6 h-6 object-contain" />
             </div>
           </Link>
 
@@ -183,14 +183,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <Link to="/" className="hidden lg:block">
             <div className="flex flex-col items-center px-3 py-1.5">
               <h1
-                className="text-xl lg:text-2xl font-bold text-white cursor-pointer transition-opacity whitespace-nowrap"
-                style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+                className="text-xl lg:text-2xl font-bold cursor-pointer transition-opacity whitespace-nowrap"
+                style={{ color: "#F4C903", filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
               >
-                Zero to{" "}
-                <span style={{ color: "#F4C903" }}>
-                  PM
-                </span>{" "}
-                Consultant
+                ZeroToPMConsultant.com
               </h1>
               <span className="text-[8px] text-white/70 tracking-wide text-center bg-black/60 px-2 py-0.5 rounded">
                 By Hassan Hammer B.Eng., PMP, CPMAI
@@ -211,14 +207,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}
         <Link to="/" className="hidden sm:block lg:hidden absolute left-1/2 transform -translate-x-1/2">
           <h1
-            className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
-            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+            className="text-base md:text-lg font-bold cursor-pointer whitespace-nowrap"
+            style={{ color: "#F4C903", filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
           >
-            Zero to{" "}
-            <span style={{ color: "#F4C903" }}>
-              PM
-            </span>{" "}
-            Consultant
+            ZeroToPMConsultant.com
           </h1>
         </Link>
 
