@@ -1600,7 +1600,7 @@ const JobAlertsPage: React.FC = () => {
 
       <footer className="glass-effect rounded-t-3xl mt-auto py-4 px-4">
         <div className="max-w-7xl mx-auto text-center text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} 0 to PM Consultant. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Zero to PM Consultant. All rights reserved.</p>
         </div>
       </footer>
     </div>;

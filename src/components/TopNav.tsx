@@ -175,7 +175,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Favicon on mobile/tablet (left side) */}
           <Link to="/" className="lg:hidden">
             <div className="p-2 rounded-xl volumetric-glass-button">
-              <img src="/favicon.ico" alt="0 to PM Consultant Logo" className="w-6 h-6 object-contain" />
+              <img src="/favicon.ico" alt="Zero to PM Consultant Logo" className="w-6 h-6 object-contain" />
             </div>
           </Link>
 
