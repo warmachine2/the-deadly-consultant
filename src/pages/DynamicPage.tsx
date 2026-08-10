@@ -383,7 +383,7 @@ const DynamicPage = () => {
 
       <footer className="volumetric-glass rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2025 The Deadly Consultant. All rights reserved.</p>
+          <p>© 2025 0 to PM Consultant. All rights reserved.</p>
         </div>
       </footer>
     </div>
