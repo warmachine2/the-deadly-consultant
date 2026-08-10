@@ -7,7 +7,7 @@ const corsHeaders = {
   "Access-Control-Max-Age": "86400",
 };
 
-const GHOST_API_URL = "https://app.ZeroToPMConsultant.com/ghost/api/v3/content";
+const GHOST_API_URL = "https://hassan-khalid-khan.ghost.io/ghost/api/v3/content";
 const GHOST_API_KEY = Deno.env.get("GHOST_KEY") || "";
 
 serve(async (req) => {

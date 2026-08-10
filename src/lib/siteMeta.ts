@@ -48,7 +48,7 @@ export async function getSiteMeta(): Promise<SiteMeta> {
   }
 
   try {
-    const response = await fetch(`https://ZeroToPMConsultant.com/ghost/api/content/settings/?key=${ghostApiKey}`);
+    const response = await fetch(`https://hassan-khalid-khan.ghost.io/ghost/api/content/settings/?key=${ghostApiKey}`);
 
     if (!response.ok) {
       throw new Error(`Ghost API returned ${response.status}`);
