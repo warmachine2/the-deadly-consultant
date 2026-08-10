@@ -44,7 +44,7 @@ const RoadmapCard = ({ className }: { className?: string }) => {
   // Teaser data (dynamic from fetched content)
   const teaser = {
     title: pageContent?.title || "2026 BI-FinTech Roadmap – Unlock Your $10k/mo Pivot",
-    excerpt: pageContent?.excerpt || "Stuck grinding $3k-$4k/mo despite your engineering skills? AI’s eating jobs—pivot to BI-FinTech PM roles for $17k/mo+ remote freedom. Get the cracked blueprint: mindset, hybrid PM, vendor-grade tools, and certs (PMP, PSM, AZ305).",
+    excerpt: pageContent?.excerpt || "Stuck grinding $3k-$4k/mo despite your engineering skills? AI’s eating jobs—pivot to BI-FinTech PM roles for $17k/mo+ remote freedom. Get the cracked blueprint: mindset, hybrid PM, vendor-grade tools, and certs (PMP, PSM, CPMAI).",
   };
 
   if (loading) {
