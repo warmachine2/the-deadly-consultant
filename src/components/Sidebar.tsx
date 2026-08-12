@@ -87,7 +87,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
           >
             <Calendar className="w-5 h-5 text-white" />
             <span className="text-sm font-bold text-white">
-              Book Free 45-Min Strategy Session
+              Book Free 30-Min Strategy Session
             </span>
           </a>
           <div className="mt-3 px-2 py-2 rounded-md" style={{ background: "rgba(0, 0, 0, 0.4)" }}>

@@ -212,7 +212,7 @@ const BookSessionPage = () => {
                     boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
                   }}
                 >
-                  {isSubmitting ? "Submitting..." : "Book Free 45-Min Pivot Strategy Session"}
+                  {isSubmitting ? "Submitting..." : "Book Free 30-Min Pivot Strategy Session"}
                 </Button>
               </form>
             </Form>
