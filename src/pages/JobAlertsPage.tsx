@@ -37,7 +37,7 @@ interface JobData {
   companyInfo?: string[]; // Array of company info bullet points (optional)
 }
 type Order = 'asc' | 'desc';
-const SHEET_ID = '107Yolhwv0VYBWQXlvNNB4T98iw7POQ_YRVJ633aIVig';
+const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
 // Canonical list of recruitment sources with descriptions
