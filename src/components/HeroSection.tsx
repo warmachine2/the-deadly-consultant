@@ -12,14 +12,13 @@ const HeroSection = () => {
       <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-start gap-4 md:gap-6">
         {/* Main Headline */}
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight animate-fade-in">
-          Your AI-Proof 90-Day Pivot to $10k/mo+{" "}
-          <span className="text-[#F4C903]">BI-FinTech & AI Deployment PM</span> Consulting
+          Zero-To-<span className="text-[#F4C903]">PM</span>-Consultant
         </h1>
 
         {/* Subheadline */}
         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium">
-          Escape AI job vaporization. Master{" "}
-          <span className="text-[#F4C903]">PMP/PSM/CPMAI trifecta</span> + build $60k PPM tools. Land guaranteed interviews fast. Click below to kick-start your pivot.
+          Data, FinTech & AI Project Management Consulting<br />
+          AI-proof pivots into high-value consulting contracts
         </p>
 
         {/* CTA Buttons - 2x2 Grid */}
