@@ -1224,22 +1224,6 @@ const JobAlertsPage: React.FC = () => {
                                   </CommandItem>
                                 )}
                                 {uniqueSources.map(source => {
-                                const sourceDescriptions: Record<string, string> = {
-                                  "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
-                                  "ProViso": "Toronto-based IT staffing agency supporting technology and business teams across Canada's financial industry for 15+ years.",
-                                  "Insight Global": "Global staffing and professional services agency founded in 2001, specializing in IT, healthcare, finance, and engineering talent.",
-                                  "SI Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
-                                  "S.i. Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
-                                  "NTT Data": "Global IT services and consulting leader providing technology and business solutions, staffing, and outsourcing services.",
-                                  "Agilus Work Solutions": "Canadian recruitment and staffing firm specializing in temporary, contract, and permanent placements across industries.",
-                                  "Tundra Technical Solutions": "Canadian IT staffing and recruitment agency connecting organizations with technology professionals nationwide.",
-                                  "Procom": "Canada's leading IT staffing and consulting services firm, providing technology talent and workforce solutions.",
-                                  "Nerdy Hire": "Niche tech recruitment platform focused on connecting companies with specialized IT and engineering talent.",
-                                  "HR Brain": "HR and talent solutions provider specializing in recruitment, staffing, and workforce consulting services.",
-                                  "Axelon Services Corporation": "Global staffing and consulting firm delivering IT, finance, and healthcare workforce solutions since 1973.",
-                                  "GTT": "Global staffing and consulting firm specializing in technology, engineering, and professional services placements.",
-                                  "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
-                                };
                                   const description = sourceDescriptions[source] || `Staffing agency providing professional recruitment services.`;
                                   const isSelected = selectedSources.includes(source);
                                   
