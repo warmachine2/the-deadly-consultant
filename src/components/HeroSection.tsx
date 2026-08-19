@@ -170,7 +170,7 @@ const HeroSection = () => {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Build $60k PPM BI tools for your portfolio.</span>
+            <span>Build <span className="text-[#F4C903]">$60k PPM BI tools</span> for your portfolio.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
@@ -178,7 +178,7 @@ const HeroSection = () => {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Land $10k/mo+ gigs - faster, easier.</span>
+            <span>Land <span className="text-[#F4C903]">$10k/mo+</span> gigs - faster, easier.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
