@@ -17,8 +17,8 @@ const HeroSection = () => {
 
         {/* Subheadline */}
         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium">
-          Data, FinTech & AI Project Management Consulting<br />
-          AI-proof pivots into high-value consulting contracts
+          Data, <span className="text-[#F4C903]">FinTech</span> & <span className="text-[#F4C903]">AI Project Management</span> <span className="text-[#F4C903]">Consulting</span><br />
+          AI-proof pivots into high-value <span className="text-[#F4C903]">consulting</span> contracts
         </p>
 
         {/* CTA Buttons - 2x2 Grid */}
@@ -162,11 +162,11 @@ const HeroSection = () => {
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-2 md:gap-y-3 text-sm sm:text-base md:text-lg text-white/80 w-full max-w-4xl mt-2">
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Escape AI job vaporization.</span>
+            <span>Escape AI job <span className="text-[#F4C903]">vaporization</span>.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Master PMP/PSM/CPMAI trifecta.</span>
+            <span>Master <span className="text-[#F4C903]">PMP/PSM/CPMAI</span> trifecta.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
@@ -174,15 +174,15 @@ const HeroSection = () => {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Orchestrate AI Deployment/BI projects. Learn front-line PM consulting skills.</span>
+            <span>Orchestrate AI Deployment/BI projects. Learn <span className="text-[#F4C903]">front-line PM</span> <span className="text-[#F4C903]">consulting</span> skills.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Land $10k/mo gigs - faster, easier.</span>
+            <span>Land $10k/mo+ gigs - faster, easier.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-[#F4C903]">•</span>
-            <span>Become a Certified Professional in Project Management & AI Deployment Projects.</span>
+            <span>Become a <span className="text-[#F4C903]">Certified Professional</span> in Project Management & AI Deployment Projects.</span>
           </li>
         </ul>
       </div>
