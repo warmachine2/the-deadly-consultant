@@ -40,6 +40,72 @@ type Order = 'asc' | 'desc';
 const SHEET_ID = '1JFNwjbOjAWCO3ewxN1qLyA0ewLOLMjkkKzJibpscm0Y';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
+// Canonical list of recruitment sources with descriptions
+const sourceDescriptions: Record<string, string> = {
+  "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
+  "Proviso": "Toronto-based IT staffing agency supporting technology and business teams across Canada's financial industry for 15+ years.",
+  "Insight Global": "Global staffing and professional services agency founded in 2001, specializing in IT, healthcare, finance, and engineering talent.",
+  "S.i. Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
+  "NTT Data": "Global IT services and consulting leader providing technology and business solutions, staffing, and outsourcing services.",
+  "Agilus Work Solutions": "Canadian recruitment and staffing firm specializing in temporary, contract, and permanent placements across industries.",
+  "Tundra Technical Solutions": "Canadian IT staffing and recruitment agency connecting organizations with technology professionals nationwide.",
+  "Procom": "Canada's leading IT staffing and consulting services firm, providing technology talent and workforce solutions.",
+  "Nerdy Hire": "Niche tech recruitment platform focused on connecting companies with specialized IT and engineering talent.",
+  "HR Brain": "HR and talent solutions provider specializing in recruitment, staffing, and workforce consulting services.",
+  "Axelon Services Corporation": "Global staffing and consulting firm delivering IT, finance, and healthcare workforce solutions since 1973.",
+  "GTT": "Global staffing and consulting firm specializing in technology, engineering, and professional services placements.",
+  "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
+};
+
+// Map observed data-source spellings to the canonical source names above
+const sourceNameMap: Record<string, string> = {
+  "ProViso": "Proviso",
+  "Agilus (Canada)": "Agilus Work Solutions",
+  "SI Systems": "S.i. Systems",
+  "S.i. Systems": "S.i. Systems",
+};
+
+// Map known cities to filter labels from the work-type/location description string
+const extractCity = (workType: string): string => {
+  const wt = workType.trim();
+  if (!wt) return 'Unknown';
+  const lower = wt.toLowerCase();
+
+  // Remote-only roles
+  if (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person')) {
+    return 'Remote';
+  }
+
+  // Canadian cities (listed in user request + common Ontario cities)
+  if (lower.includes('mississauga')) return 'Mississauga';
+  if (lower.includes('toronto')) return 'Toronto';
+  if (lower.includes('vancouver')) return 'Vancouver';
+  if (lower.includes('calgary')) return 'Calgary';
+  if (lower.includes('winnipeg')) return 'Winnipeg';
+  if (lower.includes('ottawa')) return 'Ottawa';
+  if (lower.includes('montreal')) return 'Montreal';
+  if (lower.includes('brampton')) return 'Brampton';
+  if (lower.includes('hamilton')) return 'Hamilton';
+  if (lower.includes('london')) return 'London';
+  if (lower.includes('canada')) return 'Canada';
+
+  // US cities (common in the data)
+  if (lower.includes('jersey city')) return 'Jersey City';
+  if (lower.includes('white plains')) return 'White Plains';
+  if (lower.includes('new york city')) return 'New York';
+  if (lower.includes('new york')) return 'New York';
+  if (lower.includes('charlotte')) return 'Charlotte';
+  if (lower.includes('boston')) return 'Boston';
+  if (lower.includes('harrisburg')) return 'Harrisburg';
+  if (lower.includes('buffalo')) return 'Buffalo';
+  if (lower.includes('columbia')) return 'Columbia';
+  if (lower.includes('jackson')) return 'Jackson';
+  if (lower.includes('miami')) return 'Miami';
+  if (lower.includes('usa') || lower.includes('united states')) return 'USA';
+
+  return 'Other';
+};
+
 // Parse Company Info JSON string to array
 const parseCompanyInfo = (infoStr: string): string[] => {
   if (!infoStr) return [];
@@ -86,7 +152,7 @@ const parseCSV = (csvText: string): JobData[] => {
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
-        source: row[17] || '', // Sources is column 18 (index 17)
+        source: sourceNameMap[row[17]?.trim() || ''] || row[17]?.trim() || '', // Sources is column 18 (index 17), normalized to canonical names
         companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined
       });
       console.log(`Parsed row ${rowNumber}: ${row[1]} at ${row[9]}`);
@@ -676,15 +742,17 @@ const JobAlertsPage: React.FC = () => {
     setOrderBy(property);
   };
 
-  // Extract unique locations, role types, and sources from data
+  // Extract unique locations, cities, role types, and sources from data
   const {
     countries,
     locations,
+    cities,
     uniqueRoleTypes,
     uniqueSources
   } = useMemo(() => {
     const countrySet = new Set<string>();
     const locationSet = new Set<string>();
+    const citySet = new Set<string>();
     const roleTypeSet = new Set<string>();
     const sourceSet = new Set<string>();
     
@@ -696,6 +764,10 @@ const JobAlertsPage: React.FC = () => {
       if (job.source && job.source.trim()) {
         sourceSet.add(job.source.trim());
       }
+      
+      // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
+      const city = extractCity(job.workType);
+      if (city) citySet.add(city);
       
       if (job.location) {
         locationSet.add(job.location);
@@ -714,8 +786,10 @@ const JobAlertsPage: React.FC = () => {
     return {
       countries: Array.from(countrySet).sort(),
       locations: Array.from(locationSet).sort(),
+      cities: Array.from(citySet).sort(),
       uniqueRoleTypes: Array.from(roleTypeSet).sort(),
-      uniqueSources: Array.from(sourceSet).sort()
+      // Merge canonical sources with any additional sources found in the data
+      uniqueSources: Array.from(new Set([...Object.keys(sourceDescriptions), ...Array.from(sourceSet)])).sort()
     };
   }, [data]);
   const filteredAndSortedData = useMemo(() => {
@@ -745,9 +819,12 @@ const JobAlertsPage: React.FC = () => {
       });
     }
 
-    // Location filter
+    // Location filter (by city — extracted from the work type / location description)
     if (selectedLocation !== 'all') {
-      filtered = filtered.filter(row => row.location === selectedLocation);
+      filtered = filtered.filter(row => {
+        const city = extractCity(row.workType);
+        return city === selectedLocation;
+      });
     }
     
     // Experience filter
@@ -1147,12 +1224,22 @@ const JobAlertsPage: React.FC = () => {
                                   </CommandItem>
                                 )}
                                 {uniqueSources.map(source => {
-                                  const sourceDescriptions: Record<string, string> = {
-                                    "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
-                                    "ProViso": "Toronto-based IT staffing agency supporting technology and business teams across Canada's financial industry for 15+ years.",
-                                    "Insight Global": "Global staffing and professional services agency founded in 2001, specializing in IT, healthcare, finance, and engineering talent.",
-                                    "SI Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
-                                  };
+                                const sourceDescriptions: Record<string, string> = {
+                                  "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
+                                  "ProViso": "Toronto-based IT staffing agency supporting technology and business teams across Canada's financial industry for 15+ years.",
+                                  "Insight Global": "Global staffing and professional services agency founded in 2001, specializing in IT, healthcare, finance, and engineering talent.",
+                                  "SI Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
+                                  "S.i. Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
+                                  "NTT Data": "Global IT services and consulting leader providing technology and business solutions, staffing, and outsourcing services.",
+                                  "Agilus Work Solutions": "Canadian recruitment and staffing firm specializing in temporary, contract, and permanent placements across industries.",
+                                  "Tundra Technical Solutions": "Canadian IT staffing and recruitment agency connecting organizations with technology professionals nationwide.",
+                                  "Procom": "Canada's leading IT staffing and consulting services firm, providing technology talent and workforce solutions.",
+                                  "Nerdy Hire": "Niche tech recruitment platform focused on connecting companies with specialized IT and engineering talent.",
+                                  "HR Brain": "HR and talent solutions provider specializing in recruitment, staffing, and workforce consulting services.",
+                                  "Axelon Services Corporation": "Global staffing and consulting firm delivering IT, finance, and healthcare workforce solutions since 1973.",
+                                  "GTT": "Global staffing and consulting firm specializing in technology, engineering, and professional services placements.",
+                                  "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
+                                };
                                   const description = sourceDescriptions[source] || `Staffing agency providing professional recruitment services.`;
                                   const isSelected = selectedSources.includes(source);
                                   
@@ -1202,20 +1289,20 @@ const JobAlertsPage: React.FC = () => {
                       </select>
                     </div>
                     
-                    {/* Location Filter */}
+                    {/* City Filter */}
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs text-white/60 flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
-                        City/State
+                        City
                       </label>
                       <select 
                         value={selectedLocation} 
                         onChange={e => setSelectedLocation(e.target.value)} 
                         className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Locations</option>
-                        {locations.map(loc => (
-                          <option key={loc} value={loc} className="bg-gray-900 text-white">{loc}</option>
+                        <option value="all" className="bg-gray-900 text-white">All Cities</option>
+                        {cities.map(city => (
+                          <option key={city} value={city} className="bg-gray-900 text-white">{city}</option>
                         ))}
                       </select>
                     </div>
