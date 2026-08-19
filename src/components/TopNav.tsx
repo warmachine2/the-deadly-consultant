@@ -190,7 +190,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <span style={{ color: "#F4C903" }}>PM</span>
                 -Consultant
               </h1>
-              <span className="text-[8px] text-white/70 tracking-wide text-center bg-black/60 px-2 py-0.5 rounded">
+              <span className="text-[10px] lg:text-xs text-white tracking-wide text-center bg-black/70 px-2 py-0.5 rounded mt-0.5">
                 By Hassan Hammer B.Eng., PMP, CPMAI
               </span>
             </div>
