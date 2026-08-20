@@ -1267,7 +1267,7 @@ const JobAlertsPage: React.FC = () => {
                         <option value="all" className="bg-gray-900 text-white">All Countries</option>
                         <option value="Canada" className="bg-gray-900 text-white">Canada</option>
                         <option value="USA" className="bg-gray-900 text-white">USA</option>
-                        {countries.filter(c => c !== 'Canada' && c !== 'USA').map(country => (
+                        {countries.filter(c => c !== 'Canada' && c !== 'USA' && c !== 'N/A' && c !== 'No job text provided').map(country => (
                           <option key={country} value={country} className="bg-gray-900 text-white">{country}</option>
                         ))}
                       </select>
