@@ -1285,7 +1285,7 @@ const JobAlertsPage: React.FC = () => {
                         className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Cities</option>
-                        {cities.map(city => (
+                        {cities.filter(city => city !== 'Canada').map(city => (
                           <option key={city} value={city} className="bg-gray-900 text-white">{city}</option>
                         ))}
                       </select>
