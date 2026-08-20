@@ -28,11 +28,11 @@ const DEFAULT_META: SiteMeta = {
   title: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   description:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
-  ogImage: "https://ZeroToPMConsultant.com/og-image.png",
+  ogImage: "https://www.zerotopmconsultant.com/og-image.png",
   ogTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   ogDescription:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
-  twitterImage: "https://ZeroToPMConsultant.com/og-image.png",
+  twitterImage: "https://www.zerotopmconsultant.com/og-image.png",
   twitterTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
   twitterDescription:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
