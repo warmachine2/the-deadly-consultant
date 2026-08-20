@@ -88,6 +88,16 @@ const DynamicPage = () => {
               )
           : content.html || "";
 
+      // Replace remaining old domain link in article content
+      html = html.replace(
+        /href="https:\/\/thedeadlyconsultant\.com\/ai-bi-fintech-pm-job-alerts-repo[^"]*/gi,
+        'href="https://www.zerotopmconsultant.com/ai-bi-fintech-pm-job-alerts-repo'
+      );
+      html = html.replace(
+        /https:\/\/thedeadlyconsultant\.com\/ai-bi-fintech-pm-job-alerts-repo/gi,
+        'https://www.zerotopmconsultant.com/ai-bi-fintech-pm-job-alerts-repo'
+      );
+
       // Strip inline color styles from headings
       html = html.replace(
         /<(h[1-6])([^>]*?)style="[^"]*color[^"]*"([^>]*)>/gi,
