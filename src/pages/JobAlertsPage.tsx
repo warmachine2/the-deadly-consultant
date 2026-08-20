@@ -1207,7 +1207,7 @@ const JobAlertsPage: React.FC = () => {
                               {selectedSources.length === 0 
                                 ? 'All Sources' 
                                 : selectedSources.length <= 2
-                                  ? selectedSources.join(', ')
+                                  ? selectedSources.map(getSourceDisplayName).join(', ')
                                   : `${selectedSources.length} selected`
                               }
                             </span>
