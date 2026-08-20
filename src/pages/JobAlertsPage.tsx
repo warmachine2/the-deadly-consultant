@@ -65,6 +65,13 @@ const sourceNameMap: Record<string, string> = {
   "S.i. Systems": "S.i. Systems",
 };
 
+// Frontend display labels for sources (does not affect underlying data values)
+const sourceDisplayNames: Record<string, string> = {
+  "Hassan's recruiter Network": "Hassan's Recruiter Network",
+};
+
+const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
+
 // Map known cities to filter labels from the work-type/location description string
 const extractCity = (workType: string): string => {
   const wt = workType.trim();
