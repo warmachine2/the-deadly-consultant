@@ -449,8 +449,7 @@ const JobCard: React.FC<{
             }}>
               <CalendarCheck className="w-3.5 h-3.5" />
               <span className="flex flex-col items-start leading-tight">
-                <span>Discuss your pivot:</span>
-                <span>Book 45m Strategy Session</span>
+                <span>Book 15 min. Pivot Strategy Call</span>
               </span>
             </a>
             <span className="text-[10px] mt-1" style={{
