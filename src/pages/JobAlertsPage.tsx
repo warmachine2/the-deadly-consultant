@@ -65,6 +65,13 @@ const sourceNameMap: Record<string, string> = {
   "S.i. Systems": "S.i. Systems",
 };
 
+// Frontend display labels for sources (does not affect underlying data values)
+const sourceDisplayNames: Record<string, string> = {
+  "Hassan's recruiter Network": "Hassan's Recruiter Network",
+};
+
+const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
+
 // Map known cities to filter labels from the work-type/location description string
 const extractCity = (workType: string): string => {
   const wt = workType.trim();
@@ -1200,7 +1207,7 @@ const JobAlertsPage: React.FC = () => {
                               {selectedSources.length === 0 
                                 ? 'All Sources' 
                                 : selectedSources.length <= 2
-                                  ? selectedSources.join(', ')
+                                  ? selectedSources.map(getSourceDisplayName).join(', ')
                                   : `${selectedSources.length} selected`
                               }
                             </span>
@@ -1238,7 +1245,7 @@ const JobAlertsPage: React.FC = () => {
                                           checked={isSelected}
                                           className="border-white/30 data-[state=checked]:bg-[#FFDD40] data-[state=checked]:border-[#FFDD40]"
                                         />
-                                        <span className="text-white font-medium">{source}</span>
+                                        <span className="text-white font-medium">{getSourceDisplayName(source)}</span>
                                       </div>
                                       {isSelected && (
                                         <p className="text-white/50 text-xs pl-6 leading-relaxed">{description}</p>
