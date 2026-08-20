@@ -1245,7 +1245,7 @@ const JobAlertsPage: React.FC = () => {
                                           checked={isSelected}
                                           className="border-white/30 data-[state=checked]:bg-[#FFDD40] data-[state=checked]:border-[#FFDD40]"
                                         />
-                                        <span className="text-white font-medium">{source}</span>
+                                        <span className="text-white font-medium">{getSourceDisplayName(source)}</span>
                                       </div>
                                       {isSelected && (
                                         <p className="text-white/50 text-xs pl-6 leading-relaxed">{description}</p>
