@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -1478,6 +1478,14 @@ const JobAlertsPage: React.FC = () => {
           </Collapsible>
         )}
 
+
+        {/* Recruiter contact disclaimer */}
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 backdrop-blur-sm sm:px-5">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/80" aria-hidden="true" />
+          <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground/90">Note:</span> Only jobs sourced from Hassan&rsquo;s Recruiter Network include the recruiter&rsquo;s direct email and/or phone number. For all other listings, please contact the agency using the details provided in the job posting.
+          </p>
+        </div>
 
         {loading ? <div className="flex justify-center items-center min-h-[400px]">
             <Loader2 className="w-8 h-8 text-accent animate-spin" />
