@@ -643,11 +643,14 @@ const JobCard: React.FC<{
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
-              <div className="flex flex-wrap gap-4 text-xl md:text-2xl">
-                {job.recruiterEmail && <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
-                    {job.recruiterEmail}
-                  </a>}
-                {job.recruiterPhone && <span className="text-white">{job.recruiterPhone}</span>}
+              <div className="space-y-2 text-xl md:text-2xl">
+                {job.recruiterName && job.recruiterName.trim() && <p className="text-white">{job.recruiterName}</p>}
+                <div className="flex flex-wrap gap-4">
+                  {job.recruiterEmail && <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
+                      {job.recruiterEmail}
+                    </a>}
+                  {job.recruiterPhone && <span className="text-white">{job.recruiterPhone}</span>}
+                </div>
               </div>
             </div>}
 
