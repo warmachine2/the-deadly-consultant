@@ -433,11 +433,15 @@ const JobCard: React.FC<{
             backgroundColor: 'rgba(255, 221, 64, 0.2)',
             color: '#FFDD40'
           }}>
-              {jobAge}
-            </span>
+            {jobAge}
+          </span>
             {job.location && <>
                 <span>•</span>
                 <span className="truncate">{job.location}</span>
+              </>}
+            {job.jobId && job.jobId !== 'N/A' && job.jobId !== 'n/a' && <>
+                <span>•</span>
+                <span>ID: {job.jobId.substring(0, 8)}…</span>
               </>}
           </div>
         </div>
