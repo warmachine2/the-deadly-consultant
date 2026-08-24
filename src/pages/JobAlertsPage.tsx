@@ -35,6 +35,7 @@ interface JobData {
   location: string; // City/State/Province/Country
   source?: string; // Source of the job (e.g., ProViso, Insight Global, etc.)
   companyInfo?: string[]; // Array of company info bullet points (optional)
+  jobId?: string; // Job ID from the source data
 }
 type Order = 'asc' | 'desc';
 const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
