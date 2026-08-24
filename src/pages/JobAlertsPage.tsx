@@ -412,6 +412,7 @@ const JobCard: React.FC<{
 }) => {
   const [expanded, setExpanded] = useState(true);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const { toast } = useToast();
   const jobAge = calculateJobAge(job.date);
   return <div className={`volumetric-glass rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-[#FFDD40]/30 w-full ${isDesktop ? '' : 'mb-5'}`} style={{
     background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
