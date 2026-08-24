@@ -443,7 +443,19 @@ const JobCard: React.FC<{
               </>}
             {job.jobId && job.jobId !== 'N/A' && job.jobId !== 'n/a' && <>
                 <span>•</span>
-                <span>ID: {job.jobId.substring(0, 8)}…</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(job.jobId!);
+                    toast({
+                      title: "Job ID copied!",
+                      duration: 1800,
+                    });
+                  }}
+                  className="cursor-pointer hover:underline focus:outline-none"
+                >
+                  ID: {job.jobId.substring(0, 8)}…
+                </button>
               </>}
           </div>
         </div>
