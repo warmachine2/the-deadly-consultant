@@ -161,7 +161,8 @@ const parseCSV = (csvText: string): JobData[] => {
         earningEstimate: row[13] || '',
         location: row[14] || '',
         source: sourceNameMap[row[17]?.trim() || ''] || row[17]?.trim() || '', // Sources is column 18 (index 17), normalized to canonical names
-        companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined
+        companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined,
+        jobId: row[19]?.trim() || '' // Job ID is column 20 (index 19)
       });
       console.log(`Parsed row ${rowNumber}: ${row[1]} at ${row[9]}`);
     } else {
