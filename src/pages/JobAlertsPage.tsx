@@ -31,6 +31,7 @@ interface JobData {
   company: string;
   recruiterEmail: string;
   recruiterPhone: string;
+  recruiterName?: string;
   strategy: string;
   earningEstimate: string;
   location: string; // City/State/Province/Country
@@ -158,6 +159,7 @@ const parseCSV = (csvText: string): JobData[] => {
         company: row[9] || '',
         recruiterEmail: row[10] || '',
         recruiterPhone: row[11] || '',
+        recruiterName: row[20]?.trim() || '',
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
@@ -641,11 +643,14 @@ const JobCard: React.FC<{
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
-              <div className="flex flex-wrap gap-4 text-xl md:text-2xl">
-                {job.recruiterEmail && <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
-                    {job.recruiterEmail}
-                  </a>}
-                {job.recruiterPhone && <span className="text-white">{job.recruiterPhone}</span>}
+              <div className="space-y-2 text-xl md:text-2xl">
+                {job.recruiterName && job.recruiterName.trim() && <p className="text-white">{job.recruiterName}</p>}
+                <div className="flex flex-wrap gap-4">
+                  {job.recruiterEmail && <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
+                      {job.recruiterEmail}
+                    </a>}
+                  {job.recruiterPhone && <span className="text-white">{job.recruiterPhone}</span>}
+                </div>
               </div>
             </div>}
 
