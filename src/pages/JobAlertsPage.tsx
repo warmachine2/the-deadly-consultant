@@ -1482,8 +1482,8 @@ const JobAlertsPage: React.FC = () => {
         {/* Recruiter contact disclaimer */}
         <div className="mb-6 flex items-start gap-3 rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 backdrop-blur-sm sm:px-5">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300/80" aria-hidden="true" />
-          <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground/90">Note:</span> Only jobs sourced from Hassan&rsquo;s Recruiter Network include the recruiter&rsquo;s direct email and/or phone number. For all other listings, please contact the agency using the details provided in the job posting.
+          <p className="text-sm sm:text-base font-medium leading-relaxed text-white/95">
+            <span className="font-bold text-[#FFDD40]">Note:</span> Only jobs sourced from Hassan&rsquo;s Recruiter Network include the recruiter&rsquo;s direct email and/or phone number. For all other listings, please contact the agency using the details provided in the job posting.
           </p>
         </div>
 
