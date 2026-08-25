@@ -472,14 +472,9 @@ const JobCard: React.FC<{
     background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
   }}>
-      {/* Top-centered source attribution */}
-      <div className="flex justify-center mb-3">
-        <SourceBadge source={job.source} jobLink={job.jobLink} />
-      </div>
-
-      {/* Header */}
-      <div className="flex justify-between items-start gap-4">
-        <div className="flex-1 min-w-0">
+      {/* Header with title, centered source badge, and actions on one row */}
+      <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-4">
+        <div className="min-w-0">
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight" style={{
           color: '#FFDD40'
         }}>
@@ -519,7 +514,13 @@ const JobCard: React.FC<{
               </>}
           </div>
         </div>
-          <div className="flex items-start gap-3">
+
+        {/* Centered source badge aligned with the role title */}
+        <div className="flex justify-center">
+          <SourceBadge source={job.source} jobLink={job.jobLink} />
+        </div>
+
+          <div className="flex items-start gap-3 justify-end">
           {/* Mini CTA */}
           <div className="flex flex-col items-center">
             <a href="/book-session" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-nowrap animate-subtle-glow" style={{
