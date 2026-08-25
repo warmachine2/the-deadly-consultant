@@ -522,8 +522,8 @@ const AreYouReadyToPivotPage = () => {
       />
 
       <div className="relative z-10 flex flex-col items-center gap-6">
-        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#F4C903]/20 border-4 border-[#F4C903]/40 mb-2">
-          <span className="text-4xl font-bold text-[#F4C903]">{calculateScore()}/9</span>
+        <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-[#F4C903]/20 border-4 border-[#F4C903]/40 mb-2">
+          <span className="text-4xl md:text-5xl font-bold text-[#F4C903]">{calculateScore()}</span>
         </div>
 
         <h2
@@ -533,10 +533,14 @@ const AreYouReadyToPivotPage = () => {
           Your Readiness Score
         </h2>
 
+        <p className="text-sm md:text-base text-white/60 -mt-2">
+          {calculateRawScore()} of {MAX_RAW_SCORE} points
+        </p>
+
         <p className="text-lg md:text-xl text-white/90 max-w-xl">
-          {calculateScore() >= 7
+          {calculateScore() >= 75
             ? "You look like a strong fit for Hassan’s PM consulting pivot program. Book a strategy call to lock in your next steps."
-            : calculateScore() >= 4
+            : calculateScore() >= 45
             ? "You have some solid foundations, but there are a few gaps to close before you’re ready. Book a strategy call to discuss your roadmap."
             : "You may need more preparation before making the pivot. Book a strategy call to get a personalized plan."}
         </p>
