@@ -1411,7 +1411,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={experienceFilter} 
                         onChange={e => setExperienceFilter(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Experience</option>
                         <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
