@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import RoadmapPage from "./pages/RoadmapPage";
@@ -18,6 +19,22 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const GoogleAnalytics = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const w = window as typeof window & { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === "function") {
+      w.gtag("event", "page_view", {
+        page_path: location.pathname + location.search,
+        page_location: window.location.href,
+      });
+    }
+  }, [location.pathname, location.search]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -25,6 +42,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <GoogleAnalytics />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/2026-bi-fintech-consulting-roadmap-pdf-unlock" element={<RoadmapPage />} />
