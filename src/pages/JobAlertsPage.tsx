@@ -19,6 +19,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
 import siSystemsLogoAsset from '@/assets/si-systems-logo.jpg.asset.json';
 import provisoLogoAsset from '@/assets/proviso-logo.jpg.asset.json';
+import insightGlobalLogoAsset from '@/assets/insight-global-logo.jpg.asset.json';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
