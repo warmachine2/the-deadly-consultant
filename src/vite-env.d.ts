@@ -1,5 +1,11 @@
 /// <reference types="vite/client" />
 
+declare interface Window {
+  dataLayer?: unknown[];
+  gtag?: (...args: unknown[]) => void;
+}
+
+
 interface ImportMetaEnv {
   readonly VITE_GHOST_CONTENT_API_KEY?: string;
   readonly VITE_SUPABASE_URL: string;
