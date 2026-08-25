@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info, ArrowUpRight } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -434,7 +434,25 @@ const JobCard: React.FC<{
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
           </p>
-          <div className="flex items-center gap-3 text-white/90 text-lg md:text-xl mt-2">
+
+          {/* SI Systems source attribution */}
+          {job.source === "S.i. Systems" && job.jobLink && (
+            <a 
+              href={job.jobLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            >
+              <span className="h-6 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-0.5">
+                <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
+              </span>
+              <span className="text-white">SI Systems</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-white/60" />
+            </a>
+          )}
+
+          <div className="flex items-center gap-3 text-white/90 text-lg md:text-xl mt-3">
             <span>{job.date}</span>
             <span className="px-2 py-0.5 rounded-full text-base md:text-lg font-medium" style={{
             backgroundColor: 'rgba(255, 221, 64, 0.2)',
@@ -493,21 +511,6 @@ const JobCard: React.FC<{
         </div>
       </div>
 
-      {/* SI Systems source link */}
-      {job.source === "S.i. Systems" && job.jobLink && (
-        <a 
-          href={job.jobLink} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-        >
-          <span className="h-5 w-auto flex items-center justify-center rounded overflow-hidden bg-white">
-            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
-          </span>
-          <span className="text-white">SI Systems</span>
-        </a>
-      )}
 
       {/* Company Info Banner - Centered below header */}
       {job.companyInfo && job.companyInfo.length > 0 && (
