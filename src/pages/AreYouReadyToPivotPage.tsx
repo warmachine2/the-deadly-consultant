@@ -601,7 +601,7 @@ const AreYouReadyToPivotPage = () => {
             </a>
 
             <a
-              href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock/"
+              href="https://app.thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
