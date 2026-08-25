@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles,
   ShieldCheck,
@@ -203,6 +204,41 @@ const AreYouReadyToPivotPage = () => {
       location: "",
     },
   });
+
+  useEffect(() => {
+    if (step !== "result" || !contactData) return;
+
+    const sendLead = async () => {
+      try {
+        await supabase.functions.invoke("send-quiz-lead", {
+          body: {
+            name: contactData.name,
+            email: contactData.email,
+            location: contactData.location,
+            score: calculateScore(),
+            q1: answers[1] || "",
+            q2: answers[2] || "",
+            q3: answers[3] || "",
+            q4: answers[4] || "",
+            q5: answers[5] || "",
+            q6: answers[6] || "",
+            q7: answers[7] || "",
+            q8: answers[8] || "",
+            q9: answers[9] || "",
+            q10: answers[10] || "",
+            q11: answers[11] || "",
+            q12: answers[12] || "",
+          },
+        });
+      } catch (err) {
+        // Silent fail: do not block the user from seeing results
+        console.error("Failed to send quiz lead:", err);
+      }
+    };
+
+    sendLead();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   const onContactSubmit = (data: ContactFormData) => {
     setContactData(data);
