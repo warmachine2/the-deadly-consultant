@@ -422,10 +422,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isSiSystems = normalizedSource === "S.i. Systems";
   const isProviso = normalizedSource === "Proviso";
   const isInsightGlobal = normalizedSource === "Insight Global";
+  const isProcom = normalizedSource === "Procom";
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -435,6 +436,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isInsightGlobal && (
             <img src={insightGlobalLogoUrl} alt="Insight Global" className="h-7 w-auto object-contain" />
+          )}
+          {isProcom && (
+            <img src={procomLogoUrl} alt="Procom" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
