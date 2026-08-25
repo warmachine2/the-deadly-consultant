@@ -472,6 +472,11 @@ const JobCard: React.FC<{
     background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
   }}>
+      {/* Top-centered source attribution */}
+      <div className="flex justify-center mb-3">
+        <SourceBadge source={job.source} jobLink={job.jobLink} />
+      </div>
+
       {/* Header */}
       <div className="flex justify-between items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -483,9 +488,6 @@ const JobCard: React.FC<{
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
           </p>
-
-          {/* Source attribution */}
-          <SourceBadge source={job.source} jobLink={job.jobLink} />
 
           <div className="flex items-center gap-3 text-white/90 text-lg md:text-xl mt-3">
             <span>{job.date}</span>
