@@ -530,36 +530,51 @@ const AreYouReadyToPivotPage = () => {
           className="text-3xl md:text-4xl font-bold"
           style={{ color: "#FFE361" }}
         >
-          Your Readiness Score
+          {calculateScore() >= 80
+            ? "High Readiness"
+            : calculateScore() >= 60
+            ? "Moderate Readiness"
+            : "Lower Readiness"}
         </h2>
 
         <p className="text-sm md:text-base text-white/60 -mt-2">
           {calculateRawScore()} of {MAX_RAW_SCORE} points
         </p>
 
-        <p className="text-lg md:text-xl text-white/90 max-w-xl">
-          {calculateScore() >= 75
-            ? "You look like a strong fit for Hassan’s PM consulting pivot program. Book a strategy call to lock in your next steps."
-            : calculateScore() >= 45
-            ? "You have some solid foundations, but there are a few gaps to close before you’re ready. Book a strategy call to discuss your roadmap."
-            : "You may need more preparation before making the pivot. Book a strategy call to get a personalized plan."}
-        </p>
-
-        <div className="mt-6">
-          <div className="relative group">
-            <div
-              className="absolute inset-0 rounded-2xl blur-xl opacity-50"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(245, 158, 11, 0.5), rgba(250, 204, 21, 0.6), rgba(245, 158, 11, 0.5))",
-              }}
-            />
+        {/* Next Steps */}
+        <div className="w-full max-w-xl mt-4">
+          <h3 className="text-lg md:text-xl font-semibold text-white text-center mb-4">
+            Next Steps
+          </h3>
+          <div className="grid gap-3">
             <a
-              href="/book-session"
-              className="relative inline-flex items-center justify-center gap-3 px-10 py-5 md:px-12 md:py-6 text-xl md:text-2xl font-bold rounded-2xl transition-colors duration-300 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300"
+              href="https://calendly.com/hassan-hammer/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span>Book 15 min. Pivot Strategy Call</span>
-              <ArrowRight className="w-6 h-6 md:w-7 md:h-7" />
+              <span className="font-medium text-base md:text-lg">Book a 1:1 call → 30 Minute Meeting - Hassan Hammer</span>
+              <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
+            </a>
+
+            <a
+              href="https://calendly.com/hassan-hammer/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
+            >
+              <span className="font-medium text-base md:text-lg">Webinar / Group Presentation</span>
+              <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
+            </a>
+
+            <a
+              href="https://thedeadlyconsultant.com/2026-bi-fintech-consulting-roadmap-pdf-unlock/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
+            >
+              <span className="font-medium text-base md:text-lg">Free content (PM Consulting Secrets PDF)</span>
+              <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
             </a>
           </div>
         </div>
