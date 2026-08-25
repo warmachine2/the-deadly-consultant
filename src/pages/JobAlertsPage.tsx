@@ -421,12 +421,12 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const content = (
     <>
       {(isSiSystems || isProviso) && (
-        <span className="h-6 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-0.5">
+        <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
-            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
+            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-7 w-auto object-contain" />
           )}
           {isProviso && (
-            <img src={provisoLogoAsset.url} alt="Proviso" className="h-5 w-auto object-contain" />
+            <img src={provisoLogoAsset.url} alt="Proviso" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
@@ -441,7 +441,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
         href={jobLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
+        className="mt-3 inline-flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
         style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
       >
         {content}
@@ -450,7 +450,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   }
 
   return (
-    <span className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium w-fit" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+    <span className="mt-3 inline-flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium w-fit" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
       {content}
     </span>
   );
