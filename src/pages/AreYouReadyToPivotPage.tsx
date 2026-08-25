@@ -641,7 +641,7 @@ const AreYouReadyToPivotPage = () => {
               LinkedIn
             </a>
             <a
-              href="https://www.youtube.com/@HassanHammer"
+              href="https://www.youtube.com/@hassanhammer-sr71"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm md:text-base text-[#F4C903] hover:underline"
