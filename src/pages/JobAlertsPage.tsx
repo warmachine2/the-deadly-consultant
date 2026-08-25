@@ -418,16 +418,20 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const hasLink = !isHassanEmail && jobLink;
   const isSiSystems = normalizedSource === "S.i. Systems";
   const isProviso = normalizedSource === "Proviso";
+  const isInsightGlobal = normalizedSource === "Insight Global";
 
   const content = (
     <>
-      {(isSiSystems || isProviso) && (
+      {(isSiSystems || isProviso || isInsightGlobal) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-7 w-auto object-contain" />
           )}
           {isProviso && (
             <img src={provisoLogoAsset.url} alt="Proviso" className="h-7 w-auto object-contain" />
+          )}
+          {isInsightGlobal && (
+            <img src={insightGlobalLogoAsset.url} alt="Insight Global" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
