@@ -51,6 +51,7 @@ const App = () => (
             <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
             <Route path="/ai-bi-fintech-pm-job-alerts-repo" element={<JobAlertsPage />} />
             <Route path="/book-session" element={<BookSessionPage />} />
+            <Route path="/are-you-ready-to-pivot-to-pm-consulting" element={<AreYouReadyToPivotPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/system-status" element={<SystemStatusPage />} />
             <Route path="/auth" element={<AuthPage />} />
