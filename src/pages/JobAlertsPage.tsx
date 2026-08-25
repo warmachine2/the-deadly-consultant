@@ -17,9 +17,9 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
-import siSystemsLogoAsset from '@/assets/si-systems-logo.jpg.asset.json';
-import provisoLogoAsset from '@/assets/proviso-logo.jpg.asset.json';
-import insightGlobalLogoAsset from '@/assets/insight-global-logo.jpg.asset.json';
+const siSystemsLogoUrl = '/si-systems-logo.jpg';
+const provisoLogoUrl = '/proviso-logo.jpg';
+const insightGlobalLogoUrl = '/insight-global-logo.jpg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -425,13 +425,13 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
       {(isSiSystems || isProviso || isInsightGlobal) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
-            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-7 w-auto object-contain" />
+            <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
           )}
           {isProviso && (
-            <img src={provisoLogoAsset.url} alt="Proviso" className="h-7 w-auto object-contain" />
+            <img src={provisoLogoUrl} alt="Proviso" className="h-7 w-auto object-contain" />
           )}
           {isInsightGlobal && (
-            <img src={insightGlobalLogoAsset.url} alt="Insight Global" className="h-7 w-auto object-contain" />
+            <img src={insightGlobalLogoUrl} alt="Insight Global" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
