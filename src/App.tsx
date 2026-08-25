@@ -23,8 +23,9 @@ const GoogleAnalytics = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "page_view", {
+    const w = window as typeof window & { gtag?: (...args: unknown[]) => void };
+    if (typeof w.gtag === "function") {
+      w.gtag("event", "page_view", {
         page_path: location.pathname + location.search,
         page_location: window.location.href,
       });
