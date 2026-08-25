@@ -13,7 +13,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Sparkles, ShieldCheck, ArrowRight, User, Mail, MapPin } from "lucide-react";
+import {
+  Sparkles,
+  ShieldCheck,
+  ArrowRight,
+  User,
+  Mail,
+  MapPin,
+  CheckCircle2,
+  ArrowLeft,
+} from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -23,10 +32,168 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-type Step = "hero" | "contact";
+type Step = "hero" | "contact" | "quiz" | "result";
+
+type QuestionType = "yesno" | "choice";
+
+interface Question {
+  id: number;
+  type: QuestionType;
+  text: React.ReactNode;
+  options: { value: string; label: string }[];
+}
+
+const QUESTIONS: Question[] = [
+  {
+    id: 1,
+    type: "yesno",
+    text: (
+      <>
+        Have you examined the job board for the types of jobs you’d be interested in doing?{" "}
+        <a
+          href="https://www.zerotopmconsultant.com/ai-bi-fintech-pm-job-alerts-repo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-[#F4C903] hover:underline font-semibold"
+        >
+          View the Job Board
+        </a>
+      </>
+    ),
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 2,
+    type: "yesno",
+    text: "Do you have at least 3 years of professional experience + a degree, or 5+ years of experience without a degree?",
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 3,
+    type: "yesno",
+    text: "Are you comfortable working remotely from home most (or all) of the time?",
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 4,
+    type: "yesno",
+    text: "Are you computer-savvy? (You can handle email, learn new tools, and don’t hate technology)",
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 5,
+    type: "yesno",
+    text: "Can you type at least 40 words per minute (or are you willing to practice to get there)?",
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 6,
+    type: "yesno",
+    text: (
+      <>
+        Are you open to moving from a traditional full-time employee role to a consultant setup?{" "}
+        <span className="text-white/80 block mt-2 text-sm md:text-base">
+          (This means much higher pay - 2x+ usually - and more freedom, but you lose employee benefits like paid vacation and must register your own business)
+        </span>
+      </>
+    ),
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 7,
+    type: "yesno",
+    text: (
+      <>
+        Are you willing to take a Hassan’s proven segmented approach to breaking in?{" "}
+        <span className="text-white/80 block mt-2 text-sm md:text-base">
+          (Learn how the real job is done → build a strong portfolio → then fast-track 3 key certifications, with training and guidance provided.)
+        </span>
+      </>
+    ),
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 8,
+    type: "yesno",
+    text: "Can you follow step-by-step self-paced video training and then show up to live group Q&A sessions (2x per week) when you have questions?",
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+  {
+    id: 9,
+    type: "choice",
+    text: "Which best describes your current situation?",
+    options: [
+      { value: "a", label: "Employed full-time but under-earning / stuck" },
+      { value: "b", label: "Looking for higher-paying contract work" },
+      { value: "c", label: "Career changer from a technical background" },
+      { value: "d", label: "Already freelancing / consulting and want to level up" },
+      { value: "e", label: "Other" },
+    ],
+  },
+  {
+    id: 10,
+    type: "choice",
+    text: "What is your main desired outcome in the next 6–12 months?",
+    options: [
+      { value: "a", label: "Land my first $8k–$12k/mo contract" },
+      { value: "b", label: "Replace my full-time job with consulting income" },
+      { value: "c", label: "Significantly increase my income while working remotely" },
+      { value: "d", label: "Build a more flexible / location-independent career" },
+      { value: "e", label: "Other" },
+    ],
+  },
+  {
+    id: 11,
+    type: "choice",
+    text: "What has been the biggest obstacle so far?",
+    options: [
+      { value: "a", label: "Don’t know how to break into consulting" },
+      { value: "b", label: "Lack of the right experience or portfolio" },
+      { value: "c", label: "Unsure which certifications actually matter" },
+      { value: "d", label: "Don’t have a clear step-by-step path" },
+      { value: "e", label: "Other" },
+    ],
+  },
+  {
+    id: 12,
+    type: "yesno",
+    text: "Can you commit approximately 15 hours per week for the next 12 weeks (or an equivalent total, such as 7–8 hours per week over 24 weeks)?",
+    options: [
+      { value: "Yes", label: "Yes" },
+      { value: "No", label: "No" },
+    ],
+  },
+];
 
 const AreYouReadyToPivotPage = () => {
   const [step, setStep] = useState<Step>("hero");
+  const [contactData, setContactData] = useState<ContactFormData | null>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, string>>({});
 
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -38,9 +205,40 @@ const AreYouReadyToPivotPage = () => {
   });
 
   const onContactSubmit = (data: ContactFormData) => {
-    // TODO: store captured contact and advance to quiz questions
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    void data;
+    setContactData(data);
+    setStep("quiz");
+    setCurrentQuestionIndex(0);
+  };
+
+  const handleAnswer = (value: string) => {
+    setAnswers((prev) => ({ ...prev, [QUESTIONS[currentQuestionIndex].id]: value }));
+  };
+
+  const handleNext = () => {
+    if (currentQuestionIndex < QUESTIONS.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+    } else {
+      setStep("result");
+    }
+  };
+
+  const handleBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex((prev) => prev - 1);
+    }
+  };
+
+  const currentQuestion = QUESTIONS[currentQuestionIndex];
+  const currentAnswer = answers[currentQuestion.id];
+  const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
+
+  const calculateScore = () => {
+    let score = 0;
+    const yesNoQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 12];
+    yesNoQuestions.forEach((id) => {
+      if (answers[id] === "Yes") score += 1;
+    });
+    return score;
   };
 
   const HeroSection = (
@@ -201,13 +399,156 @@ const AreYouReadyToPivotPage = () => {
     </section>
   );
 
+  const QuizSection = (
+    <section className="volumetric-glass rounded-3xl p-8 md:p-12 max-w-3xl mx-auto relative overflow-hidden">
+      <div className="relative z-10">
+        {/* Progress bar */}
+        <div className="mb-8">
+          <div className="flex justify-between text-sm text-white/80 mb-2">
+            <span>Question {currentQuestionIndex + 1} of {QUESTIONS.length}</span>
+            <span>{Math.round(progress)}%</span>
+          </div>
+          <div className="h-3 rounded-full bg-white/10 overflow-hidden border border-white/10">
+            <div
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{
+                width: `${progress}%`,
+                background: "linear-gradient(90deg, #F4C903, #FFE361)",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Question */}
+        <div className="mb-8">
+          <h2
+            className="text-xl md:text-2xl font-bold leading-relaxed"
+            style={{ color: "#FFE361" }}
+          >
+            {currentQuestion.text}
+          </h2>
+        </div>
+
+        {/* Options */}
+        <div className={`grid gap-3 ${currentQuestion.type === "yesno" ? "grid-cols-2" : "grid-cols-1"}`}>
+          {currentQuestion.options.map((option) => {
+            const isSelected = currentAnswer === option.value;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => handleAnswer(option.value)}
+                className={`relative flex items-center gap-3 px-5 py-4 rounded-xl border-2 text-left transition-all duration-200 ${
+                  isSelected
+                    ? "border-[#F4C903] bg-[#F4C903]/20 text-white"
+                    : "border-white/20 bg-white/5 text-white/90 hover:border-white/40 hover:bg-white/10"
+                }`}
+              >
+                <div
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                    isSelected ? "border-[#F4C903] bg-[#F4C903]" : "border-white/40"
+                  }`}
+                >
+                  {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-gray-900" />}
+                </div>
+                <span className="font-medium text-base md:text-lg">{option.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between mt-10 gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleBack}
+            disabled={currentQuestionIndex === 0}
+            className="px-6 py-5 text-base border-white/20 text-white hover:bg-white/10 hover:text-white disabled:opacity-40"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back
+          </Button>
+
+          <Button
+            type="button"
+            onClick={handleNext}
+            disabled={!currentAnswer}
+            className="px-8 py-5 text-base font-semibold text-white desktop-hover-scale-105 transition-transform disabled:opacity-50"
+            style={{
+              background: "linear-gradient(135deg, #dc2626, #b91c1c)",
+              boxShadow: "0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)",
+            }}
+          >
+            {currentQuestionIndex === QUESTIONS.length - 1 ? "See Results" : "Next"}
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+
+  const ResultSection = (
+    <section className="volumetric-glass rounded-3xl p-8 md:p-16 text-center max-w-3xl mx-auto relative overflow-hidden">
+      <div className="absolute inset-0 rounded-3xl pointer-events-none opacity-30"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 30%, rgba(244, 201, 3, 0.15) 0%, transparent 60%)",
+        }}
+      />
+
+      <div className="relative z-10 flex flex-col items-center gap-6">
+        <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#F4C903]/20 border-4 border-[#F4C903]/40 mb-2">
+          <span className="text-4xl font-bold text-[#F4C903]">{calculateScore()}/9</span>
+        </div>
+
+        <h2
+          className="text-3xl md:text-4xl font-bold"
+          style={{ color: "#FFE361" }}
+        >
+          Your Readiness Score
+        </h2>
+
+        <p className="text-lg md:text-xl text-white/90 max-w-xl">
+          {calculateScore() >= 7
+            ? "You look like a strong fit for Hassan’s PM consulting pivot program. Book a strategy call to lock in your next steps."
+            : calculateScore() >= 4
+            ? "You have some solid foundations, but there are a few gaps to close before you’re ready. Book a strategy call to discuss your roadmap."
+            : "You may need more preparation before making the pivot. Book a strategy call to get a personalized plan."}
+        </p>
+
+        <div className="mt-6">
+          <div className="relative group">
+            <div
+              className="absolute inset-0 rounded-2xl blur-xl opacity-50"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(245, 158, 11, 0.5), rgba(250, 204, 21, 0.6), rgba(245, 158, 11, 0.5))",
+              }}
+            />
+            <a
+              href="/book-session"
+              className="relative inline-flex items-center justify-center gap-3 px-10 py-5 md:px-12 md:py-6 text-xl md:text-2xl font-bold rounded-2xl transition-colors duration-300 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300"
+            >
+              <span>Book 15 min. Pivot Strategy Call</span>
+              <ArrowRight className="w-6 h-6 md:w-7 md:h-7" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <div className="min-h-screen overflow-x-hidden">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
       <main className="pt-24 lg:pt-28 px-4 md:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
-          {step === "hero" ? HeroSection : ContactSection}
+          {step === "hero" && HeroSection}
+          {step === "contact" && ContactSection}
+          {step === "quiz" && QuizSection}
+          {step === "result" && ResultSection}
         </div>
       </main>
 
