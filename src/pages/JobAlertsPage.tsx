@@ -1464,7 +1464,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedRoleType} 
                         onChange={e => setSelectedRoleType(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Roles</option>
                         {uniqueRoleTypes.map(role => (
