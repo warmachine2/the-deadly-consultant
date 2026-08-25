@@ -578,6 +578,45 @@ const AreYouReadyToPivotPage = () => {
             </a>
           </div>
         </div>
+
+        {/* Results Footer */}
+        <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
+          <p className="text-center text-sm text-white/60 mb-3">Connect with Hassan</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+            <a
+              href="https://www.zerotopmconsultant.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm md:text-base text-[#F4C903] hover:underline"
+            >
+              Website
+            </a>
+            <a
+              href="https://www.instagram.com/hassan.hammer.sr71/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm md:text-base text-[#F4C903] hover:underline"
+            >
+              Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/in/hassanhammer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm md:text-base text-[#F4C903] hover:underline"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://www.youtube.com/@HassanHammer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm md:text-base text-[#F4C903] hover:underline"
+            >
+              YouTube
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
