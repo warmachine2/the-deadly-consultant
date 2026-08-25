@@ -1305,7 +1305,7 @@ const JobAlertsPage: React.FC = () => {
                         <PopoverTrigger asChild>
                           <Button 
                             variant="outline" 
-                            className="w-full justify-between px-4 py-3 h-auto rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-base"
+                            className="w-full justify-between px-4 py-3 h-11 rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-sm"
                           >
                             <span className="truncate">
                               {selectedSources.length === 0 
