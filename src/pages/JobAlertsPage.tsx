@@ -17,6 +17,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
+import siSystemsLogoAsset from '@/assets/si-systems-logo.jpg.asset.json';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
