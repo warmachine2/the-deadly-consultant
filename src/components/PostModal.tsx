@@ -51,7 +51,8 @@ export default function PostModal({
                 dangerouslySetInnerHTML={{
                   __html: rebrandHtml(
                     fullContent ||
-                    '<p>No content available. <a href="#" onClick={(e) => { e.preventDefault(); onClose(); }}>Close and try another post.</a></p>',
+                      '<p>No content available. <a href="#" onClick={(e) => { e.preventDefault(); onClose(); }}>Close and try another post.</a></p>'
+                  ),
                 }}
               />
             )}
