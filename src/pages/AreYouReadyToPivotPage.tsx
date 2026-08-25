@@ -232,13 +232,37 @@ const AreYouReadyToPivotPage = () => {
   const currentAnswer = answers[currentQuestion.id];
   const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
 
-  const calculateScore = () => {
-    let score = 0;
-    const yesNoQuestions = [1, 2, 3, 4, 5, 6, 7, 8, 12];
-    yesNoQuestions.forEach((id) => {
-      if (answers[id] === "Yes") score += 1;
+  const SCORING_CONFIG: Record<number, Record<string, number>> = {
+    1: { Yes: 8, No: 0 },
+    2: { Yes: 12, No: 0 },
+    3: { Yes: 8, No: 0 },
+    4: { Yes: 8, No: 0 },
+    5: { Yes: 6, No: 0 },
+    6: { Yes: 12, No: 0 },
+    7: { Yes: 10, No: 0 },
+    8: { Yes: 10, No: 0 },
+    9: { a: 8, b: 8, c: 8, d: 6, e: 3 },
+    10: { a: 8, b: 8, c: 8, d: 6, e: 3 },
+    11: { a: 5, b: 5, c: 5, d: 5, e: 2 },
+    12: { Yes: 15, No: 0 },
+  };
+
+  const MAX_RAW_SCORE = 110;
+
+  const calculateRawScore = () => {
+    let raw = 0;
+    Object.entries(answers).forEach(([id, value]) => {
+      const questionPoints = SCORING_CONFIG[Number(id)];
+      if (questionPoints && value in questionPoints) {
+        raw += questionPoints[value];
+      }
     });
-    return score;
+    return raw;
+  };
+
+  const calculateScore = () => {
+    const raw = calculateRawScore();
+    return Math.round((raw / MAX_RAW_SCORE) * 100);
   };
 
   const HeroSection = (
