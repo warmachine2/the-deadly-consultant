@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchPageBySlug } from "@/lib/ghostApi";
 import { GhostPost } from "@/lib/ghostApi";
 import TopNav from "@/components/TopNav";
+import { rebrandHtml } from "@/lib/rebrandHtml";
 
 const RoadmapPage = () => {
   const [pageContent, setPageContent] = useState<GhostPost | null>(null);
@@ -127,7 +128,7 @@ const RoadmapPage = () => {
               `}</style>
               <div
                 className="prose prose-invert prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: filterSmallVideos(pageContent.html || "") }}
+                dangerouslySetInnerHTML={{ __html: rebrandHtml(filterSmallVideos(pageContent.html || "")) }}
               />
             </section>
 

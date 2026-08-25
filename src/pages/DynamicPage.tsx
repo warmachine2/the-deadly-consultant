@@ -4,6 +4,7 @@ import TopNav from "@/components/TopNav";
 import { fetchPageBySlug, fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, Loader2 } from "lucide-react";
+import { rebrandHtml } from "@/lib/rebrandHtml";
 
 const DynamicPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -88,15 +89,8 @@ const DynamicPage = () => {
               )
           : content.html || "";
 
-      // Replace remaining old domain link in article content
-      html = html.replace(
-        /href="https:\/\/thedeadlyconsultant\.com\/ai-bi-fintech-pm-job-alerts-repo[^"]*/gi,
-        'href="https://www.zerotopmconsultant.com/ai-bi-fintech-pm-job-alerts-repo'
-      );
-      html = html.replace(
-        /https:\/\/thedeadlyconsultant\.com\/ai-bi-fintech-pm-job-alerts-repo/gi,
-        'https://www.zerotopmconsultant.com/ai-bi-fintech-pm-job-alerts-repo'
-      );
+      // Normalize legacy branding (old domain, old name, old copyright year)
+      html = rebrandHtml(html);
 
       // Strip inline color styles from headings
       html = html.replace(
@@ -393,7 +387,7 @@ const DynamicPage = () => {
 
       <footer className="volumetric-glass rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2025 Zero to PM Consultant. All rights reserved.</p>
+          <p>© 2026 Zero to PM Consultant. All rights reserved.</p>
         </div>
       </footer>
     </div>

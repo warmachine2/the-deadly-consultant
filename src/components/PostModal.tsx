@@ -3,6 +3,7 @@ import { BlogPost } from "./BlogCard";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { FocusScope } from "@radix-ui/react-focus-scope";
+import { rebrandHtml } from "@/lib/rebrandHtml";
 
 interface PostModalProps {
   post: BlogPost | null;
@@ -48,9 +49,10 @@ export default function PostModal({
             ) : (
               <div
                 dangerouslySetInnerHTML={{
-                  __html:
+                  __html: rebrandHtml(
                     fullContent ||
-                    '<p>No content available. <a href="#" onClick={(e) => { e.preventDefault(); onClose(); }}>Close and try another post.</a></p>',
+                      '<p>No content available. <a href="#" onClick={(e) => { e.preventDefault(); onClose(); }}>Close and try another post.</a></p>'
+                  ),
                 }}
               />
             )}

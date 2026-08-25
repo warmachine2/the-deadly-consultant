@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 import { Loader2 } from "lucide-react";
+import { rebrandHtml } from "@/lib/rebrandHtml";
 
 
 const AboutPage = () => {
@@ -112,7 +113,7 @@ const AboutPage = () => {
                 className="prose prose-invert prose-lg max-w-none text-foreground
                   [&_h1]:text-[#F4C903] [&_h2]:text-[#F4C903] [&_h3]:text-[#F4C903] [&_h4]:text-[#F4C903] [&_h5]:text-[#F4C903] [&_h6]:text-[#F4C903]
                   [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold"
-                dangerouslySetInnerHTML={{ __html: content.html || "" }}
+                dangerouslySetInnerHTML={{ __html: rebrandHtml(content.html || "") }}
               />
             </div>
           </article>
@@ -131,7 +132,7 @@ const AboutPage = () => {
 
       <footer className="volumetric-glass rounded-t-3xl mt-12 py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2025 Zero to PM Consultant. All rights reserved.</p>
+          <p>© 2026 Zero to PM Consultant. All rights reserved.</p>
         </div>
       </footer>
     </div>
