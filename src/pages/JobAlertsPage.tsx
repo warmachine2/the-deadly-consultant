@@ -17,6 +17,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
+import siSystemsLogoAsset from '@/assets/si-systems-logo.jpg.asset.json';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -38,6 +39,7 @@ interface JobData {
   source?: string; // Source of the job (e.g., ProViso, Insight Global, etc.)
   companyInfo?: string[]; // Array of company info bullet points (optional)
   jobId?: string; // Job ID from the source data
+  jobLink?: string; // Original job posting link
 }
 type Order = 'asc' | 'desc';
 const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
@@ -165,7 +167,8 @@ const parseCSV = (csvText: string): JobData[] => {
         location: row[14] || '',
         source: sourceNameMap[row[17]?.trim() || ''] || row[17]?.trim() || '', // Sources is column 18 (index 17), normalized to canonical names
         companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined,
-        jobId: row[19]?.trim() || '' // Job ID is column 20 (index 19)
+        jobId: row[19]?.trim() || '', // Job ID is column 20 (index 19)
+        jobLink: row[18]?.trim() || '' // Link is column 19 (index 18)
       });
       console.log(`Parsed row ${rowNumber}: ${row[1]} at ${row[9]}`);
     } else {
@@ -489,6 +492,22 @@ const JobCard: React.FC<{
           </IconButton>
         </div>
       </div>
+
+      {/* SI Systems source link */}
+      {job.source === "S.i. Systems" && job.jobLink && (
+        <a 
+          href={job.jobLink} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+        >
+          <span className="h-5 w-auto flex items-center justify-center rounded overflow-hidden bg-white">
+            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
+          </span>
+          <span className="text-white">SI Systems</span>
+        </a>
+      )}
 
       {/* Company Info Banner - Centered below header */}
       {job.companyInfo && job.companyInfo.length > 0 && (
