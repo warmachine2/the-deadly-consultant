@@ -1,9 +1,12 @@
 /// <reference types="vite/client" />
 
-declare interface Window {
-  dataLayer?: unknown[];
-  gtag?: (...args: unknown[]) => void;
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
 }
+
 
 
 interface ImportMetaEnv {
