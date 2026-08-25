@@ -1305,7 +1305,7 @@ const JobAlertsPage: React.FC = () => {
                         <PopoverTrigger asChild>
                           <Button 
                             variant="outline" 
-                            className="w-full justify-between px-4 py-3 h-auto rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-base"
+                            className="w-full justify-between px-4 py-3 h-11 rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-sm"
                           >
                             <span className="truncate">
                               {selectedSources.length === 0 
@@ -1373,7 +1373,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedCountry} 
                         onChange={e => setSelectedCountry(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Countries</option>
                         <option value="Canada" className="bg-gray-900 text-white">Canada</option>
@@ -1393,7 +1393,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedLocation} 
                         onChange={e => setSelectedLocation(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Cities</option>
                         {cities.filter(city => city !== 'Canada').map(city => (
@@ -1411,7 +1411,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={experienceFilter} 
                         onChange={e => setExperienceFilter(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Experience</option>
                         <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
@@ -1428,7 +1428,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={salaryFilter} 
                         onChange={e => setSalaryFilter(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Salaries</option>
                         <option value="less15" className="bg-gray-900 text-white">≤ $15k/mo</option>
@@ -1446,7 +1446,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={workTypeFilter} 
                         onChange={e => setWorkTypeFilter(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Types</option>
                         <option value="remote" className="bg-gray-900 text-white">Remote</option>
@@ -1464,7 +1464,7 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedRoleType} 
                         onChange={e => setSelectedRoleType(e.target.value)} 
-                        className="px-4 py-3 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Roles</option>
                         {uniqueRoleTypes.map(role => (
