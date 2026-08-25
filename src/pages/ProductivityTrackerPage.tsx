@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import TopNav from "@/components/TopNav";
 import { fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 import { Skeleton } from "@/components/ui/skeleton";
+import { rebrandHtml } from "@/lib/rebrandHtml";
 
 const ProductivityTrackerPage = () => {
   const [post, setPost] = useState<GhostPost | null>(null);
@@ -59,7 +60,7 @@ const ProductivityTrackerPage = () => {
                     prose-ul:text-muted-foreground prose-ol:text-muted-foreground
                     prose-li:marker:text-[#F4C903]
                     prose-img:rounded-xl prose-img:mx-auto"
-                  dangerouslySetInnerHTML={{ __html: post.html }}
+                  dangerouslySetInnerHTML={{ __html: rebrandHtml(post.html) }}
                 />
               )}
             </div>
