@@ -499,13 +499,13 @@ const JobCard: React.FC<{
           href={job.jobLink} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/10 w-fit"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.08)' }}
+          className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
         >
-          <span className="h-5 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
-            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-4 w-auto object-contain" />
+          <span className="h-5 w-auto flex items-center justify-center rounded overflow-hidden bg-white">
+            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
           </span>
-          <span className="text-white/90">SI Systems</span>
+          <span className="text-white">SI Systems</span>
         </a>
       )}
 
