@@ -35,6 +35,7 @@ interface JobData {
   recruiterEmail: string;
   recruiterPhone: string;
   recruiterName?: string;
+  recruiterLinkedIn?: string;
   strategy: string;
   earningEstimate: string;
   location: string; // City/State/Province/Country
