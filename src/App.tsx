@@ -12,6 +12,7 @@ import DynamicPage from "./pages/DynamicPage";
 import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
+import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import DashboardPage from "./pages/DashboardPage";
 import SystemStatusPage from "./pages/SystemStatusPage";
 import AuthPage from "./pages/AuthPage";
