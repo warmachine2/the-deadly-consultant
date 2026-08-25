@@ -19,6 +19,21 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const GoogleAnalytics = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        page_path: location.pathname + location.search,
+        page_location: window.location.href,
+      });
+    }
+  }, [location.pathname, location.search]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
