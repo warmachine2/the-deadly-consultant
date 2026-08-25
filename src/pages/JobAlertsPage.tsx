@@ -20,6 +20,7 @@ import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
 const siSystemsLogoUrl = '/si-systems-logo.jpg';
 const provisoLogoUrl = '/proviso-logo.jpg';
 const insightGlobalLogoUrl = '/insight-global-logo.jpg';
+const procomLogoUrl = '/Procom_LOGO.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
