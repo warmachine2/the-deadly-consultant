@@ -12,6 +12,7 @@ import DynamicPage from "./pages/DynamicPage";
 import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
+import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import DashboardPage from "./pages/DashboardPage";
 import SystemStatusPage from "./pages/SystemStatusPage";
 import AuthPage from "./pages/AuthPage";
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
             <Route path="/ai-bi-fintech-pm-job-alerts-repo" element={<JobAlertsPage />} />
             <Route path="/book-session" element={<BookSessionPage />} />
+            <Route path="/are-you-ready-to-pivot-to-pm-consulting" element={<AreYouReadyToPivotPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/system-status" element={<SystemStatusPage />} />
             <Route path="/auth" element={<AuthPage />} />
