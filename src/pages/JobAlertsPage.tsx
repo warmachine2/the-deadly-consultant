@@ -18,6 +18,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
 import siSystemsLogoAsset from '@/assets/si-systems-logo.jpg.asset.json';
+import provisoLogoAsset from '@/assets/proviso-logo.jpg.asset.json';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -415,12 +416,18 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(normalizedSource);
   const hasLink = !isHassanEmail && jobLink;
   const isSiSystems = normalizedSource === "S.i. Systems";
+  const isProviso = normalizedSource === "Proviso";
 
   const content = (
     <>
-      {isSiSystems && (
+      {(isSiSystems || isProviso) && (
         <span className="h-6 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-0.5">
-          <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
+          {isSiSystems && (
+            <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
+          )}
+          {isProviso && (
+            <img src={provisoLogoAsset.url} alt="Proviso" className="h-5 w-auto object-contain" />
+          )}
         </span>
       )}
       <span className="text-white">{displayName}</span>
