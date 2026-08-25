@@ -573,9 +573,6 @@ const AreYouReadyToPivotPage = () => {
             : "Lower Readiness"}
         </h2>
 
-        <p className="text-sm md:text-base text-white/60 -mt-2">
-          {calculateRawScore()} of {MAX_RAW_SCORE} points
-        </p>
 
         {/* Next Steps */}
         <div className="w-full max-w-xl mt-4">
