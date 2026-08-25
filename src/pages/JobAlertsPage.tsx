@@ -19,6 +19,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
 import siSystemsLogoAsset from '@/assets/si-systems-logo.jpg.asset.json';
 import provisoLogoAsset from '@/assets/proviso-logo.jpg.asset.json';
+import insightGlobalLogoAsset from '@/assets/insight-global-logo.jpg.asset.json';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -417,16 +418,20 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const hasLink = !isHassanEmail && jobLink;
   const isSiSystems = normalizedSource === "S.i. Systems";
   const isProviso = normalizedSource === "Proviso";
+  const isInsightGlobal = normalizedSource === "Insight Global";
 
   const content = (
     <>
-      {(isSiSystems || isProviso) && (
+      {(isSiSystems || isProviso || isInsightGlobal) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-7 w-auto object-contain" />
           )}
           {isProviso && (
             <img src={provisoLogoAsset.url} alt="Proviso" className="h-7 w-auto object-contain" />
+          )}
+          {isInsightGlobal && (
+            <img src={insightGlobalLogoAsset.url} alt="Insight Global" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
