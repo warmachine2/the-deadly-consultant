@@ -441,7 +441,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
         href={jobLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-3 inline-flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
+        className="mt-3 flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit mx-auto"
         style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
       >
         {content}
@@ -450,7 +450,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   }
 
   return (
-    <span className="mt-3 inline-flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium w-fit" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+    <span className="mt-3 flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium w-fit mx-auto" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
       {content}
     </span>
   );
