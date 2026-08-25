@@ -407,6 +407,48 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
   );
 };
 
+// Source attribution badge shown on every job card
+const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, jobLink }) => {
+  if (!source) return null;
+  const normalizedSource = source.trim();
+  const isHassanEmail = /hassan|email/i.test(normalizedSource);
+  const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(normalizedSource);
+  const hasLink = !isHassanEmail && jobLink;
+  const isSiSystems = normalizedSource === "S.i. Systems";
+
+  const content = (
+    <>
+      {isSiSystems && (
+        <span className="h-6 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-0.5">
+          <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
+        </span>
+      )}
+      <span className="text-white">{displayName}</span>
+      {hasLink && <ArrowUpRight className="w-3.5 h-3.5 text-white/60" />}
+    </>
+  );
+
+  if (hasLink) {
+    return (
+      <a
+        href={jobLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
+        style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <span className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium w-fit" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+      {content}
+    </span>
+  );
+};
+
 // Job card component (used for both mobile and desktop)
 const JobCard: React.FC<{
   job: JobData;
@@ -435,22 +477,8 @@ const JobCard: React.FC<{
             {job.company}
           </p>
 
-          {/* SI Systems source attribution */}
-          {job.source === "S.i. Systems" && job.jobLink && (
-            <a 
-              href={job.jobLink} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit"
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-            >
-              <span className="h-6 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-0.5">
-                <img src={siSystemsLogoAsset.url} alt="SI Systems" className="h-5 w-auto object-contain" />
-              </span>
-              <span className="text-white">SI Systems</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-white/60" />
-            </a>
-          )}
+          {/* Source attribution */}
+          <SourceBadge source={job.source} jobLink={job.jobLink} />
 
           <div className="flex items-center gap-3 text-white/90 text-lg md:text-xl mt-3">
             <span>{job.date}</span>
