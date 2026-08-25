@@ -4,6 +4,7 @@ import TopNav from "@/components/TopNav";
 import { fetchPageBySlug, fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, Loader2 } from "lucide-react";
+import { rebrandHtml } from "@/lib/rebrandHtml";
 
 const DynamicPage = () => {
   const { slug } = useParams<{ slug: string }>();
