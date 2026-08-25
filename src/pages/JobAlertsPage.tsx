@@ -165,6 +165,7 @@ const parseCSV = (csvText: string): JobData[] => {
         recruiterEmail: row[10] || '',
         recruiterPhone: row[11] || '',
         recruiterName: row[20]?.trim() || '',
+        recruiterLinkedIn: row[21]?.trim() || '',
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
