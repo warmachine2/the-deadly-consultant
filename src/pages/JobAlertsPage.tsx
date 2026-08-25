@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info, ArrowUpRight } from 'lucide-react';
+import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info, ArrowUpRight, Linkedin, Mail, Phone } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
@@ -35,6 +35,7 @@ interface JobData {
   recruiterEmail: string;
   recruiterPhone: string;
   recruiterName?: string;
+  recruiterLinkedIn?: string;
   strategy: string;
   earningEstimate: string;
   location: string; // City/State/Province/Country
@@ -164,6 +165,7 @@ const parseCSV = (csvText: string): JobData[] => {
         recruiterEmail: row[10] || '',
         recruiterPhone: row[11] || '',
         recruiterName: row[20]?.trim() || '',
+        recruiterLinkedIn: row[21]?.trim() || '',
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
@@ -704,17 +706,25 @@ const JobCard: React.FC<{
               <p className="text-xl md:text-2xl text-white">{job.comments}</p>
             </div>}
           
-          {(job.recruiterEmail || job.recruiterPhone) && <div className="pt-3 border-t border-white/10">
+          {(job.recruiterName?.trim() || job.recruiterEmail?.trim() || job.recruiterPhone?.trim() || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
-              <div className="space-y-2 text-xl md:text-2xl">
-                {job.recruiterName && job.recruiterName.trim() && <p className="text-white">{job.recruiterName}</p>}
-                <div className="flex flex-wrap gap-4">
-                  {job.recruiterEmail && <a href={`mailto:${job.recruiterEmail}`} className="text-white hover:text-[#00d4ff] transition-colors">
+              <div className="space-y-3">
+                {job.recruiterName?.trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
+                <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                  {job.recruiterEmail?.trim() && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                      <Mail className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterEmail}
                     </a>}
-                  {job.recruiterPhone && <span className="text-white">{job.recruiterPhone}</span>}
+                  {job.recruiterPhone?.trim() && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                      <Phone className="w-5 h-5 text-[#00d4ff]" />
+                      {job.recruiterPhone}
+                    </a>}
+                  {job.recruiterLinkedIn?.trim() && job.recruiterLinkedIn.trim().toLowerCase() !== 'n/a' && <a href={job.recruiterLinkedIn.startsWith('http') ? job.recruiterLinkedIn : `https://${job.recruiterLinkedIn}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                      <Linkedin className="w-5 h-5 text-[#00d4ff]" />
+                      LinkedIn
+                    </a>}
                 </div>
               </div>
             </div>}
