@@ -39,7 +39,8 @@ const AreYouReadyToPivotPage = () => {
 
   const onContactSubmit = (data: ContactFormData) => {
     // TODO: store captured contact and advance to quiz questions
-    console.log("Captured contact:", data);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    void data;
   };
 
   const HeroSection = (
