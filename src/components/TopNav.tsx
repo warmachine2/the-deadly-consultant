@@ -219,10 +219,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         </Link>
 
         {/* Right: Desktop Nav Items */}
-        <div className="flex items-center gap-1 xl:gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1 flex-shrink-0">
           {/* Desktop: Collapsible Search */}
-          <div className="hidden 2xl:flex items-center">
-            <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-40' : 'w-8'}`}>
+          <div className="hidden xl:flex items-center">
+            <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-36' : 'w-8'}`}>
               <button
                 onClick={() => setIsSearchExpanded(!isSearchExpanded)}
                 className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
@@ -238,13 +238,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   value={searchQuery}
                   onChange={handleSearchChange}
                   onBlur={() => !searchQuery && setIsSearchExpanded(false)}
-                  className="absolute left-8 w-32 pl-2 pr-2 py-1 volumetric-glass-button rounded-lg text-xs text-white focus:outline-none placeholder:text-white/60"
+                  className="absolute left-8 w-28 pl-2 pr-2 py-1 volumetric-glass-button rounded-lg text-xs text-white focus:outline-none placeholder:text-white/60"
                 />
               )}
             </div>
             
             {/* Separator */}
-            <span className="text-white/40 mx-2">|</span>
+            <span className="text-white/40 mx-1.5 xl:mx-2">|</span>
           </div>
 
           {/* Desktop Nav Links - Hidden on mobile/tablet */}
