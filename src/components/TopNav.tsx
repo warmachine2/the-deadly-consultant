@@ -247,12 +247,12 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <span className="text-white/40 mx-1.5 xl:mx-2">|</span>
           </div>
 
-          {/* Desktop Nav Links - Hidden on mobile/tablet */}
+          {/* Desktop Nav Links - Hidden on mobile/tablet and laptop */}
           <a
             href="https://www.skool.com/bi-fintech-consultant-academy/about"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden xl:block px-1.5 xl:px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+            className="hidden 2xl:block px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
           >
             Training Program
           </a>
@@ -260,7 +260,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="hidden xl:flex px-1.5 xl:px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
+                className="hidden 2xl:flex px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
               >
                 Articles
                 <ChevronDown className="w-4 h-4" />
@@ -303,7 +303,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="hidden xl:flex px-1.5 xl:px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
+                className="hidden 2xl:flex px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
               >
                 AI/BI-FinTech PM Resources
                 <ChevronDown className="w-4 h-4" />
@@ -333,17 +333,17 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Link to="/book-session" className="hidden xl:block">
+          <Link to="/book-session" className="hidden 2xl:block">
             <button
-              className="px-1.5 xl:px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+              className="px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
             >
               Book Session
             </button>
           </Link>
 
-          <Link to="/about-post" className="hidden xl:block">
+          <Link to="/about-post" className="hidden 2xl:block">
             <button
-              className="px-1.5 xl:px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+              className="px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
             >
               About
             </button>
