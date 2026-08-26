@@ -4,6 +4,7 @@ import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info, ArrowUpRight, Linkedin, Mail, Phone } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
+import NetworkHealthPanel from '@/components/NetworkHealthPanel';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
