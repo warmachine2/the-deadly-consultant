@@ -51,14 +51,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
-      <div className="flex items-center justify-between h-16 px-2 xl:px-5 gap-1 xl:gap-2 w-full">
+      <div className="flex h-16 w-full items-center justify-between gap-4 px-4">
         {/* Left: Hamburger + Favicon (mobile/tablet) or Full Logo (desktop) */}
-        <div className="flex items-center gap-1 xl:gap-2 flex-shrink-0">
+        <div className="flex min-w-0 items-center gap-2">
           {/* Mobile/Tablet: Hamburger Menu */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <button
-                className="xl:hidden p-2 rounded-xl volumetric-glass-button"
+                className="min-[1700px]:hidden p-2 rounded-xl volumetric-glass-button flex-shrink-0"
                 aria-label="Toggle menu"
               >
                 <Menu className="w-6 h-6 text-white" />
@@ -197,31 +197,16 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </Link>
 
           {/* PM Consulting Job Board Button - Desktop */}
-          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden md:block mr-3 xl:mr-6">
+          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden md:block flex-shrink-0">
             <button
               className="px-2 xl:px-3 py-2 rounded-xl font-semibold text-xs xl:text-sm transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-white hover:text-[#F4C903] cta-glow-pulse"
             >
               PM CONSULTING JOB BOARD
             </button>
           </Link>
-        </div>
 
-        {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}
-        <Link to="/" className="hidden sm:block md:hidden absolute left-1/2 transform -translate-x-1/2">
-          <h1
-            className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
-            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
-          >
-            Zero-To-
-            <span style={{ color: "#F4C903" }}>PM</span>
-            -Consultant
-          </h1>
-        </Link>
-
-        {/* Right: Desktop Nav Items */}
-        <div className="flex items-center gap-1 flex-shrink-0">
-          {/* Desktop: Collapsible Search */}
-          <div className="hidden xl:flex items-center">
+          {/* Desktop search stays in the left group, separated from the Job Board pill */}
+          <div className="hidden xl:flex items-center ml-1 flex-shrink-0">
             <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-36' : 'w-8'}`}>
               <button
                 onClick={() => setIsSearchExpanded(!isSearchExpanded)}
@@ -242,17 +227,29 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 />
               )}
             </div>
-            
-            {/* Separator */}
-            <span className="text-white/40 mx-1.5 xl:mx-2">|</span>
           </div>
+        </div>
 
+        {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}
+        <Link to="/" className="hidden sm:block md:hidden absolute left-1/2 transform -translate-x-1/2">
+          <h1
+            className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
+            style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
+          >
+            Zero-To-
+            <span style={{ color: "#F4C903" }}>PM</span>
+            -Consultant
+          </h1>
+        </Link>
+
+        {/* Right: Desktop Nav Items */}
+        <div className="flex flex-shrink-0 items-center gap-2">
           {/* Desktop Nav Links - Hidden on mobile/tablet and laptop */}
           <a
             href="https://www.skool.com/bi-fintech-consultant-academy/about"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden 2xl:block px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
+            className="hidden min-[1700px]:block px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
           >
             Training Program
           </a>
@@ -260,7 +257,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="hidden 2xl:flex px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
+                className="hidden min-[1700px]:flex px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
               >
                 Articles
                 <ChevronDown className="w-4 h-4" />
@@ -303,7 +300,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="hidden 2xl:flex px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
+                className="hidden min-[1700px]:flex px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-1"
               >
                 AI/BI-FinTech PM Resources
                 <ChevronDown className="w-4 h-4" />
@@ -333,7 +330,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Link to="/book-session" className="hidden 2xl:block">
+          <Link to="/book-session" className="hidden min-[1700px]:block">
             <button
               className="px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
             >
@@ -341,7 +338,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </button>
           </Link>
 
-          <Link to="/about-post" className="hidden 2xl:block">
+          <Link to="/about-post" className="hidden min-[1700px]:block">
             <button
               className="px-2 py-2 text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
             >
