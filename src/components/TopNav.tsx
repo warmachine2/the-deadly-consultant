@@ -197,7 +197,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </Link>
 
           {/* PM Consulting Job Board Button - Desktop */}
-          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden xl:block">
+          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden md:block">
             <button
               className="px-3 py-2 rounded-xl font-semibold text-sm transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-white hover:text-[#F4C903] cta-glow-pulse"
             >
@@ -207,7 +207,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         </div>
 
         {/* Center: Text Logo on tablet (hidden on very small mobile and desktop) */}
-        <Link to="/" className="hidden sm:block xl:hidden absolute left-1/2 transform -translate-x-1/2">
+        <Link to="/" className="hidden sm:block md:hidden absolute left-1/2 transform -translate-x-1/2">
           <h1
             className="text-base md:text-lg font-bold text-white cursor-pointer whitespace-nowrap"
             style={{ filter: "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4))" }}
@@ -367,7 +367,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </Link>
 
           {/* Desktop: Login + Subscribe buttons */}
-          <div className="hidden xl:flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2">
             <button
               className="px-3 py-1.5 text-sm font-semibold rounded-xl bg-transparent backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all duration-300"
             >
