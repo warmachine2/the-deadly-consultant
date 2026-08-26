@@ -543,7 +543,7 @@ const JobCard: React.FC<{
             }}>
               <CalendarCheck className="w-3.5 h-3.5" />
               <span className="flex flex-col items-start leading-tight">
-                <span>Book 15 min. Pivot Strategy Call</span>
+                <span>Book Free 30-Min Strategy Session</span>
               </span>
             </a>
             <span className="text-[10px] mt-1" style={{
@@ -1164,7 +1164,7 @@ const JobAlertsPage: React.FC = () => {
               border: '1px solid rgba(0, 150, 255, 0.4)'
             }}>
                 <CalendarCheck className="w-5 h-5 mr-2" />
-                Book Free 45-Min Strategy Session
+                Book Free 30-Min Strategy Session
               </a>
               {/* Mobile Link */}
               <a 
@@ -1217,7 +1217,7 @@ const JobAlertsPage: React.FC = () => {
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <p className="text-muted-foreground">
-                Book a free 45-minute strategy session to discuss your career pivot, certification paths, and how to land these high-paying consulting gigs.
+                Book a free 30-minute strategy session to discuss your career pivot, certification paths, and how to land these high-paying consulting gigs.
               </p>
               <a href="/book-session" className="block w-full px-6 py-4 rounded-xl font-bold text-white text-center transition-all duration-300 desktop-hover-scale-105" style={{
               background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
