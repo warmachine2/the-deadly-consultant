@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import TopNav from "@/components/TopNav";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
