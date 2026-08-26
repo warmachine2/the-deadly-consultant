@@ -221,7 +221,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         {/* Right: Desktop Nav Items */}
         <div className="flex items-center gap-1 xl:gap-2 flex-shrink-0">
           {/* Desktop: Collapsible Search */}
-          <div className="hidden xl:flex items-center">
+          <div className="hidden 2xl:flex items-center">
             <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-40' : 'w-8'}`}>
               <button
                 onClick={() => setIsSearchExpanded(!isSearchExpanded)}
