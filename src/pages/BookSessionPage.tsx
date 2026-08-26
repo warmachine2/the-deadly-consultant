@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import TopNav from "@/components/TopNav";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -50,18 +51,38 @@ const BookSessionPage = () => {
     });
 
     try {
-      // Insert into Supabase strategy_sessions table (protected by RLS)
-      const { error } = await supabase.from("strategy_sessions").insert({
-        name: data.name,
-        email: data.email,
-        role_current: data.role_current,
-        years_experience: data.years_experience,
-        biggest_pain_point: "N/A", // Required by DB but removed from form
-        whatsapp_number: data.whatsapp_number || null,
-      });
+      // POST booking details to the backend n8n webhook
+      const response = await fetch(
+        "https://n8n.srv1182241.hstgr.cloud/webhook/book-session",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: data.name,
+            email: data.email,
+            currentRole: data.role_current,
+            yearsOfExperience: data.years_experience,
+            whatsAppNumber: data.whatsapp_number || "",
+          }),
+        }
+      );
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        throw new Error(`Webhook error: ${response.status}`);
+      }
+
+      // Best-effort backup insert into Supabase strategy_sessions table (protected by RLS)
+      try {
+        await supabase.from("strategy_sessions").insert({
+          name: data.name,
+          email: data.email,
+          role_current: data.role_current,
+          years_experience: data.years_experience,
+          biggest_pain_point: "N/A", // Required by DB but removed from form
+          whatsapp_number: data.whatsapp_number || null,
+        });
+      } catch (supabaseError) {
+        console.error("Supabase backup error:", supabaseError);
       }
 
       // Check years experience for qualification
@@ -212,7 +233,14 @@ const BookSessionPage = () => {
                     boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
                   }}
                 >
-                  {isSubmitting ? "Submitting..." : "Book Free 30-Min Pivot Strategy Session"}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Book Free 30-Min Pivot Strategy Session"
+                  )}
                 </Button>
               </form>
             </Form>
