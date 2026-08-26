@@ -53,7 +53,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
       <div className="flex items-center justify-between h-16 px-2 xl:px-5 gap-1 xl:gap-2 w-full">
         {/* Left: Hamburger + Favicon (mobile/tablet) or Full Logo (desktop) */}
-        <div className="flex items-center gap-1 xl:gap-2 min-w-0">
+        <div className="flex items-center gap-1 xl:gap-2 flex-shrink-0">
           {/* Mobile/Tablet: Hamburger Menu */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -197,7 +197,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           </Link>
 
           {/* PM Consulting Job Board Button - Desktop */}
-          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden md:block">
+          <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden md:block mr-3 xl:mr-6">
             <button
               className="px-2 xl:px-3 py-2 rounded-xl font-semibold text-xs xl:text-sm transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-white hover:text-[#F4C903] cta-glow-pulse"
             >
@@ -219,10 +219,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
         </Link>
 
         {/* Right: Desktop Nav Items */}
-        <div className="flex items-center gap-1 xl:gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1 flex-shrink-0">
           {/* Desktop: Collapsible Search */}
-          <div className="hidden 2xl:flex items-center">
-            <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-40' : 'w-8'}`}>
+          <div className="hidden xl:flex items-center">
+            <div className={`relative flex items-center transition-all duration-300 ${isSearchExpanded ? 'w-36' : 'w-8'}`}>
               <button
                 onClick={() => setIsSearchExpanded(!isSearchExpanded)}
                 className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
@@ -238,16 +238,16 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   value={searchQuery}
                   onChange={handleSearchChange}
                   onBlur={() => !searchQuery && setIsSearchExpanded(false)}
-                  className="absolute left-8 w-32 pl-2 pr-2 py-1 volumetric-glass-button rounded-lg text-xs text-white focus:outline-none placeholder:text-white/60"
+                  className="absolute left-8 w-28 pl-2 pr-2 py-1 volumetric-glass-button rounded-lg text-xs text-white focus:outline-none placeholder:text-white/60"
                 />
               )}
             </div>
             
             {/* Separator */}
-            <span className="text-white/40 mx-2">|</span>
+            <span className="text-white/40 mx-1.5 xl:mx-2">|</span>
           </div>
 
-          {/* Desktop Nav Links - Hidden on mobile/tablet */}
+          {/* Desktop Nav Links - Hidden on mobile/tablet and laptop */}
           <a
             href="https://www.skool.com/bi-fintech-consultant-academy/about"
             target="_blank"
