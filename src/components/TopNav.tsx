@@ -51,7 +51,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
-      <div className="flex items-center justify-between h-16 px-3 xl:px-5 gap-2 w-full">
+      <div className="flex items-center justify-between h-16 px-2 xl:px-5 gap-1 xl:gap-2 w-full">
         {/* Left: Hamburger + Favicon (mobile/tablet) or Full Logo (desktop) */}
         <div className="flex items-center gap-2 min-w-0">
           {/* Mobile/Tablet: Hamburger Menu */}
