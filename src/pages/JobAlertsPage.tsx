@@ -22,6 +22,7 @@ const siSystemsLogoUrl = '/si-systems-logo.jpg';
 const provisoLogoUrl = '/proviso-logo.jpg';
 const insightGlobalLogoUrl = '/insight-global-logo.jpg';
 const procomLogoUrl = '/Procom_LOGO.png';
+const agilusLogoUrl = '/Agilus_LOGO.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -70,6 +71,7 @@ const sourceDescriptions: Record<string, string> = {
 // Map observed data-source spellings to the canonical source names above
 const sourceNameMap: Record<string, string> = {
   "ProViso": "Proviso",
+  "Agilus": "Agilus Work Solutions",
   "Agilus (Canada)": "Agilus Work Solutions",
   "SI Systems": "S.i. Systems",
   "S.i. Systems": "S.i. Systems",
@@ -78,6 +80,7 @@ const sourceNameMap: Record<string, string> = {
 // Frontend display labels for sources (does not affect underlying data values)
 const sourceDisplayNames: Record<string, string> = {
   "Hassan's recruiter Network": "Hassan's Recruiter Network",
+  "Agilus Work Solutions": "Agilus",
 };
 
 const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
@@ -424,10 +427,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isProviso = normalizedSource === "Proviso";
   const isInsightGlobal = normalizedSource === "Insight Global";
   const isProcom = normalizedSource === "Procom";
+  const isAgilus = normalizedSource === "Agilus Work Solutions";
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -440,6 +444,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isProcom && (
             <img src={procomLogoUrl} alt="Procom" className="h-7 w-auto object-contain" />
+          )}
+          {isAgilus && (
+            <img src={agilusLogoUrl} alt="Agilus" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
