@@ -249,6 +249,7 @@ const AreYouReadyToPivotPage = () => {
           q10: answers[10] || "N/A",
           q11: answers[11] || "N/A",
           q12: answers[12] || "N/A",
+          timestamp: new Date().toISOString(),
         },
       });
     } catch (err) {
