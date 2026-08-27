@@ -352,7 +352,10 @@ const AreYouReadyToPivotPage = () => {
             />
             <button
               type="button"
-              onClick={() => setStep("contact")}
+              onClick={() => {
+                setCurrentQuestionIndex(0);
+                setStep("quiz");
+              }}
               className="relative inline-flex items-center justify-center gap-3 px-10 py-5 md:px-12 md:py-6 text-xl md:text-2xl font-bold rounded-2xl transition-colors duration-300 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300"
             >
               <span>Start Quiz</span>
