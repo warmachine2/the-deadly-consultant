@@ -367,100 +367,70 @@ const AreYouReadyToPivotPage = () => {
     </section>
   );
 
-  const ContactSection = (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-12 max-w-2xl mx-auto relative overflow-hidden">
-      <div className="relative z-10">
-        <h2
-          className="text-2xl md:text-3xl font-bold text-center mb-2"
-          style={{ color: "#FFE361" }}
+  const RoadmapForm = (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onRoadmapSubmit)} className="space-y-5">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
+                <User className="w-4 h-4 text-[#F4C903]" />
+                Name <span className="text-[#F4C903]">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Your full name" className="bg-input border-border" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#F4C903]" />
+                Email <span className="text-[#F4C903]">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="you@example.com" className="bg-input border-border" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#F4C903]" />
+                Location <span className="text-[#F4C903]">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="City, Country" className="bg-input border-border" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          disabled={submittingRoadmap}
+          className={`w-full font-bold py-6 text-lg rounded-xl ${GOLD_BUTTON_CLASS}`}
         >
-          Get Your Readiness Score
-        </h2>
-        <p className="text-center text-white/80 mb-8">
-          Enter your details to continue. No spam — ever.
-        </p>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onContactSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                    <User className="w-4 h-4 text-[#F4C903]" />
-                    Name <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Your full name"
-                      className="bg-input border-border"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-[#F4C903]" />
-                    Email <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="you@example.com"
-                      className="bg-input border-border"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#F4C903]" />
-                    Location <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="City, Country"
-                      className="bg-input border-border"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="submit"
-              className="w-full font-semibold py-6 text-lg text-white desktop-hover-scale-105 transition-transform"
-              style={{
-                background: "linear-gradient(135deg, #dc2626, #b91c1c)",
-                boxShadow: "0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)",
-              }}
-            >
-              Continue
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </section>
+          {submittingRoadmap ? "Unlocking..." : "Submit & Open Roadmap"}
+          <ArrowRight className="w-5 h-5 ml-2" />
+        </Button>
+      </form>
+    </Form>
   );
 
   const QuizSection = (
