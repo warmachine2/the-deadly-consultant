@@ -330,7 +330,7 @@ const AreYouReadyToPivotPage = () => {
             WebkitTextStroke: "0.5px #000",
           }}
         >
-          Are you ready to pivot to PM Consulting?
+          Are You Ready to Pivot to PM Consulting?
         </h1>
 
         {/* No signup required text */}
