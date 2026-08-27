@@ -13,6 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles,
@@ -23,7 +29,14 @@ import {
   MapPin,
   CheckCircle2,
   ArrowLeft,
+  Globe,
+  Instagram,
+  Linkedin,
+  Youtube,
 } from "lucide-react";
+
+const GOLD_BUTTON_CLASS =
+  "bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300 transition-colors";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -109,7 +122,7 @@ const QUESTIONS: Question[] = [
       <>
         Are you open to moving from a traditional full-time employee role to a consultant setup?{" "}
         <span className="text-white/80 block mt-2 text-sm md:text-base">
-          (This means much higher pay - 2x+ usually - and more freedom, but you lose employee benefits like paid vacation and must register your own business)
+          (This means much higher pay - 2x+ usually - and more freedom. You must register your own business and be on your own payroll instead of being an employee.)
         </span>
       </>
     ),
@@ -205,45 +218,46 @@ const AreYouReadyToPivotPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (step !== "result" || !contactData) return;
+  const [roadmapOpen, setRoadmapOpen] = useState(false);
+  const [submittingRoadmap, setSubmittingRoadmap] = useState(false);
 
-    const sendLead = async () => {
-      try {
-        await supabase.functions.invoke("send-quiz-lead", {
-          body: {
-            name: contactData.name,
-            email: contactData.email,
-            location: contactData.location,
-            score: calculateScore(),
-            q1: answers[1] || "",
-            q2: answers[2] || "",
-            q3: answers[3] || "",
-            q4: answers[4] || "",
-            q5: answers[5] || "",
-            q6: answers[6] || "",
-            q7: answers[7] || "",
-            q8: answers[8] || "",
-            q9: answers[9] || "",
-            q10: answers[10] || "",
-            q11: answers[11] || "",
-            q12: answers[12] || "",
-          },
-        });
-      } catch (err) {
-        // Silent fail: do not block the user from seeing results
-        console.error("Failed to send quiz lead:", err);
-      }
-    };
+  const ROADMAP_PDF_URL = "https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf";
 
-    sendLead();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
-
-  const onContactSubmit = (data: ContactFormData) => {
+  const onRoadmapSubmit = async (data: ContactFormData) => {
     setContactData(data);
-    setStep("quiz");
-    setCurrentQuestionIndex(0);
+    setSubmittingRoadmap(true);
+
+    // Open the PDF immediately (synchronously) so it is not blocked by the browser
+    const pdfWindow = window.open(ROADMAP_PDF_URL, "_blank", "noopener,noreferrer");
+
+    try {
+      await supabase.functions.invoke("send-quiz-lead", {
+        body: {
+          name: data.name,
+          email: data.email,
+          location: data.location,
+          score: calculateScore(),
+          q1: answers[1] || "N/A",
+          q2: answers[2] || "N/A",
+          q3: answers[3] || "N/A",
+          q4: answers[4] || "N/A",
+          q5: answers[5] || "N/A",
+          q6: answers[6] || "N/A",
+          q7: answers[7] || "N/A",
+          q8: answers[8] || "N/A",
+          q9: answers[9] || "N/A",
+          q10: answers[10] || "N/A",
+          q11: answers[11] || "N/A",
+          q12: answers[12] || "N/A",
+        },
+      });
+    } catch (err) {
+      console.error("Failed to send quiz lead:", err);
+    } finally {
+      setSubmittingRoadmap(false);
+      setRoadmapOpen(false);
+      if (!pdfWindow) window.location.href = ROADMAP_PDF_URL;
+    }
   };
 
   const handleAnswer = (value: string) => {
@@ -329,7 +343,7 @@ const AreYouReadyToPivotPage = () => {
             WebkitTextStroke: "0.5px #000",
           }}
         >
-          Are you ready to pivot to PM Consulting?
+          Are You Ready to Pivot to PM Consulting?
         </h1>
 
         {/* No signup required text */}
@@ -351,7 +365,10 @@ const AreYouReadyToPivotPage = () => {
             />
             <button
               type="button"
-              onClick={() => setStep("contact")}
+              onClick={() => {
+                setCurrentQuestionIndex(0);
+                setStep("quiz");
+              }}
               className="relative inline-flex items-center justify-center gap-3 px-10 py-5 md:px-12 md:py-6 text-xl md:text-2xl font-bold rounded-2xl transition-colors duration-300 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300"
             >
               <span>Start Quiz</span>
@@ -363,100 +380,70 @@ const AreYouReadyToPivotPage = () => {
     </section>
   );
 
-  const ContactSection = (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-12 max-w-2xl mx-auto relative overflow-hidden">
-      <div className="relative z-10">
-        <h2
-          className="text-2xl md:text-3xl font-bold text-center mb-2"
-          style={{ color: "#FFE361" }}
+  const RoadmapForm = (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onRoadmapSubmit)} className="space-y-5">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
+                <User className="w-4 h-4 text-[#F4C903]" />
+                Name <span className="text-[#F4C903]">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Your full name" className="bg-input border-border" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#F4C903]" />
+                Email <span className="text-[#F4C903]">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="you@example.com" className="bg-input border-border" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#F4C903]" />
+                Location <span className="text-[#F4C903]">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="City, Country" className="bg-input border-border" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          disabled={submittingRoadmap}
+          className={`w-full font-bold py-6 text-lg rounded-xl ${GOLD_BUTTON_CLASS}`}
         >
-          Get Your Readiness Score
-        </h2>
-        <p className="text-center text-white/80 mb-8">
-          Enter your details to continue. No spam — ever.
-        </p>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onContactSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                    <User className="w-4 h-4 text-[#F4C903]" />
-                    Name <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Your full name"
-                      className="bg-input border-border"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-[#F4C903]" />
-                    Email <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="you@example.com"
-                      className="bg-input border-border"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#F4C903]" />
-                    Location <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="City, Country"
-                      className="bg-input border-border"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="submit"
-              className="w-full font-semibold py-6 text-lg text-white desktop-hover-scale-105 transition-transform"
-              style={{
-                background: "linear-gradient(135deg, #dc2626, #b91c1c)",
-                boxShadow: "0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)",
-              }}
-            >
-              Continue
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </section>
+          {submittingRoadmap ? "Unlocking..." : "Submit & Open Roadmap"}
+          <ArrowRight className="w-5 h-5 ml-2" />
+        </Button>
+      </form>
+    </Form>
   );
 
   const QuizSection = (
@@ -534,11 +521,7 @@ const AreYouReadyToPivotPage = () => {
             type="button"
             onClick={handleNext}
             disabled={!currentAnswer}
-            className="px-8 py-5 text-base font-semibold text-white desktop-hover-scale-105 transition-transform disabled:opacity-50"
-            style={{
-              background: "linear-gradient(135deg, #dc2626, #b91c1c)",
-              boxShadow: "0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)",
-            }}
+            className={`px-8 py-5 text-base font-bold rounded-xl disabled:opacity-50 ${GOLD_BUTTON_CLASS}`}
           >
             {currentQuestionIndex === QUESTIONS.length - 1 ? "See Results" : "Next"}
             <ArrowRight className="w-5 h-5 ml-2" />
@@ -586,7 +569,7 @@ const AreYouReadyToPivotPage = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">Book a 1:1 call → 30 Minute Meeting - Hassan Hammer</span>
+              <span className="font-medium text-base md:text-lg">Book a meeting</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
             </a>
 
@@ -596,61 +579,66 @@ const AreYouReadyToPivotPage = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">Webinar / Group Presentation</span>
+              <span className="font-medium text-base md:text-lg">PM Consulting Pivot Group Workshop (Free)</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
             </a>
 
-            <a
-              href="https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
+            <button
+              type="button"
+              onClick={() => setRoadmapOpen(true)}
+              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white text-left hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">Free content (PM Consulting Secrets PDF)</span>
+              <span className="font-medium text-base md:text-lg">$10k/mo+ BI-FinTech PM Consultant Accelerator Roadmap</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
-            </a>
+            </button>
           </div>
         </div>
 
         {/* Results Footer */}
         <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
           <p className="text-center text-sm text-white/60 mb-3">Connect with Hassan</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-            <a
-              href="https://www.zerotopmconsultant.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              Website
-            </a>
-            <a
-              href="https://www.instagram.com/hassan.hammer.sr71/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              Instagram
-            </a>
-            <a
-              href="https://www.linkedin.com/in/hassanhammer"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="https://www.youtube.com/@hassanhammer-sr71"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              YouTube
-            </a>
+          <div className="flex flex-wrap items-start justify-center gap-6 md:gap-10">
+            {[
+              { label: "Website", href: "https://www.zerotopmconsultant.com/", Icon: Globe },
+              { label: "Instagram", href: "https://www.instagram.com/hassan.hammer.sr71/", Icon: Instagram },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/hassanhammer", Icon: Linkedin },
+              { label: "YouTube", href: "https://www.youtube.com/@hassanhammer-sr71", Icon: Youtube },
+            ].map(({ label, href, Icon }) => (
+              <div key={label} className="flex flex-col items-center gap-2">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm md:text-base text-[#F4C903] hover:underline"
+                >
+                  {label}
+                </a>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-[#F4C903]/80 hover:text-[#F4C903]"
+                >
+                  <Icon className="w-5 h-5" />
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Roadmap unlock dialog */}
+      <Dialog open={roadmapOpen} onOpenChange={setRoadmapOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center" style={{ color: "#FFE361" }}>
+              Enter your details to unlock the roadmap immediately
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-left">{RoadmapForm}</div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 
@@ -661,7 +649,6 @@ const AreYouReadyToPivotPage = () => {
       <main className="pt-24 lg:pt-28 px-4 md:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
           {step === "hero" && HeroSection}
-          {step === "contact" && ContactSection}
           {step === "quiz" && QuizSection}
           {step === "result" && ResultSection}
         </div>
