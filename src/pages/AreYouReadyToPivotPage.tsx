@@ -13,6 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles,
@@ -23,7 +29,14 @@ import {
   MapPin,
   CheckCircle2,
   ArrowLeft,
+  Globe,
+  Instagram,
+  Linkedin,
+  Youtube,
 } from "lucide-react";
+
+const GOLD_BUTTON_CLASS =
+  "bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300 transition-colors";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -109,7 +122,7 @@ const QUESTIONS: Question[] = [
       <>
         Are you open to moving from a traditional full-time employee role to a consultant setup?{" "}
         <span className="text-white/80 block mt-2 text-sm md:text-base">
-          (This means much higher pay - 2x+ usually - and more freedom, but you lose employee benefits like paid vacation and must register your own business)
+          (This means much higher pay - 2x+ usually - and more freedom. You must register your own business and be on your own payroll instead of being an employee.)
         </span>
       </>
     ),
@@ -508,11 +521,7 @@ const AreYouReadyToPivotPage = () => {
             type="button"
             onClick={handleNext}
             disabled={!currentAnswer}
-            className="px-8 py-5 text-base font-semibold text-white desktop-hover-scale-105 transition-transform disabled:opacity-50"
-            style={{
-              background: "linear-gradient(135deg, #dc2626, #b91c1c)",
-              boxShadow: "0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)",
-            }}
+            className={`px-8 py-5 text-base font-bold rounded-xl disabled:opacity-50 ${GOLD_BUTTON_CLASS}`}
           >
             {currentQuestionIndex === QUESTIONS.length - 1 ? "See Results" : "Next"}
             <ArrowRight className="w-5 h-5 ml-2" />
@@ -635,7 +644,6 @@ const AreYouReadyToPivotPage = () => {
       <main className="pt-24 lg:pt-28 px-4 md:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
           {step === "hero" && HeroSection}
-          {step === "contact" && ContactSection}
           {step === "quiz" && QuizSection}
           {step === "result" && ResultSection}
         </div>
