@@ -569,7 +569,7 @@ const AreYouReadyToPivotPage = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">Book a 1:1 call → 30 Minute Meeting - Hassan Hammer</span>
+              <span className="font-medium text-base md:text-lg">Book a meeting</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
             </a>
 
@@ -579,61 +579,66 @@ const AreYouReadyToPivotPage = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">Webinar / Group Presentation</span>
+              <span className="font-medium text-base md:text-lg">PM Consulting Pivot Group Workshop (Free)</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
             </a>
 
-            <a
-              href="https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
+            <button
+              type="button"
+              onClick={() => setRoadmapOpen(true)}
+              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white text-left hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">Free content (PM Consulting Secrets PDF)</span>
+              <span className="font-medium text-base md:text-lg">$10k/mo+ BI-FinTech PM Consultant Accelerator Roadmap</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
-            </a>
+            </button>
           </div>
         </div>
 
         {/* Results Footer */}
         <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
           <p className="text-center text-sm text-white/60 mb-3">Connect with Hassan</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-            <a
-              href="https://www.zerotopmconsultant.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              Website
-            </a>
-            <a
-              href="https://www.instagram.com/hassan.hammer.sr71/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              Instagram
-            </a>
-            <a
-              href="https://www.linkedin.com/in/hassanhammer"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="https://www.youtube.com/@hassanhammer-sr71"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm md:text-base text-[#F4C903] hover:underline"
-            >
-              YouTube
-            </a>
+          <div className="flex flex-wrap items-start justify-center gap-6 md:gap-10">
+            {[
+              { label: "Website", href: "https://www.zerotopmconsultant.com/", Icon: Globe },
+              { label: "Instagram", href: "https://www.instagram.com/hassan.hammer.sr71/", Icon: Instagram },
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/hassanhammer", Icon: Linkedin },
+              { label: "YouTube", href: "https://www.youtube.com/@hassanhammer-sr71", Icon: Youtube },
+            ].map(({ label, href, Icon }) => (
+              <div key={label} className="flex flex-col items-center gap-2">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm md:text-base text-[#F4C903] hover:underline"
+                >
+                  {label}
+                </a>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-[#F4C903]/80 hover:text-[#F4C903]"
+                >
+                  <Icon className="w-5 h-5" />
+                </a>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Roadmap unlock dialog */}
+      <Dialog open={roadmapOpen} onOpenChange={setRoadmapOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center" style={{ color: "#FFE361" }}>
+              Enter your details to unlock the roadmap immediately
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-left">{RoadmapForm}</div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 
