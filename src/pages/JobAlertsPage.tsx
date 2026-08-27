@@ -22,6 +22,7 @@ const siSystemsLogoUrl = '/si-systems-logo.jpg';
 const provisoLogoUrl = '/proviso-logo.jpg';
 const insightGlobalLogoUrl = '/insight-global-logo.jpg';
 const procomLogoUrl = '/Procom_LOGO.png';
+const agilusLogoUrl = '/Agilus_LOGO.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -78,6 +79,7 @@ const sourceNameMap: Record<string, string> = {
 // Frontend display labels for sources (does not affect underlying data values)
 const sourceDisplayNames: Record<string, string> = {
   "Hassan's recruiter Network": "Hassan's Recruiter Network",
+  "Agilus Work Solutions": "Agilus",
 };
 
 const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
