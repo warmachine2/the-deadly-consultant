@@ -205,45 +205,46 @@ const AreYouReadyToPivotPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (step !== "result" || !contactData) return;
+  const [roadmapOpen, setRoadmapOpen] = useState(false);
+  const [submittingRoadmap, setSubmittingRoadmap] = useState(false);
 
-    const sendLead = async () => {
-      try {
-        await supabase.functions.invoke("send-quiz-lead", {
-          body: {
-            name: contactData.name,
-            email: contactData.email,
-            location: contactData.location,
-            score: calculateScore(),
-            q1: answers[1] || "",
-            q2: answers[2] || "",
-            q3: answers[3] || "",
-            q4: answers[4] || "",
-            q5: answers[5] || "",
-            q6: answers[6] || "",
-            q7: answers[7] || "",
-            q8: answers[8] || "",
-            q9: answers[9] || "",
-            q10: answers[10] || "",
-            q11: answers[11] || "",
-            q12: answers[12] || "",
-          },
-        });
-      } catch (err) {
-        // Silent fail: do not block the user from seeing results
-        console.error("Failed to send quiz lead:", err);
-      }
-    };
+  const ROADMAP_PDF_URL = "https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf";
 
-    sendLead();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
-
-  const onContactSubmit = (data: ContactFormData) => {
+  const onRoadmapSubmit = async (data: ContactFormData) => {
     setContactData(data);
-    setStep("quiz");
-    setCurrentQuestionIndex(0);
+    setSubmittingRoadmap(true);
+
+    // Open the PDF immediately (synchronously) so it is not blocked by the browser
+    const pdfWindow = window.open(ROADMAP_PDF_URL, "_blank", "noopener,noreferrer");
+
+    try {
+      await supabase.functions.invoke("send-quiz-lead", {
+        body: {
+          name: data.name,
+          email: data.email,
+          location: data.location,
+          score: calculateScore(),
+          q1: answers[1] || "N/A",
+          q2: answers[2] || "N/A",
+          q3: answers[3] || "N/A",
+          q4: answers[4] || "N/A",
+          q5: answers[5] || "N/A",
+          q6: answers[6] || "N/A",
+          q7: answers[7] || "N/A",
+          q8: answers[8] || "N/A",
+          q9: answers[9] || "N/A",
+          q10: answers[10] || "N/A",
+          q11: answers[11] || "N/A",
+          q12: answers[12] || "N/A",
+        },
+      });
+    } catch (err) {
+      console.error("Failed to send quiz lead:", err);
+    } finally {
+      setSubmittingRoadmap(false);
+      setRoadmapOpen(false);
+      if (!pdfWindow) window.location.href = ROADMAP_PDF_URL;
+    }
   };
 
   const handleAnswer = (value: string) => {
