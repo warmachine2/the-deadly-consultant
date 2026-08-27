@@ -71,6 +71,7 @@ const sourceDescriptions: Record<string, string> = {
 // Map observed data-source spellings to the canonical source names above
 const sourceNameMap: Record<string, string> = {
   "ProViso": "Proviso",
+  "Agilus": "Agilus Work Solutions",
   "Agilus (Canada)": "Agilus Work Solutions",
   "SI Systems": "S.i. Systems",
   "S.i. Systems": "S.i. Systems",
