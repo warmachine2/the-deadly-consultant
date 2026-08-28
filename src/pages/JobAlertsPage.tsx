@@ -51,6 +51,63 @@ type Order = 'asc' | 'desc';
 const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
+// --- KAN-311: stale-while-revalidate cache ---
+const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v1';
+const readJobCache = (): JobData[] | null => {
+  try {
+    const raw = localStorage.getItem(JOB_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    const jobs = Array.isArray(parsed) ? parsed : parsed?.jobs;
+    return Array.isArray(jobs) && jobs.length > 0 ? (jobs as JobData[]) : null;
+  } catch {
+    return null;
+  }
+};
+const writeJobCache = (jobs: JobData[]) => {
+  try {
+    localStorage.setItem(JOB_CACHE_KEY, JSON.stringify({ jobs, cachedAt: Date.now() }));
+  } catch {
+    /* quota or private mode — ignore */
+  }
+};
+
+// Skeleton placeholder matching the Job Card shape for cold visits
+const JobCardSkeleton: React.FC = () => (
+  <div className="volumetric-glass rounded-2xl p-5 sm:p-6 animate-pulse">
+    <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-4 mb-4">
+      <div className="h-4 w-28 rounded bg-white/10" />
+      <div className="justify-self-center h-9 w-40 rounded-full bg-white/10" />
+      <div className="justify-self-end h-8 w-24 rounded-lg bg-white/10" />
+    </div>
+    <div className="h-7 w-3/4 rounded bg-[#FFDD40]/25 mb-3" />
+    <div className="flex flex-wrap gap-2 mb-5">
+      <div className="h-6 w-24 rounded-full bg-[#00d4ff]/20" />
+      <div className="h-6 w-20 rounded-full bg-white/10" />
+      <div className="h-6 w-28 rounded-full bg-white/10" />
+      <div className="h-6 w-16 rounded-full bg-white/10" />
+    </div>
+    <div className="space-y-4">
+      <div>
+        <div className="h-4 w-32 rounded bg-[#FFDD40]/20 mb-2" />
+        <div className="h-3 w-full rounded bg-white/10 mb-2" />
+        <div className="h-3 w-11/12 rounded bg-white/10 mb-2" />
+        <div className="h-3 w-9/12 rounded bg-white/10" />
+      </div>
+      <div>
+        <div className="h-4 w-40 rounded bg-[#FFDD40]/20 mb-2" />
+        <div className="h-3 w-10/12 rounded bg-white/10 mb-2" />
+        <div className="h-3 w-8/12 rounded bg-white/10" />
+      </div>
+    </div>
+    <div className="mt-6 flex items-center justify-between gap-3">
+      <div className="h-10 w-44 rounded-xl bg-white/10" />
+      <div className="h-10 w-32 rounded-xl bg-[#FFDD40]/20" />
+    </div>
+  </div>
+);
+
+
 // Canonical list of recruitment sources with descriptions
 const sourceDescriptions: Record<string, string> = {
   "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
