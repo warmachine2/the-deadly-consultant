@@ -843,8 +843,9 @@ const DateRangePicker: React.FC<{
     </div>;
 };
 const JobAlertsPage: React.FC = () => {
-  const [data, setData] = useState<JobData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [cachedJobs] = useState<JobData[] | null>(() => readJobCache());
+  const [data, setData] = useState<JobData[]>(() => cachedJobs ?? []);
+  const [loading, setLoading] = useState(() => !cachedJobs);
   const [error, setError] = useState<string | null>(null);
   const [orderBy, setOrderBy] = useState<keyof JobData>('date');
   const [order, setOrder] = useState<Order>('desc');
