@@ -1640,8 +1640,11 @@ const JobAlertsPage: React.FC = () => {
           </p>
         </div>
 
-        {loading ? <div className="flex justify-center items-center min-h-[400px]">
-            <Loader2 className="w-8 h-8 text-accent animate-spin" />
+        {loading ? <div className="space-y-6">
+            <JobCardSkeleton />
+            <JobCardSkeleton />
+            <JobCardSkeleton />
+          </div> : error ? <div className="volumetric-glass rounded-3xl p-8 text-center">
           </div> : error ? <div className="volumetric-glass rounded-3xl p-8 text-center">
             <p className="text-red-400">{error}</p>
           </div> : viewMode === 'table' ? (
