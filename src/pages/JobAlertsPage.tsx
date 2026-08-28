@@ -1645,7 +1645,6 @@ const JobAlertsPage: React.FC = () => {
             <JobCardSkeleton />
             <JobCardSkeleton />
           </div> : error ? <div className="volumetric-glass rounded-3xl p-8 text-center">
-          </div> : error ? <div className="volumetric-glass rounded-3xl p-8 text-center">
             <p className="text-red-400">{error}</p>
           </div> : viewMode === 'table' ? (
           // Table View
