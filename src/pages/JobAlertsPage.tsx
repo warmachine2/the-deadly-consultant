@@ -893,25 +893,28 @@ const JobAlertsPage: React.FC = () => {
     setEndDate(end);
   };
   const isMobile = useMediaQuery('(max-width:768px)');
-  const fetchData = async () => {
+  const fetchData = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const response = await fetch(CSV_URL + '&t=' + Date.now());
       if (!response.ok) throw new Error('Failed to fetch data');
       const csvText = await response.text();
-      console.log('CSV Response:', csvText);
       const parsedData = parseCSV(csvText);
-      console.log('Parsed data:', parsedData);
       setData(parsedData);
+      writeJobCache(parsedData);
+      setError(null);
     } catch (err) {
       console.error('Fetch error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load job data');
+      // Silent background refresh must never break a cached view
+      if (!silent) setError(err instanceof Error ? err.message : 'Failed to load job data');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
   useEffect(() => {
-    fetchData();
+    // Cached visitors: revalidate silently in the background, keeping their page intact
+    fetchData(Boolean(cachedJobs));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
