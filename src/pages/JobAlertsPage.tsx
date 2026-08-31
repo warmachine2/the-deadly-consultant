@@ -550,9 +550,38 @@ const JobCard: React.FC<{
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
   }}>
       {/* Header with title, centered source badge, and actions on one row */}
-      <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-4">
+        {/* Mobile-only top row: source badge + actions, never overlapping the title */}
+        <div className="flex md:hidden items-center justify-between gap-3">
+          <SourceBadge source={job.source} jobLink={job.jobLink} />
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex flex-col items-center">
+              <a href="/book-session" className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-normal text-center leading-tight animate-subtle-glow" style={{
+                background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
+                border: '1px solid rgba(255, 221, 64, 0.5)',
+                color: '#FFDD40'
+              }}>
+                <CalendarCheck className="w-3.5 h-3.5 shrink-0" />
+                <span>Book Free 30-Min Strategy Session</span>
+              </a>
+              <span className="text-[10px] mt-1" style={{
+                color: 'rgba(255, 255, 255, 0.5)'
+              }}>Free</span>
+            </div>
+            <IconButton size="small" onClick={() => setExpanded(!expanded)} sx={{
+              color: '#FFDD40',
+              backgroundColor: 'rgba(255, 221, 64, 0.1)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 221, 64, 0.2)'
+              }
+            }}>
+              {expanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            </IconButton>
+          </div>
+        </div>
+
         <div className="min-w-0">
-          <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight" style={{
+          <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
           color: '#FFDD40'
         }}>
             {job.role}
@@ -561,9 +590,9 @@ const JobCard: React.FC<{
             {job.company}
           </p>
 
-          <div className="flex items-center gap-3 text-white/90 text-lg md:text-xl mt-3">
-            <span>{job.date}</span>
-            <span className="px-2 py-0.5 rounded-full text-base md:text-lg font-medium" style={{
+          <div className="flex flex-wrap items-center gap-3 text-white/90 text-lg md:text-xl mt-3">
+            <span className="whitespace-nowrap flex-shrink-0">{job.date}</span>
+            <span className="px-2.5 py-0.5 whitespace-nowrap text-xs sm:text-sm md:text-lg font-medium rounded-full" style={{
             backgroundColor: 'rgba(255, 221, 64, 0.2)',
             color: '#FFDD40'
           }}>
@@ -586,18 +615,18 @@ const JobCard: React.FC<{
                   }}
                   className="cursor-pointer hover:underline focus:outline-none"
                 >
-                  ID: {job.jobId.substring(0, 8)}…
+                  Job ID {job.jobId.substring(0, 8)}…
                 </button>
               </>}
           </div>
         </div>
 
-        {/* Centered source badge aligned with the role title */}
-        <div className="flex justify-center">
+        {/* Centered source badge aligned with the role title (desktop only) */}
+        <div className="hidden md:flex justify-center">
           <SourceBadge source={job.source} jobLink={job.jobLink} />
         </div>
 
-          <div className="flex items-start gap-3 justify-end">
+          <div className="hidden md:flex items-start gap-3 justify-end">
           {/* Mini CTA */}
           <div className="flex flex-col items-center">
             <a href="/book-session" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-nowrap animate-subtle-glow" style={{
