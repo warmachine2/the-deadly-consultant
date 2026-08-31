@@ -615,7 +615,9 @@ const JobCard: React.FC<{
                   }}
                   className="cursor-pointer hover:underline focus:outline-none"
                 >
-                  Job ID {job.jobId.substring(0, 8)}…
+                  <span className="md:hidden">Job ID </span>
+                  <span className="hidden md:inline">ID: </span>
+                  {job.jobId.substring(0, 8)}…
                 </button>
               </>}
           </div>
