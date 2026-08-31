@@ -41,8 +41,18 @@
 
   <body>
     <div id="root"></div>
-    <script async data-uid="27ad03da2d" src="https://bi-fintech-consultant-academy.kit.com/27ad03da2d/index.js"></script>
-    <script async data-uid="0edbc71770" src="https://bi-fintech-consultant-academy.kit.com/0edbc71770/index.js"></script>
+    <script>
+      // Load Kit (ConvertKit) modal forms only on the Job Board page
+      if (window.location.pathname.indexOf('/ai-bi-fintech-pm-job-alerts-repo') === 0) {
+        ['27ad03da2d', '0edbc71770'].forEach(function (uid) {
+          var s = document.createElement('script');
+          s.async = true;
+          s.setAttribute('data-uid', uid);
+          s.src = 'https://bi-fintech-consultant-academy.kit.com/' + uid + '/index.js';
+          document.body.appendChild(s);
+        });
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
