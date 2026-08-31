@@ -132,6 +132,21 @@ const sourceNameMap: Record<string, string> = {
   "Agilus (Canada)": "Agilus Work Solutions",
   "SI Systems": "S.i. Systems",
   "S.i. Systems": "S.i. Systems",
+  "Nerdyhire": "Nerdy Hire",
+  "Nerdy Hire": "Nerdy Hire",
+  "Tundra Technical": "Tundra Technical Solutions",
+  "Tundra Technical Solutions": "Tundra Technical Solutions",
+};
+
+// Case-insensitive, trimmed alias lookup so variants never appear as separate sources
+const sourceAliasLookup: Record<string, string> = Object.fromEntries(
+  Object.entries(sourceNameMap).map(([alias, canonical]) => [alias.trim().toLowerCase(), canonical])
+);
+
+const normalizeSourceName = (raw: string): string => {
+  const trimmed = raw.trim();
+  if (!trimmed) return '';
+  return sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
 };
 
 // Frontend display labels for sources (does not affect underlying data values)
@@ -231,7 +246,7 @@ const parseCSV = (csvText: string): JobData[] => {
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
-        source: sourceNameMap[row[17]?.trim() || ''] || row[17]?.trim() || '', // Sources is column 18 (index 17), normalized to canonical names
+        source: normalizeSourceName(row[17] || ''), // Sources is column 18 (index 17), normalized to canonical names (case-insensitive aliases)
         companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined,
         jobId: row[19]?.trim() || '', // Job ID is column 20 (index 19)
         jobLink: row[18]?.trim() || '' // Link is column 19 (index 18)
