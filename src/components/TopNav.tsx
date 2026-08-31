@@ -346,31 +346,16 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </button>
           </Link>
 
-          {/* CTA Button - visible on all screens but smaller on mobile */}
-          <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
+          {/* Workshop CTA - gold glowing animated border */}
+          <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer">
             <button
-              className="px-2 py-1.5 text-[10px] 2xl:px-4 2xl:py-2 rounded-xl font-semibold 2xl:text-sm transition-all duration-300 whitespace-nowrap bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60 active:scale-95 cta-glow-pulse-red"
-              onMouseEnter={() => setIsRoadmapHovered(true)}
-              onMouseLeave={() => setIsRoadmapHovered(false)}
-              style={{
-                boxShadow: isRoadmapHovered 
-                  ? "0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.5)" 
-                  : undefined,
-              }}
+              className="gold-glow-border px-3 py-2.5 text-[11px] 2xl:px-5 2xl:py-3 2xl:text-sm font-bold text-white hover:text-[#F4C903] transition-colors duration-300 whitespace-nowrap"
             >
-              <span className="hidden sm:inline">Free $10k/mo+ Roadmap</span>
-              <span className="sm:hidden">Free Roadmap</span>
+              <span className="hidden sm:inline">Reserve My Free Workshop</span>
+              <span className="sm:hidden">Free Workshop</span>
             </button>
-          </Link>
+          </a>
 
-          {/* Desktop: Login + Subscribe buttons */}
-          <div className="hidden sm:flex items-center gap-2">
-            <button
-              className="px-2 2xl:px-3 py-1.5 text-xs 2xl:text-sm font-semibold rounded-xl bg-transparent backdrop-blur-md border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all duration-300 whitespace-nowrap"
-            >
-              Log-in
-            </button>
-          </div>
         </div>
       </div>
     </nav>
