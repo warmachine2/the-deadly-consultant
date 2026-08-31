@@ -551,12 +551,17 @@ const JobCard: React.FC<{
   }}>
       {/* Header with title, centered source badge, and actions on one row */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-start gap-4">
-        {/* Mobile-only top row: source badge + actions, never overlapping the title */}
-        <div className="flex md:hidden items-center justify-between gap-3">
-          <SourceBadge source={job.source} jobLink={job.jobLink} />
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="flex flex-col items-center">
-              <a href="/book-session" className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-normal text-center leading-tight animate-subtle-glow" style={{
+        {/* Mobile header: stacked rows to prevent source chip / CTA overlap */}
+        <div className="flex md:hidden flex-col gap-2">
+          {/* Row 1: source badge / logo only */}
+          <div className="flex items-center">
+            <SourceBadge source={job.source} jobLink={job.jobLink} />
+          </div>
+
+          {/* Row 2: Book Session CTA + expand toggle */}
+          <div className="flex items-start gap-2">
+            <div className="flex flex-col items-center flex-1 min-w-0">
+              <a href="/book-session" className="w-full inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300 desktop-hover-scale-105 whitespace-normal text-center leading-tight animate-subtle-glow" style={{
                 background: 'linear-gradient(135deg, rgba(255, 221, 64, 0.2), rgba(255, 221, 64, 0.1))',
                 border: '1px solid rgba(255, 221, 64, 0.5)',
                 color: '#FFDD40'
