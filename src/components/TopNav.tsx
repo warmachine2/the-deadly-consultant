@@ -170,7 +170,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Workshop CTA - gold glowing animated border */}
           <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer">
             <button
-              className="gold-glow-border px-2.5 py-1.5 text-[11px] leading-tight text-center md:px-4 md:py-2.5 md:text-xs 2xl:px-5 2xl:py-3 2xl:text-sm font-bold text-white hover:text-[#F4C903] transition-colors duration-300 max-w-[130px] sm:max-w-none"
+              className="gold-glow-border px-2.5 py-1.5 text-[11px] leading-tight text-center whitespace-normal font-bold text-white hover:text-[#F4C903] transition-colors duration-300 max-w-[130px] sm:max-w-none md:px-4 md:py-2.5 md:text-xs 2xl:px-5 2xl:py-3 2xl:text-sm"
             >
               Reserve My Free Workshop
             </button>
