@@ -21,10 +21,13 @@ import {
 } from "@/components/ui/collapsible";
 
 
+export const WORKSHOP_REGISTER_URL = "https://calendly.com/hassan-hammer/30min";
+
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
   onToggleSidebar?: () => void;
 }
+
 
 const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,91 +86,22 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                   </div>
                 </div>
 
-                {/* Training Program */}
-                <a
-                  href="https://www.skool.com/bi-fintech-consultant-academy/about"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all"
-                  onClick={closeMobileMenu}
-                >
-                  Training Program
-                </a>
-
-                {/* Articles Collapsible */}
-                <Collapsible open={articlesOpen} onOpenChange={setArticlesOpen}>
-                  <CollapsibleTrigger className="w-full px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all flex items-center justify-between">
-                    Articles
-                    <ChevronDown className={`w-4 h-4 transition-transform ${articlesOpen ? 'rotate-180' : ''}`} />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="bg-white/5">
-                    <Link to="/tools-articles" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      Tools Articles
-                    </Link>
-                    <Link to="/pmp-certification-articles" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      PMP Cert Articles
-                    </Link>
-                    <Link to="/psm-certification-articles" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      PSM Cert Articles
-                    </Link>
-                    <Link to="/pmi-cpmai-certification-articles" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      PMI-CPMAI Cert Articles
-                    </Link>
-                    <Link to="/consulting-job-stories-articles" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      Consulting Jobs/Stories
-                    </Link>
-                    <Link to="/other-articles" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      Other Articles
-                    </Link>
-                  </CollapsibleContent>
-                </Collapsible>
-
-                {/* Resources Collapsible */}
-                <Collapsible open={resourcesOpen} onOpenChange={setResourcesOpen}>
-                  <CollapsibleTrigger className="w-full px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all flex items-center justify-between">
-                    AI/BI-FinTech PM Resources
-                    <ChevronDown className={`w-4 h-4 transition-transform ${resourcesOpen ? 'rotate-180' : ''}`} />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="bg-white/5">
-                    <Link to="/3ks-tracker" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      3KS Productivity Tracker
-                    </Link>
-                    <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      90D PM Pivot Roadmap
-                    </Link>
-                    <Link to="/pm-strategy-guide-pdf" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      PM Strategy Guide PDF
-                    </Link>
-                    <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="block px-6 py-2 text-sm text-white/80 hover:text-[#F4C903] hover:bg-white/10" onClick={closeMobileMenu}>
-                      Job Alerts/Repo
-                    </Link>
-                  </CollapsibleContent>
-                </Collapsible>
-
-                {/* Book Strategy Session */}
-                <Link to="/book-session" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
-                  Book Strategy Session
-                </Link>
-
-                {/* About */}
-                <Link to="/about-post" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
-                  About
+                {/* Job Board pill */}
+                <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                  Open PM Contracts
                 </Link>
 
                 {/* Divider */}
                 <div className="my-4 border-t border-white/10" />
 
-                {/* CTA buttons in mobile menu */}
-                <div className="px-4 space-y-3">
-                  <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" onClick={closeMobileMenu}>
-                    <button className="w-full px-4 py-3 rounded-xl font-semibold bg-[#DC2626] text-white hover:text-[#F4C903] border border-cyan-400/60">
-                      Free $10k/mo+ Roadmap
+                <div className="px-4">
+                  <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>
+                    <button className="gold-glow-border w-full px-4 py-3 font-bold text-white">
+                      Reserve My Free Workshop
                     </button>
-                  </Link>
-                  <button className="w-full px-4 py-2 text-sm font-semibold rounded-xl bg-transparent border border-white/20 text-white hover:text-[#F4C903] hover:bg-white/10">
-                    Log-in
-                  </button>
+                  </a>
                 </div>
+
               </div>
             </SheetContent>
           </Sheet>
@@ -201,7 +135,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             <button
               className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-white hover:text-[#F4C903] cta-glow-pulse"
             >
-              PM CONSULTING JOB BOARD
+              Open PM Contracts
             </button>
           </Link>
 
@@ -244,107 +178,8 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
         {/* Right: Desktop Nav Items */}
         <div className="flex flex-shrink-0 items-center gap-1">
-          {/* Desktop Nav Links - Hidden on mobile/tablet and laptop */}
-          <a
-            href="https://www.skool.com/bi-fintech-consultant-academy/about"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:block px-1 py-2 text-[11px] 2xl:text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
-          >
-            Training Program
-          </a>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="hidden md:flex px-1 py-2 text-[11px] 2xl:text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-0.5"
-              >
-                Articles
-                <ChevronDown className="w-4 h-4" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-gray-900 border border-white/20 min-w-[200px] z-[100]">
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/tools-articles" className="w-full">
-                  Tools Articles
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/pmp-certification-articles" className="w-full">
-                  PMP Cert Articles
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/psm-certification-articles" className="w-full">
-                  PSM Cert Articles
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/pmi-cpmai-certification-articles" className="w-full">
-                  PMI-CPMAI Cert Articles
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/consulting-job-stories-articles" className="w-full">
-                  Consulting Jobs/Stories Articles
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/other-articles" className="w-full">
-                  Other Articles
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="hidden md:flex px-1 py-2 text-[11px] 2xl:text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap items-center gap-0.5"
-              >
-                AI/BI-FinTech PM Resources
-                <ChevronDown className="w-4 h-4" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-gray-900 border border-white/20 min-w-[200px] z-[100]">
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/3ks-tracker" className="w-full">
-                  3KS Productivity Tracker
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="w-full">
-                  90D PM Pivot Roadmap
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/pm-strategy-guide-pdf" className="w-full">
-                  PM Consulting Strategy Guide PDF
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10 text-white hover:text-[#F4C903] focus:text-[#F4C903]">
-                <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="w-full">
-                  AI/BI-FinTech PM Job Alerts/Repo
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Link to="/book-session" className="hidden md:block">
-            <button
-              className="px-1 py-2 text-[11px] 2xl:text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
-            >
-              Book Session
-            </button>
-          </Link>
-
-          <Link to="/about-post" className="hidden md:block">
-            <button
-              className="px-1 py-2 text-[11px] 2xl:text-sm font-semibold text-white hover:text-[#F4C903] transition-all duration-300 whitespace-nowrap"
-            >
-              About
-            </button>
-          </Link>
 
           {/* Workshop CTA - gold glowing animated border */}
           <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer">
