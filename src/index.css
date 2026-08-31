@@ -945,3 +945,73 @@ All colors MUST be HSL.
 .animate-subtle-glow {
   animation: subtle-glow 2.5s ease-in-out infinite;
 }
+
+/* --- KAN-328: rotating gold conic-gradient border + soft outer glow --- */
+@property --gold-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes gold-border-spin {
+  to { --gold-angle: 360deg; }
+}
+
+.gold-glow-border {
+  position: relative;
+  isolation: isolate;
+  background: rgba(12, 12, 12, 0.92);
+  border-radius: 0.75rem;
+  border: 0;
+  box-shadow: 0 0 12px rgba(244, 201, 3, 0.35);
+}
+
+/* the animated border ring */
+.gold-glow-border::before,
+.gold-glow-border::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--gold-angle),
+    rgba(244, 201, 3, 0.15),
+    #FFE361 20%,
+    #F4C903 35%,
+    rgba(244, 201, 3, 0.15) 55%,
+    rgba(244, 201, 3, 0.15) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: gold-border-spin 4s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* the soft outer glow (same ring, blurred) */
+.gold-glow-border::after {
+  filter: blur(10px);
+  opacity: 0.75;
+  z-index: -2;
+}
+
+@media (min-width: 768px) {
+  .gold-glow-border::after { filter: blur(16px); }
+}
+
+/* Fallback + reduced motion: static gold border */
+@supports not (background: conic-gradient(from var(--gold-angle), red, blue)) {
+  .gold-glow-border {
+    border: 2px solid #F4C903;
+  }
+  .gold-glow-border::before,
+  .gold-glow-border::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-glow-border::before,
+  .gold-glow-border::after { animation: none; }
+}
