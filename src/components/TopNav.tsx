@@ -1,12 +1,6 @@
-import { Search, Menu, User, ChevronDown, X } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -14,11 +8,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 
 export const WORKSHOP_REGISTER_URL = "https://calendly.com/hassan-hammer/30min";
@@ -31,11 +20,8 @@ interface TopNavProps {
 
 const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isRoadmapHovered, setIsRoadmapHovered] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [articlesOpen, setArticlesOpen] = useState(false);
-  const [resourcesOpen, setResourcesOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
