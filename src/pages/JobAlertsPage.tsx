@@ -132,6 +132,21 @@ const sourceNameMap: Record<string, string> = {
   "Agilus (Canada)": "Agilus Work Solutions",
   "SI Systems": "S.i. Systems",
   "S.i. Systems": "S.i. Systems",
+  "Nerdyhire": "Nerdy Hire",
+  "Nerdy Hire": "Nerdy Hire",
+  "Tundra Technical": "Tundra Technical Solutions",
+  "Tundra Technical Solutions": "Tundra Technical Solutions",
+};
+
+// Case-insensitive, trimmed alias lookup so variants never appear as separate sources
+const sourceAliasLookup: Record<string, string> = Object.fromEntries(
+  Object.entries(sourceNameMap).map(([alias, canonical]) => [alias.trim().toLowerCase(), canonical])
+);
+
+const normalizeSourceName = (raw: string): string => {
+  const trimmed = raw.trim();
+  if (!trimmed) return '';
+  return sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
 };
 
 // Frontend display labels for sources (does not affect underlying data values)
