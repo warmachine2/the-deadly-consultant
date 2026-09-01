@@ -1849,10 +1849,12 @@ const JobAlertsPage: React.FC = () => {
                             </span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
-                            <span className="px-2 py-1 rounded-full text-xs inline-flex items-center gap-1" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
-                              {job.workType.toLowerCase().includes('remote') ? <Plane className="w-3 h-3" /> : job.workType.toLowerCase().includes('hybrid') ? <Home className="w-3 h-3" /> : <Car className="w-3 h-3" />}
-                              {job.workType}
-                            </span>
+                            {workMode && (
+                              <span className="px-2 py-1 rounded-full text-xs inline-flex items-center gap-1" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+                                {workMode === 'Remote' ? <Plane className="w-3 h-3" /> : workMode === 'Hybrid' ? <Home className="w-3 h-3" /> : <Car className="w-3 h-3" />}
+                                {workMode}
+                              </span>
+                            )}
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
                             {job.earningEstimate && (
@@ -1860,7 +1862,7 @@ const JobAlertsPage: React.FC = () => {
                                 <span className="inline-flex" style={{ color: '#FFDD40' }}>
                                   {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3 h-3 -mx-0.5" />)}
                                 </span>
-                                {job.earningEstimate.replace(/\s*(CAD|USD)\s*/gi, ' ').trim()} {currency} *Est.
+                                {formattedEarnings}{!earningsHasCurrency && ` ${currency}`}{!earningsHasEst && ' *Est.'}
                               </span>
                             )}
                           </TableCell>
