@@ -1063,6 +1063,16 @@ const JobAlertsPage: React.FC = () => {
   // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
   // Desktop form: 27ad03da2d, Mobile form: 0edbc71770
   useEffect(() => {
+    // Safety net: never let a formkit-toggle click navigate away from the page.
+    // When the Kit script is loaded it calls preventDefault itself and opens the
+    // modal; this capture-phase guard only matters if the script is blocked/slow.
+    const guard = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest?.('[data-formkit-toggle]')) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('click', guard, true);
+
     const uid = window.innerWidth < 768 ? '0edbc71770' : '27ad03da2d';
     const timer = setTimeout(() => {
       // The Kit embed script binds to existing [data-formkit-toggle] elements,
@@ -1070,7 +1080,10 @@ const JobAlertsPage: React.FC = () => {
       const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${uid}"]`);
       trigger?.click();
     }, 5000);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('click', guard, true);
+    };
   }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
