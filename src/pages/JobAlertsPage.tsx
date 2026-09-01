@@ -157,6 +157,48 @@ const sourceDisplayNames: Record<string, string> = {
 
 const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
 
+// Normalize raw work-type strings to clean badges: Remote / Hybrid / On-site (or null = no chip)
+const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | null => {
+  const lower = (workType || '').toLowerCase().trim();
+  if (!lower) return null;
+  if (lower === 'true' || lower.includes('remote')) return 'Remote';
+  if (lower.includes('hybrid')) return 'Hybrid';
+  if (lower === 'false' || lower.includes('on-site') || lower.includes('onsite') || lower.includes('in-person') || lower.includes('in person') || lower.includes('in-office')) return 'On-site';
+  return null;
+};
+
+// Convert hourly earnings strings to monthly equivalents (hourly * 1.14 * 160).
+// Monthly strings (with /mo or /month) are preserved as-is. Keeps CAD/USD and *Est. from the raw string.
+const formatEarningsMonthly = (raw: string): string => {
+  if (!raw || !raw.trim()) return '';
+  const str = raw.trim();
+  const isMonthly = /\/\s*(mo|month)\b/i.test(str);
+  const isHourly = /\/\s*(hr|hour|h)\b/i.test(str);
+  if (isMonthly || !isHourly) return str;
+  const currency = /\bCAD\b/i.test(str) ? 'CAD' : /\bUSD\b/i.test(str) ? 'USD' : '';
+  const hasEst = /\*\s*Est\.?/i.test(str);
+  const numbers = str.match(/\$?\s*([\d,]+(?:\.\d+)?)/g) || [];
+  const converted = numbers
+    .map(n => {
+      const v = parseFloat(n.replace(/[^0-9.]/g, ''));
+      if (!isFinite(v) || v <= 0) return null;
+      return '$' + Math.round(v * 1.14 * 160).toLocaleString('en-US');
+    })
+    .filter((s): s is string => s !== null);
+  if (converted.length === 0) return str;
+  let out = converted.join(' - ') + '/mo';
+  if (currency) out += ' ' + currency;
+  if (hasEst) out += ' *Est.';
+  return out;
+};
+
+// First numeric amount of the (possibly converted) monthly earnings string, for filtering/ratings
+const getMonthlyAmount = (raw: string): number => {
+  const formatted = formatEarningsMonthly(raw);
+  const m = formatted.match(/([\d,]+(?:\.\d+)?)/);
+  return m ? Math.round(parseFloat(m[1].replace(/,/g, ''))) : 0;
+};
+
 // Map known cities to filter labels from the work-type/location description string
 const extractCity = (workType: string): string => {
   const wt = workType.trim();
@@ -164,7 +206,7 @@ const extractCity = (workType: string): string => {
   const lower = wt.toLowerCase();
 
   // Remote-only roles
-  if (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person')) {
+  if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
     return 'Remote';
   }
 
@@ -764,27 +806,27 @@ const JobCard: React.FC<{
           })()}
           {job.term}
         </span>
-        <span className="px-4 py-2 text-lg md:text-xl font-medium rounded-full inline-flex items-center gap-2" style={{
-        backgroundColor: 'rgba(0, 212, 255, 0.15)',
-        color: '#00d4ff',
-        border: '1px solid rgba(0, 212, 255, 0.3)'
-      }}>
-          {(() => {
-            const workLower = job.workType.toLowerCase();
-            if (workLower.includes('remote')) return <Plane className="w-5 h-5" />;
-            if (workLower.includes('hybrid')) return <Home className="w-5 h-5" />;
-            return <Car className="w-5 h-5" />;
-          })()}
-          {job.workType}
-        </span>
+        {(() => {
+          const workMode = normalizeWorkMode(job.workType);
+          if (!workMode) return null;
+          return (
+            <span className="px-4 py-2 text-lg md:text-xl font-medium rounded-full inline-flex items-center gap-2" style={{
+            backgroundColor: 'rgba(0, 212, 255, 0.15)',
+            color: '#00d4ff',
+            border: '1px solid rgba(0, 212, 255, 0.3)'
+          }}>
+              {workMode === 'Remote' ? <Plane className="w-5 h-5" /> : workMode === 'Hybrid' ? <Home className="w-5 h-5" /> : <Car className="w-5 h-5" />}
+              {workMode}
+            </span>
+          );
+        })()}
         {job.earningEstimate && <span className="px-4 py-2 text-lg md:text-xl font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(76, 175, 80, 0.15)',
         color: '#4caf50',
         border: '1px solid rgba(76, 175, 80, 0.3)'
       }}>
           {(() => {
-            const earning = job.earningEstimate.replace(/[^0-9]/g, '');
-            const amount = parseInt(earning) || 0;
+            const amount = getMonthlyAmount(job.earningEstimate);
             const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
             return (
               <span className="inline-flex" style={{ color: '#FFDD40' }}>
@@ -792,13 +834,19 @@ const JobCard: React.FC<{
               </span>
             );
           })()}
-          {job.earningEstimate.replace(/\s*(CAD|USD)\s*/gi, ' ').trim()}
           {(() => {
+            const formatted = formatEarningsMonthly(job.earningEstimate);
             const locationLower = job.location?.toLowerCase() || '';
-            if (locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa')) {
-              return <span className="ml-1 text-base opacity-80">CAD *Est.</span>;
-            }
-            return <span className="ml-1 text-base opacity-80">USD *Est.</span>;
+            const fallbackCurrency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
+            const hasCurrency = /\b(CAD|USD)\b/i.test(formatted);
+            const hasEst = /\*\s*Est\.?/i.test(formatted);
+            return (
+              <>
+                {formatted}
+                {!hasCurrency && <span className="ml-1 text-base opacity-80">{fallbackCurrency}</span>}
+                {!hasEst && <span className="ml-1 text-base opacity-80">*Est.</span>}
+              </>
+            );
           })()}
           </span>}
         
@@ -1118,11 +1166,10 @@ const JobAlertsPage: React.FC = () => {
       });
     }
     
-    // Salary filter
+    // Salary filter (uses converted monthly amount)
     if (salaryFilter !== 'all') {
       filtered = filtered.filter(row => {
-        const earning = row.earningEstimate.replace(/[^0-9]/g, '');
-        const amount = parseInt(earning) || 0;
+        const amount = getMonthlyAmount(row.earningEstimate);
         
         if (salaryFilter === 'less15') {
           return amount <= 15000;
@@ -1135,16 +1182,16 @@ const JobAlertsPage: React.FC = () => {
       });
     }
     
-    // Work type filter
+    // Work type filter (by normalized work mode)
     if (workTypeFilter !== 'all') {
       filtered = filtered.filter(row => {
-        const workLower = row.workType.toLowerCase();
+        const workMode = normalizeWorkMode(row.workType);
         if (workTypeFilter === 'remote') {
-          return workLower.includes('remote');
+          return workMode === 'Remote';
         } else if (workTypeFilter === 'hybrid') {
-          return workLower.includes('hybrid');
+          return workMode === 'Hybrid';
         } else if (workTypeFilter === 'onsite') {
-          return !workLower.includes('remote') && !workLower.includes('hybrid');
+          return workMode === 'On-site';
         }
         return true;
       });
@@ -1774,11 +1821,14 @@ const JobAlertsPage: React.FC = () => {
                       const status = hoursAgo <= 6 ? 'HOT' : hoursAgo <= 24 ? 'Ideal' : hoursAgo <= 48 ? 'Hurry' : 'Stale';
                       const statusColor = hoursAgo <= 6 ? '#ff4444' : hoursAgo <= 24 ? '#4ade80' : hoursAgo <= 48 ? '#FFDD40' : '#ef4444';
                       
-                      const earning = job.earningEstimate.replace(/[^0-9]/g, '');
-                      const amount = parseInt(earning) || 0;
+                      const amount = getMonthlyAmount(job.earningEstimate);
                       const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
+                      const workMode = normalizeWorkMode(job.workType);
+                      const formattedEarnings = formatEarningsMonthly(job.earningEstimate);
                       const locationLower = job.location?.toLowerCase() || '';
                       const currency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
+                      const earningsHasCurrency = /\b(CAD|USD)\b/i.test(formattedEarnings);
+                      const earningsHasEst = /\*\s*Est\.?/i.test(formattedEarnings);
                       
                       return (
                         <TableRow key={index} className="border-white/10 hover:bg-white/5">
@@ -1799,10 +1849,12 @@ const JobAlertsPage: React.FC = () => {
                             </span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
-                            <span className="px-2 py-1 rounded-full text-xs inline-flex items-center gap-1" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
-                              {job.workType.toLowerCase().includes('remote') ? <Plane className="w-3 h-3" /> : job.workType.toLowerCase().includes('hybrid') ? <Home className="w-3 h-3" /> : <Car className="w-3 h-3" />}
-                              {job.workType}
-                            </span>
+                            {workMode && (
+                              <span className="px-2 py-1 rounded-full text-xs inline-flex items-center gap-1" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+                                {workMode === 'Remote' ? <Plane className="w-3 h-3" /> : workMode === 'Hybrid' ? <Home className="w-3 h-3" /> : <Car className="w-3 h-3" />}
+                                {workMode}
+                              </span>
+                            )}
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
                             {job.earningEstimate && (
@@ -1810,7 +1862,7 @@ const JobAlertsPage: React.FC = () => {
                                 <span className="inline-flex" style={{ color: '#FFDD40' }}>
                                   {[...Array(dollarCount)].map((_, i) => <DollarSign key={i} className="w-3 h-3 -mx-0.5" />)}
                                 </span>
-                                {job.earningEstimate.replace(/\s*(CAD|USD)\s*/gi, ' ').trim()} {currency} *Est.
+                                {formattedEarnings}{!earningsHasCurrency && ` ${currency}`}{!earningsHasEst && ' *Est.'}
                               </span>
                             )}
                           </TableCell>
