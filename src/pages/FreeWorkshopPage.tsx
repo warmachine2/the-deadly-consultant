@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+
 import {
   Form,
   FormControl,
@@ -181,19 +181,20 @@ const FreeWorkshopPage = () => {
                           className="space-y-3 mt-2"
                         >
                           {QUALIFIER_OPTIONS.map((option) => (
-                            <div key={option} className="flex items-start gap-3">
+                            <label
+                              key={option}
+                              htmlFor={option}
+                              className="flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-colors hover:bg-white/5 has-[:checked]:bg-white/10"
+                            >
                               <RadioGroupItem
                                 value={option}
                                 id={option}
-                                className="mt-1 border-white/40"
+                                className="mt-0.5 h-5 w-5 border-white/60 text-white data-[state=checked]:border-[#F4C903] data-[state=checked]:text-[#F4C903] data-[state=checked]:bg-[#F4C903]/10 [&>span>svg]:h-3.5 [&>span>svg]:w-3.5 [&>span>svg]:fill-[#F4C903]"
                               />
-                              <Label
-                                htmlFor={option}
-                                className="text-white text-sm leading-snug cursor-pointer"
-                              >
+                              <span className="text-white text-sm leading-snug">
                                 {option}
-                              </Label>
-                            </div>
+                              </span>
+                            </label>
                           ))}
                         </RadioGroup>
                       </FormControl>
