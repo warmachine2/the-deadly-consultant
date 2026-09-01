@@ -23,24 +23,24 @@ const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
 
 const SOURCE_ORDER = [
   "Hassan’s Recruiter Network",
-  "Proviso Jobs",
-  "SI Systems Jobs",
-  "Insight Global Jobs",
-  "Procom Jobs",
-  "bifintechleads v4",
+  "Proviso",
+  "SI Systems",
+  "Insight Global",
+  "Procom",
+  "Agilus",
 ];
 
 const normalizeSourceName = (name?: string): string => {
   if (!name) return "";
   const lower = name.toLowerCase().trim();
-  if (lower.includes("hassan") || lower.includes("email") || lower.includes("recruiter")) {
+  if (lower.includes("hassan") || lower.includes("bifintechleads") || lower.includes("recruiter")) {
     return "Hassan’s Recruiter Network";
   }
-  if (lower.includes("proviso")) return "Proviso Jobs";
-  if (lower.includes("si systems") || lower.includes("s.i. systems")) return "SI Systems Jobs";
-  if (lower.includes("insight global")) return "Insight Global Jobs";
-  if (lower.includes("procom")) return "Procom Jobs";
-  if (lower.includes("bifintechleads")) return "bifintechleads v4";
+  if (lower.includes("proviso")) return "Proviso";
+  if (lower.includes("si systems") || lower.includes("s.i. systems") || lower.includes("s.i systems")) return "SI Systems";
+  if (lower.includes("insight global")) return "Insight Global";
+  if (lower.includes("procom")) return "Procom";
+  if (lower.includes("agilus")) return "Agilus";
   return name.trim();
 };
 
