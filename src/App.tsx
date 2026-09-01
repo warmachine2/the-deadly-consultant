@@ -13,6 +13,8 @@ import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
+import FreeWorkshopPage from "./pages/FreeWorkshopPage";
+import FreeWorkshopThankYouPage from "./pages/FreeWorkshopThankYouPage";
 import DashboardPage from "./pages/DashboardPage";
 import SystemStatusPage from "./pages/SystemStatusPage";
 import AuthPage from "./pages/AuthPage";
