@@ -13,6 +13,8 @@ import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
+import FreeWorkshopPage from "./pages/FreeWorkshopPage";
+import FreeWorkshopThankYouPage from "./pages/FreeWorkshopThankYouPage";
 import DashboardPage from "./pages/DashboardPage";
 import SystemStatusPage from "./pages/SystemStatusPage";
 import AuthPage from "./pages/AuthPage";
@@ -52,6 +54,8 @@ const App = () => (
             <Route path="/ai-bi-fintech-pm-job-alerts-repo" element={<JobAlertsPage />} />
             <Route path="/book-session" element={<BookSessionPage />} />
             <Route path="/are-you-ready-to-pivot-to-pm-consulting" element={<AreYouReadyToPivotPage />} />
+            <Route path="/free-workshop" element={<FreeWorkshopPage />} />
+            <Route path="/free-workshop/thank-you" element={<FreeWorkshopThankYouPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/system-status" element={<SystemStatusPage />} />
             <Route path="/auth" element={<AuthPage />} />
