@@ -193,80 +193,39 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
       }
     };
 
-
-    const fetchHealth = async () => {
     const fetchHealth = async () => {
       setLoading(true);
-      setLoading(true);
-      setError(null);
-      setError(null);
-
 
       let resolved: NetworkSource[] | null = null;
-      let resolved: NetworkSource[] | null = null;
-
 
       try {
-      try {
-        const controller = new AbortController();
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 15000);
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
-        const response = await fetch(WEBHOOK_URL, { method: "GET", signal: controller.signal });
         const response = await fetch(WEBHOOK_URL, { method: "GET", signal: controller.signal });
         clearTimeout(timeoutId);
-        clearTimeout(timeoutId);
-
 
         if (response.ok) {
-        if (response.ok) {
-          const json = (await response.json()) as NetworkHealthResponse;
           const json = (await response.json()) as NetworkHealthResponse;
           if (hasDates(json?.sources)) {
-          if (hasDates(json?.sources)) {
-            resolved = json.sources as NetworkSource[];
             resolved = json.sources as NetworkSource[];
           }
-          }
-        }
         }
       } catch (err) {
-      } catch (err) {
-        console.error("Network health fetch failed:", err);
         console.error("Network health fetch failed:", err);
       }
-      }
-
 
       if (!resolved) {
-      if (!resolved) {
-        resolved = await fetchFromSheet();
         resolved = await fetchFromSheet();
       }
-      }
-
 
       if (cancelled) return;
-      if (cancelled) return;
-
 
       if (resolved) {
-      if (resolved) {
         setData({ sources: resolved, count: resolved.length });
-        setData({ sources: resolved, count: resolved.length });
-        setError(null);
-        setError(null);
-      } else {
       } else {
         setData(fallbackData);
-        setData(fallbackData);
-        setError("Unable to refresh live status");
-        setError("Unable to refresh live status");
-      }
       }
       setLoading(false);
-      setLoading(false);
-    };
     };
 
     fetchHealth();
