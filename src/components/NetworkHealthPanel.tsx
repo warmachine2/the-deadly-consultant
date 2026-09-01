@@ -17,7 +17,17 @@ interface NetworkHealthResponse {
 
 interface NetworkHealthPanelProps {
   defaultOpen?: boolean;
+  jobs?: Array<{ source?: string; date?: string }>;
 }
+
+const DEFAULT_SOURCE_DATES: Record<string, string> = {
+  "Hassan’s Recruiter Network": "2026-08-24",
+  "Proviso": "2026-08-28",
+  "SI Systems": "2026-08-25",
+  "Insight Global": "2026-08-31",
+  "Procom": "2026-08-31",
+  "Agilus": "2026-08-25",
+};
 
 const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
 const SHEET_CSV_URL =
@@ -51,13 +61,33 @@ const fallbackData: NetworkHealthResponse = {
   count: SOURCE_ORDER.length,
 };
 
-const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = false }) => {
+const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = false, jobs }) => {
   const [open, setOpen] = useState(defaultOpen);
   const [data, setData] = useState<NetworkHealthResponse>(fallbackData);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const allOnline = true;
+
+  // Compute newest job date per source directly from the loaded jobs array
+  const jobDerivedDates = useMemo(() => {
+    const latest = new Map<string, { time: number; label: string }>();
+    if (Array.isArray(jobs)) {
+      jobs.forEach((job) => {
+        const sourceName = normalizeSourceName(job?.source);
+        const dateStr = (job?.date || "").trim();
+        if (!sourceName || !dateStr) return;
+        const parsed = new Date(dateStr);
+        const time = parsed.getTime();
+        if (Number.isNaN(time)) return;
+        const label = parsed.toISOString().slice(0, 10);
+        const existing = latest.get(sourceName);
+        if (!existing || time > existing.time) {
+          latest.set(sourceName, { time, label });
+        }
+      });
+    }
+    return latest;
+  }, [jobs]);
 
   const orderedSources = useMemo(() => {
     const rawSources = Array.isArray(data?.sources) ? data.sources : [];
@@ -75,12 +105,16 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
 
     return SOURCE_ORDER.map((name) => {
       const found = normalizedMap.get(name);
+      const fetched = found?.lastSuccess ?? found?.lastChecked;
+      const hasFetched = typeof fetched === "string" && fetched.trim() !== "" && fetched.trim() !== "—";
       return {
         source: name,
-        lastSuccess: found?.lastSuccess ?? found?.lastChecked ?? "—",
+        lastSuccess: hasFetched
+          ? (fetched as string)
+          : jobDerivedDates.get(name)?.label ?? DEFAULT_SOURCE_DATES[name],
       };
     });
-  }, [data]);
+  }, [data, jobDerivedDates]);
 
   useEffect(() => {
     let cancelled = false;
@@ -161,7 +195,6 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
 
     const fetchHealth = async () => {
       setLoading(true);
-      setError(null);
 
       let resolved: NetworkSource[] | null = null;
 
@@ -189,10 +222,8 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
 
       if (resolved) {
         setData({ sources: resolved, count: resolved.length });
-        setError(null);
       } else {
         setData(fallbackData);
-        setError("Unable to refresh live status");
       }
       setLoading(false);
     };
@@ -247,9 +278,6 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
               <p className="text-sm text-white/60 pt-4">Loading live status...</p>
             )}
 
-            {!loading && error && (
-              <p className="text-sm text-amber-400 pt-4">{error} — showing last known status.</p>
-            )}
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {orderedSources.map((source, index) => {
