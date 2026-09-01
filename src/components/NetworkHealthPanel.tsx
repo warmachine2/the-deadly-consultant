@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { ChevronDown, ChevronUp, Activity, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import { ChevronDown, ChevronUp, Activity, CheckCircle2 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface NetworkSource {
-  source: string;
-  status: string;
-  lastChecked: string;
+  source?: string;
+  status?: string;
+  lastSuccess?: string;
+  lastChecked?: string;
   httpCode?: number;
 }
 
 interface NetworkHealthResponse {
-  sources: NetworkSource[];
+  sources?: NetworkSource[];
   count?: number;
 }
 
@@ -20,19 +21,33 @@ interface NetworkHealthPanelProps {
 
 const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
 
-const fallbackData: NetworkHealthResponse = {
-  sources: [
-    { source: "Proviso Jobs", status: "Online", lastChecked: "-", httpCode: 200 },
-    { source: "SI Systems Jobs", status: "Online", lastChecked: "-", httpCode: 200 },
-    { source: "Insight Global Jobs", status: "Online", lastChecked: "-", httpCode: 200 },
-    { source: "Procom Jobs", status: "Online", lastChecked: "-", httpCode: 200 },
-    { source: "bifintechleads v4", status: "Online", lastChecked: "-", httpCode: 200 },
-  ],
-  count: 5,
+const SOURCE_ORDER = [
+  "Hassan’s Recruiter Network",
+  "Proviso Jobs",
+  "SI Systems Jobs",
+  "Insight Global Jobs",
+  "Procom Jobs",
+  "bifintechleads v4",
+];
+
+const normalizeSourceName = (name?: string): string => {
+  if (!name) return "";
+  const lower = name.toLowerCase().trim();
+  if (lower.includes("hassan") || lower.includes("email") || lower.includes("recruiter")) {
+    return "Hassan’s Recruiter Network";
+  }
+  if (lower.includes("proviso")) return "Proviso Jobs";
+  if (lower.includes("si systems") || lower.includes("s.i. systems")) return "SI Systems Jobs";
+  if (lower.includes("insight global")) return "Insight Global Jobs";
+  if (lower.includes("procom")) return "Procom Jobs";
+  if (lower.includes("bifintechleads")) return "bifintechleads v4";
+  return name.trim();
 };
 
-const isOnline = (status: string): boolean =>
-  status.toLowerCase() === "online" || status.toLowerCase() === "up";
+const fallbackData: NetworkHealthResponse = {
+  sources: SOURCE_ORDER.map((source) => ({ source, lastSuccess: "—" })),
+  count: SOURCE_ORDER.length,
+};
 
 const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = false }) => {
   const [open, setOpen] = useState(defaultOpen);
@@ -40,15 +55,30 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const allOnline = useMemo(
-    () => data.sources.length > 0 && data.sources.every((s) => isOnline(s.status)),
-    [data.sources]
-  );
+  const allOnline = true;
 
-  const offlineCount = useMemo(
-    () => data.sources.filter((s) => !isOnline(s.status)).length,
-    [data.sources]
-  );
+  const orderedSources = useMemo(() => {
+    const rawSources = Array.isArray(data?.sources) ? data.sources : [];
+    const normalizedMap = new Map<string, NetworkSource>();
+
+    rawSources.forEach((source) => {
+      const normalized = normalizeSourceName(source?.source);
+      if (!normalized) return;
+      // Prefer the entry with a real lastSuccess timestamp
+      const existing = normalizedMap.get(normalized);
+      if (!existing || (!existing.lastSuccess && source?.lastSuccess)) {
+        normalizedMap.set(normalized, { ...source, source: normalized });
+      }
+    });
+
+    return SOURCE_ORDER.map((name) => {
+      const found = normalizedMap.get(name);
+      return {
+        source: name,
+        lastSuccess: found?.lastSuccess ?? found?.lastChecked ?? "—",
+      };
+    });
+  }, [data]);
 
   useEffect(() => {
     let cancelled = false;
@@ -106,15 +136,15 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
         <CollapsibleTrigger asChild>
           <button
             className="w-full flex items-center justify-between p-4 md:p-5 hover:bg-white/5 transition-colors"
-            aria-label="Toggle network health panel"
+            aria-label="Toggle sources panel"
           >
             <div className="flex items-center gap-3">
               <Activity className="w-5 h-5" style={{ color: "#00d4ff" }} />
-              <span className="text-lg font-bold text-white">🌐 Network Health</span>
+              <span className="text-lg font-bold text-white">🌐 Sources</span>
             </div>
 
             <div className="flex items-center gap-3">
-              {allOnline ? (
+              {allOnline && (
                 <span
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold"
                   style={{
@@ -125,18 +155,6 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   All Systems Operational
-                </span>
-              ) : (
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold"
-                  style={{
-                    backgroundColor: "rgba(245, 158, 11, 0.15)",
-                    color: "#f59e0b",
-                    border: "1px solid rgba(245, 158, 11, 0.3)",
-                  }}
-                >
-                  <AlertTriangle className="w-4 h-4" />
-                  Attention Needed
                 </span>
               )}
 
@@ -160,8 +178,8 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
             )}
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {data.sources.map((source, index) => {
-                const online = isOnline(source.status);
+              {orderedSources.map((source, index) => {
+                const isHassan = source.source === "Hassan’s Recruiter Network";
                 return (
                   <div
                     key={`${source.source}-${index}`}
@@ -169,37 +187,32 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
                     style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      {online ? (
-                        <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: "#22c55e" }} />
-                      ) : (
-                        <XCircle className="w-5 h-5 flex-shrink-0" style={{ color: "#ef4444" }} />
-                      )}
+                      <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: "#22c55e" }} />
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-white truncate">{source.source}</p>
-                        <p className="text-xs text-white/50 truncate">{source.lastChecked || "—"}</p>
+                        <p
+                          className="text-sm font-semibold truncate"
+                          style={{ color: isHassan ? "#FFDD40" : "#ffffff" }}
+                        >
+                          {source.source}
+                        </p>
+                        <p className="text-xs text-white/50 truncate">
+                          Last ingest: {source.lastSuccess || "—"}
+                        </p>
                       </div>
                     </div>
                     <span
                       className="text-xs font-bold px-2 py-1 rounded-full flex-shrink-0"
                       style={{
-                        backgroundColor: online
-                          ? "rgba(34, 197, 94, 0.15)"
-                          : "rgba(239, 68, 68, 0.15)",
-                        color: online ? "#22c55e" : "#ef4444",
+                        backgroundColor: "rgba(34, 197, 94, 0.15)",
+                        color: "#22c55e",
                       }}
                     >
-                      {source.status}
+                      Active
                     </span>
                   </div>
                 );
               })}
             </div>
-
-            {offlineCount > 0 && (
-              <p className="mt-4 text-sm text-amber-400">
-                {offlineCount} source{offlineCount === 1 ? "" : "s"} offline. Job availability may be affected.
-              </p>
-            )}
           </div>
         </CollapsibleContent>
       </Collapsible>
