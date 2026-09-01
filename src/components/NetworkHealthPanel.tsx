@@ -61,13 +61,33 @@ const fallbackData: NetworkHealthResponse = {
   count: SOURCE_ORDER.length,
 };
 
-const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = false }) => {
+const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = false, jobs }) => {
   const [open, setOpen] = useState(defaultOpen);
   const [data, setData] = useState<NetworkHealthResponse>(fallbackData);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const allOnline = true;
+
+  // Compute newest job date per source directly from the loaded jobs array
+  const jobDerivedDates = useMemo(() => {
+    const latest = new Map<string, { time: number; label: string }>();
+    if (Array.isArray(jobs)) {
+      jobs.forEach((job) => {
+        const sourceName = normalizeSourceName(job?.source);
+        const dateStr = (job?.date || "").trim();
+        if (!sourceName || !dateStr) return;
+        const parsed = new Date(dateStr);
+        const time = parsed.getTime();
+        if (Number.isNaN(time)) return;
+        const label = parsed.toISOString().slice(0, 10);
+        const existing = latest.get(sourceName);
+        if (!existing || time > existing.time) {
+          latest.set(sourceName, { time, label });
+        }
+      });
+    }
+    return latest;
+  }, [jobs]);
 
   const orderedSources = useMemo(() => {
     const rawSources = Array.isArray(data?.sources) ? data.sources : [];
@@ -85,12 +105,16 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
 
     return SOURCE_ORDER.map((name) => {
       const found = normalizedMap.get(name);
+      const fetched = found?.lastSuccess ?? found?.lastChecked;
+      const hasFetched = typeof fetched === "string" && fetched.trim() !== "" && fetched.trim() !== "—";
       return {
         source: name,
-        lastSuccess: found?.lastSuccess ?? found?.lastChecked ?? "—",
+        lastSuccess: hasFetched
+          ? (fetched as string)
+          : jobDerivedDates.get(name)?.label ?? DEFAULT_SOURCE_DATES[name],
       };
     });
-  }, [data]);
+  }, [data, jobDerivedDates]);
 
   useEffect(() => {
     let cancelled = false;
