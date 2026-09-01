@@ -530,6 +530,52 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
   );
 };
 
+// KAN-274: deterministic source destination routing
+const getSourceDestinationUrl = (source?: string, jobLink?: string): string | null => {
+  if (!source) return null;
+  const s = source.trim();
+  const lower = s.toLowerCase();
+
+  // Hassan / Hassan’s Recruiter Network / email: span only. Not a link.
+  if (lower.includes('hassan') || lower.includes('email')) {
+    return null;
+  }
+
+  // Insight Global: always https://insightglobal.com/jobs
+  if (lower.includes('insight global')) {
+    return 'https://insightglobal.com/jobs';
+  }
+
+  // Procom: always https://www.procomservices.com/jobs
+  if (lower.includes('procom')) {
+    return 'https://www.procomservices.com/jobs';
+  }
+
+  // S.i. Systems / SI Systems: always https://www.sisystems.com/search-it-jobs/
+  if (lower.includes('s.i. systems') || lower.includes('si systems') || lower.includes('s.i systems')) {
+    return 'https://www.sisystems.com/search-it-jobs/';
+  }
+
+  // Proviso: use job Link if present, else https://proviso.ca/jobs
+  if (lower.includes('proviso')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://proviso.ca/jobs';
+  }
+
+  // Agilus: use job Link if present, else https://agilus.ca/jobs
+  if (lower.includes('agilus')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://agilus.ca/jobs';
+  }
+
+  // Any other source: use job Link if it starts with http. Else not clickable.
+  if (jobLink && jobLink.trim().startsWith('http')) {
+    return jobLink.trim();
+  }
+
+  return null;
+};
+
 // Source attribution badge shown on every job card
 const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, jobLink }) => {
   if (!source) return null;
@@ -538,25 +584,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isHassanEmail = /hassan|email/i.test(normalizedSource) || canonicalSource === "Hassan's recruiter Network";
   const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(canonicalSource);
 
-  // KAN-274: deterministic source routing
-  let href: string | null = null;
-  if (!isHassanEmail) {
-    if (canonicalSource === "Insight Global") {
-      href = "https://insightglobal.com/jobs";
-    } else if (canonicalSource === "Procom") {
-      href = "https://www.procomservices.com/jobs";
-    } else if (canonicalSource === "S.i. Systems") {
-      href = "https://www.sisystems.com/search-it-jobs/";
-    } else if (canonicalSource === "Proviso") {
-      href = jobLink && jobLink.startsWith("http") ? jobLink : "https://proviso.ca/jobs";
-    } else if (canonicalSource === "Agilus Work Solutions") {
-      href = jobLink && jobLink.startsWith("http") ? jobLink : "https://agilus.ca/jobs";
-    } else if (jobLink && jobLink.startsWith("http")) {
-      href = jobLink;
-    }
-  }
+  const destinationUrl = getSourceDestinationUrl(source, jobLink);
+  const hasLink = Boolean(destinationUrl);
 
-  const hasLink = !!href;
   const isSiSystems = canonicalSource === "S.i. Systems";
   const isProviso = canonicalSource === "Proviso";
   const isInsightGlobal = canonicalSource === "Insight Global";
@@ -589,10 +619,10 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
     </>
   );
 
-  if (hasLink) {
+  if (hasLink && destinationUrl) {
     return (
       <a
-        href={href}
+        href={destinationUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit mx-auto"
