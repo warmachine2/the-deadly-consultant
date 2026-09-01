@@ -622,7 +622,7 @@ const JobCard: React.FC<{
               color: '#FFDD40'
             }}>
               <CalendarCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>Book Free 30-Min Strategy Session</span>
+              <span>Free 30-Min Strategy Session</span>
             </a>
             <span className="text-[10px] mt-1" style={{
               color: 'rgba(255, 255, 255, 0.5)'
@@ -744,7 +744,7 @@ const JobCard: React.FC<{
             }}>
               <CalendarCheck className="w-3.5 h-3.5" />
               <span className="flex flex-col items-start leading-tight">
-                <span>Book Free 30-Min Strategy Session</span>
+                <span>Free 30-Min Strategy Session</span>
               </span>
             </a>
             <span className="text-[10px] mt-1" style={{
@@ -1058,6 +1058,30 @@ const JobAlertsPage: React.FC = () => {
     // Cached visitors: revalidate silently in the background, keeping their page intact
     fetchData(Boolean(cachedJobs));
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
+  // Desktop form: 27ad03da2d, Mobile form: 0edbc71770
+  useEffect(() => {
+    const uid = window.innerWidth < 768 ? '0edbc71770' : '27ad03da2d';
+    // Only click once the Kit embed script has actually loaded (flag set by the
+    // loader in index.html). If Kit is blocked/slow, we skip — a programmatic
+    // click on an unbound toggle anchor would otherwise navigate the page away.
+    const tryOpen = () => {
+      const loaded = (window as unknown as { __kitLoaded?: Record<string, boolean> }).__kitLoaded;
+      if (!loaded?.[uid]) return false;
+      const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${uid}"]`);
+      trigger?.click();
+      return true;
+    };
+    const timer = setTimeout(() => {
+      if (tryOpen()) return;
+      const poll = setInterval(() => {
+        if (tryOpen()) clearInterval(poll);
+      }, 1000);
+      setTimeout(() => clearInterval(poll), 25000);
+    }, 5000);
+    return () => clearTimeout(timer);
   }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -1374,7 +1398,7 @@ const JobAlertsPage: React.FC = () => {
               border: '1px solid rgba(0, 150, 255, 0.4)'
             }}>
                 <CalendarCheck className="w-5 h-5 mr-2" />
-                Book Free 30-Min Strategy Session
+                Free 30-Min Strategy Session
               </a>
               {/* Mobile Link */}
               <a 
@@ -1389,7 +1413,7 @@ const JobAlertsPage: React.FC = () => {
                 }}
               >
                 <Users className="w-5 h-5 mr-2" />
-                Sign Up for Alerts & PDF Guide
+                Sign-up for new PM Contract Alerts
               </a>
               {/* Desktop Link */}
               <a 
@@ -1404,7 +1428,7 @@ const JobAlertsPage: React.FC = () => {
                 }}
               >
                 <Users className="w-5 h-5 mr-2" />
-                Sign Up for Alerts & PDF Guide
+                Sign-up for new PM Contract Alerts
               </a>
             </div>
             <p className="text-base md:text-lg mt-3" style={{
