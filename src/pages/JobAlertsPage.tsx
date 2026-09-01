@@ -806,27 +806,27 @@ const JobCard: React.FC<{
           })()}
           {job.term}
         </span>
-        <span className="px-4 py-2 text-lg md:text-xl font-medium rounded-full inline-flex items-center gap-2" style={{
-        backgroundColor: 'rgba(0, 212, 255, 0.15)',
-        color: '#00d4ff',
-        border: '1px solid rgba(0, 212, 255, 0.3)'
-      }}>
-          {(() => {
-            const workLower = job.workType.toLowerCase();
-            if (workLower.includes('remote')) return <Plane className="w-5 h-5" />;
-            if (workLower.includes('hybrid')) return <Home className="w-5 h-5" />;
-            return <Car className="w-5 h-5" />;
-          })()}
-          {job.workType}
-        </span>
+        {(() => {
+          const workMode = normalizeWorkMode(job.workType);
+          if (!workMode) return null;
+          return (
+            <span className="px-4 py-2 text-lg md:text-xl font-medium rounded-full inline-flex items-center gap-2" style={{
+            backgroundColor: 'rgba(0, 212, 255, 0.15)',
+            color: '#00d4ff',
+            border: '1px solid rgba(0, 212, 255, 0.3)'
+          }}>
+              {workMode === 'Remote' ? <Plane className="w-5 h-5" /> : workMode === 'Hybrid' ? <Home className="w-5 h-5" /> : <Car className="w-5 h-5" />}
+              {workMode}
+            </span>
+          );
+        })()}
         {job.earningEstimate && <span className="px-4 py-2 text-lg md:text-xl font-medium rounded-full inline-flex items-center gap-2" style={{
         backgroundColor: 'rgba(76, 175, 80, 0.15)',
         color: '#4caf50',
         border: '1px solid rgba(76, 175, 80, 0.3)'
       }}>
           {(() => {
-            const earning = job.earningEstimate.replace(/[^0-9]/g, '');
-            const amount = parseInt(earning) || 0;
+            const amount = getMonthlyAmount(job.earningEstimate);
             const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
             return (
               <span className="inline-flex" style={{ color: '#FFDD40' }}>
@@ -834,13 +834,19 @@ const JobCard: React.FC<{
               </span>
             );
           })()}
-          {job.earningEstimate.replace(/\s*(CAD|USD)\s*/gi, ' ').trim()}
           {(() => {
+            const formatted = formatEarningsMonthly(job.earningEstimate);
             const locationLower = job.location?.toLowerCase() || '';
-            if (locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa')) {
-              return <span className="ml-1 text-base opacity-80">CAD *Est.</span>;
-            }
-            return <span className="ml-1 text-base opacity-80">USD *Est.</span>;
+            const fallbackCurrency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
+            const hasCurrency = /\b(CAD|USD)\b/i.test(formatted);
+            const hasEst = /\*\s*Est\.?/i.test(formatted);
+            return (
+              <>
+                {formatted}
+                {!hasCurrency && <span className="ml-1 text-base opacity-80">{fallbackCurrency}</span>}
+                {!hasEst && <span className="ml-1 text-base opacity-80">*Est.</span>}
+              </>
+            );
           })()}
           </span>}
         
