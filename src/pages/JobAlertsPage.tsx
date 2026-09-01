@@ -622,7 +622,7 @@ const JobCard: React.FC<{
               color: '#FFDD40'
             }}>
               <CalendarCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>Book Free 30-Min Strategy Session</span>
+              <span>Free 30-Min Strategy Session</span>
             </a>
             <span className="text-[10px] mt-1" style={{
               color: 'rgba(255, 255, 255, 0.5)'
@@ -744,7 +744,7 @@ const JobCard: React.FC<{
             }}>
               <CalendarCheck className="w-3.5 h-3.5" />
               <span className="flex flex-col items-start leading-tight">
-                <span>Book Free 30-Min Strategy Session</span>
+                <span>Free 30-Min Strategy Session</span>
               </span>
             </a>
             <span className="text-[10px] mt-1" style={{
@@ -1374,7 +1374,7 @@ const JobAlertsPage: React.FC = () => {
               border: '1px solid rgba(0, 150, 255, 0.4)'
             }}>
                 <CalendarCheck className="w-5 h-5 mr-2" />
-                Book Free 30-Min Strategy Session
+                Free 30-Min Strategy Session
               </a>
               {/* Mobile Link */}
               <a 
@@ -1389,7 +1389,7 @@ const JobAlertsPage: React.FC = () => {
                 }}
               >
                 <Users className="w-5 h-5 mr-2" />
-                Sign Up for Alerts & PDF Guide
+                Sign-up for new PM Contract Alerts
               </a>
               {/* Desktop Link */}
               <a 
@@ -1404,7 +1404,7 @@ const JobAlertsPage: React.FC = () => {
                 }}
               >
                 <Users className="w-5 h-5 mr-2" />
-                Sign Up for Alerts & PDF Guide
+                Sign-up for new PM Contract Alerts
               </a>
             </div>
             <p className="text-base md:text-lg mt-3" style={{
