@@ -1063,33 +1063,25 @@ const JobAlertsPage: React.FC = () => {
   // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
   // Desktop form: 27ad03da2d, Mobile form: 0edbc71770
   useEffect(() => {
-    // Safety net: never let a formkit-toggle click navigate away from the page.
-    // When the Kit script is loaded it calls preventDefault itself and opens the
-    // modal; this capture-phase guard only fires while the Kit script is missing.
-    let kitReady = document.readyState === 'complete' && !!document.querySelector('script[data-uid]');
-    const onLoad = () => {
-      kitReady = kitReady || !!document.querySelector('script[data-uid]');
-    };
-    window.addEventListener('load', onLoad);
-    const guard = (e: MouseEvent) => {
-      if (!kitReady && (e.target as HTMLElement).closest?.('[data-formkit-toggle]')) {
-        e.preventDefault();
-      }
-    };
-    document.addEventListener('click', guard, true);
-
     const uid = window.innerWidth < 768 ? '0edbc71770' : '27ad03da2d';
-    const timer = setTimeout(() => {
-      // The Kit embed script binds to existing [data-formkit-toggle] elements,
-      // so click the already-rendered CTA anchor for this viewport's form UID.
+    // Only click once the Kit embed script has actually loaded (flag set by the
+    // loader in index.html). If Kit is blocked/slow, we skip — a programmatic
+    // click on an unbound toggle anchor would otherwise navigate the page away.
+    const tryOpen = () => {
+      const loaded = (window as unknown as { __kitLoaded?: Record<string, boolean> }).__kitLoaded;
+      if (!loaded?.[uid]) return false;
       const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${uid}"]`);
       trigger?.click();
-    }, 5000);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('load', onLoad);
-      document.removeEventListener('click', guard, true);
+      return true;
     };
+    const timer = setTimeout(() => {
+      if (tryOpen()) return;
+      const poll = setInterval(() => {
+        if (tryOpen()) clearInterval(poll);
+      }, 1000);
+      setTimeout(() => clearInterval(poll), 25000);
+    }, 5000);
+    return () => clearTimeout(timer);
   }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
