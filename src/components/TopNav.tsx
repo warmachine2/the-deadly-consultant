@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 
 
-export const WORKSHOP_REGISTER_URL = "https://calendly.com/hassan-hammer/30min";
+export const WORKSHOP_REGISTER_URL = "https://www.zerotopmconsultant.com/free-workshop";
 
 interface TopNavProps {
   onSearchChange?: (query: string) => void;
