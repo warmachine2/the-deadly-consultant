@@ -1065,9 +1065,14 @@ const JobAlertsPage: React.FC = () => {
   useEffect(() => {
     // Safety net: never let a formkit-toggle click navigate away from the page.
     // When the Kit script is loaded it calls preventDefault itself and opens the
-    // modal; this capture-phase guard only matters if the script is blocked/slow.
+    // modal; this capture-phase guard only fires while the Kit script is missing.
+    let kitReady = document.readyState === 'complete' && !!document.querySelector('script[data-uid]');
+    const onLoad = () => {
+      kitReady = kitReady || !!document.querySelector('script[data-uid]');
+    };
+    window.addEventListener('load', onLoad);
     const guard = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).closest?.('[data-formkit-toggle]')) {
+      if (!kitReady && (e.target as HTMLElement).closest?.('[data-formkit-toggle]')) {
         e.preventDefault();
       }
     };
