@@ -546,9 +546,9 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://insightglobal.com/jobs';
   }
 
-  // Procom: always https://myprocom-portal.procomservices.com/jobs
+  // Procom: always https://portal.procomservices.com/jobs?loginType=contractor&lang=en
   if (lower.includes('procom')) {
-    return 'https://myprocom-portal.procomservices.com/jobs';
+    return 'https://portal.procomservices.com/jobs?loginType=contractor&lang=en';
   }
 
   // S.i. Systems / SI Systems: always https://www.sisystems.com/search-it-jobs/
