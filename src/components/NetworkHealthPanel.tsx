@@ -20,6 +20,8 @@ interface NetworkHealthPanelProps {
 }
 
 const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
+const SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig/export?format=csv&gid=1354178862";
 
 const SOURCE_ORDER = [
   "Hassan’s Recruiter Network",
