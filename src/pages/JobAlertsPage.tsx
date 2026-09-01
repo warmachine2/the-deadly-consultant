@@ -1059,6 +1059,24 @@ const JobAlertsPage: React.FC = () => {
     fetchData(Boolean(cachedJobs));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
+  // Desktop form: 27ad03da2d, Mobile form: 0edbc71770
+  useEffect(() => {
+    const uid = window.innerWidth < 768 ? '0edbc71770' : '27ad03da2d';
+    const timer = setTimeout(() => {
+      // The Kit embed script attaches handlers to elements with data-formkit-toggle.
+      // Programmatically clicking a hidden trigger opens the modal once the script is ready.
+      const trigger = document.createElement('a');
+      trigger.setAttribute('data-formkit-toggle', uid);
+      trigger.href = `https://bi-fintech-consultant-academy.kit.com/${uid}`;
+      trigger.style.display = 'none';
+      document.body.appendChild(trigger);
+      trigger.click();
+      setTimeout(() => trigger.remove(), 1000);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
