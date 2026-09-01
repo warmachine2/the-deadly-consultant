@@ -1087,6 +1087,7 @@ const JobAlertsPage: React.FC = () => {
     }, 5000);
     return () => {
       clearTimeout(timer);
+      window.removeEventListener('load', onLoad);
       document.removeEventListener('click', guard, true);
     };
   }, []);
