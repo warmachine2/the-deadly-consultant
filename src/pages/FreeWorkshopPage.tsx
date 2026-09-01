@@ -189,7 +189,7 @@ const FreeWorkshopPage = () => {
                               <RadioGroupItem
                                 value={option}
                                 id={option}
-                                className="mt-0.5 h-5 w-5 border-white/60 text-white data-[state=checked]:border-[#F4C903] data-[state=checked]:text-[#F4C903]"
+                                className="mt-0.5 h-5 w-5 border-white/60 text-white data-[state=checked]:border-[#F4C903] data-[state=checked]:text-[#F4C903] data-[state=checked]:bg-[#F4C903]/10 [&>span>svg]:h-3.5 [&>span>svg]:w-3.5 [&>span>svg]:fill-[#F4C903]"
                               />
                               <span className="text-white text-sm leading-snug">
                                 {option}
