@@ -1065,15 +1065,10 @@ const JobAlertsPage: React.FC = () => {
   useEffect(() => {
     const uid = window.innerWidth < 768 ? '0edbc71770' : '27ad03da2d';
     const timer = setTimeout(() => {
-      // The Kit embed script attaches handlers to elements with data-formkit-toggle.
-      // Programmatically clicking a hidden trigger opens the modal once the script is ready.
-      const trigger = document.createElement('a');
-      trigger.setAttribute('data-formkit-toggle', uid);
-      trigger.href = `https://bi-fintech-consultant-academy.kit.com/${uid}`;
-      trigger.style.display = 'none';
-      document.body.appendChild(trigger);
-      trigger.click();
-      setTimeout(() => trigger.remove(), 1000);
+      // The Kit embed script binds to existing [data-formkit-toggle] elements,
+      // so click the already-rendered CTA anchor for this viewport's form UID.
+      const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${uid}"]`);
+      trigger?.click();
     }, 5000);
     return () => clearTimeout(timer);
   }, []);
