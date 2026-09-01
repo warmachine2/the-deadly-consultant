@@ -1166,11 +1166,10 @@ const JobAlertsPage: React.FC = () => {
       });
     }
     
-    // Salary filter
+    // Salary filter (uses converted monthly amount)
     if (salaryFilter !== 'all') {
       filtered = filtered.filter(row => {
-        const earning = row.earningEstimate.replace(/[^0-9]/g, '');
-        const amount = parseInt(earning) || 0;
+        const amount = getMonthlyAmount(row.earningEstimate);
         
         if (salaryFilter === 'less15') {
           return amount <= 15000;
@@ -1183,16 +1182,16 @@ const JobAlertsPage: React.FC = () => {
       });
     }
     
-    // Work type filter
+    // Work type filter (by normalized work mode)
     if (workTypeFilter !== 'all') {
       filtered = filtered.filter(row => {
-        const workLower = row.workType.toLowerCase();
+        const workMode = normalizeWorkMode(row.workType);
         if (workTypeFilter === 'remote') {
-          return workLower.includes('remote');
+          return workMode === 'Remote';
         } else if (workTypeFilter === 'hybrid') {
-          return workLower.includes('hybrid');
+          return workMode === 'Hybrid';
         } else if (workTypeFilter === 'onsite') {
-          return !workLower.includes('remote') && !workLower.includes('hybrid');
+          return workMode === 'On-site';
         }
         return true;
       });
@@ -1822,11 +1821,14 @@ const JobAlertsPage: React.FC = () => {
                       const status = hoursAgo <= 6 ? 'HOT' : hoursAgo <= 24 ? 'Ideal' : hoursAgo <= 48 ? 'Hurry' : 'Stale';
                       const statusColor = hoursAgo <= 6 ? '#ff4444' : hoursAgo <= 24 ? '#4ade80' : hoursAgo <= 48 ? '#FFDD40' : '#ef4444';
                       
-                      const earning = job.earningEstimate.replace(/[^0-9]/g, '');
-                      const amount = parseInt(earning) || 0;
+                      const amount = getMonthlyAmount(job.earningEstimate);
                       const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
+                      const workMode = normalizeWorkMode(job.workType);
+                      const formattedEarnings = formatEarningsMonthly(job.earningEstimate);
                       const locationLower = job.location?.toLowerCase() || '';
                       const currency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
+                      const earningsHasCurrency = /\b(CAD|USD)\b/i.test(formattedEarnings);
+                      const earningsHasEst = /\*\s*Est\.?/i.test(formattedEarnings);
                       
                       return (
                         <TableRow key={index} className="border-white/10 hover:bg-white/5">
