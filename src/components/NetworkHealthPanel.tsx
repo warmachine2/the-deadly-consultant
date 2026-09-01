@@ -20,15 +20,6 @@ interface NetworkHealthPanelProps {
   jobs?: Array<{ source?: string; date?: string }>;
 }
 
-const DEFAULT_SOURCE_DATES: Record<string, string> = {
-  "Hassan’s Recruiter Network": "2026-08-24",
-  "Proviso": "2026-08-28",
-  "SI Systems": "2026-08-25",
-  "Insight Global": "2026-08-31",
-  "Procom": "2026-08-31",
-  "Agilus": "2026-08-25",
-};
-
 const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
 const SHEET_CSV_URL =
   "https://docs.google.com/spreadsheets/d/107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig/export?format=csv&gid=1354178862";
@@ -111,7 +102,7 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
         source: name,
         lastSuccess: hasFetched
           ? (fetched as string)
-          : jobDerivedDates.get(name)?.label ?? DEFAULT_SOURCE_DATES[name],
+          : jobDerivedDates.get(name)?.label ?? "—",
       };
     });
   }, [data, jobDerivedDates]);
