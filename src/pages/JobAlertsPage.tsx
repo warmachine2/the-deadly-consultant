@@ -157,6 +157,48 @@ const sourceDisplayNames: Record<string, string> = {
 
 const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
 
+// Normalize raw work-type strings to clean badges: Remote / Hybrid / On-site (or null = no chip)
+const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | null => {
+  const lower = (workType || '').toLowerCase().trim();
+  if (!lower) return null;
+  if (lower === 'true' || lower.includes('remote')) return 'Remote';
+  if (lower.includes('hybrid')) return 'Hybrid';
+  if (lower === 'false' || lower.includes('on-site') || lower.includes('onsite') || lower.includes('in-person') || lower.includes('in person') || lower.includes('in-office')) return 'On-site';
+  return null;
+};
+
+// Convert hourly earnings strings to monthly equivalents (hourly * 1.14 * 160).
+// Monthly strings (with /mo or /month) are preserved as-is. Keeps CAD/USD and *Est. from the raw string.
+const formatEarningsMonthly = (raw: string): string => {
+  if (!raw || !raw.trim()) return '';
+  const str = raw.trim();
+  const isMonthly = /\/\s*(mo|month)\b/i.test(str);
+  const isHourly = /\/\s*(hr|hour|h)\b/i.test(str);
+  if (isMonthly || !isHourly) return str;
+  const currency = /\bCAD\b/i.test(str) ? 'CAD' : /\bUSD\b/i.test(str) ? 'USD' : '';
+  const hasEst = /\*\s*Est\.?/i.test(str);
+  const numbers = str.match(/\$?\s*([\d,]+(?:\.\d+)?)/g) || [];
+  const converted = numbers
+    .map(n => {
+      const v = parseFloat(n.replace(/[^0-9.]/g, ''));
+      if (!isFinite(v) || v <= 0) return null;
+      return '$' + Math.round(v * 1.14 * 160).toLocaleString('en-US');
+    })
+    .filter((s): s is string => s !== null);
+  if (converted.length === 0) return str;
+  let out = converted.join(' - ') + '/mo';
+  if (currency) out += ' ' + currency;
+  if (hasEst) out += ' *Est.';
+  return out;
+};
+
+// First numeric amount of the (possibly converted) monthly earnings string, for filtering/ratings
+const getMonthlyAmount = (raw: string): number => {
+  const formatted = formatEarningsMonthly(raw);
+  const m = formatted.match(/([\d,]+(?:\.\d+)?)/);
+  return m ? Math.round(parseFloat(m[1].replace(/,/g, ''))) : 0;
+};
+
 // Map known cities to filter labels from the work-type/location description string
 const extractCity = (workType: string): string => {
   const wt = workType.trim();
@@ -164,7 +206,7 @@ const extractCity = (workType: string): string => {
   const lower = wt.toLowerCase();
 
   // Remote-only roles
-  if (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person')) {
+  if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
     return 'Remote';
   }
 
