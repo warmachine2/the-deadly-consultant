@@ -278,9 +278,6 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
               <p className="text-sm text-white/60 pt-4">Loading live status...</p>
             )}
 
-            {!loading && error && (
-              <p className="text-sm text-amber-400 pt-4">{error} — showing last known status.</p>
-            )}
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {orderedSources.map((source, index) => {
