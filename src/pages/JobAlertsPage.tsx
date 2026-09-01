@@ -1359,7 +1359,7 @@ const JobAlertsPage: React.FC = () => {
       
       <main className="flex-1 px-4 md:px-6 pb-6 pt-16">
         {/* Network Health Control Panel */}
-        <NetworkHealthPanel />
+        <NetworkHealthPanel jobs={data} />
 
         {/* Strategy Guide Banner - Mobile */}
         {/* Strategy Guide Banner - Mobile */}
