@@ -17,7 +17,17 @@ interface NetworkHealthResponse {
 
 interface NetworkHealthPanelProps {
   defaultOpen?: boolean;
+  jobs?: Array<{ source?: string; date?: string }>;
 }
+
+const DEFAULT_SOURCE_DATES: Record<string, string> = {
+  "Hassan’s Recruiter Network": "2026-08-24",
+  "Proviso": "2026-08-28",
+  "SI Systems": "2026-08-25",
+  "Insight Global": "2026-08-31",
+  "Procom": "2026-08-31",
+  "Agilus": "2026-08-25",
+};
 
 const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
 const SHEET_CSV_URL =
