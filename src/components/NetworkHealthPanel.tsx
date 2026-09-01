@@ -85,44 +85,116 @@ const NetworkHealthPanel: React.FC<NetworkHealthPanelProps> = ({ defaultOpen = f
   useEffect(() => {
     let cancelled = false;
 
-    const fetchHealth = async () => {
+    const hasDates = (sources?: NetworkSource[]) =>
+      Array.isArray(sources) &&
+      sources.some((s) => {
+        const v = s?.lastSuccess ?? s?.lastChecked;
+        return typeof v === "string" && v.trim() !== "" && v.trim() !== "—";
+      });
+
+    const parseCsvRows = (csv: string): string[][] => {
+      const rows: string[][] = [];
+      let row: string[] = [];
+      let field = "";
+      let inQuotes = false;
+      for (let i = 0; i < csv.length; i++) {
+        const c = csv[i];
+        if (inQuotes) {
+          if (c === '"') {
+            if (csv[i + 1] === '"') {
+              field += '"';
+              i++;
+            } else {
+              inQuotes = false;
+            }
+          } else field += c;
+        } else if (c === '"') inQuotes = true;
+        else if (c === ",") {
+          row.push(field);
+          field = "";
+        } else if (c === "\n") {
+          row.push(field);
+          rows.push(row);
+          row = [];
+          field = "";
+        } else if (c !== "\r") field += c;
+      }
+      if (field || row.length) {
+        row.push(field);
+        rows.push(row);
+      }
+      return rows;
+    };
+
+    const fetchFromSheet = async (): Promise<NetworkSource[] | null> => {
       try {
-        setLoading(true);
-        setError(null);
+        const res = await fetch(SHEET_CSV_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const csv = await res.text();
+        const rows = parseCsvRows(csv).slice(1);
+        const latest = new Map<string, { time: number; label: string }>();
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-        const response = await fetch(WEBHOOK_URL, {
-          method: "GET",
-          signal: controller.signal,
+        rows.forEach((row) => {
+          const dateStr = (row[0] || "").trim();
+          const sourceName = normalizeSourceName(row[17] || "");
+          if (!dateStr || !sourceName) return;
+          const parsed = new Date(dateStr);
+          const time = parsed.getTime();
+          if (Number.isNaN(time)) return;
+          const label = parsed.toISOString().slice(0, 10);
+          const existing = latest.get(sourceName);
+          if (!existing || time > existing.time) {
+            latest.set(sourceName, { time, label });
+          }
         });
 
+        if (latest.size === 0) return null;
+        return SOURCE_ORDER.map((source) => ({
+          source,
+          lastSuccess: latest.get(source)?.label ?? "—",
+        }));
+      } catch (err) {
+        console.error("Sheet fallback failed:", err);
+        return null;
+      }
+    };
+
+    const fetchHealth = async () => {
+      setLoading(true);
+      setError(null);
+
+      let resolved: NetworkSource[] | null = null;
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const response = await fetch(WEBHOOK_URL, { method: "GET", signal: controller.signal });
         clearTimeout(timeoutId);
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const json = (await response.json()) as NetworkHealthResponse;
-
-        if (!cancelled) {
-          if (Array.isArray(json?.sources)) {
-            setData(json);
-          } else {
-            setError("Invalid response format");
+        if (response.ok) {
+          const json = (await response.json()) as NetworkHealthResponse;
+          if (hasDates(json?.sources)) {
+            resolved = json.sources as NetworkSource[];
           }
         }
       } catch (err) {
         console.error("Network health fetch failed:", err);
-        if (!cancelled) {
-          setError("Unable to refresh live status");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
       }
+
+      if (!resolved) {
+        resolved = await fetchFromSheet();
+      }
+
+      if (cancelled) return;
+
+      if (resolved) {
+        setData({ sources: resolved, count: resolved.length });
+        setError(null);
+      } else {
+        setData(fallbackData);
+        setError("Unable to refresh live status");
+      }
+      setLoading(false);
     };
 
     fetchHealth();
