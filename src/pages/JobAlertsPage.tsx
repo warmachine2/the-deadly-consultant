@@ -534,14 +534,34 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, jobLink }) => {
   if (!source) return null;
   const normalizedSource = source.trim();
-  const isHassanEmail = /hassan|email/i.test(normalizedSource);
-  const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(normalizedSource);
-  const hasLink = !isHassanEmail && jobLink;
-  const isSiSystems = normalizedSource === "S.i. Systems";
-  const isProviso = normalizedSource === "Proviso";
-  const isInsightGlobal = normalizedSource === "Insight Global";
-  const isProcom = normalizedSource === "Procom";
-  const isAgilus = normalizedSource === "Agilus Work Solutions";
+  const canonicalSource = normalizeSourceName(normalizedSource);
+  const isHassanEmail = /hassan|email/i.test(normalizedSource) || canonicalSource === "Hassan's recruiter Network";
+  const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(canonicalSource);
+
+  // KAN-274: deterministic source routing
+  let href: string | null = null;
+  if (!isHassanEmail) {
+    if (canonicalSource === "Insight Global") {
+      href = "https://insightglobal.com/jobs";
+    } else if (canonicalSource === "Procom") {
+      href = "https://www.procomservices.com/jobs";
+    } else if (canonicalSource === "S.i. Systems") {
+      href = "https://www.sisystems.com/search-it-jobs/";
+    } else if (canonicalSource === "Proviso") {
+      href = jobLink && jobLink.startsWith("http") ? jobLink : "https://proviso.ca/jobs";
+    } else if (canonicalSource === "Agilus Work Solutions") {
+      href = jobLink && jobLink.startsWith("http") ? jobLink : "https://agilus.ca/jobs";
+    } else if (jobLink && jobLink.startsWith("http")) {
+      href = jobLink;
+    }
+  }
+
+  const hasLink = !!href;
+  const isSiSystems = canonicalSource === "S.i. Systems";
+  const isProviso = canonicalSource === "Proviso";
+  const isInsightGlobal = canonicalSource === "Insight Global";
+  const isProcom = canonicalSource === "Procom";
+  const isAgilus = canonicalSource === "Agilus Work Solutions";
 
   const content = (
     <>
@@ -572,7 +592,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   if (hasLink) {
     return (
       <a
-        href={jobLink}
+        href={href}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/15 w-fit mx-auto"
