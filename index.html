@@ -49,6 +49,9 @@
           s.async = true;
           s.setAttribute('data-uid', uid);
           s.src = 'https://bi-fintech-consultant-academy.kit.com/' + uid + '/index.js';
+          s.onload = function () {
+            (window.__kitLoaded = window.__kitLoaded || {})[uid] = true;
+          };
           document.body.appendChild(s);
         });
       }
