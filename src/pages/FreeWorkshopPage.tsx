@@ -95,7 +95,7 @@ const FreeWorkshopPage = () => {
               className="text-3xl md:text-4xl font-bold mb-4 text-center"
               style={{ color: "#FFE361" }}
             >
-              Free Live Workshop: How to Land $10k–$18k/mo Data &amp; FinTech PM Consulting
+              Free Live Workshop: How to Land $10k–$18k/mo Data and AI orchestration PM Consulting
               Contracts
             </h1>
             <p className="text-white text-center mb-8 text-base md:text-lg">
