@@ -25,15 +25,15 @@ interface SiteMeta {
 }
 
 const DEFAULT_META: SiteMeta = {
-  title: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
+  title: "Your AI-Proof 90-Day Pivot to Data & AI Orchestration PM Consulting",
   description:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
   ogImage: "https://www.zerotopmconsultant.com/og-image.png",
-  ogTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
+  ogTitle: "Your AI-Proof 90-Day Pivot to Data & AI Orchestration PM Consulting",
   ogDescription:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
   twitterImage: "https://www.zerotopmconsultant.com/og-image.png",
-  twitterTitle: "10k/mo+ AI-Proof Pivot: BI-FinTech & AI Deployment PM Consulting",
+  twitterTitle: "Your AI-Proof 90-Day Pivot to Data & AI Orchestration PM Consulting",
   twitterDescription:
     "Escape AI job vaporization. Master PMP/PSM/CPMAI trifecta + build $60k PPM tools. Land guaranteed interviews fast.",
 };
