@@ -1043,6 +1043,11 @@ const JobAlertsPage: React.FC = () => {
   const [orderBy, setOrderBy] = useState<keyof JobData>('date');
   const [order, setOrder] = useState<Order>('desc');
 
+  // Set browser title on mount
+  useEffect(() => {
+    document.title = "Data & AI Orchestration PM Consulting Contracts Job Board | Zero to PM Consultant";
+  }, []);
+
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
@@ -1377,7 +1382,7 @@ const JobAlertsPage: React.FC = () => {
             className="w-12 h-14 object-cover rounded-md flex-shrink-0 -my-1"
           />
           <span className="text-base font-bold text-white flex-1">
-            <span className="text-[#F4C903]">FREE</span> 15 Page AI-Proof BI-FinTech 10k/mo+ PM <span className="text-[#F4C903]">Strategy Guide PDF</span>
+            <span className="text-[#F4C903]">Free book:</span> Autonomous Agents - PMs Handbook
           </span>
           <a 
             data-formkit-toggle="0edbc71770"
@@ -1403,7 +1408,7 @@ const JobAlertsPage: React.FC = () => {
             className="w-16 h-20 object-cover rounded-md flex-shrink-0 -my-1"
           />
           <span className="text-2xl font-bold text-white flex-1">
-            <span className="text-[#F4C903]">FREE</span> 15 Page AI-Proof BI-FinTech 10k/mo+ PM <span className="text-[#F4C903]">Strategy Guide PDF</span>
+            <span className="text-[#F4C903]">Free book:</span> Autonomous Agents - PMs Handbook
           </span>
           <a 
             data-formkit-toggle="27ad03da2d"
