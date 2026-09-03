@@ -1418,10 +1418,10 @@ const JobAlertsPage: React.FC = () => {
           <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{
           color: '#FFDD40'
         }}>
-            Data, FinTech & Project Management Consulting Contracts Job Board
+            Data & AI Orchestration PM Consulting Contracts Job Board
           </h1>
           <p className="text-white text-lg md:text-xl mb-3">
-            The Most Comprehensive BI-FinTech Project Management Consulting Contracts Job Board in North America
+            The Most Comprehensive Data & AI Orchestration PM Consulting Contracts Job Board in North America
           </p>
           <p className="text-sm md:text-base mb-4 text-red-400 italic">
             ⚠️ Skip roles older than 48 hours — recruiters submit top candidates within this window.
@@ -1484,7 +1484,7 @@ const JobAlertsPage: React.FC = () => {
             <p className="text-base md:text-lg mt-3" style={{
             color: '#FFDD40'
           }}>
-              Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles — a personal one-on-one call with me
+              Map your career pivot and discover if my Data & AI Orchestration PM Consultant Academy can help you land these roles — a personal one-on-one call with me
             </p>
           </div>
         </div>
