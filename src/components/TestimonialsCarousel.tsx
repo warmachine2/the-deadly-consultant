@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    quote: "The strategy session with Hassan was a game-changer – he delivered an ultra-actionable AI-Proof 90-day roadmap that's fast-tracking my pivot to $10k/mo+ BI-FinTech PM consulting. Invaluable insights on CPMAI trifecta and $60k tools. Following it now!",
+    quote: "The strategy session with Hassan was a game-changer – he delivered an ultra-actionable AI-Proof 90-day roadmap that's fast-tracking my pivot to $10k/mo+ Data & AI Orchestration PM consulting. Invaluable insights on CPMAI trifecta and $60k tools. Following it now!",
     author: "Jeffrey Osarfo",
     filled: true,
   },
