@@ -541,9 +541,9 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return null;
   }
 
-  // Insight Global: always https://insightglobal.com/jobs
+  // Insight Global: always https://insightglobal.com/jobs/search/all/all
   if (lower.includes('insight global')) {
-    return 'https://insightglobal.com/jobs';
+    return 'https://insightglobal.com/jobs/search/all/all';
   }
 
   // Procom: always https://portal.procomservices.com/jobs?loginType=contractor&lang=en
