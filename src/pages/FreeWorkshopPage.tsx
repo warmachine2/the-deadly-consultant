@@ -206,7 +206,7 @@ const FreeWorkshopPage = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="gold-glow-border w-full px-4 py-3 font-bold text-white hover:text-[#F4C903] text-base md:text-lg"
+                  className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white hover:text-white text-base md:text-lg tracking-wide shadow-none"
                 >
                   {isSubmitting ? (
                     <>

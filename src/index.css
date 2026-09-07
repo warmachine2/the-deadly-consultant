@@ -1018,3 +1018,98 @@ All colors MUST be HSL.
   .gold-glow-border::before,
   .gold-glow-border::after { animation: none; }
 }
+
+/* --- KAN-328: Designed To Highlight Multi-Spectrum Gradient Glow --- */
+@keyframes highlight-glow-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    filter: blur(14px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(18px);
+  }
+}
+
+.highlight-glow-button {
+  position: relative;
+  isolation: isolate;
+  background: #0B0B0E;
+  border-radius: 9999px;
+  border: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Crisp 2px multi-color gradient border along left, bottom, and right (dark on top) */
+.highlight-glow-button::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 40deg,
+    #00E676 80deg,
+    #00C7FF 140deg,
+    #E040FB 190deg,
+    #FF4500 260deg,
+    transparent 320deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Soft atmospheric multi-color ambient underglow - animated the whole time */
+.highlight-glow-button::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  padding: 4px;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 40deg,
+    #00E676 80deg,
+    #00C7FF 140deg,
+    #E040FB 190deg,
+    #FF4500 260deg,
+    transparent 320deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: highlight-glow-pulse 3.5s ease-in-out infinite;
+  z-index: -2;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .highlight-glow-button::after {
+    inset: -6px;
+    padding: 6px;
+    filter: blur(18px);
+  }
+}
+
+.highlight-glow-button:hover {
+  transform: translateY(-1px);
+}
+
+.highlight-glow-button:hover::after {
+  opacity: 1;
+  filter: blur(22px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight-glow-button::after { animation: none; }
+}
