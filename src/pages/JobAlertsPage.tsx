@@ -459,12 +459,12 @@ const DutiesText: React.FC<{
   const previewLength = 200;
   
   if (!text || text.length <= previewLength) {
-    return <p className="text-lg md:text-xl text-white">{text}</p>;
+    return <p className="text-xl md:text-2xl text-white">{text}</p>;
   }
   
   return (
     <div>
-      <p className="text-lg md:text-xl text-white">
+      <p className="text-xl md:text-2xl text-white">
         {expanded ? text : text.substring(0, previewLength) + '...'}
       </p>
       <button 
