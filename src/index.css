@@ -1026,18 +1026,15 @@ All colors MUST be HSL.
   inherits: false;
 }
 
-@keyframes highlight-beam-sway {
-  0%, 100% {
-    --highlight-angle: -12deg;
-  }
-  50% {
-    --highlight-angle: 12deg;
+@keyframes highlight-spin {
+  to {
+    --highlight-angle: 360deg;
   }
 }
 
 @keyframes highlight-glow-pulse {
   0%, 100% {
-    opacity: 0.8;
+    opacity: 0.85;
     filter: blur(14px);
   }
   50% {
@@ -1055,34 +1052,35 @@ All colors MUST be HSL.
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Crisp 2px multi-color gradient border along left, bottom, and right (dark on top) */
+/* Crisp 2.5px multi-color gradient border rotating continuously around the perimeter */
 .highlight-glow-button::before {
   content: "";
   position: absolute;
-  inset: -2px;
+  inset: -2.5px;
   border-radius: inherit;
-  padding: 2px;
+  padding: 2.5px;
   background: conic-gradient(
-    from var(--highlight-angle) at 50% 50%,
-    transparent 0deg,
-    transparent 45deg,
-    #00E676 85deg,
-    #00C7FF 140deg,
-    #E040FB 195deg,
-    #FF4500 260deg,
-    transparent 315deg,
-    transparent 360deg
+    from var(--highlight-angle),
+    #FF3B30 0%,
+    #FF9500 14%,
+    #FFDD00 28%,
+    #00FF88 42%,
+    #00D4FF 56%,
+    #3B82F6 70%,
+    #A855F7 84%,
+    #FF1493 92%,
+    #FF3B30 100%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  animation: highlight-beam-sway 4s ease-in-out infinite;
+  animation: highlight-spin 3.5s linear infinite;
   z-index: -1;
   pointer-events: none;
 }
 
-/* Soft atmospheric multi-color ambient underglow - animated the whole time */
+/* Soft atmospheric multi-color ambient underglow - rotating and pulsing continuously */
 .highlight-glow-button::after {
   content: "";
   position: absolute;
@@ -1090,21 +1088,22 @@ All colors MUST be HSL.
   border-radius: inherit;
   padding: 4px;
   background: conic-gradient(
-    from var(--highlight-angle) at 50% 50%,
-    transparent 0deg,
-    transparent 45deg,
-    #00E676 85deg,
-    #00C7FF 140deg,
-    #E040FB 195deg,
-    #FF4500 260deg,
-    transparent 315deg,
-    transparent 360deg
+    from var(--highlight-angle),
+    #FF3B30 0%,
+    #FF9500 14%,
+    #FFDD00 28%,
+    #00FF88 42%,
+    #00D4FF 56%,
+    #3B82F6 70%,
+    #A855F7 84%,
+    #FF1493 92%,
+    #FF3B30 100%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  animation: highlight-beam-sway 4s ease-in-out infinite, highlight-glow-pulse 3s ease-in-out infinite;
+  animation: highlight-spin 3.5s linear infinite, highlight-glow-pulse 3s ease-in-out infinite;
   z-index: -2;
   pointer-events: none;
 }
@@ -1130,15 +1129,16 @@ All colors MUST be HSL.
   .highlight-glow-button::before,
   .highlight-glow-button::after {
     background: conic-gradient(
-      from 0deg at 50% 50%,
-      transparent 0deg,
-      transparent 45deg,
-      #00E676 85deg,
-      #00C7FF 140deg,
-      #E040FB 195deg,
-      #FF4500 260deg,
-      transparent 315deg,
-      transparent 360deg
+      from 0deg,
+      #FF3B30 0%,
+      #FF9500 14%,
+      #FFDD00 28%,
+      #00FF88 42%,
+      #00D4FF 56%,
+      #3B82F6 70%,
+      #A855F7 84%,
+      #FF1493 92%,
+      #FF3B30 100%
     );
   }
 }
