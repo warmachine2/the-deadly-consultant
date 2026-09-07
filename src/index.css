@@ -1020,6 +1020,21 @@ All colors MUST be HSL.
 }
 
 /* --- KAN-328: Designed To Highlight Multi-Spectrum Gradient Glow --- */
+@property --highlight-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes highlight-beam-sway {
+  0%, 100% {
+    --highlight-angle: -12deg;
+  }
+  50% {
+    --highlight-angle: 12deg;
+  }
+}
+
 @keyframes highlight-glow-pulse {
   0%, 100% {
     opacity: 0.8;
@@ -1048,20 +1063,21 @@ All colors MUST be HSL.
   border-radius: inherit;
   padding: 2px;
   background: conic-gradient(
-    from 0deg at 50% 50%,
+    from var(--highlight-angle) at 50% 50%,
     transparent 0deg,
-    transparent 40deg,
-    #00E676 80deg,
+    transparent 45deg,
+    #00E676 85deg,
     #00C7FF 140deg,
-    #E040FB 190deg,
+    #E040FB 195deg,
     #FF4500 260deg,
-    transparent 320deg,
+    transparent 315deg,
     transparent 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
+  animation: highlight-beam-sway 4s ease-in-out infinite;
   z-index: -1;
   pointer-events: none;
 }
@@ -1074,21 +1090,21 @@ All colors MUST be HSL.
   border-radius: inherit;
   padding: 4px;
   background: conic-gradient(
-    from 0deg at 50% 50%,
+    from var(--highlight-angle) at 50% 50%,
     transparent 0deg,
-    transparent 40deg,
-    #00E676 80deg,
+    transparent 45deg,
+    #00E676 85deg,
     #00C7FF 140deg,
-    #E040FB 190deg,
+    #E040FB 195deg,
     #FF4500 260deg,
-    transparent 320deg,
+    transparent 315deg,
     transparent 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  animation: highlight-glow-pulse 3.5s ease-in-out infinite;
+  animation: highlight-beam-sway 4s ease-in-out infinite, highlight-glow-pulse 3s ease-in-out infinite;
   z-index: -2;
   pointer-events: none;
 }
@@ -1110,6 +1126,24 @@ All colors MUST be HSL.
   filter: blur(22px);
 }
 
+@supports not (background: conic-gradient(from var(--highlight-angle), red, blue)) {
+  .highlight-glow-button::before,
+  .highlight-glow-button::after {
+    background: conic-gradient(
+      from 0deg at 50% 50%,
+      transparent 0deg,
+      transparent 45deg,
+      #00E676 85deg,
+      #00C7FF 140deg,
+      #E040FB 195deg,
+      #FF4500 260deg,
+      transparent 315deg,
+      transparent 360deg
+    );
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .highlight-glow-button::before,
   .highlight-glow-button::after { animation: none; }
 }
