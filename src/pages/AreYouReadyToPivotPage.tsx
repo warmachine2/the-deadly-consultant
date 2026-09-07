@@ -355,27 +355,17 @@ const AreYouReadyToPivotPage = () => {
 
         {/* Start Quiz button */}
         <div className="mt-4 md:mt-6">
-          <div className="relative group">
-            {/* Static amber glow */}
-            <div
-              className="absolute inset-0 rounded-2xl blur-xl opacity-50"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(245, 158, 11, 0.5), rgba(250, 204, 21, 0.6), rgba(245, 158, 11, 0.5))",
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setCurrentQuestionIndex(0);
-                setStep("quiz");
-              }}
-              className="relative inline-flex items-center justify-center gap-3 px-10 py-5 md:px-12 md:py-6 text-xl md:text-2xl font-bold rounded-2xl transition-colors duration-300 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300"
-            >
-              <span>Start Quiz</span>
-              <ArrowRight className="w-6 h-6 md:w-7 md:h-7" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setCurrentQuestionIndex(0);
+              setStep("quiz");
+            }}
+            className="highlight-glow-button inline-flex items-center justify-center gap-3 px-10 py-4 md:px-12 md:py-5 text-xl md:text-2xl font-bold text-white hover:text-white tracking-wide shadow-none"
+          >
+            <span>Start Quiz</span>
+            <ArrowRight className="w-6 h-6 md:w-7 md:h-7" />
+          </button>
         </div>
       </div>
     </section>
