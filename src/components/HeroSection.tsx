@@ -32,7 +32,12 @@ const HeroSection = () => {
             href={WORKSHOP_REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="gold-glow-border flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-left cursor-pointer"
+            className="border border-cyan-400/60 cta-glow-pulse flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-left cursor-pointer transition-colors duration-300"
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
           >
             <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#F4C903]">
               Reserve My Free Workshop Spot
@@ -48,7 +53,12 @@ const HeroSection = () => {
           {/* Card 2 - Quiz */}
           <Link
             to="/are-you-ready-to-pivot-to-pm-consulting"
-            className="gold-glow-border flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-left cursor-pointer"
+            className="border border-cyan-400/60 cta-glow-pulse flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-left cursor-pointer transition-colors duration-300"
+            style={{
+              background: "rgba(15, 15, 15, 0.85)",
+              backdropFilter: "blur(9px) saturate(150%)",
+              WebkitBackdropFilter: "blur(9px) saturate(150%)"
+            }}
           >
             <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#F4C903]">
               Take the PM Consulting Readiness Quiz
