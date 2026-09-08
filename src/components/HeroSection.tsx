@@ -32,7 +32,7 @@ const HeroSection = () => {
             href={WORKSHOP_REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-cyan-400/60 cta-glow-pulse flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-left cursor-pointer transition-colors duration-300"
+            className="border border-cyan-400/60 cta-glow-pulse flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-center items-center cursor-pointer transition-colors duration-300"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -43,7 +43,7 @@ const HeroSection = () => {
               Reserve My Free Workshop Spot
             </span>
             <span className="text-sm md:text-base text-white/90">
-              How experienced professionals land $10k–$18k/mo Data and AI orchestration PM contracts
+              How experienced professionals land $10k–$18k/mo Data and AI Orchestration PM contracts
             </span>
             <span className="text-xs md:text-sm text-white/60">
               Includes the 90-day roadmap when you register.
@@ -53,7 +53,7 @@ const HeroSection = () => {
           {/* Card 2 - Quiz */}
           <Link
             to="/are-you-ready-to-pivot-to-pm-consulting"
-            className="border border-cyan-400/60 cta-glow-pulse flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-left cursor-pointer transition-colors duration-300"
+            className="border border-cyan-400/60 cta-glow-pulse flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-center items-center cursor-pointer transition-colors duration-300"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",

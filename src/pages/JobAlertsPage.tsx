@@ -1377,7 +1377,7 @@ const JobAlertsPage: React.FC = () => {
             className="w-12 h-14 object-cover rounded-md flex-shrink-0 -my-1"
           />
           <span className="text-base font-bold text-white flex-1">
-            <span className="text-[#F4C903]">Free book:</span> Autonomous Agents - PMs Handbook
+            <span className="text-[#F4C903]">Free Book:</span> Autonomous Agents - PMs Handbook
           </span>
           <a 
             data-formkit-toggle="0edbc71770"
@@ -1403,7 +1403,7 @@ const JobAlertsPage: React.FC = () => {
             className="w-16 h-20 object-cover rounded-md flex-shrink-0 -my-1"
           />
           <span className="text-2xl font-bold text-white flex-1">
-            <span className="text-[#F4C903]">Free book:</span> Autonomous Agents - PMs Handbook
+            <span className="text-[#F4C903]">Free Book:</span> Autonomous Agents - PMs Handbook
           </span>
           <a 
             data-formkit-toggle="27ad03da2d"
