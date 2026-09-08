@@ -106,18 +106,23 @@ const FreeWorkshopPage = () => {
             <div className="mb-6">
               <button
                 type="button"
+                disabled={isSubmitting}
                 className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none"
-                onClick={() => {
-                  const formEl = document.getElementById('workshop-form');
-                  if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={form.handleSubmit(onSubmit)}
               >
-                Reserve My Free Spot
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="inline mr-2 h-5 w-5 animate-spin" />
+                    Reserving...
+                  </>
+                ) : (
+                  "Reserve My Free Spot"
+                )}
               </button>
             </div>
 
             <Form {...form}>
-              <form id="workshop-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -215,21 +220,6 @@ const FreeWorkshopPage = () => {
                     </FormItem>
                   )}
                 />
-
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white hover:text-white text-base md:text-lg tracking-wide shadow-none"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Reserving...
-                    </>
-                  ) : (
-                    "Reserve My Free Spot"
-                  )}
-                </Button>
               </form>
             </Form>
           </div>
