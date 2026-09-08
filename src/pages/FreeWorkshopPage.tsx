@@ -95,7 +95,7 @@ const FreeWorkshopPage = () => {
               className="text-3xl md:text-4xl font-bold mb-4 text-center"
               style={{ color: "#FFE361" }}
             >
-              Free Live Workshop: How to Land $10k–$18k/mo Data and AI orchestration PM Consulting
+              Free Live Workshop: How to Land $10k–$18k/mo Data and AI Orchestration PM Consulting
               Contracts
             </h1>
             <p className="text-white text-center mb-8 text-base md:text-lg">
@@ -206,7 +206,12 @@ const FreeWorkshopPage = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white hover:text-white text-base md:text-lg tracking-wide shadow-none"
+                  className="w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide rounded-2xl transition-all duration-300 hover:brightness-110"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
+                    boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
+                    border: '1px solid rgba(0, 150, 255, 0.4)'
+                  }}
                 >
                   {isSubmitting ? (
                     <>

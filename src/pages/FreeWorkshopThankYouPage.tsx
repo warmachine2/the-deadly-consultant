@@ -21,7 +21,7 @@ const FreeWorkshopThankYouPage = () => {
             </p>
           </div>
 
-          <div className="volumetric-glass rounded-2xl p-8">
+          <div className="volumetric-glass rounded-2xl p-8 text-center">
             <h2 className="text-2xl font-bold mb-3" style={{ color: "#FFE361" }}>
               Workshop Details
             </h2>
@@ -31,8 +31,8 @@ const FreeWorkshopThankYouPage = () => {
             </p>
           </div>
 
-          <div className="volumetric-glass rounded-2xl p-8">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="volumetric-glass rounded-2xl p-8 text-center">
+            <div className="flex justify-center items-center gap-3 mb-3">
               <Briefcase className="w-6 h-6 text-[#FFE361]" />
               <h2 className="text-2xl font-bold" style={{ color: "#FFE361" }}>
                 Start Browsing Now
@@ -41,15 +41,15 @@ const FreeWorkshopThankYouPage = () => {
             <p className="text-white mb-5">
               Get a head start — check out the open PM consulting contracts on our job board.
             </p>
-            <Link to="/ai-bi-fintech-pm-job-alerts-repo">
+            <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="flex justify-center">
               <button className="gold-glow-border px-5 py-3 font-bold text-white hover:text-[#F4C903]">
                 Browse open contracts
               </button>
             </Link>
           </div>
 
-          <div className="volumetric-glass rounded-2xl p-8">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="volumetric-glass rounded-2xl p-8 text-center">
+            <div className="flex justify-center items-center gap-3 mb-3">
               <FileText className="w-6 h-6 text-[#FFE361]" />
               <h2 className="text-2xl font-bold" style={{ color: "#FFE361" }}>
                 2026 PM Consulting Roadmap
