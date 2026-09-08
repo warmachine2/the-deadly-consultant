@@ -103,8 +103,21 @@ const FreeWorkshopPage = () => {
               $3.5k/mo to $18k/mo take-home.
             </p>
 
+            <div className="mb-6">
+              <button
+                type="button"
+                className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none"
+                onClick={() => {
+                  const formEl = document.getElementById('workshop-form');
+                  if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Reserve My Free Spot
+              </button>
+            </div>
+
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form id="workshop-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
                   name="firstName"
