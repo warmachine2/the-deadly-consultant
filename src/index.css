@@ -1049,16 +1049,17 @@ All colors MUST be HSL.
   background: #0B0B0E;
   border-radius: 9999px;
   border: 0;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Crisp 2.5px multi-color gradient border rotating continuously around the perimeter */
+/* Crisp 1.5px multi-color gradient border rotating continuously around the perimeter */
 .highlight-glow-button::before {
   content: "";
   position: absolute;
-  inset: -2.5px;
+  inset: -1.5px;
   border-radius: inherit;
-  padding: 2.5px;
+  padding: 1.5px;
   background: conic-gradient(
     from var(--highlight-angle),
     #FF3B30 0%,
@@ -1084,9 +1085,9 @@ All colors MUST be HSL.
 .highlight-glow-button::after {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -2.5px;
   border-radius: inherit;
-  padding: 4px;
+  padding: 2.5px;
   background: conic-gradient(
     from var(--highlight-angle),
     #FF3B30 0%,
