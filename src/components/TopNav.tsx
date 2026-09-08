@@ -82,7 +82,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
                 <div className="px-4">
                   <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>
-                    <button className="gold-glow-border w-full px-4 py-3 font-bold text-white">
+                    <button className="highlight-glow-button w-full px-4 py-3 font-bold text-white">
                       Reserve My Free Workshop
                     </button>
                   </a>
@@ -170,7 +170,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* Workshop CTA - gold glowing animated border */}
           <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer">
             <button
-              className="gold-glow-border px-2.5 py-1.5 text-[11px] leading-tight text-center whitespace-normal font-bold text-white hover:text-[#F4C903] transition-colors duration-300 max-w-[130px] sm:max-w-none md:px-4 md:py-2.5 md:text-xs 2xl:px-5 2xl:py-3 2xl:text-sm"
+              className="highlight-glow-button px-2.5 py-1.5 text-[11px] leading-tight text-center whitespace-normal font-bold text-white hover:text-white transition-colors duration-300 max-w-[130px] sm:max-w-none md:px-4 md:py-2.5 md:text-xs 2xl:px-5 2xl:py-3 2xl:text-sm shadow-none"
             >
               Reserve My Free Workshop
             </button>

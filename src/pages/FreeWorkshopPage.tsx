@@ -206,12 +206,7 @@ const FreeWorkshopPage = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide rounded-2xl transition-all duration-300 hover:brightness-110"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(0, 100, 200, 0.8), rgba(0, 150, 255, 0.6))',
-                    boxShadow: '0 0 30px rgba(0, 150, 255, 0.5), 0 0 60px rgba(0, 150, 255, 0.3)',
-                    border: '1px solid rgba(0, 150, 255, 0.4)'
-                  }}
+                  className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white hover:text-white text-base md:text-lg tracking-wide shadow-none"
                 >
                   {isSubmitting ? (
                     <>
