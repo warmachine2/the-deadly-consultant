@@ -1049,7 +1049,6 @@ All colors MUST be HSL.
   background: #0B0B0E;
   border-radius: 9999px;
   border: 0;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1081,54 +1080,12 @@ All colors MUST be HSL.
   pointer-events: none;
 }
 
-/* Soft atmospheric multi-color ambient underglow - rotating and pulsing continuously */
-.highlight-glow-button::after {
-  content: "";
-  position: absolute;
-  inset: -2.5px;
-  border-radius: inherit;
-  padding: 2.5px;
-  background: conic-gradient(
-    from var(--highlight-angle),
-    #FF3B30 0%,
-    #FF9500 14%,
-    #FFDD00 28%,
-    #00FF88 42%,
-    #00D4FF 56%,
-    #3B82F6 70%,
-    #A855F7 84%,
-    #FF1493 92%,
-    #FF3B30 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: highlight-spin 3.5s linear infinite, highlight-glow-pulse 3s ease-in-out infinite;
-  z-index: -2;
-  pointer-events: none;
-}
-
-@media (min-width: 768px) {
-  .highlight-glow-button::after {
-    inset: -6px;
-    padding: 6px;
-    filter: blur(18px);
-  }
-}
-
 .highlight-glow-button:hover {
   transform: translateY(-1px);
 }
 
-.highlight-glow-button:hover::after {
-  opacity: 1;
-  filter: blur(22px);
-}
-
 @supports not (background: conic-gradient(from var(--highlight-angle), red, blue)) {
-  .highlight-glow-button::before,
-  .highlight-glow-button::after {
+  .highlight-glow-button::before {
     background: conic-gradient(
       from 0deg,
       #FF3B30 0%,
@@ -1145,6 +1102,5 @@ All colors MUST be HSL.
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .highlight-glow-button::before,
-  .highlight-glow-button::after { animation: none; }
+  .highlight-glow-button::before { animation: none; }
 }
