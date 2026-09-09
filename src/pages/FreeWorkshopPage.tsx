@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -37,6 +37,107 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
+
+const TZ = "America/Toronto";
+
+/** Offset in minutes between UTC and America/Toronto at a given instant. */
+const tzOffsetMs = (date: Date) => {
+  const asTz = new Date(date.toLocaleString("en-US", { timeZone: TZ }));
+  const asUtc = new Date(date.toLocaleString("en-US", { timeZone: "UTC" }));
+  return asTz.getTime() - asUtc.getTime();
+};
+
+/** Next Saturday 11:00 AM Toronto time, as a real (UTC) Date. */
+const getNextSession = (now: Date = new Date()): Date => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    weekday: "short",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hour12: false,
+  }).formatToParts(now);
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  const weekdayMap: Record<string, number> = {
+    Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6,
+  };
+  const dow = weekdayMap[get("weekday")] ?? 0;
+  const hour = parseInt(get("hour"), 10) % 24;
+
+  let daysAhead = (6 - dow + 7) % 7;
+  // Saturday after 12:00 PM -> next week's session
+  if (daysAhead === 0 && hour >= 12) daysAhead = 7;
+
+  const y = parseInt(get("year"), 10);
+  const m = parseInt(get("month"), 10);
+  const d = parseInt(get("day"), 10);
+
+  // Build target wall-clock time in Toronto, then convert to UTC instant.
+  const naiveUtc = Date.UTC(y, m - 1, d + daysAhead, 11, 0, 0);
+  const guess = new Date(naiveUtc - tzOffsetMs(new Date(naiveUtc)));
+  return new Date(naiveUtc - tzOffsetMs(guess));
+};
+
+const formatSessionDate = (date: Date) =>
+  new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+
+const CountdownCard = () => {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const session = useMemo(() => getNextSession(now), [now]);
+  const diff = Math.max(0, session.getTime() - now.getTime());
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+
+  const units: Array<[string, number]> = [
+    ["Days", days],
+    ["Hours", hours],
+    ["Mins", mins],
+    ["Secs", secs],
+  ];
+
+  return (
+    <div className="volumetric-glass rounded-2xl p-6 mb-8 text-center">
+      <span
+        className="inline-block text-xs md:text-sm font-bold tracking-widest mb-2"
+        style={{ color: "#FFE361" }}
+      >
+        NEXT LIVE SESSION
+      </span>
+      <p className="text-white text-sm md:text-base font-medium mb-5">
+        {formatSessionDate(session)} &bull; 11:00 AM &ndash; 12:00 PM EST
+      </p>
+      <div className="grid grid-cols-4 gap-2 md:gap-3">
+        {units.map(([label, value]) => (
+          <div
+            key={label}
+            className="rounded-xl px-2 py-3 border border-[#FFE361]/50 bg-black/40"
+          >
+            <div className="text-2xl md:text-3xl font-bold" style={{ color: "#FFE361" }}>
+              {String(value).padStart(2, "0")}
+            </div>
+            <div className="text-[10px] md:text-xs uppercase tracking-wider text-white/80">
+              {label}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const FreeWorkshopPage = () => {
   const { toast } = useToast();
@@ -102,6 +203,8 @@ const FreeWorkshopPage = () => {
               I&rsquo;ll show you the exact roadmap + the hidden job board I used to go from
               $3.5k/mo to $18k/mo take-home.
             </p>
+
+            <CountdownCard />
 
             <div className="mb-6">
               <button
