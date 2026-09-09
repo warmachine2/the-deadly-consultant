@@ -163,12 +163,18 @@ const Index = () => {
             ) : (
               <>
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
-                  <RoadmapCard />
                   {(() => {
                     // Filter out job alerts first
                     let postsToShow = filteredPosts.filter(
                       (post) => !post.title.toLowerCase().includes('deadly job alerts')
                     );
+                    
+                    // Find Video 1 to pin to position #1
+                    const pinnedIndex = postsToShow.findIndex(p => 
+                      p.title.toLowerCase().includes('18k/mo') || 
+                      p.slug.includes('18k-mo')
+                    );
+                    const pinnedPost = pinnedIndex !== -1 ? postsToShow.splice(pinnedIndex, 1)[0] : null;
                     
                     // Find and reposition Hassan Hammer post
                     const hassanIndex = postsToShow.findIndex(p => 
@@ -177,17 +183,23 @@ const Index = () => {
                     );
                     
                     if (hassanIndex !== -1) {
-                      const hassanPost = postsToShow[hassanIndex];
-                      // Remove from current position
-                      postsToShow = postsToShow.filter((_, i) => i !== hassanIndex);
+                      const hassanPost = postsToShow.splice(hassanIndex, 1)[0];
                       // Insert second to last (before the last item)
                       const insertPosition = Math.max(0, postsToShow.length - 1);
                       postsToShow.splice(insertPosition, 0, hassanPost);
                     }
                     
-                    return postsToShow.map((post) => (
-                      <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
-                    ));
+                    return (
+                      <>
+                        {pinnedPost && (
+                          <BlogCard key={pinnedPost.id} post={pinnedPost} onClick={() => debouncedHandlePostClick(pinnedPost)} />
+                        )}
+                        <RoadmapCard />
+                        {postsToShow.map((post) => (
+                          <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
+                        ))}
+                      </>
+                    );
                   })()}
                 </div>
 
