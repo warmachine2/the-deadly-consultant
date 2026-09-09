@@ -204,6 +204,8 @@ const FreeWorkshopPage = () => {
               $3.5k/mo to $18k/mo take-home.
             </p>
 
+            <CountdownCard />
+
             <div className="mb-6">
               <button
                 type="button"
