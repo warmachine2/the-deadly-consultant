@@ -13,14 +13,14 @@ const HeroSection = () => {
         <div className="bokeh-orb bokeh-orb-5"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-start gap-4 md:gap-6">
+      <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center gap-4 md:gap-6">
         {/* Main Headline */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight animate-fade-in">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight animate-fade-in text-center">
           Zero-To-<span className="text-[#F4C903]">PM</span>-Consultant
         </h1>
 
         {/* Subheadline */}
-      <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium">
+      <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium text-center">
         Data & <span className="text-[#F4C903]">AI Orchestration PM Consulting</span><br />
         Pivot into high-value <span className="text-[#F4C903]">consulting</span> contracts
       </p>
