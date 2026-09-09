@@ -15,6 +15,8 @@ import BookSessionPage from "./pages/BookSessionPage";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import FreeWorkshopPage from "./pages/FreeWorkshopPage";
 import FreeWorkshopThankYouPage from "./pages/FreeWorkshopThankYouPage";
+import FreeWorkshopJoinPage from "./pages/FreeWorkshopJoinPage";
+import FreeWorkshopReplayPage from "./pages/FreeWorkshopReplayPage";
 import DashboardPage from "./pages/DashboardPage";
 import SystemStatusPage from "./pages/SystemStatusPage";
 import AuthPage from "./pages/AuthPage";
@@ -56,6 +58,8 @@ const App = () => (
             <Route path="/are-you-ready-to-pivot-to-pm-consulting" element={<AreYouReadyToPivotPage />} />
             <Route path="/free-workshop" element={<FreeWorkshopPage />} />
             <Route path="/free-workshop/thank-you" element={<FreeWorkshopThankYouPage />} />
+            <Route path="/free-workshop/join" element={<FreeWorkshopJoinPage />} />
+            <Route path="/free-workshop/replay" element={<FreeWorkshopReplayPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/system-status" element={<SystemStatusPage />} />
             <Route path="/auth" element={<AuthPage />} />
