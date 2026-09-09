@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import { fetchPageBySlug, fetchPostBySlug, GhostPost } from "@/lib/ghostApi";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { rebrandHtml } from "@/lib/rebrandHtml";
 
 const DynamicPage = () => {
@@ -51,139 +51,42 @@ const DynamicPage = () => {
     fetchContent();
   }, [slug]);
 
-  const StrategySessionCTA = (
-    <div className="my-8 flex flex-col items-center">
-      <div className="relative group">
-        {/* Pulsing glow backdrop */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-500/40 via-yellow-400/50 to-amber-500/40 blur-xl animate-glow-backdrop opacity-60 transition-opacity" />
-        <a 
-          href="/book-session"
-          className="relative inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-bold rounded-2xl transition-colors duration-300 
-            bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400
-            text-gray-900
-            border-2 border-amber-300/60"
-        >
-          <CalendarCheck className="w-6 h-6" />
-          Book Your Free 45m Pivot Strategy Session
-        </a>
-      </div>
-      <span className="mt-2 text-xs text-white/70 font-light tracking-wide">with Hassan</span>
-    </div>
-  );
-
   const renderedContent = useMemo(() => {
     if (!content?.html) return null;
 
-    const rawHtml = (() => {
-      let html =
-        slug === "roadmap-thank-you"
-          ? (content.html || "")
-              .replace(
-                /href="[^"]*"([^>]*>Back to Video)/gi,
-                'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
-              )
-              .replace(/Accelerate to mastery/gi, "Accelerate To Mastery")
-              .replace(
-                /href="[^"]*"([^>]*>Join Now)/gi,
-                'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
-              )
-          : content.html || "";
+    let html =
+      slug === "roadmap-thank-you"
+        ? (content.html || "")
+            .replace(
+              /href="[^"]*"([^>]*>Back to Video)/gi,
+              'href="/2026-bi-fintech-consulting-roadmap-pdf-unlock"$1'
+            )
+            .replace(/Accelerate to mastery/gi, "Accelerate To Mastery")
+            .replace(
+              /href="[^"]*"([^>]*>Join Now)/gi,
+              'href="https://www.skool.com/bi-fintech-consultant-academy/about"$1'
+            )
+        : content.html || "";
 
-      // Normalize legacy branding (old domain, old name, old copyright year)
-      html = rebrandHtml(html);
+    // Normalize legacy branding
+    html = rebrandHtml(html);
 
-      // Strip inline color styles from headings
-      html = html.replace(
-        /<(h[1-6])([^>]*?)style="[^"]*color[^"]*"([^>]*)>/gi,
-        "<$1$2$3>"
-      );
-      html = html.replace(
-        /<(h[1-6])([^>]*?)style='[^']*color[^']*'([^>]*)>/gi,
-        "<$1$2$3>"
-      );
-      return html;
-    })();
+    // Strip inline color styles from headings
+    html = html.replace(
+      /<(h[1-6])([^>]*?)style="[^"]*color[^"]*"([^>]*)>/gi,
+      "<$1$2$3>"
+    );
+    html = html.replace(
+      /<(h[1-6])([^>]*?)style='[^']*color[^']*'([^>]*)>/gi,
+      "<$1$2$3>"
+    );
 
-    const CTA_1 = "<!--LOVABLE_STRATEGY_CTA_1-->";
-    const CTA_2 = "<!--LOVABLE_STRATEGY_CTA_2-->";
-
-    try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(rawHtml, "text/html");
-      const body = doc.body;
-
-      const containsText = (el: Element | null, text: string) =>
-        (el?.textContent || "").toLowerCase().includes(text.toLowerCase());
-
-      // Remove bottom "Ready to get started" glass panel (if present inside Ghost HTML)
-      const readyNode = Array.from(body.querySelectorAll("*"))
-        .filter((el) => (el.textContent || "").trim().length > 0)
-        .find((el) => containsText(el, "ready to get started"));
-      if (readyNode) {
-        const removable =
-          readyNode.closest("section,article,aside,footer,div") || readyNode;
-        removable.remove();
-      }
-
-      // Target #1: button under "Mini-Roadmap Overview" figure but above "Your AI-Proof..." heading
-      const figures = Array.from(body.querySelectorAll("figure"));
-      const miniFigure = figures.find((fig) => containsText(fig, "mini-roadmap overview"));
-
-      const headings = Array.from(body.querySelectorAll("h1,h2,h3,h4,h5,h6"));
-      const aiProofHeading = headings.find((h) => containsText(h, "your ai-proof"));
-
-      if (aiProofHeading && miniFigure) {
-        // only place CTA_1 if the heading is after the mini figure
-        const orderOk =
-          miniFigure.compareDocumentPosition(aiProofHeading) &
-          Node.DOCUMENT_POSITION_FOLLOWING;
-        if (orderOk) {
-          aiProofHeading.insertAdjacentHTML("beforebegin", CTA_1);
-        } else {
-          miniFigure.insertAdjacentHTML("afterend", CTA_1);
-        }
-      } else if (aiProofHeading) {
-        aiProofHeading.insertAdjacentHTML("beforebegin", CTA_1);
-      } else if (miniFigure) {
-        miniFigure.insertAdjacentHTML("afterend", CTA_1);
-      }
-
-      // Target #2: button above the bottom-most picture
-      const visuals = Array.from(body.querySelectorAll("figure, img"));
-      const lastVisual = visuals.length ? visuals[visuals.length - 1] : null;
-      if (lastVisual) {
-        lastVisual.insertAdjacentHTML("beforebegin", CTA_2);
-      }
-
-      const finalHtml = body.innerHTML;
-      const segments = finalHtml.split(new RegExp(`${CTA_1}|${CTA_2}`, "g"));
-      const markers = Array.from(
-        finalHtml.matchAll(new RegExp(`${CTA_1}|${CTA_2}`, "g"))
-      ).map((m) => m[0]);
-
-      const nodes: JSX.Element[] = [];
-      for (let i = 0; i < segments.length; i++) {
-        const htmlSeg = segments[i];
-        if (htmlSeg.trim()) {
-          nodes.push(
-            <div key={`html-${i}`} dangerouslySetInnerHTML={{ __html: htmlSeg }} />
-          );
-        }
-        if (markers[i]) {
-          nodes.push(<div key={`cta-${i}`}>{StrategySessionCTA}</div>);
-        }
-      }
-
-      return nodes;
-    } catch {
-      // If parsing fails, render without injection (safe fallback)
-      return (
-        <div
-          dangerouslySetInnerHTML={{ __html: rawHtml }}
-          className="dynamic-page-content"
-        />
-      );
-    }
+    return (
+      <div
+        dangerouslySetInnerHTML={{ __html: html }}
+        className="dynamic-page-content"
+      />
+    );
   }, [content?.html, slug]);
 
   if (loading) {
