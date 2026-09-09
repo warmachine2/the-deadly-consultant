@@ -53,7 +53,8 @@ const FreeWorkshopThankYouPage = () => {
               Get a head start — check out the open PM consulting contracts on our job board.
             </p>
             <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="flex justify-center">
-              <button className="gold-glow-border px-5 py-3 font-bold text-white hover:text-[#F4C903]">
+              <button className="highlight-glow-button inline-flex items-center justify-center gap-2 px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none">
+                <Briefcase className="w-5 h-5" />
                 Browse open contracts
               </button>
             </Link>
@@ -70,7 +71,8 @@ const FreeWorkshopThankYouPage = () => {
               Grab the full roadmap guide and start planning your pivot today.
             </p>
             <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" className="flex justify-center">
-              <button className="gold-glow-border px-5 py-3 font-bold text-white hover:text-[#F4C903]">
+              <button className="highlight-glow-button inline-flex items-center justify-center gap-2 px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none">
+                <FileText className="w-5 h-5" />
                 Download the 2026 BI-FinTech Consulting Roadmap PDF
               </button>
             </Link>
