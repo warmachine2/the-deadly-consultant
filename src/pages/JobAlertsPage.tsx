@@ -994,7 +994,7 @@ const JobCard: React.FC<{
               <p className="text-xl md:text-2xl text-white">{job.comments}</p>
             </div>}
           
-          {(job.recruiterName?.trim() || job.recruiterEmail?.trim() || job.recruiterPhone?.trim() || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
+          {(job.recruiterName?.trim() || (job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a') || (job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a') || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
