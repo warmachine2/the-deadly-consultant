@@ -994,18 +994,18 @@ const JobCard: React.FC<{
               <p className="text-xl md:text-2xl text-white">{job.comments}</p>
             </div>}
           
-          {(job.recruiterName?.trim() || job.recruiterEmail?.trim() || job.recruiterPhone?.trim() || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
+          {(job.recruiterName?.trim() || (job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a') || (job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a') || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
               <div className="space-y-3">
                 {job.recruiterName?.trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
                 <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                  {job.recruiterEmail?.trim() && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Mail className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterEmail}
                     </a>}
-                  {job.recruiterPhone?.trim() && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a' && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Phone className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterPhone}
                     </a>}
@@ -1979,7 +1979,7 @@ const JobAlertsPage: React.FC = () => {
                             </span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
-                            {job.recruiterEmail && (
+                            {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && (
                               <a href={`mailto:${job.recruiterEmail}`} className="text-[#00d4ff] hover:underline text-xs">
                                 Email
                               </a>
