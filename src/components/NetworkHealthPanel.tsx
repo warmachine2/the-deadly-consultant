@@ -31,6 +31,7 @@ const SOURCE_ORDER = [
   "Insight Global",
   "Procom",
   "Agilus",
+  "Tundra Technical Solutions",
 ];
 
 const normalizeSourceName = (name?: string): string => {
@@ -44,6 +45,7 @@ const normalizeSourceName = (name?: string): string => {
   if (lower.includes("insight global")) return "Insight Global";
   if (lower.includes("procom")) return "Procom";
   if (lower.includes("agilus")) return "Agilus";
+  if (lower.includes("tundra")) return "Tundra Technical Solutions";
   return name.trim();
 };
 
