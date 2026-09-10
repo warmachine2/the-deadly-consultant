@@ -24,6 +24,7 @@ const insightGlobalLogoUrl = '/insight-global-logo.jpg';
 const procomLogoUrl = '/Procom_LOGO.png';
 const agilusLogoUrl = '/Agilus_LOGO.png';
 const tundraLogoUrl = '/tundra-logo.png';
+const gttLogoUrl = '/gtt-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -122,7 +123,7 @@ const sourceDescriptions: Record<string, string> = {
   "Nerdy Hire": "Niche tech recruitment platform focused on connecting companies with specialized IT and engineering talent.",
   "HR Brain": "HR and talent solutions provider specializing in recruitment, staffing, and workforce consulting services.",
   "Axelon Services Corporation": "Global staffing and consulting firm delivering IT, finance, and healthcare workforce solutions since 1973.",
-  "GTT": "Global staffing and consulting firm specializing in technology, engineering, and professional services placements.",
+  "GTT (Global Technical Talent)": "Premier IT and Engineering staffing provider delivering top-tier Project Management, Scrum, and Agile talent across North America.",
   "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
 };
 
@@ -137,6 +138,9 @@ const sourceNameMap: Record<string, string> = {
   "Nerdy Hire": "Nerdy Hire",
   "Tundra Technical": "Tundra Technical Solutions",
   "Tundra Technical Solutions": "Tundra Technical Solutions",
+  "GTT": "GTT (Global Technical Talent)",
+  "GTT (Global Technical Talent)": "GTT (Global Technical Talent)",
+  "Global Technical Talent": "GTT (Global Technical Talent)",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -575,6 +579,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://community.tundratechnical.ca/jobs/';
   }
 
+  // GTT (Global Technical Talent): use job Link if present, else https://careers.gttit.com/
+  if (lower.includes('gtt') || lower.includes('global technical talent')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://careers.gttit.com/';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -600,10 +610,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isProcom = canonicalSource === "Procom";
   const isAgilus = canonicalSource === "Agilus Work Solutions";
   const isTundra = canonicalSource === "Tundra Technical Solutions" || canonicalSource.toLowerCase().includes("tundra");
+  const isGtt = canonicalSource === "GTT (Global Technical Talent)" || canonicalSource.toLowerCase().includes("gtt") || canonicalSource.toLowerCase().includes("global technical talent");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -622,6 +633,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isTundra && (
             <img src={tundraLogoUrl} alt="Tundra Technical Solutions" className="h-7 w-auto object-contain" />
+          )}
+          {isGtt && (
+            <img src={gttLogoUrl} alt="GTT (Global Technical Talent)" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
