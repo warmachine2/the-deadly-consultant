@@ -23,6 +23,7 @@ const provisoLogoUrl = '/proviso-logo.jpg';
 const insightGlobalLogoUrl = '/insight-global-logo.jpg';
 const procomLogoUrl = '/Procom_LOGO.png';
 const agilusLogoUrl = '/Agilus_LOGO.png';
+const tundraLogoUrl = '/tundra-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -568,6 +569,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://agilus.ca/jobs';
   }
 
+  // Tundra Technical Solutions: use job Link if present, else https://community.tundratechnical.ca/jobs/
+  if (lower.includes('tundra')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://community.tundratechnical.ca/jobs/';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -592,10 +599,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isInsightGlobal = canonicalSource === "Insight Global";
   const isProcom = canonicalSource === "Procom";
   const isAgilus = canonicalSource === "Agilus Work Solutions";
+  const isTundra = canonicalSource === "Tundra Technical Solutions" || canonicalSource.toLowerCase().includes("tundra");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -611,6 +619,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isAgilus && (
             <img src={agilusLogoUrl} alt="Agilus" className="h-7 w-auto object-contain" />
+          )}
+          {isTundra && (
+            <img src={tundraLogoUrl} alt="Tundra Technical Solutions" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
