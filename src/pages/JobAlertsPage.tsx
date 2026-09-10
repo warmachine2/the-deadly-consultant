@@ -1005,7 +1005,7 @@ const JobCard: React.FC<{
                       <Mail className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterEmail}
                     </a>}
-                  {job.recruiterPhone?.trim() && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a' && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Phone className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterPhone}
                     </a>}
