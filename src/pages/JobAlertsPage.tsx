@@ -1001,7 +1001,7 @@ const JobCard: React.FC<{
               <div className="space-y-3">
                 {job.recruiterName?.trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
                 <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                  {job.recruiterEmail?.trim() && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Mail className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterEmail}
                     </a>}
