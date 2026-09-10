@@ -1979,7 +1979,7 @@ const JobAlertsPage: React.FC = () => {
                             </span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
-                            {job.recruiterEmail && (
+                            {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && (
                               <a href={`mailto:${job.recruiterEmail}`} className="text-[#00d4ff] hover:underline text-xs">
                                 Email
                               </a>
