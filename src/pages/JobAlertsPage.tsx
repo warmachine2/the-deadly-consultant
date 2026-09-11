@@ -26,6 +26,7 @@ const agilusLogoUrl = '/Agilus_LOGO.png';
 const tundraLogoUrl = '/tundra-logo.png';
 const gttLogoUrl = '/gtt-logo.png';
 const nerdyHireLogoUrl = '/nerdy-hire-logo.png';
+const nttDataLogoUrl = '/ntt-data-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -55,7 +56,7 @@ const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
 // --- KAN-311: stale-while-revalidate cache ---
-const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v1';
+const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v2';
 const readJobCache = (): JobData[] | null => {
   try {
     const raw = localStorage.getItem(JOB_CACHE_KEY);
@@ -142,6 +143,10 @@ const sourceNameMap: Record<string, string> = {
   "GTT": "GTT (Global Technical Talent)",
   "GTT (Global Technical Talent)": "GTT (Global Technical Talent)",
   "Global Technical Talent": "GTT (Global Technical Talent)",
+  "NTT Data": "NTT Data",
+  "NTT DATA": "NTT Data",
+  "NTT": "NTT Data",
+  "NTT DATA Services": "NTT Data",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
