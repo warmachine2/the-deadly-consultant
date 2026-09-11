@@ -26,6 +26,7 @@ const agilusLogoUrl = '/Agilus_LOGO.png';
 const tundraLogoUrl = '/tundra-logo.png';
 const gttLogoUrl = '/gtt-logo.png';
 const nerdyHireLogoUrl = '/nerdy-hire-logo.png';
+const nttDataLogoUrl = '/ntt-data-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -55,7 +56,7 @@ const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
 // --- KAN-311: stale-while-revalidate cache ---
-const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v1';
+const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v2';
 const readJobCache = (): JobData[] | null => {
   try {
     const raw = localStorage.getItem(JOB_CACHE_KEY);
@@ -142,6 +143,10 @@ const sourceNameMap: Record<string, string> = {
   "GTT": "GTT (Global Technical Talent)",
   "GTT (Global Technical Talent)": "GTT (Global Technical Talent)",
   "Global Technical Talent": "GTT (Global Technical Talent)",
+  "NTT Data": "NTT Data",
+  "NTT DATA": "NTT Data",
+  "NTT": "NTT Data",
+  "NTT DATA Services": "NTT Data",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -592,6 +597,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://nerdyhire.com/jobs.php';
   }
 
+  // NTT Data: use job Link if present, else https://careers.services.global.ntt/global/en
+  if (lower.includes('ntt')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://careers.services.global.ntt/global/en';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -619,10 +630,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isTundra = canonicalSource === "Tundra Technical Solutions" || canonicalSource.toLowerCase().includes("tundra");
   const isGtt = canonicalSource === "GTT (Global Technical Talent)" || canonicalSource.toLowerCase().includes("gtt") || canonicalSource.toLowerCase().includes("global technical talent");
   const isNerdyHire = canonicalSource === "Nerdy Hire" || canonicalSource.toLowerCase().includes("nerdy");
+  const isNttData = canonicalSource === "NTT Data" || canonicalSource.toLowerCase().includes("ntt");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -647,6 +659,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isNerdyHire && (
             <img src={nerdyHireLogoUrl} alt="Nerdy Hire" className="h-7 w-auto object-contain" />
+          )}
+          {isNttData && (
+            <img src={nttDataLogoUrl} alt="NTT Data" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
@@ -714,6 +729,17 @@ const JobCard: React.FC<{
               color: 'rgba(255, 255, 255, 0.5)'
             }}>Free</span>
           </div>
+          {job.jobLink && (
+            <a
+              href={job.jobLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold text-white hover:text-[#00d4ff] transition-colors whitespace-nowrap"
+              style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', border: '1px solid rgba(0, 212, 255, 0.3)' }}
+            >
+              View Job <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          )}
           <IconButton size="small" onClick={() => setExpanded(!expanded)} sx={{
             color: '#FFDD40',
             backgroundColor: 'rgba(255, 221, 64, 0.1)',
@@ -730,7 +756,19 @@ const JobCard: React.FC<{
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
             color: '#FFDD40'
           }}>
-            {job.role}
+            {job.jobLink ? (
+              <a
+                href={job.jobLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center gap-2 group text-[#FFDD40]"
+              >
+                <span>{job.role}</span>
+                <ArrowUpRight className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" />
+              </a>
+            ) : (
+              job.role
+            )}
           </h3>
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
@@ -776,7 +814,19 @@ const JobCard: React.FC<{
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
             color: '#FFDD40'
           }}>
-            {job.role}
+            {job.jobLink ? (
+              <a
+                href={job.jobLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center gap-2 group text-[#FFDD40]"
+              >
+                <span>{job.role}</span>
+                <ArrowUpRight className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" />
+              </a>
+            ) : (
+              job.role
+            )}
           </h3>
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
@@ -837,6 +887,17 @@ const JobCard: React.FC<{
               color: 'rgba(255, 255, 255, 0.5)'
             }}>Free</span>
           </div>
+          {job.jobLink && (
+            <a
+              href={job.jobLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-white hover:text-[#00d4ff] transition-colors whitespace-nowrap"
+              style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', border: '1px solid rgba(0, 212, 255, 0.3)' }}
+            >
+              View Job <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          )}
           <IconButton size="medium" onClick={() => setExpanded(!expanded)} sx={{
             color: '#FFDD40',
             backgroundColor: 'rgba(255, 221, 64, 0.1)',
@@ -1814,7 +1875,14 @@ const JobAlertsPage: React.FC = () => {
                   <div className="flex gap-3 flex-wrap items-center justify-between pt-3">
                     <div className="flex gap-3 items-center flex-wrap">
                       <button 
-                        onClick={() => fetchData()} 
+                        onClick={() => {
+                          try {
+                            localStorage.removeItem(JOB_CACHE_KEY);
+                          } catch {
+                            /* ignore */
+                          }
+                          fetchData();
+                        }} 
                         disabled={loading} 
                         className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white transition-colors flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/25"
                       >

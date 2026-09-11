@@ -34,6 +34,7 @@ const SOURCE_ORDER = [
   "Tundra Technical Solutions",
   "GTT (Global Technical Talent)",
   "Nerdy Hire",
+  "NTT Data",
 ];
 
 const normalizeSourceName = (name?: string): string => {
@@ -50,6 +51,7 @@ const normalizeSourceName = (name?: string): string => {
   if (lower.includes("tundra")) return "Tundra Technical Solutions";
   if (lower.includes("gtt") || lower.includes("global technical talent")) return "GTT (Global Technical Talent)";
   if (lower.includes("nerdy")) return "Nerdy Hire";
+  if (lower.includes("ntt")) return "NTT Data";
   return name.trim();
 };
 
