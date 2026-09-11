@@ -281,6 +281,17 @@ const parseCSV = (csvText: string): JobData[] => {
     rowNumber++;
     // Only require that there's at least a date and role (first 2 columns)
     if (row.length >= 2 && row[0] && row[1]) {
+      const canonicalSource = normalizeSourceName(row[17] || '');
+      const parsedCompanyInfo = row[16] ? parseCompanyInfo(row[16]) : undefined;
+      const companyInfo =
+        canonicalSource === 'NTT Data' && (!parsedCompanyInfo || parsedCompanyInfo.length <= 1)
+          ? [
+              'NTT DATA Corporation',
+              'Global IT services and consulting leader operating in 50+ countries',
+              'Premier provider of digital innovation, cloud transformation, and systems integration',
+              'Delivering enterprise AI and BI-FinTech solutions worldwide',
+            ]
+          : parsedCompanyInfo;
       rows.push({
         date: row[0] || '',
         role: row[1] || '',
@@ -299,8 +310,8 @@ const parseCSV = (csvText: string): JobData[] => {
         strategy: row[12] || '',
         earningEstimate: row[13] || '',
         location: row[14] || '',
-        source: normalizeSourceName(row[17] || ''), // Sources is column 18 (index 17), normalized to canonical names (case-insensitive aliases)
-        companyInfo: row[16] ? parseCompanyInfo(row[16]) : undefined,
+        source: canonicalSource, // Sources is column 18 (index 17), normalized to canonical names (case-insensitive aliases)
+        companyInfo,
         jobId: row[19]?.trim() || '', // Job ID is column 20 (index 19)
         jobLink: row[18]?.trim() || '' // Link is column 19 (index 18)
       });
