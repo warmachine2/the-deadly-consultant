@@ -121,7 +121,7 @@ const sourceDescriptions: Record<string, string> = {
   "Agilus Work Solutions": "Canadian recruitment and staffing firm specializing in temporary, contract, and permanent placements across industries.",
   "Tundra Technical Solutions": "Canadian IT staffing and recruitment agency connecting organizations with technology professionals nationwide.",
   "Procom": "Canada's leading IT staffing and consulting services firm, providing technology talent and workforce solutions.",
-  "Nerdy Hire": "Niche tech recruitment platform focused on connecting companies with specialized IT and engineering talent.",
+  "Nerdy Hire": "Specialized tech recruitment platform delivering vetted Project Management, Scrum, and Agile talent across North America.",
   "HR Brain": "HR and talent solutions provider specializing in recruitment, staffing, and workforce consulting services.",
   "Axelon Services Corporation": "Global staffing and consulting firm delivering IT, finance, and healthcare workforce solutions since 1973.",
   "GTT (Global Technical Talent)": "Premier IT and Engineering staffing provider delivering top-tier Project Management, Scrum, and Agile talent across North America.",
