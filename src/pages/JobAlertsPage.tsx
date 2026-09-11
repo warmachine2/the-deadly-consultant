@@ -745,19 +745,7 @@ const JobCard: React.FC<{
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
             color: '#FFDD40'
           }}>
-            {job.jobLink ? (
-              <a
-                href={job.jobLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline inline-flex items-center gap-2 group text-[#FFDD40]"
-              >
-                <span>{job.role}</span>
-                <ArrowUpRight className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" />
-              </a>
-            ) : (
-              job.role
-            )}
+            {job.role}
           </h3>
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
@@ -803,19 +791,7 @@ const JobCard: React.FC<{
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
             color: '#FFDD40'
           }}>
-            {job.jobLink ? (
-              <a
-                href={job.jobLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline inline-flex items-center gap-2 group text-[#FFDD40]"
-              >
-                <span>{job.role}</span>
-                <ArrowUpRight className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" />
-              </a>
-            ) : (
-              job.role
-            )}
+            {job.role}
           </h3>
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
