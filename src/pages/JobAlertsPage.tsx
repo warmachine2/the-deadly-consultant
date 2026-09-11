@@ -729,17 +729,6 @@ const JobCard: React.FC<{
               color: 'rgba(255, 255, 255, 0.5)'
             }}>Free</span>
           </div>
-          {job.jobLink && (
-            <a
-              href={job.jobLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-semibold text-white hover:text-[#00d4ff] transition-colors whitespace-nowrap"
-              style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', border: '1px solid rgba(0, 212, 255, 0.3)' }}
-            >
-              View Job <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          )}
           <IconButton size="small" onClick={() => setExpanded(!expanded)} sx={{
             color: '#FFDD40',
             backgroundColor: 'rgba(255, 221, 64, 0.1)',
@@ -887,17 +876,6 @@ const JobCard: React.FC<{
               color: 'rgba(255, 255, 255, 0.5)'
             }}>Free</span>
           </div>
-          {job.jobLink && (
-            <a
-              href={job.jobLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-white hover:text-[#00d4ff] transition-colors whitespace-nowrap"
-              style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', border: '1px solid rgba(0, 212, 255, 0.3)' }}
-            >
-              View Job <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          )}
           <IconButton size="medium" onClick={() => setExpanded(!expanded)} sx={{
             color: '#FFDD40',
             backgroundColor: 'rgba(255, 221, 64, 0.1)',
