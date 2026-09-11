@@ -618,10 +618,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isAgilus = canonicalSource === "Agilus Work Solutions";
   const isTundra = canonicalSource === "Tundra Technical Solutions" || canonicalSource.toLowerCase().includes("tundra");
   const isGtt = canonicalSource === "GTT (Global Technical Talent)" || canonicalSource.toLowerCase().includes("gtt") || canonicalSource.toLowerCase().includes("global technical talent");
+  const isNerdyHire = canonicalSource === "Nerdy Hire" || canonicalSource.toLowerCase().includes("nerdy");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -643,6 +644,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isGtt && (
             <img src={gttLogoUrl} alt="GTT (Global Technical Talent)" className="h-7 w-auto object-contain" />
+          )}
+          {isNerdyHire && (
+            <img src={nerdyHireLogoUrl} alt="Nerdy Hire" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
