@@ -586,6 +586,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://careers.gttit.com/';
   }
 
+  // Nerdy Hire: use job Link if present, else https://nerdyhire.com/jobs.php
+  if (lower.includes('nerdy')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://nerdyhire.com/jobs.php';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
