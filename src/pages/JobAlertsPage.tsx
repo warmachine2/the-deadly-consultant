@@ -27,6 +27,7 @@ const tundraLogoUrl = '/tundra-logo.png';
 const gttLogoUrl = '/gtt-logo.png';
 const nerdyHireLogoUrl = '/nerdy-hire-logo.png';
 const nttDataLogoUrl = '/ntt-data-logo.png';
+const hrBrainLogoUrl = '/hr-brain-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -147,6 +148,9 @@ const sourceNameMap: Record<string, string> = {
   "NTT DATA": "NTT Data",
   "NTT": "NTT Data",
   "NTT DATA Services": "NTT Data",
+  "HR Brain": "HR Brain",
+  "hrbrain": "HR Brain",
+  "HRBrain": "HR Brain",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -614,6 +618,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://careers.services.global.ntt/global/en';
   }
 
+  // HR Brain: use job Link if present, else https://hrbrain.com/jobs/
+  if (lower.includes('hr brain') || lower.includes('hrbrain')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://hrbrain.com/jobs/';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -642,10 +652,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isGtt = canonicalSource === "GTT (Global Technical Talent)" || canonicalSource.toLowerCase().includes("gtt") || canonicalSource.toLowerCase().includes("global technical talent");
   const isNerdyHire = canonicalSource === "Nerdy Hire" || canonicalSource.toLowerCase().includes("nerdy");
   const isNttData = canonicalSource === "NTT Data" || canonicalSource.toLowerCase().includes("ntt");
+  const isHrBrain = canonicalSource === "HR Brain" || canonicalSource.toLowerCase().includes("hr brain") || canonicalSource.toLowerCase().includes("hrbrain");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -673,6 +684,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isNttData && (
             <img src={nttDataLogoUrl} alt="NTT Data" className="h-7 w-auto object-contain" />
+          )}
+          {isHrBrain && (
+            <img src={hrBrainLogoUrl} alt="HR Brain" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
