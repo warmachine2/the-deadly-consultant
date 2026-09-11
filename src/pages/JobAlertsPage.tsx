@@ -597,6 +597,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://nerdyhire.com/jobs.php';
   }
 
+  // NTT Data: use job Link if present, else https://careers.services.global.ntt/global/en
+  if (lower.includes('ntt')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://careers.services.global.ntt/global/en';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -624,10 +630,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isTundra = canonicalSource === "Tundra Technical Solutions" || canonicalSource.toLowerCase().includes("tundra");
   const isGtt = canonicalSource === "GTT (Global Technical Talent)" || canonicalSource.toLowerCase().includes("gtt") || canonicalSource.toLowerCase().includes("global technical talent");
   const isNerdyHire = canonicalSource === "Nerdy Hire" || canonicalSource.toLowerCase().includes("nerdy");
+  const isNttData = canonicalSource === "NTT Data" || canonicalSource.toLowerCase().includes("ntt");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -652,6 +659,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isNerdyHire && (
             <img src={nerdyHireLogoUrl} alt="Nerdy Hire" className="h-7 w-auto object-contain" />
+          )}
+          {isNttData && (
+            <img src={nttDataLogoUrl} alt="NTT Data" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
@@ -735,7 +745,19 @@ const JobCard: React.FC<{
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
             color: '#FFDD40'
           }}>
-            {job.role}
+            {job.jobLink ? (
+              <a
+                href={job.jobLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center gap-2 group text-[#FFDD40]"
+              >
+                <span>{job.role}</span>
+                <ArrowUpRight className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" />
+              </a>
+            ) : (
+              job.role
+            )}
           </h3>
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
@@ -781,7 +803,19 @@ const JobCard: React.FC<{
           <h3 className="text-[1.625rem] md:text-[2rem] font-bold leading-tight break-words" style={{
             color: '#FFDD40'
           }}>
-            {job.role}
+            {job.jobLink ? (
+              <a
+                href={job.jobLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center gap-2 group text-[#FFDD40]"
+              >
+                <span>{job.role}</span>
+                <ArrowUpRight className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" />
+              </a>
+            ) : (
+              job.role
+            )}
           </h3>
           <p className="text-white font-semibold text-xl md:text-2xl mt-2">
             {job.company}
@@ -1819,7 +1853,14 @@ const JobAlertsPage: React.FC = () => {
                   <div className="flex gap-3 flex-wrap items-center justify-between pt-3">
                     <div className="flex gap-3 items-center flex-wrap">
                       <button 
-                        onClick={() => fetchData()} 
+                        onClick={() => {
+                          try {
+                            localStorage.removeItem(JOB_CACHE_KEY);
+                          } catch {
+                            /* ignore */
+                          }
+                          fetchData();
+                        }} 
                         disabled={loading} 
                         className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white transition-colors flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/25"
                       >
