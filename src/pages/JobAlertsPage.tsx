@@ -152,6 +152,9 @@ const sourceNameMap: Record<string, string> = {
   "HR Brain": "HR Brain",
   "hrbrain": "HR Brain",
   "HRBrain": "HR Brain",
+  "Axelon Services": "Axelon Services Corporation",
+  "Axelon Services Corporation": "Axelon Services Corporation",
+  "Axelon": "Axelon Services Corporation",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -169,6 +172,7 @@ const normalizeSourceName = (raw: string): string => {
 const sourceDisplayNames: Record<string, string> = {
   "Hassan's recruiter Network": "Hassan's Recruiter Network",
   "Agilus Work Solutions": "Agilus",
+  "Axelon Services Corporation": "Axelon Services",
 };
 
 const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
