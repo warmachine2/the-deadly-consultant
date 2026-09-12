@@ -28,6 +28,7 @@ const gttLogoUrl = '/gtt-logo.png';
 const nerdyHireLogoUrl = '/nerdy-hire-logo.png';
 const nttDataLogoUrl = '/ntt-data-logo.png';
 const hrBrainLogoUrl = '/hr-brain-logo.png';
+const axelonLogoUrl = '/axelon-logo.svg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
