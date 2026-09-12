@@ -36,6 +36,7 @@ const SOURCE_ORDER = [
   "Nerdy Hire",
   "NTT Data",
   "HR Brain",
+  "Axelon Services",
 ];
 
 const normalizeSourceName = (name?: string): string => {
@@ -54,6 +55,7 @@ const normalizeSourceName = (name?: string): string => {
   if (lower.includes("nerdy")) return "Nerdy Hire";
   if (lower.includes("ntt")) return "NTT Data";
   if (lower.includes("hr brain") || lower.includes("hrbrain")) return "HR Brain";
+  if (lower.includes("axelon")) return "Axelon Services";
   return name.trim();
 };
 
