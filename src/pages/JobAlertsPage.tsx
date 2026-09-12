@@ -629,6 +629,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return 'https://hrbrain.com/jobs/';
   }
 
+  // Axelon Services: use job Link if present, else https://www.axelon.com/job-seekers/
+  if (lower.includes('axelon')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://www.axelon.com/job-seekers/';
+  }
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -658,10 +664,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isNerdyHire = canonicalSource === "Nerdy Hire" || canonicalSource.toLowerCase().includes("nerdy");
   const isNttData = canonicalSource === "NTT Data" || canonicalSource.toLowerCase().includes("ntt");
   const isHrBrain = canonicalSource === "HR Brain" || canonicalSource.toLowerCase().includes("hr brain") || canonicalSource.toLowerCase().includes("hrbrain");
+  const isAxelon = canonicalSource === "Axelon Services Corporation" || canonicalSource.toLowerCase().includes("axelon");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -692,6 +699,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isHrBrain && (
             <img src={hrBrainLogoUrl} alt="HR Brain" className="h-7 w-auto object-contain" />
+          )}
+          {isAxelon && (
+            <img src={axelonLogoUrl} alt="Axelon Services" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
