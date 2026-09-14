@@ -22,7 +22,7 @@ const HeroSection = () => {
         {/* Subheadline */}
       <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-medium text-center">
         Data & <span className="text-[#F4C903]">AI Orchestration PM Consulting</span><br />
-        Pivot into high-value <span className="text-[#F4C903]">consulting</span> contracts
+        <span className="text-[#9CA3AF]">Pivot into high-value consulting contracts</span>
       </p>
 
         {/* Two primary hero cards */}
