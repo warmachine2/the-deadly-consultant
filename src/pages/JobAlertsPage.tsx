@@ -1739,10 +1739,33 @@ const JobAlertsPage: React.FC = () => {
                                     Clear selection ({selectedSources.length})
                                   </CommandItem>
                                 )}
-                                {uniqueSources.map(source => {
+                                {/* Hassan's Recruiter Network pinned first */}
+                                {uniqueSources.filter(s => s === "Hassan's recruiter Network").map(source => {
                                   const description = sourceDescriptions[source] || `Staffing agency providing professional recruitment services.`;
                                   const isSelected = selectedSources.includes(source);
-                                  
+                                  return (
+                                    <CommandItem
+                                      key={source}
+                                      onSelect={() => toggleSource(source)}
+                                      className="cursor-pointer hover:bg-cyan-500/20 data-[selected=true]:bg-cyan-500/20 flex-col items-start gap-1 py-2"
+                                    >
+                                      <div className="flex items-center gap-2 w-full">
+                                        <Checkbox
+                                          checked={isSelected}
+                                          className="border-white/30 data-[state=checked]:bg-[#FFDD40] data-[state=checked]:border-[#FFDD40]"
+                                        />
+                                        <span className="font-medium" style={{ color: '#FFDD40' }}>{getSourceDisplayName(source)}</span>
+                                      </div>
+                                      {isSelected && (
+                                        <p className="text-white/50 text-xs pl-6 leading-relaxed">{description}</p>
+                                      )}
+                                    </CommandItem>
+                                  );
+                                })}
+                                {/* All other sources in existing alpha order */}
+                                {uniqueSources.filter(s => s !== "Hassan's recruiter Network").map(source => {
+                                  const description = sourceDescriptions[source] || `Staffing agency providing professional recruitment services.`;
+                                  const isSelected = selectedSources.includes(source);
                                   return (
                                     <CommandItem
                                       key={source}
