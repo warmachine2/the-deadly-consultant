@@ -1022,12 +1022,12 @@ All colors MUST be HSL.
 /* --- KAN-348: Quiet Google dark-mode pill with uniform glow --- */
 @keyframes pill-glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.28), 0 0 20px rgba(255, 255, 255, 0.14) !important;
-    border-color: rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.18), 0 0 10px rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.45);
   }
   50% {
-    box-shadow: 0 0 16px rgba(255, 255, 255, 0.48), 0 0 32px rgba(255, 255, 255, 0.24) !important;
-    border-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.65);
   }
 }
 
@@ -1036,9 +1036,9 @@ All colors MUST be HSL.
   isolation: isolate;
   background: #1c1d22 !important;
   border-radius: 9999px;
-  border: 1.5px solid rgba(255, 255, 255, 0.65) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
   color: #ffffff;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.35), 0 0 24px rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.22), 0 0 12px rgba(255, 255, 255, 0.1) !important;
   animation: pill-glow-pulse 3.5s ease-in-out infinite;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -1051,7 +1051,7 @@ All colors MUST be HSL.
 @media (prefers-reduced-motion: reduce) {
   .highlight-glow-button {
     animation: none;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.35), 0 0 24px rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.65) !important;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.22), 0 0 12px rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
   }
 }
