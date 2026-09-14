@@ -1019,27 +1019,15 @@ All colors MUST be HSL.
   .gold-glow-border::after { animation: none; }
 }
 
-/* --- KAN-328: Designed To Highlight Multi-Spectrum Gradient Glow --- */
-@property --highlight-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes highlight-spin {
-  to {
-    --highlight-angle: 360deg;
-  }
-}
-
-@keyframes highlight-glow-pulse {
+/* --- KAN-348: Quiet Google dark-mode pill with uniform glow --- */
+@keyframes pill-glow-pulse {
   0%, 100% {
-    opacity: 0.85;
-    filter: blur(14px);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.35);
   }
   50% {
-    opacity: 1;
-    filter: blur(18px);
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.25), 0 0 32px rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.55);
   }
 }
 
@@ -1048,59 +1036,22 @@ All colors MUST be HSL.
   isolation: isolate;
   background: #0B0B0E;
   border-radius: 9999px;
-  border: 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Crisp 1.5px multi-color gradient border rotating continuously around the perimeter */
-.highlight-glow-button::before {
-  content: "";
-  position: absolute;
-  inset: -1.5px;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--highlight-angle),
-    #FF3B30 0%,
-    #FF9500 14%,
-    #FFDD00 28%,
-    #00FF88 42%,
-    #00D4FF 56%,
-    #3B82F6 70%,
-    #A855F7 84%,
-    #FF1493 92%,
-    #FF3B30 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  animation: highlight-spin 3.5s linear infinite;
-  z-index: -1;
-  pointer-events: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.12), 0 0 24px rgba(255, 255, 255, 0.06);
+  animation: pill-glow-pulse 3.5s ease-in-out infinite;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .highlight-glow-button:hover {
   transform: translateY(-1px);
-}
-
-@supports not (background: conic-gradient(from var(--highlight-angle), red, blue)) {
-  .highlight-glow-button::before {
-    background: conic-gradient(
-      from 0deg,
-      #FF3B30 0%,
-      #FF9500 14%,
-      #FFDD00 28%,
-      #00FF88 42%,
-      #00D4FF 56%,
-      #3B82F6 70%,
-      #A855F7 84%,
-      #FF1493 92%,
-      #FF3B30 100%
-    );
-  }
+  background: #121216;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .highlight-glow-button::before { animation: none; }
+  .highlight-glow-button {
+    animation: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
 }
