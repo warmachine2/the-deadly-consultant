@@ -756,6 +756,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
         </span>
       )}
+      {isHassanEmail && (
+        <HassanEmailIcon className="h-5 w-5" />
+      )}
       <span className="text-white">{displayName}</span>
       {hasLink && <ArrowUpRight className="w-3.5 h-3.5 text-white/60" />}
     </>
