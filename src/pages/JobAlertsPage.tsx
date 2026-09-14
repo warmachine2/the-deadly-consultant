@@ -118,49 +118,45 @@ const HassanEmailIcon: React.FC<{ className?: string }> = ({ className = "h-5 w-
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`${className} shrink-0 inline-block`}
+    className={`${className} shrink-0`}
     aria-hidden="true"
   >
     <defs>
-      <linearGradient id="hassanGoldCard" x1="12" y1="3" x2="12" y2="14" gradientUnits="userSpaceOnUse">
+      <linearGradient id="henvBody" x1="12" y1="2" x2="12" y2="20" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#FFE033" />
+        <stop offset="100%" stopColor="#F5C800" />
+      </linearGradient>
+      <linearGradient id="henvFlap" x1="12" y1="2" x2="12" y2="12" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#FFE566" />
-        <stop offset="45%" stopColor="#FFDD40" />
-        <stop offset="100%" stopColor="#F59E0B" />
+        <stop offset="100%" stopColor="#EAB308" />
       </linearGradient>
-      <linearGradient id="hassanEnvFront" x1="12" y1="9" x2="12" y2="21" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FFFFFF" />
-        <stop offset="100%" stopColor="#E2E8F0" />
+      <linearGradient id="henvLeft" x1="2" y1="12" x2="9" y2="20" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#EAB308" />
+        <stop offset="100%" stopColor="#CA8A04" />
       </linearGradient>
-      <linearGradient id="hassanEnvBack" x1="12" y1="2.5" x2="12" y2="10" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#CBD5E1" />
-        <stop offset="100%" stopColor="#94A3B8" />
+      <linearGradient id="henvRight" x1="15" y1="12" x2="22" y2="20" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#FFDD40" />
+        <stop offset="100%" stopColor="#D97706" />
       </linearGradient>
-      <filter id="hassanIconShadow" x="0" y="0" width="24" height="24" filterUnits="userSpaceOnUse">
-        <feDropShadow dx="0" dy="1" stdDeviation="0.8" floodColor="#000000" floodOpacity="0.2" />
-      </filter>
     </defs>
-    <g filter="url(#hassanIconShadow)">
-      {/* Envelope Back Flap (Open) */}
-      <path d="M3 9.5L12 2.5L21 9.5V18.5C21 19.6 20.1 20.5 19 20.5H5C3.9 20.5 3 19.6 3 18.5V9.5Z" fill="#94A3B8" />
-      <path d="M12 2.5L21 9.5H3L12 2.5Z" fill="url(#hassanEnvBack)" />
-      <path d="M4 9.5H20V18.5H4V9.5Z" fill="#475569" opacity="0.35" />
 
-      {/* Yellow Card Insert */}
-      <rect x="5" y="4.5" width="14" height="10" rx="1.5" fill="url(#hassanGoldCard)" />
-      {/* White Letter Paper on Card */}
-      <rect x="6.5" y="6" width="11" height="8" rx="1" fill="#FFFFFF" />
-      {/* Text lines */}
-      <rect x="8" y="7.5" width="6" height="1.2" rx="0.6" fill="#0F172A" opacity="0.35" />
-      <rect x="8.5" y="9.5" width="7" height="1" rx="0.5" fill="#94A3B8" />
-      <rect x="8.5" y="11.2" width="4.5" height="1" rx="0.5" fill="#CBD5E1" />
+    {/* Envelope body */}
+    <rect x="2" y="5" width="20" height="14" rx="2" ry="2" fill="url(#henvBody)" />
 
-      {/* Envelope Front Pocket */}
-      <path d="M3 20.5L11 13.5L3 8.5V20.5Z" fill="#E2E8F0" />
-      <path d="M21 20.5L13 13.5L21 8.5V20.5Z" fill="#CBD5E1" />
-      <path d="M3 20.5H21C21 20.5 20.8 19.8 20.3 19.3L12 13L3.7 19.3C3.2 19.8 3 20.5 3 20.5Z" fill="url(#hassanEnvFront)" />
-      <path d="M3 20.5L12 13.5L21 20.5H3Z" fill="#F8FAFC" opacity="0.6" />
-      <path d="M3 9L12 14L21 9" stroke="rgba(255,255,255,0.7)" strokeWidth="0.8" strokeLinecap="round" />
-    </g>
+    {/* Bottom-left fold triangle */}
+    <path d="M2 19L9 13L2 7V19Z" fill="url(#henvLeft)" />
+
+    {/* Bottom-right fold triangle */}
+    <path d="M22 19L15 13L22 7V19Z" fill="url(#henvRight)" />
+
+    {/* Bottom V fold (front pocket) */}
+    <path d="M2 19H22L15 13L12 15.5L9 13L2 19Z" fill="#F5C800" />
+
+    {/* Top flap / V crease */}
+    <path d="M2 5L12 13L22 5" fill="url(#henvFlap)" />
+
+    {/* Subtle shadow on flap crease */}
+    <path d="M2 5L12 13L22 5" stroke="#CA8A04" strokeWidth="0.5" strokeLinejoin="round" fill="none" />
   </svg>
 );
 
