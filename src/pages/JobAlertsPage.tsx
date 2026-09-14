@@ -115,48 +115,23 @@ const JobCardSkeleton: React.FC = () => (
 
 const HassanEmailIcon: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => (
   <svg
-    viewBox="0 0 24 24"
+    viewBox="0 0 24 18"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={`${className} shrink-0`}
     aria-hidden="true"
   >
-    <defs>
-      <linearGradient id="henvBody" x1="12" y1="2" x2="12" y2="20" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FFE033" />
-        <stop offset="100%" stopColor="#F5C800" />
-      </linearGradient>
-      <linearGradient id="henvFlap" x1="12" y1="2" x2="12" y2="12" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FFE566" />
-        <stop offset="100%" stopColor="#EAB308" />
-      </linearGradient>
-      <linearGradient id="henvLeft" x1="2" y1="12" x2="9" y2="20" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#EAB308" />
-        <stop offset="100%" stopColor="#CA8A04" />
-      </linearGradient>
-      <linearGradient id="henvRight" x1="15" y1="12" x2="22" y2="20" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FFDD40" />
-        <stop offset="100%" stopColor="#D97706" />
-      </linearGradient>
-    </defs>
+    {/* Envelope body - solid yellow rounded rect */}
+    <rect x="0" y="0" width="24" height="18" rx="2.5" fill="#FFDD40" />
 
-    {/* Envelope body */}
-    <rect x="2" y="5" width="20" height="14" rx="2" ry="2" fill="url(#henvBody)" />
+    {/* Top flap - darker yellow V shape pointing down to center */}
+    <path d="M0 0 L12 10 L24 0 Z" fill="#F5C800" />
 
-    {/* Bottom-left fold triangle */}
-    <path d="M2 19L9 13L2 7V19Z" fill="url(#henvLeft)" />
+    {/* Bottom-left fold line */}
+    <line x1="0" y1="18" x2="10" y2="9" stroke="#D4A800" strokeWidth="0.8" />
 
-    {/* Bottom-right fold triangle */}
-    <path d="M22 19L15 13L22 7V19Z" fill="url(#henvRight)" />
-
-    {/* Bottom V fold (front pocket) */}
-    <path d="M2 19H22L15 13L12 15.5L9 13L2 19Z" fill="#F5C800" />
-
-    {/* Top flap / V crease */}
-    <path d="M2 5L12 13L22 5" fill="url(#henvFlap)" />
-
-    {/* Subtle shadow on flap crease */}
-    <path d="M2 5L12 13L22 5" stroke="#CA8A04" strokeWidth="0.5" strokeLinejoin="round" fill="none" />
+    {/* Bottom-right fold line */}
+    <line x1="24" y1="18" x2="14" y2="9" stroke="#D4A800" strokeWidth="0.8" />
   </svg>
 );
 
