@@ -113,7 +113,7 @@ const JobCardSkeleton: React.FC = () => (
   </div>
 );
 
-const HassanEmailIcon: React.FC<{ className?: string }> = ({ className = "h-5 w-5" }) => (
+const HassanEmailIcon: React.FC<{ className?: string }> = ({ className = "h-6 w-6" }) => (
   <svg
     viewBox="0 0 24 18"
     fill="none"
@@ -728,7 +728,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
         </span>
       )}
       {isHassanEmail && (
-        <HassanEmailIcon className="h-5 w-5" />
+        <HassanEmailIcon className="h-6 w-6" />
       )}
       <span className="text-white">{displayName}</span>
       {hasLink && <ArrowUpRight className="w-3.5 h-3.5 text-white/60" />}
