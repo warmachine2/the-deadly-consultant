@@ -58,7 +58,7 @@ const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
 // --- KAN-311: stale-while-revalidate cache ---
-const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v2';
+const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v3';
 const readJobCache = (): JobData[] | null => {
   try {
     const raw = localStorage.getItem(JOB_CACHE_KEY);
@@ -209,34 +209,72 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
   return null;
 };
 
-// Convert hourly earnings strings to monthly equivalents (hourly * 1.14 * 160).
-// Monthly strings (with /mo or /month) are preserved as-is. Keeps CAD/USD and *Est. from the raw string.
-const formatEarningsMonthly = (raw: string): string => {
+// Enforce monthly salary ($/mo) across all formats:
+// - Hourly rates (e.g. '$91/hr USD') convert at hourly * 160 * 1.13.
+// - Annual salaries (e.g. '$76,000 - $126,000/yr USD') convert at annual / 12.
+// - Already-monthly amounts missing '/mo' (e.g. '$12,758 CAD') get '/mo' appended; '/month' standardizes to '/mo'.
+// - Currency (CAD/USD) is preserved from the string or inferred from the location
+//   (Canadian cities => CAD, otherwise USD).
+const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   if (!raw || !raw.trim()) return '';
   const str = raw.trim();
-  const isMonthly = /\/\s*(mo|month)\b/i.test(str);
   const isHourly = /\/\s*(hr|hour|h)\b/i.test(str);
-  if (isMonthly || !isHourly) return str;
-  const currency = /\bCAD\b/i.test(str) ? 'CAD' : /\bUSD\b/i.test(str) ? 'USD' : '';
+  const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
   const hasEst = /\*\s*Est\.?/i.test(str);
-  const numbers = str.match(/\$?\s*([\d,]+(?:\.\d+)?)/g) || [];
-  const converted = numbers
-    .map(n => {
-      const v = parseFloat(n.replace(/[^0-9.]/g, ''));
-      if (!isFinite(v) || v <= 0) return null;
-      return '$' + Math.round(v * 1.14 * 160).toLocaleString('en-US');
-    })
-    .filter((s): s is string => s !== null);
-  if (converted.length === 0) return str;
-  let out = converted.join(' - ') + '/mo';
-  if (currency) out += ' ' + currency;
-  if (hasEst) out += ' *Est.';
+
+  // Currency: preserve from the string, else infer from location
+  let currency = /\bCAD\b/i.test(str) ? 'CAD' : /\bUSD\b/i.test(str) ? 'USD' : '';
+  if (!currency) {
+    const loc = (location || '').toLowerCase();
+    currency = /(canada|canadian|toronto|vancouver|montreal|calgary|ottawa)/.test(loc) ? 'CAD' : 'USD';
+  }
+
+  const convertNumbers = (divisor: number, multiplier: number = 1): string[] =>
+    (str.match(/\$?\s*([\d,]+(?:\.\d+)?)/g) || [])
+      .map(n => {
+        const v = parseFloat(n.replace(/[^0-9.]/g, ''));
+        if (!isFinite(v) || v <= 0) return null;
+        return '$' + Math.round((v * multiplier) / divisor).toLocaleString('en-US');
+      })
+      .filter((s): s is string => s !== null);
+
+  if (isHourly) {
+    const converted = convertNumbers(1, 160 * 1.13);
+    if (converted.length === 0) return str;
+    let out = converted.join(' - ') + '/mo ' + currency;
+    if (hasEst) out += ' *Est.';
+    return out;
+  }
+
+  if (isAnnual) {
+    const converted = convertNumbers(12);
+    if (converted.length === 0) return str;
+    let out = converted.join(' - ') + '/mo ' + currency;
+    if (hasEst) out += ' *Est.';
+    return out;
+  }
+
+  // Already monthly (explicitly or implied): standardize '/month' -> '/mo', append '/mo' if missing
+  let out = str.replace(/\/\s*month\b/gi, '/mo');
+  const hasAmount = /\$\s*[\d,]/.test(out) || /\/\s*mo\b/i.test(out);
+  if (!hasAmount) return str;
+  if (!/\/\s*mo\b/i.test(out)) {
+    if (/\b(CAD|USD)\b/i.test(out)) {
+      out = out.replace(/(\d)\s+(\b(?:CAD|USD)\b)/i, '$1/mo $2');
+    } else {
+      out = out + '/mo';
+    }
+  }
+  if (!new RegExp(`\\b${currency}\\b`, 'i').test(out)) {
+    if (hasEst) out = out.replace(/\s*\*\s*Est\.?\s*$/i, '');
+    out = out + ' ' + currency + (hasEst ? ' *Est.' : '');
+  }
   return out;
 };
 
 // First numeric amount of the (possibly converted) monthly earnings string, for filtering/ratings
-const getMonthlyAmount = (raw: string): number => {
-  const formatted = formatEarningsMonthly(raw);
+const getMonthlyAmount = (raw: string, location: string = ''): number => {
+  const formatted = formatEarningsMonthly(raw, location);
   const m = formatted.match(/([\d,]+(?:\.\d+)?)/);
   return m ? Math.round(parseFloat(m[1].replace(/,/g, ''))) : 0;
 };
@@ -339,7 +377,7 @@ const parseCSV = (csvText: string): JobData[] => {
         recruiterName: row[20]?.trim() || '',
         recruiterLinkedIn: row[21]?.trim() || '',
         strategy: row[12] || '',
-        earningEstimate: row[13] || '',
+        earningEstimate: formatEarningsMonthly(row[13] || '', row[14] || ''),
         location: row[14] || '',
         source: canonicalSource, // Sources is column 18 (index 17), normalized to canonical names (case-insensitive aliases)
         companyInfo,
@@ -992,7 +1030,7 @@ const JobCard: React.FC<{
         border: '1px solid rgba(76, 175, 80, 0.3)'
       }}>
           {(() => {
-            const amount = getMonthlyAmount(job.earningEstimate);
+            const amount = getMonthlyAmount(job.earningEstimate, job.location);
             const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
             return (
               <span className="inline-flex" style={{ color: '#FFDD40' }}>
@@ -1001,7 +1039,7 @@ const JobCard: React.FC<{
             );
           })()}
           {(() => {
-            const formatted = formatEarningsMonthly(job.earningEstimate);
+            const formatted = formatEarningsMonthly(job.earningEstimate, job.location);
             const locationLower = job.location?.toLowerCase() || '';
             const fallbackCurrency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
             const hasCurrency = /\b(CAD|USD)\b/i.test(formatted);
@@ -1359,7 +1397,7 @@ const JobAlertsPage: React.FC = () => {
     // Salary filter (uses converted monthly amount)
     if (salaryFilter !== 'all') {
       filtered = filtered.filter(row => {
-        const amount = getMonthlyAmount(row.earningEstimate);
+        const amount = getMonthlyAmount(row.earningEstimate, row.location);
         
         if (salaryFilter === 'less15') {
           return amount <= 15000;
@@ -2041,10 +2079,10 @@ const JobAlertsPage: React.FC = () => {
                       const status = hoursAgo <= 6 ? 'HOT' : hoursAgo <= 24 ? 'Ideal' : hoursAgo <= 48 ? 'Hurry' : 'Stale';
                       const statusColor = hoursAgo <= 6 ? '#ff4444' : hoursAgo <= 24 ? '#4ade80' : hoursAgo <= 48 ? '#FFDD40' : '#ef4444';
                       
-                      const amount = getMonthlyAmount(job.earningEstimate);
+                      const amount = getMonthlyAmount(job.earningEstimate, job.location);
                       const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
                       const workMode = normalizeWorkMode(job.workType);
-                      const formattedEarnings = formatEarningsMonthly(job.earningEstimate);
+                      const formattedEarnings = formatEarningsMonthly(job.earningEstimate, job.location);
                       const locationLower = job.location?.toLowerCase() || '';
                       const currency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
                       const earningsHasCurrency = /\b(CAD|USD)\b/i.test(formattedEarnings);
