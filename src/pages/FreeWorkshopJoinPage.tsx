@@ -16,7 +16,8 @@ const FreeWorkshopJoinPage = () => {
               Contracts
             </h1>
             <p className="text-white text-base md:text-lg mb-8">
-              Live session runs every Saturday from 11:00 AM to 12:00 PM EST (Toronto / New York)
+              Live sessions run Mondays &amp; Wednesdays (12:00 PM &ndash; 1:00 PM ET) and Saturdays
+              (11:00 AM &ndash; 12:00 PM ET) (Toronto / New York)
             </p>
 
             <a

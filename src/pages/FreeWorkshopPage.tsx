@@ -47,7 +47,7 @@ const tzOffsetMs = (date: Date) => {
   return asTz.getTime() - asUtc.getTime();
 };
 
-/** Next Saturday 11:00 AM Toronto time, as a real (UTC) Date. */
+/** Next upcoming session among Mon 12:00 PM, Wed 12:00 PM, Sat 11:00 AM (America/Toronto), as a real (UTC) Date. */
 const getNextSession = (now: Date = new Date()): Date => {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: TZ,
@@ -56,6 +56,7 @@ const getNextSession = (now: Date = new Date()): Date => {
     month: "2-digit",
     day: "2-digit",
     hour: "2-digit",
+    minute: "2-digit",
     hour12: false,
   }).formatToParts(now);
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
@@ -64,19 +65,39 @@ const getNextSession = (now: Date = new Date()): Date => {
   };
   const dow = weekdayMap[get("weekday")] ?? 0;
   const hour = parseInt(get("hour"), 10) % 24;
-
-  let daysAhead = (6 - dow + 7) % 7;
-  // Saturday after 12:00 PM -> next week's session
-  if (daysAhead === 0 && hour >= 12) daysAhead = 7;
+  const minute = parseInt(get("minute"), 10) % 60;
 
   const y = parseInt(get("year"), 10);
   const m = parseInt(get("month"), 10);
   const d = parseInt(get("day"), 10);
 
-  // Build target wall-clock time in Toronto, then convert to UTC instant.
-  const naiveUtc = Date.UTC(y, m - 1, d + daysAhead, 11, 0, 0);
-  const guess = new Date(naiveUtc - tzOffsetMs(new Date(naiveUtc)));
-  return new Date(naiveUtc - tzOffsetMs(guess));
+  // Weekly schedule: [dayOfWeek, hour, minute] in Toronto time.
+  const schedule: Array<[number, number, number]> = [
+    [1, 12, 0], // Monday 12:00 PM (lunch)
+    [3, 12, 0], // Wednesday 12:00 PM (lunch)
+    [6, 11, 0], // Saturday 11:00 AM
+  ];
+
+  // Find the soonest upcoming session: after a session starts, roll to the next one.
+  let best: Date | null = null;
+  for (const [targetDow, targetHour, targetMinute] of schedule) {
+    let daysAhead = (targetDow - dow + 7) % 7;
+    // Same day but session already started -> roll to next week's occurrence.
+    if (daysAhead === 0 && (hour > targetHour || (hour === targetHour && minute >= targetMinute))) {
+      daysAhead = 7;
+    }
+
+    // Build target wall-clock time in Toronto, then convert to UTC instant.
+    const naiveUtc = Date.UTC(y, m - 1, d + daysAhead, targetHour, targetMinute, 0);
+    const guess = new Date(naiveUtc - tzOffsetMs(new Date(naiveUtc)));
+    const sessionDate = new Date(naiveUtc - tzOffsetMs(guess));
+
+    if (!best || sessionDate.getTime() < best.getTime()) {
+      best = sessionDate;
+    }
+  }
+
+  return best ?? new Date();
 };
 
 const formatSessionDate = (date: Date) =>
@@ -118,7 +139,8 @@ const CountdownCard = () => {
         NEXT LIVE SESSION
       </span>
       <p className="text-white text-sm md:text-base font-medium mb-5">
-        {formatSessionDate(session)} &bull; 11:00 AM &ndash; 12:00 PM EST
+        {formatSessionDate(session)} &bull;{" "}
+        {session.getDay() === 6 ? "11:00 AM – 12:00 PM EST" : "12:00 PM – 1:00 PM EST"}
       </p>
       <div className="grid grid-cols-4 gap-2 md:gap-3">
         {units.map(([label, value]) => (
