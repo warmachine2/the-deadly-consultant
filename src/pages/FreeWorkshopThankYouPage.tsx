@@ -29,7 +29,8 @@ const FreeWorkshopThankYouPage = () => {
               </h2>
             </div>
             <p className="text-white font-semibold mb-3">
-              Every Saturday • 11:00 AM – 12:00 PM EST (Toronto / New York)
+              Mondays &amp; Wednesdays &bull; 12:00 PM &ndash; 1:00 PM ET | Saturdays &bull; 11:00
+              AM &ndash; 12:00 PM ET (Toronto / New York)
             </p>
             <p className="text-white mb-6">
               We&rsquo;ve also sent the join link and meeting details directly to your email inbox.
