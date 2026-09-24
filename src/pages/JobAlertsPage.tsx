@@ -29,6 +29,7 @@ const nerdyHireLogoUrl = '/nerdy-hire-logo.png';
 const nttDataLogoUrl = '/ntt-data-logo.png';
 const hrBrainLogoUrl = '/hr-brain-logo.png';
 const axelonLogoUrl = '/axelon-logo.svg';
+const sohoSquareLogoUrl = '/soho-square-logo.svg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -734,10 +735,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
   const isNttData = canonicalSource === "NTT Data" || canonicalSource.toLowerCase().includes("ntt");
   const isHrBrain = canonicalSource === "HR Brain" || canonicalSource.toLowerCase().includes("hr brain") || canonicalSource.toLowerCase().includes("hrbrain");
   const isAxelon = canonicalSource === "Axelon Services Corporation" || canonicalSource.toLowerCase().includes("axelon");
+  const isSohoSquare = canonicalSource === "Soho Square Solutions" || canonicalSource.toLowerCase().includes("soho");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -771,6 +773,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
           )}
           {isAxelon && (
             <img src={axelonLogoUrl} alt="Axelon Services" className="h-7 w-auto object-contain" />
+          )}
+          {isSohoSquare && (
+            <img src={sohoSquareLogoUrl} alt="Soho Square Solutions" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
