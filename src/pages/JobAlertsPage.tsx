@@ -775,7 +775,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, 
             <img src={axelonLogoUrl} alt="Axelon Services" className="h-7 w-auto object-contain" />
           )}
           {isSohoSquare && (
-            <img src={sohoSquareLogoUrl} alt="Soho Square Solutions" className="h-7 w-auto object-contain" />
+            <img src={sohoSquareLogoUrl} alt="Soho Square Solutions" className="h-6 w-auto object-contain" />
           )}
         </span>
       )}
