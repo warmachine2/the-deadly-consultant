@@ -177,6 +177,9 @@ const sourceNameMap: Record<string, string> = {
   "Axelon Services": "Axelon Services Corporation",
   "Axelon Services Corporation": "Axelon Services Corporation",
   "Axelon": "Axelon Services Corporation",
+  "Soho Square Solutions": "Soho Square Solutions",
+  "Soho Square": "Soho Square Solutions",
+  "Soho": "Soho Square Solutions",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -693,6 +696,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
   if (lower.includes('axelon')) {
     if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
     return 'https://www.axelon.com/job-seekers/';
+  }
+
+  // Soho Square Solutions: use job Link if present, else https://sohosquaresolutions.com/careers/
+  if (lower.includes('soho square') || lower.includes('soho')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://sohosquaresolutions.com/careers/';
   }
 
   // Any other source: use job Link if it starts with http. Else not clickable.
