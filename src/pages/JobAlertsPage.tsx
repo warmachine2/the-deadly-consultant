@@ -630,7 +630,18 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 // Strip parenthetical/bracketed qualifiers so badge searches stay role-specific
 const getCleanRoleKeyword = (role?: string) => {
   if (!role) return '';
-  return role.replace(/\s*[\(\[].*?[\)\]]/g, '').trim();
+  // Strip parenthetical/bracketed qualifiers
+  let cleaned = role.replace(/\s*[\(\[].*?[\)\]]/g, '').trim();
+  // Strip everything after a dash/hyphen separator
+  cleaned = cleaned.replace(/\s*[-–—]\s+.*$/, '').trim();
+  // Remove leading seniority/title qualifiers to keep only the core role (max ~2-3 words)
+  const qualifiers = /^(Senior|Lead|Junior|Principal|Associate|Staff|Chief|Vice|VP|Head|Director|Sr\.?|Jr\.?|Intermediate|Mid-Level|Entry-Level|Executive)\s+/i;
+  let iterations = 0;
+  while (qualifiers.test(cleaned) && iterations < 3) {
+    cleaned = cleaned.replace(qualifiers, '').trim();
+    iterations++;
+  }
+  return cleaned;
 };
 
 const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: string): string | null => {
@@ -665,7 +676,7 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
   // Insight Global: only true direct posting links (never the bare /all/all directory)
   if (lower.includes('insight global')) {
     const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && !/\/jobs\/search\/all\/all\/?$/.test(jl)) {
+    if (jl.startsWith('http') && !/\/jobs\/search\/all\/all\/?$/.test(jl) && !/\/job\/[0-9a-f-]{20,}/.test(jl)) {
       return jl;
     }
     if (roleTitle && getCleanRoleKeyword(roleTitle)) {
@@ -677,7 +688,7 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
   // S.i. Systems / SI Systems: only direct posting links with a job ID, never the bare search directory
   if (lower.includes('s.i. systems') || lower.includes('si systems') || lower.includes('s.i systems')) {
     const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && /\/jobs\/\d+/.test(jl)) {
+    if (jl.startsWith('http') && (/\/jobs\/\d+/.test(jl) || /\/jobs\/[\w-]+\/[0-9a-f]{10,}\/?/.test(jl))) {
       return jl;
     }
     if (roleTitle && getCleanRoleKeyword(roleTitle)) {
