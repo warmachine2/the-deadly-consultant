@@ -627,6 +627,12 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 
 // KAN-274: deterministic source destination routing
 // KAN-318: never dump candidates on generic directories, login gates, or unrelated roles
+// Strip parenthetical/bracketed qualifiers so badge searches stay role-specific
+const getCleanRoleKeyword = (role?: string) => {
+  if (!role) return '';
+  return role.replace(/\s*[\(\[].*?[\)\]]/g, '').trim();
+};
+
 const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: string): string | null => {
   if (!source) return null;
   const s = source.trim();
@@ -637,35 +643,45 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return null;
   }
 
-  // Procom: prefer the direct job link (never the contractor login gate), else search the role title
+  // Procom: GorillaWorks portal links (myprocom-portal / procomjobs.cc / loginType=) always
+  // redirect to the talent network contractor gate — ignore them entirely.
   if (lower.includes('procom')) {
-    if (jobLink && jobLink.trim().startsWith('http') && !jobLink.includes('loginType=contractor')) {
-      return jobLink.trim();
+    const jl = jobLink?.trim() ?? '';
+    if (jl.startsWith('http') && !/myprocom-portal|procomjobs\.cc|loginType=/.test(jl)) {
+      if (jl.includes('smartrecruiters.com')) {
+        return jl;
+      }
+      if (roleTitle && getCleanRoleKeyword(roleTitle)) {
+        return `https://careers.smartrecruiters.com/ProcomServices?search=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
+      }
+      return 'https://careers.smartrecruiters.com/ProcomServices';
     }
-    if (roleTitle && roleTitle.trim()) {
-      return `https://careers.smartrecruiters.com/ProcomServices?search=${encodeURIComponent(roleTitle.trim())}`;
+    if (roleTitle && getCleanRoleKeyword(roleTitle)) {
+      return `https://careers.smartrecruiters.com/ProcomServices?search=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
     }
     return 'https://careers.smartrecruiters.com/ProcomServices';
   }
 
-  // Insight Global: prefer the direct job link, else search the role title on the job board
+  // Insight Global: only true direct posting links (never the bare /all/all directory)
   if (lower.includes('insight global')) {
-    if (jobLink && jobLink.trim().startsWith('http')) {
-      return jobLink.trim();
+    const jl = jobLink?.trim() ?? '';
+    if (jl.startsWith('http') && !/\/jobs\/search\/all\/all\/?$/.test(jl)) {
+      return jl;
     }
-    if (roleTitle && roleTitle.trim()) {
-      return `https://insightglobal.com/jobs/search/all/all?keyword=${encodeURIComponent(roleTitle.trim())}`;
+    if (roleTitle && getCleanRoleKeyword(roleTitle)) {
+      return `https://insightglobal.com/jobs/search/all/all?keyword=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
     }
     return 'https://insightglobal.com/jobs/search/all/all?keyword=project-manager';
   }
 
-  // S.i. Systems / SI Systems: prefer the direct job link, else search the role title
+  // S.i. Systems / SI Systems: only direct posting links with a job ID, never the bare search directory
   if (lower.includes('s.i. systems') || lower.includes('si systems') || lower.includes('s.i systems')) {
-    if (jobLink && jobLink.trim().startsWith('http')) {
-      return jobLink.trim();
+    const jl = jobLink?.trim() ?? '';
+    if (jl.startsWith('http') && /\/jobs\/\d+/.test(jl)) {
+      return jl;
     }
-    if (roleTitle && roleTitle.trim()) {
-      return `https://www.sisystems.com/search-it-jobs/?keyword=${encodeURIComponent(roleTitle.trim())}`;
+    if (roleTitle && getCleanRoleKeyword(roleTitle)) {
+      return `https://www.sisystems.com/search-it-jobs/?keyword=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
     }
     return 'https://www.sisystems.com/search-it-jobs/?keyword=project+manager';
   }
