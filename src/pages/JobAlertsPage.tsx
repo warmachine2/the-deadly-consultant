@@ -637,13 +637,15 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return null;
   }
 
-  // Procom: direct SmartRecruiters links or open Procom directory (never login gates or 0-result searches)
+  // Procom: official Procom candidate portal (myprocom-portal.procomservices.com)
   if (lower.includes('procom')) {
     const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && jl.includes('smartrecruiters.com/ProcomServices/')) {
+    // If it's a direct job posting link on myprocom-portal, procomjobs.cc, or SmartRecruiters, use it directly
+    if (jl.startsWith('http') && (jl.includes('myprocom-portal.procomservices.com') || jl.includes('procomjobs.cc') || jl.includes('smartrecruiters.com/ProcomServices/'))) {
       return jl;
     }
-    return 'https://careers.smartrecruiters.com/ProcomServices';
+    // Official Procom jobs portal directory
+    return 'https://myprocom-portal.procomservices.com/jobs?loginType=contractor&lang=en';
   }
 
   // Insight Global: clean static jobs hub (instant <1s load; avoids slow 20s SPA search and broken /job/{uuid} 404s)
