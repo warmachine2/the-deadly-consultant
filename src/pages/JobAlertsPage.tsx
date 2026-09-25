@@ -626,7 +626,8 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 };
 
 // KAN-274: deterministic source destination routing
-const getSourceDestinationUrl = (source?: string, jobLink?: string): string | null => {
+// KAN-318: never dump candidates on generic directories, login gates, or unrelated roles
+const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: string): string | null => {
   if (!source) return null;
   const s = source.trim();
   const lower = s.toLowerCase();
@@ -636,19 +637,37 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
     return null;
   }
 
-  // Insight Global: always https://insightglobal.com/jobs/search/all/all
-  if (lower.includes('insight global')) {
-    return 'https://insightglobal.com/jobs/search/all/all';
-  }
-
-  // Procom: always https://portal.procomservices.com/jobs?loginType=contractor&lang=en
+  // Procom: prefer the direct job link (never the contractor login gate), else search the role title
   if (lower.includes('procom')) {
-    return 'https://portal.procomservices.com/jobs?loginType=contractor&lang=en';
+    if (jobLink && jobLink.trim().startsWith('http') && !jobLink.includes('loginType=contractor')) {
+      return jobLink.trim();
+    }
+    if (roleTitle && roleTitle.trim()) {
+      return `https://careers.smartrecruiters.com/ProcomServices?search=${encodeURIComponent(roleTitle.trim())}`;
+    }
+    return 'https://careers.smartrecruiters.com/ProcomServices';
   }
 
-  // S.i. Systems / SI Systems: always https://www.sisystems.com/search-it-jobs/
+  // Insight Global: prefer the direct job link, else search the role title on the job board
+  if (lower.includes('insight global')) {
+    if (jobLink && jobLink.trim().startsWith('http')) {
+      return jobLink.trim();
+    }
+    if (roleTitle && roleTitle.trim()) {
+      return `https://insightglobal.com/jobs/search/all/all?keyword=${encodeURIComponent(roleTitle.trim())}`;
+    }
+    return 'https://insightglobal.com/jobs/search/all/all?keyword=project-manager';
+  }
+
+  // S.i. Systems / SI Systems: prefer the direct job link, else search the role title
   if (lower.includes('s.i. systems') || lower.includes('si systems') || lower.includes('s.i systems')) {
-    return 'https://www.sisystems.com/search-it-jobs/';
+    if (jobLink && jobLink.trim().startsWith('http')) {
+      return jobLink.trim();
+    }
+    if (roleTitle && roleTitle.trim()) {
+      return `https://www.sisystems.com/search-it-jobs/?keyword=${encodeURIComponent(roleTitle.trim())}`;
+    }
+    return 'https://www.sisystems.com/search-it-jobs/?keyword=project+manager';
   }
 
   // Proviso: use job Link if present, else https://proviso.ca/jobs
@@ -714,14 +733,14 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string): string | nu
 };
 
 // Source attribution badge shown on every job card
-const SourceBadge: React.FC<{ source?: string; jobLink?: string }> = ({ source, jobLink }) => {
+const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: string }> = ({ source, jobLink, roleTitle }) => {
   if (!source) return null;
   const normalizedSource = source.trim();
   const canonicalSource = normalizeSourceName(normalizedSource);
   const isHassanEmail = /hassan|email/i.test(normalizedSource) || canonicalSource === "Hassan's recruiter Network";
   const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(canonicalSource);
 
-  const destinationUrl = getSourceDestinationUrl(source, jobLink);
+  const destinationUrl = getSourceDestinationUrl(source, jobLink, roleTitle);
   const hasLink = Boolean(destinationUrl);
 
   const isSiSystems = canonicalSource === "S.i. Systems";
@@ -828,7 +847,7 @@ const JobCard: React.FC<{
       <div className="md:hidden flex flex-col gap-3">
         {/* Row 1: source badge / logo only */}
         <div className="flex items-center">
-          <SourceBadge source={job.source} jobLink={job.jobLink} />
+          <SourceBadge source={job.source} jobLink={job.jobLink} roleTitle={job.role} />
         </div>
 
         {/* Row 2: Book Session CTA + expand toggle */}
@@ -949,7 +968,7 @@ const JobCard: React.FC<{
 
         {/* Centered source badge aligned with the role title */}
         <div className="flex justify-center">
-          <SourceBadge source={job.source} jobLink={job.jobLink} />
+          <SourceBadge source={job.source} jobLink={job.jobLink} roleTitle={job.role} />
         </div>
 
         <div className="flex items-start gap-3 justify-end">
