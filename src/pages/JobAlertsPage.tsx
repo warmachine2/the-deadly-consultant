@@ -627,23 +627,6 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 
 // KAN-274: deterministic source destination routing
 // KAN-318: never dump candidates on generic directories, login gates, or unrelated roles
-// Strip parenthetical/bracketed qualifiers so badge searches stay role-specific
-const getCleanRoleKeyword = (role?: string) => {
-  if (!role) return '';
-  // Strip parenthetical/bracketed qualifiers
-  let cleaned = role.replace(/\s*[\(\[].*?[\)\]]/g, '').trim();
-  // Strip everything after a dash/hyphen separator
-  cleaned = cleaned.replace(/\s*[-–—]\s+.*$/, '').trim();
-  // Remove leading seniority/title qualifiers to keep only the core role (max ~2-3 words)
-  const qualifiers = /^(Senior|Lead|Junior|Principal|Associate|Staff|Chief|Vice|VP|Head|Director|Sr\.?|Jr\.?|Intermediate|Mid-Level|Entry-Level|Executive)\s+/i;
-  let iterations = 0;
-  while (qualifiers.test(cleaned) && iterations < 3) {
-    cleaned = cleaned.replace(qualifiers, '').trim();
-    iterations++;
-  }
-  return cleaned;
-};
-
 const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: string): string | null => {
   if (!source) return null;
   const s = source.trim();
@@ -654,47 +637,46 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return null;
   }
 
-  // Procom: GorillaWorks portal links (myprocom-portal / procomjobs.cc / loginType=) always
-  // redirect to the talent network contractor gate — ignore them entirely.
+  // Procom: direct SmartRecruiters links or open Procom directory (never login gates or 0-result searches)
   if (lower.includes('procom')) {
     const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && !/myprocom-portal|procomjobs\.cc|loginType=/.test(jl)) {
-      if (jl.includes('smartrecruiters.com')) {
-        return jl;
-      }
-      if (roleTitle && getCleanRoleKeyword(roleTitle)) {
-        return `https://careers.smartrecruiters.com/ProcomServices?search=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
-      }
-      return 'https://careers.smartrecruiters.com/ProcomServices';
-    }
-    if (roleTitle && getCleanRoleKeyword(roleTitle)) {
-      return `https://careers.smartrecruiters.com/ProcomServices?search=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
+    if (jl.startsWith('http') && jl.includes('smartrecruiters.com/ProcomServices/')) {
+      return jl;
     }
     return 'https://careers.smartrecruiters.com/ProcomServices';
   }
 
-  // Insight Global: only true direct posting links (never the bare /all/all directory)
+  // Insight Global: clean static jobs hub (instant <1s load; avoids slow 20s SPA search and broken /job/{uuid} 404s)
   if (lower.includes('insight global')) {
     const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && !/\/jobs\/search\/all\/all\/?$/.test(jl) && !/\/job\/[0-9a-f-]{20,}/.test(jl)) {
+    if (jl.startsWith('http') && !/\/jobs\/search\/all\/all\/?$/.test(jl) && !/\/job\/[0-9a-f-]{20,}/.test(jl) && !jl.includes('insightglobal.com/job/')) {
       return jl;
     }
-    if (roleTitle && getCleanRoleKeyword(roleTitle)) {
-      return `https://insightglobal.com/jobs/search/all/all?keyword=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
-    }
-    return 'https://insightglobal.com/jobs/search/all/all?keyword=project-manager';
+    return 'https://insightglobal.com/jobs/';
   }
 
-  // S.i. Systems / SI Systems: only direct posting links with a job ID, never the bare search directory
+  // S.i. Systems / SI Systems: direct canonical job posting URL
   if (lower.includes('s.i. systems') || lower.includes('si systems') || lower.includes('s.i systems')) {
     const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && (/\/jobs\/\d+/.test(jl) || /\/jobs\/[\w-]+\/[0-9a-f]{10,}\/?/.test(jl))) {
+    // If it's already a direct /jobs/... link, use it directly
+    if (jl.startsWith('http') && jl.includes('sisystems.com/jobs/')) {
       return jl;
     }
-    if (roleTitle && getCleanRoleKeyword(roleTitle)) {
-      return `https://www.sisystems.com/search-it-jobs/?keyword=${encodeURIComponent(getCleanRoleKeyword(roleTitle))}`;
+    // If it has encyJobId, construct the canonical direct job URL matching their live site
+    const encyMatch = jl.match(/encyJobId=([0-9a-fA-F]+)/);
+    if (encyMatch) {
+      const slug = (roleTitle || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      if (slug) {
+        return `https://www.sisystems.com/jobs/${slug}/${encyMatch[1]}/`;
+      }
     }
-    return 'https://www.sisystems.com/search-it-jobs/?keyword=project+manager';
+    if (jl.startsWith('http') && !jl.includes('AsyncPage.aspx') && !jl.includes('search-it-jobs/?')) {
+      return jl;
+    }
+    return 'https://www.sisystems.com/search-it-jobs/';
   }
 
   // Proviso: use job Link if present, else https://proviso.ca/jobs
