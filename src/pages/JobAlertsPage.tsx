@@ -740,7 +740,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
   const isHassanEmail = /hassan|email/i.test(normalizedSource) || canonicalSource === "Hassan's recruiter Network";
   const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(canonicalSource);
 
-  const destinationUrl = getSourceDestinationUrl(source, jobLink);
+  const destinationUrl = getSourceDestinationUrl(source, jobLink, roleTitle);
   const hasLink = Boolean(destinationUrl);
 
   const isSiSystems = canonicalSource === "S.i. Systems";
@@ -847,7 +847,7 @@ const JobCard: React.FC<{
       <div className="md:hidden flex flex-col gap-3">
         {/* Row 1: source badge / logo only */}
         <div className="flex items-center">
-          <SourceBadge source={job.source} jobLink={job.jobLink} />
+          <SourceBadge source={job.source} jobLink={job.jobLink} roleTitle={job.role} />
         </div>
 
         {/* Row 2: Book Session CTA + expand toggle */}
@@ -968,7 +968,7 @@ const JobCard: React.FC<{
 
         {/* Centered source badge aligned with the role title */}
         <div className="flex justify-center">
-          <SourceBadge source={job.source} jobLink={job.jobLink} />
+          <SourceBadge source={job.source} jobLink={job.jobLink} roleTitle={job.role} />
         </div>
 
         <div className="flex items-start gap-3 justify-end">
