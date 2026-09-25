@@ -637,14 +637,14 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return null;
   }
 
-  // Procom: official Procom candidate portal (myprocom-portal.procomservices.com)
+  // Procom: open public candidate portal (never route to broken /job/{id} links or contractor login gates)
   if (lower.includes('procom')) {
     const jl = jobLink?.trim() ?? '';
-    // If it's a direct job posting link on myprocom-portal, procomjobs.cc, or SmartRecruiters, use it directly
-    if (jl.startsWith('http') && (jl.includes('myprocom-portal.procomservices.com') || jl.includes('procomjobs.cc') || jl.includes('smartrecruiters.com/ProcomServices/'))) {
+    // Direct SmartRecruiters links work directly
+    if (jl.startsWith('http') && jl.includes('smartrecruiters.com/ProcomServices/')) {
       return jl;
     }
-    // Official Procom jobs portal directory
+    // All other Procom jobs: route to the open public candidate portal (avoids login gates & blank screens)
     return 'https://myprocom-portal.procomservices.com/jobs?loginType=contractor&lang=en';
   }
 
