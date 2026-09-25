@@ -62,6 +62,7 @@ const App = () => (
             <Route path="/free-workshop/replay" element={<FreeWorkshopReplayPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/system-status" element={<SystemStatusPage />} />
+            <Route path="/pm-strategy-guide-pdf" element={<Navigate to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" replace />} />
             <Route path="/auth" element={<AuthPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="/:slug" element={<DynamicPage />} />
