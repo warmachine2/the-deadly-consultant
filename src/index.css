@@ -1019,17 +1019,56 @@ All colors MUST be HSL.
   .gold-glow-border::after { animation: none; }
 }
 
-/* --- KAN-348: Google AI Traveling Light Beam Pill (Clean Outside Line Only) --- */
+/* --- KAN-348: Google AI Traveling Light Beam Pill (Clean Outside Line, Uniform Constant Speed) --- */
 @property --beam-angle {
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
 
+/* Calibrated to travel at uniform constant linear speed along the entire pill perimeter */
 @keyframes beam-orbit {
-  to {
-    --beam-angle: 360deg;
-  }
+  0.0% { --beam-angle: 0.0deg; }
+  2.5% { --beam-angle: 40.9deg; }
+  5.0% { --beam-angle: 60.0deg; }
+  7.5% { --beam-angle: 68.9deg; }
+  10.0% { --beam-angle: 73.9deg; }
+  12.5% { --beam-angle: 77.0deg; }
+  15.0% { --beam-angle: 79.1deg; }
+  17.5% { --beam-angle: 80.6deg; }
+  20.0% { --beam-angle: 81.8deg; }
+  22.5% { --beam-angle: 84.4deg; }
+  25.0% { --beam-angle: 90.0deg; }
+  27.5% { --beam-angle: 95.6deg; }
+  30.0% { --beam-angle: 98.2deg; }
+  32.5% { --beam-angle: 99.4deg; }
+  35.0% { --beam-angle: 100.9deg; }
+  37.5% { --beam-angle: 103.0deg; }
+  40.0% { --beam-angle: 106.1deg; }
+  42.5% { --beam-angle: 111.1deg; }
+  45.0% { --beam-angle: 120.0deg; }
+  47.5% { --beam-angle: 139.1deg; }
+  50.0% { --beam-angle: 180.0deg; }
+  52.5% { --beam-angle: 220.9deg; }
+  55.0% { --beam-angle: 240.0deg; }
+  57.5% { --beam-angle: 248.9deg; }
+  60.0% { --beam-angle: 253.9deg; }
+  62.5% { --beam-angle: 257.0deg; }
+  65.0% { --beam-angle: 259.1deg; }
+  67.5% { --beam-angle: 260.6deg; }
+  70.0% { --beam-angle: 261.8deg; }
+  72.5% { --beam-angle: 264.4deg; }
+  75.0% { --beam-angle: 270.0deg; }
+  77.5% { --beam-angle: 275.6deg; }
+  80.0% { --beam-angle: 278.2deg; }
+  82.5% { --beam-angle: 279.4deg; }
+  85.0% { --beam-angle: 280.9deg; }
+  87.5% { --beam-angle: 283.0deg; }
+  90.0% { --beam-angle: 286.1deg; }
+  92.5% { --beam-angle: 291.1deg; }
+  95.0% { --beam-angle: 300.0deg; }
+  97.5% { --beam-angle: 319.1deg; }
+  100.0% { --beam-angle: 360.0deg; }
 }
 
 .highlight-glow-button,
