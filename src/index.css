@@ -1019,22 +1019,21 @@ All colors MUST be HSL.
   .gold-glow-border::after { animation: none; }
 }
 
-/* --- KAN-348 V3: Google AI Dark-Mode Pill with Uniform Illumination --- */
-/* No spinning line: static 1.5px iridescent Google-palette border + uniform breathing glow */
-@keyframes google-pill-glow-breathe {
+/* --- KAN-348: Google Gemini Cool Tech Pill with Uniform 360 Illumination --- */
+@keyframes cool-tech-pill-breathe {
   0%, 100% {
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.12),
-      0 0 16px -2px rgba(66, 133, 244, 0.4),
-      0 0 28px -4px rgba(168, 85, 247, 0.25),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 0 10px rgba(0, 212, 255, 0.3),
+      0 0 20px rgba(66, 133, 244, 0.18),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(0, 212, 255, 0.5) !important;
   }
   50% {
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.22),
-      0 0 24px 0px rgba(66, 133, 244, 0.65),
-      0 0 36px -2px rgba(168, 85, 247, 0.45),
-      inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 
+      0 0 18px rgba(0, 212, 255, 0.6),
+      0 0 32px rgba(66, 133, 244, 0.35),
+      inset 0 1px 1.5px rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(0, 212, 255, 0.9) !important;
   }
 }
 
@@ -1042,75 +1041,42 @@ All colors MUST be HSL.
 .header-workshop-pill {
   position: relative;
   isolation: isolate;
-  background: #131316 !important;
-  border-radius: 9999px;
-  border: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f1015 !important;
+  border: 1.5px solid rgba(0, 212, 255, 0.55) !important;
+  border-radius: 9999px !important;
   color: #ffffff !important;
   font-weight: 600;
   letter-spacing: 0.02em;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 0 16px -2px rgba(66, 133, 244, 0.4),
-    0 0 28px -4px rgba(168, 85, 247, 0.25),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
-  animation: google-pill-glow-breathe 3.5s ease-in-out infinite;
-  transition: transform 0.2s ease, background 0.2s ease;
+  animation: cool-tech-pill-breathe 3.5s ease-in-out infinite;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* Refined 1.5px Google AI iridescent gradient border — uniform 360-degree perimeter coverage */
+/* Remove all multi-color gradient pseudo-elements entirely (zero muddy green or split colors) */
 .highlight-glow-button::before,
-.header-workshop-pill::before {
-  content: "";
-  position: absolute;
-  inset: -1.5px;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: linear-gradient(
-    135deg,
-    #4285F4 0%,
-    #9B72CF 30%,
-    #D96570 55%,
-    #F4B400 80%,
-    #1AA260 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Soft blurred ambient multi-spectral underglow */
+.header-workshop-pill::before,
 .highlight-glow-button::after,
 .header-workshop-pill::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(66, 133, 244, 0.55),
-    rgba(155, 114, 207, 0.5),
-    rgba(217, 101, 112, 0.45),
-    rgba(244, 180, 0, 0.4),
-    rgba(26, 162, 96, 0.45)
-  );
-  filter: blur(8px);
-  opacity: 0.55;
-  z-index: -2;
-  pointer-events: none;
+  content: none !important;
+  display: none !important;
 }
 
 .highlight-glow-button:hover,
 .header-workshop-pill:hover {
-  transform: translateY(-1px);
-  background: #1a1a1f !important;
+  transform: translateY(-1.5px);
+  background: #171922 !important;
+  border-color: rgba(0, 212, 255, 0.95) !important;
+  box-shadow: 
+    0 0 22px rgba(0, 212, 255, 0.7),
+    0 0 40px rgba(66, 133, 244, 0.45) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .highlight-glow-button,
   .header-workshop-pill {
     animation: none;
+    box-shadow: 0 0 14px rgba(0, 212, 255, 0.45);
   }
 }
