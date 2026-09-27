@@ -76,6 +76,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
                   Open PM Contracts
                 </Link>
+                <Link to="/proof" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                  Student Results
+                </Link>
 
                 {/* Divider */}
                 <div className="my-4 border-t border-white/10" />
@@ -122,6 +125,12 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-white hover:text-[#F4C903] cta-glow-pulse"
             >
               Open PM Contracts
+            </button>
+          </Link>
+
+          <Link to="/proof" className="hidden md:block flex-shrink-0">
+            <button className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button text-white hover:text-[#F4C903]">
+              Student Results
             </button>
           </Link>
 
