@@ -73,10 +73,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 </div>
 
                 {/* Job Board pill */}
-                <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
                   Open PM Contracts
                 </Link>
-                <Link to="/proof" className="px-4 py-3 text-white hover:text-[#F4C903] hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                <Link to="/proof" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
                   Student Results
                 </Link>
 
@@ -122,14 +122,14 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
           {/* PM Consulting Job Board Button - Desktop */}
           <Link to="/ai-bi-fintech-pm-job-alerts-repo" className="hidden md:block flex-shrink-0">
             <button
-              className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-white hover:text-[#F4C903] cta-glow-pulse"
+              className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-[#F4C903] hover:text-white cta-glow-pulse"
             >
               Open PM Contracts
             </button>
           </Link>
 
           <Link to="/proof" className="hidden md:block flex-shrink-0">
-            <button className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button text-white hover:text-[#F4C903]">
+            <button className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button text-[#F4C903] hover:text-white">
               Student Results
             </button>
           </Link>
