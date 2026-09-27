@@ -96,7 +96,7 @@ const ProofPage = () => {
           <section className="volumetric-glass rounded-2xl p-8 text-center space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold">If you have 3+ years of professional experience</h2>
             <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
-              <button className="highlight-glow-button px-6 py-3 font-bold text-[#F4C903]">Reserve My Free Workshop Spot</button>
+              <button className="highlight-glow-button gold-text px-6 py-3 font-bold">Reserve My Free Workshop Spot</button>
             </a>
             <p className="text-sm text-white/80 max-w-xl mx-auto">
               How experienced professionals land $10k–$18k/mo Data &amp; AI Orchestration PM contracts. Includes the 90-day roadmap when you register.
