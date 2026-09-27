@@ -1088,6 +1088,11 @@ All colors MUST be HSL.
   overflow: visible !important;
 }
 
+/* Gold text variant for standalone workshop CTAs (e.g. Student Results page) */
+.highlight-glow-button.gold-text {
+  color: #F4C903 !important;
+}
+
 /* Crisp traveling light beam strictly on the 2px outside border track - zero glow inside */
 .highlight-glow-button::before,
 .header-workshop-pill::before {

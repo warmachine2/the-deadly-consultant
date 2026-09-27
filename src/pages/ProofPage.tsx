@@ -34,9 +34,9 @@ const ProofPage = () => {
         <div className="max-w-5xl mx-auto space-y-10">
           <header className="text-center space-y-3">
             <p className="text-xs uppercase tracking-widest text-white/70">Zero to PM Consultant · Proof</p>
-            <h1 className="text-4xl md:text-5xl font-bold">Student results</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-[#F4C903]">Student Results</h1>
             <p className="text-white text-base md:text-lg max-w-2xl mx-auto">
-              Professionals with 3+ years of experience. Same path: Data &amp; AI Orchestration PM work, resume first, then the contracts.
+              Professionals with 3+ years of experience. Same path: <span className="text-[#F4C903]">Data &amp; AI Orchestration PM</span> work, resume first, then the contracts.
             </p>
           </header>
 
@@ -52,7 +52,7 @@ const ProofPage = () => {
                   allowFullScreen
                 />
               </div>
-              <p className="mt-2 text-xs text-white/60">Gary · filmed one take</p>
+              <p className="mt-2 text-xs text-white/60">Gary</p>
             </div>
             <div className="space-y-4">
               <div>
@@ -66,7 +66,7 @@ const ProofPage = () => {
                   </span>
                 ))}
               </div>
-              <blockquote className="text-lg md:text-xl italic text-white border-l-2 border-[#FFE361] pl-4">
+              <blockquote className="text-lg md:text-xl italic text-[#F4C903] border-l-2 border-[#FFE361] pl-4">
                 “We didn’t start with studying. We remade my resume to how it would eventually look. Before I knew it, recruiters were reaching out - while I was still working through the program.”
               </blockquote>
               <ul className="text-sm text-white/80 space-y-1">
@@ -96,7 +96,7 @@ const ProofPage = () => {
           <section className="volumetric-glass rounded-2xl p-8 text-center space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold">If you have 3+ years of professional experience</h2>
             <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
-              <button className="highlight-glow-button px-6 py-3 font-bold text-white">Reserve My Free Workshop Spot</button>
+              <button className="highlight-glow-button gold-text px-6 py-3 font-bold">Reserve My Free Workshop Spot</button>
             </a>
             <p className="text-sm text-white/80 max-w-xl mx-auto">
               How experienced professionals land $10k–$18k/mo Data &amp; AI Orchestration PM contracts. Includes the 90-day roadmap when you register.
