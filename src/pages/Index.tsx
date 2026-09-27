@@ -10,6 +10,7 @@ import Sidebar from "@/components/Sidebar";
 import { fetchPosts, fetchPostBySlug, transformGhostPost } from "@/lib/ghostApi";
 import { Loader2, Filter } from "lucide-react";
 import RoadmapCard from "@/components/RoadmapCard";
+import ProofTile from "@/components/ProofTile";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -191,6 +192,8 @@ const Index = () => {
                     
                     return (
                       <>
+                        {/* Proof tile pinned to position #1 */}
+                        <ProofTile />
                         {pinnedPost && (
                           <BlogCard key={pinnedPost.id} post={pinnedPost} onClick={() => debouncedHandlePostClick(pinnedPost)} />
                         )}
