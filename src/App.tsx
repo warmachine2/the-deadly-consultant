@@ -21,6 +21,7 @@ import DashboardPage from "./pages/DashboardPage";
 import SystemStatusPage from "./pages/SystemStatusPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
+import ProofPage from "./pages/ProofPage";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
             <Route path="/system-status" element={<SystemStatusPage />} />
             <Route path="/pm-strategy-guide-pdf" element={<Navigate to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" replace />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/proof" element={<ProofPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="/:slug" element={<DynamicPage />} />
             <Route path="*" element={<NotFound />} />
