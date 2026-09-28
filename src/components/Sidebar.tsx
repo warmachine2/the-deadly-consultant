@@ -12,7 +12,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: SidebarProps) => {
-  const [showTags, setShowTags] = useState(true);
+  const [showTags, setShowTags] = useState(false);
   const isMobile = useIsMobile();
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
               ? isOpen
                 ? "translate-x-0 h-screen"
                 : "-translate-x-full hidden"
-              : "md:top-20 h-[calc(100vh-5rem)] translate-x-0"
+              : "md:top-20 max-h-[calc(100vh-5rem)] h-fit translate-x-0"
           }
         `}
       >
