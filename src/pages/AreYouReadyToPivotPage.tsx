@@ -579,7 +579,7 @@ const AreYouReadyToPivotPage = () => {
               onClick={() => setRoadmapOpen(true)}
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white text-left hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
-              <span className="font-medium text-base md:text-lg">$10k/mo+ BI-FinTech PM Consultant Accelerator Roadmap</span>
+              <span className="font-medium text-base md:text-lg">$10k/mo+ Data & AI Orchestration PM Accelerator Roadmap</span>
               <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
             </button>
           </div>
