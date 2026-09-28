@@ -648,13 +648,9 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return 'https://myprocom-portal.procomservices.com/jobs?loginType=contractor&lang=en';
   }
 
-  // Insight Global: clean static jobs hub (instant <1s load; avoids slow 20s SPA search and broken /job/{uuid} 404s)
+  // Insight Global: route to jobs search pre-typed with "project"
   if (lower.includes('insight global')) {
-    const jl = jobLink?.trim() ?? '';
-    if (jl.startsWith('http') && !/\/jobs\/search\/all\/all\/?$/.test(jl) && !/\/job\/[0-9a-f-]{20,}/.test(jl) && !jl.includes('insightglobal.com/job/')) {
-      return jl;
-    }
-    return 'https://insightglobal.com/jobs/';
+    return 'https://insightglobal.com/jobs/search/all/project?page=1&size=10';
   }
 
   // S.i. Systems / SI Systems: direct canonical job posting URL
