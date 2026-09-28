@@ -93,7 +93,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
           </a>
           <div className="mt-3 px-2 py-2 rounded-md" style={{ background: "rgba(0, 0, 0, 0.4)" }}>
             <p className="text-[11px] text-[#F4C903] leading-tight text-center">
-              Map your career pivot and discover if my 90-Day BI-FinTech Accelerator can help you land these roles
+              Map your career pivot and discover if my 90-Day PM Accelerator can help you land these roles
             </p>
           </div>
         </div>
