@@ -52,6 +52,7 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
           w-full md:w-64 volumetric-glass rounded-2xl md:rounded-2xl
           p-6
           transition-transform duration-300 overflow-y-auto
+          [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
           ${
             isMobile
               ? isOpen
