@@ -284,19 +284,27 @@ const getMonthlyAmount = (raw: string, location: string = ''): number => {
 };
 
 // Map known cities to filter labels from the work-type/location description string
-const extractCity = (workType: string): string => {
-  const wt = workType.trim();
-  if (!wt) return 'Unknown';
-  const lower = wt.toLowerCase();
+const extractCity = (workType: string, location: string = ''): string => {
+  const combined = `${workType || ''} ${location || ''}`.trim();
+  if (!combined) return 'Unknown';
+  const lower = combined.toLowerCase();
+
+  // 7 Target Cities (KAN-227)
+  if (lower.includes('toronto')) return 'Toronto';
+  if (lower.includes('new york city') || lower.includes('new york') || lower.includes('jersey city') || lower.includes('white plains')) return 'New York';
+  if (lower.includes('chicago')) return 'Chicago';
+  if (lower.includes('san francisco') || lower.includes('bay area') || lower.includes('san jose') || lower.includes('santa clara') || lower.includes('oakland') || lower.includes('sunnyvale')) return 'San Francisco';
+  if (lower.includes('boston')) return 'Boston';
+  if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving')) return 'Dallas';
+  if (lower.includes('austin')) return 'Austin';
 
   // Remote-only roles
   if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
     return 'Remote';
   }
 
-  // Canadian cities (listed in user request + common Ontario cities)
+  // Canadian cities
   if (lower.includes('mississauga')) return 'Mississauga';
-  if (lower.includes('toronto')) return 'Toronto';
   if (lower.includes('vancouver')) return 'Vancouver';
   if (lower.includes('calgary')) return 'Calgary';
   if (lower.includes('winnipeg')) return 'Winnipeg';
@@ -307,13 +315,8 @@ const extractCity = (workType: string): string => {
   if (lower.includes('london')) return 'London';
   if (lower.includes('canada')) return 'Canada';
 
-  // US cities (common in the data)
-  if (lower.includes('jersey city')) return 'Jersey City';
-  if (lower.includes('white plains')) return 'White Plains';
-  if (lower.includes('new york city')) return 'New York';
-  if (lower.includes('new york')) return 'New York';
+  // Other US cities
   if (lower.includes('charlotte')) return 'Charlotte';
-  if (lower.includes('boston')) return 'Boston';
   if (lower.includes('harrisburg')) return 'Harrisburg';
   if (lower.includes('buffalo')) return 'Buffalo';
   if (lower.includes('columbia')) return 'Columbia';
@@ -1357,7 +1360,7 @@ const JobAlertsPage: React.FC = () => {
       }
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
-      const city = extractCity(job.workType);
+      const city = extractCity(job.workType, job.location);
       if (city) citySet.add(city);
       
       if (job.location) {
@@ -1413,7 +1416,7 @@ const JobAlertsPage: React.FC = () => {
     // Location filter (by city — extracted from the work type / location description)
     if (selectedLocation !== 'all') {
       filtered = filtered.filter(row => {
-        const city = extractCity(row.workType);
+        const city = extractCity(row.workType, row.location);
         return city === selectedLocation;
       });
     }
