@@ -30,6 +30,7 @@ const nttDataLogoUrl = '/ntt-data-logo.png';
 const hrBrainLogoUrl = '/hr-brain-logo.png';
 const axelonLogoUrl = '/axelon-logo.svg';
 const sohoSquareLogoUrl = '/soho-square-logo.svg';
+const mondoLogoUrl = '/mondo-logo.svg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -152,6 +153,7 @@ const sourceDescriptions: Record<string, string> = {
   "Axelon Services Corporation": "Global staffing and consulting firm delivering IT, finance, and healthcare workforce solutions since 1973.",
   "GTT (Global Technical Talent)": "Premier IT and Engineering staffing provider delivering top-tier Project Management, Scrum, and Agile talent across North America.",
   "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
+  "Mondo": "Leading US IT, tech, and digital staffing specialist providing contract PM, Agile, and technical consulting placements nationwide.",
 };
 
 // Map observed data-source spellings to the canonical source names above
@@ -181,6 +183,9 @@ const sourceNameMap: Record<string, string> = {
   "Soho Square Solutions": "Soho Square Solutions",
   "Soho Square": "Soho Square Solutions",
   "Soho": "Soho Square Solutions",
+  "Mondo": "Mondo",
+  "mondo": "Mondo",
+  "Mondo (US)": "Mondo",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -734,6 +739,13 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return 'https://sohosquaresolutions.com/careers/';
   }
 
+  // Mondo: use job Link if present, else https://mondo.com/jobs/
+  if (lower.includes('mondo')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://mondo.com/jobs/';
+  }
+
+
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
     return jobLink.trim();
@@ -765,6 +777,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
   const isHrBrain = canonicalSource === "HR Brain" || canonicalSource.toLowerCase().includes("hr brain") || canonicalSource.toLowerCase().includes("hrbrain");
   const isAxelon = canonicalSource === "Axelon Services Corporation" || canonicalSource.toLowerCase().includes("axelon");
   const isSohoSquare = canonicalSource === "Soho Square Solutions" || canonicalSource.toLowerCase().includes("soho");
+  const isMondo = canonicalSource === "Mondo" || canonicalSource.toLowerCase().includes("mondo");
 
   const content = (
     <>
