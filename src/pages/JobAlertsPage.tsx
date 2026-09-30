@@ -781,7 +781,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -818,6 +818,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
           )}
           {isSohoSquare && (
             <img src={sohoSquareLogoUrl} alt="Soho Square Solutions" className="h-6 w-auto object-contain" />
+          )}
+          {isMondo && (
+            <img src={mondoLogoUrl} alt="Mondo" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
