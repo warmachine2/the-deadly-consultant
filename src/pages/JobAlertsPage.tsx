@@ -31,6 +31,7 @@ const hrBrainLogoUrl = '/hr-brain-logo.png';
 const axelonLogoUrl = '/axelon-logo.svg';
 const sohoSquareLogoUrl = '/soho-square-logo.svg';
 const mondoLogoUrl = '/mondo-logo.svg';
+const ptpLogoUrl = '/ptp-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -154,6 +155,7 @@ const sourceDescriptions: Record<string, string> = {
   "GTT (Global Technical Talent)": "Premier IT and Engineering staffing provider delivering top-tier Project Management, Scrum, and Agile talent across North America.",
   "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
   "Mondo": "Leading US IT, tech, and digital staffing specialist providing contract PM, Agile, and technical consulting placements nationwide.",
+  "Peterson Technology Partners": "Premier Chicago-based IT & Tech Staffing firm founded in 1997, specializing in PM, Agile, and technology consulting placements.",
 };
 
 // Map observed data-source spellings to the canonical source names above
@@ -186,6 +188,9 @@ const sourceNameMap: Record<string, string> = {
   "Mondo": "Mondo",
   "mondo": "Mondo",
   "Mondo (US)": "Mondo",
+  "Peterson Technology Partners": "Peterson Technology Partners",
+  "Peterson": "Peterson Technology Partners",
+  "PTP": "Peterson Technology Partners",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -745,6 +750,14 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return 'https://mondo.com/jobs/';
   }
 
+  // Peterson Technology Partners: use job Link if present, else https://www.ptechpartners.com/jobs/
+  if (lower.includes('peterson') || lower === 'ptp') {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://www.ptechpartners.com/jobs/';
+  }
+
+
+
 
   // Any other source: use job Link if it starts with http. Else not clickable.
   if (jobLink && jobLink.trim().startsWith('http')) {
@@ -778,10 +791,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
   const isAxelon = canonicalSource === "Axelon Services Corporation" || canonicalSource.toLowerCase().includes("axelon");
   const isSohoSquare = canonicalSource === "Soho Square Solutions" || canonicalSource.toLowerCase().includes("soho");
   const isMondo = canonicalSource === "Mondo" || canonicalSource.toLowerCase().includes("mondo");
+  const isPtp = canonicalSource === "Peterson Technology Partners" || canonicalSource.toLowerCase().includes("peterson") || canonicalSource.toLowerCase() === "ptp";
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -821,6 +835,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
           )}
           {isMondo && (
             <img src={mondoLogoUrl} alt="Mondo" className="h-7 w-auto object-contain" />
+          )}
+          {isPtp && (
+            <img src={ptpLogoUrl} alt="Peterson Technology Partners" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
