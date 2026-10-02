@@ -39,6 +39,7 @@ const SOURCE_ORDER = [
   "Axelon Services",
   "Soho Square Solutions",
   "Mondo",
+  "Peterson Technology Partners",
 ];
 
 const normalizeSourceName = (name?: string): string => {
@@ -60,6 +61,7 @@ const normalizeSourceName = (name?: string): string => {
   if (lower.includes("axelon")) return "Axelon Services";
   if (lower.includes("soho")) return "Soho Square Solutions";
   if (lower.includes("mondo")) return "Mondo";
+  if (lower.includes("peterson") || lower.includes("ptp")) return "Peterson Technology Partners";
   return name.trim();
 };
 
