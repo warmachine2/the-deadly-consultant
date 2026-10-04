@@ -87,14 +87,34 @@ const ProofPage = () => {
           {/* Shiva */}
           <section className="volumetric-glass rounded-2xl p-6 md:p-8 grid md:grid-cols-2 gap-8">
             <div>
-              <div className="relative w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden">
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube-nocookie.com/embed/AkqEOSpEihs"
-                  title="Shiva — student result"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+              <div className="relative w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden bg-black">
+                {shivaPlaying ? (
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src="https://www.youtube-nocookie.com/embed/AkqEOSpEihs?autoplay=1"
+                    title="Shiva — student result"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setShivaPlaying(true)}
+                    aria-label="Play Shiva's student results video"
+                    className="absolute inset-0 w-full h-full cursor-pointer"
+                  >
+                    <img
+                      src={shivaThumb.url}
+                      alt="Shiva — student results video"
+                      className="w-full h-full object-cover"
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="w-16 h-16 rounded-full bg-black/60 border border-[#FFE361]/70 flex items-center justify-center shadow-[0_0_24px_rgba(255,227,97,0.35)]">
+                        <Play className="w-7 h-7 text-[#FFE361] ml-1" fill="currentColor" />
+                      </span>
+                    </span>
+                  </button>
+                )}
               </div>
               <p className="mt-2 text-xs text-white/60">Shiva</p>
             </div>
