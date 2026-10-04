@@ -119,7 +119,7 @@ const ProofPage = () => {
           <section className="space-y-4">
             <h2 className="text-2xl md:text-3xl font-bold text-center">More results coming</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[0, 1].map((i) => (
+              {[0].map((i) => (
                 <div key={i} className="volumetric-glass rounded-2xl p-8 flex flex-col items-center justify-center gap-4 min-h-[220px] opacity-70">
                   <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
                     <User className="w-8 h-8 text-white/40" />
