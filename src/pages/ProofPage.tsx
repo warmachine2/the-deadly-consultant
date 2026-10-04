@@ -105,7 +105,7 @@ const ProofPage = () => {
                     className="absolute inset-0 w-full h-full cursor-pointer"
                   >
                     <img
-                      src={shivaThumb.url}
+                      src={shivaThumb}
                       alt="Shiva — student results video"
                       className="w-full h-full object-cover"
                     />
