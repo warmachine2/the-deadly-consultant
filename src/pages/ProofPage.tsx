@@ -22,6 +22,7 @@ const shivaChips = [
 ];
 
 const ProofPage = () => {
+  const [shivaPlaying, setShivaPlaying] = useState(false);
   useEffect(() => {
     const prevTitle = document.title;
     document.title = TITLE;
