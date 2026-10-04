@@ -14,6 +14,12 @@ const chips = [
   "$11k/mo after tax",
 ];
 
+const shivaChips = [
+  "Mid-program",
+  "3 PM interviews",
+  "$10k/mo opportunities",
+];
+
 const ProofPage = () => {
   useEffect(() => {
     const prevTitle = document.title;
@@ -74,6 +80,38 @@ const ProofPage = () => {
                 <li>PMP and PSM complete; CPMAI in progress</li>
                 <li>Reverse learning: job skills, tools, and portfolio first; certifications after</li>
               </ul>
+            </div>
+          </section>
+
+          {/* Shiva */}
+          <section className="volumetric-glass rounded-2xl p-6 md:p-8 grid md:grid-cols-2 gap-8">
+            <div>
+              <div className="relative w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden">
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube-nocookie.com/embed/AkqEOSpEihs"
+                  title="Shiva — student result"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <p className="mt-2 text-xs text-white/60">Shiva</p>
+            </div>
+            <div className="space-y-4 md:self-center">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold">Shiva</h2>
+                <p className="text-white/80">PM accelerator student → active interview pipeline</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {shivaChips.map((chip) => (
+                  <span key={chip} className="text-xs text-white px-3 py-1 rounded-full border border-cyan-400/50 bg-white/5">
+                    {chip}
+                  </span>
+                ))}
+              </div>
+              <blockquote className="text-lg md:text-xl italic text-[#F4C903] border-l-2 border-[#FFE361] pl-4">
+                “Three $10k/mo PM interviews — while still mid-program.”
+              </blockquote>
             </div>
           </section>
 
