@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TopNav, { WORKSHOP_REGISTER_URL } from "@/components/TopNav";
-import { User } from "lucide-react";
+import { Play, User } from "lucide-react";
+import shivaThumb from "@/assets/shiva-student-results-thumb.jpg.asset.json";
 
 const TITLE = "Student Results | Zero to PM Consultant";
 const DESC =
