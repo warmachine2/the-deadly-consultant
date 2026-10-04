@@ -176,6 +176,12 @@ const Index = () => {
                       p.slug.includes('18k-mo')
                     );
                     const pinnedPost = pinnedIndex !== -1 ? postsToShow.splice(pinnedIndex, 1)[0] : null;
+
+                    // Find the Full Walkthrough post and pin it to position #1
+                    const walkthroughIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('full walkthrough')
+                    );
+                    const walkthroughPost = walkthroughIndex !== -1 ? postsToShow.splice(walkthroughIndex, 1)[0] : null;
                     
                     // Find and reposition Hassan Hammer post
                     const hassanIndex = postsToShow.findIndex(p => 
@@ -192,7 +198,11 @@ const Index = () => {
                     
                     return (
                       <>
-                        {/* Proof tile pinned to position #1 */}
+                        {/* Full Walkthrough post pinned to position #1 */}
+                        {walkthroughPost && (
+                          <BlogCard key={walkthroughPost.id} post={walkthroughPost} onClick={() => debouncedHandlePostClick(walkthroughPost)} />
+                        )}
+                        {/* Proof tile pinned after it */}
                         <ProofTile />
                         {pinnedPost && (
                           <BlogCard key={pinnedPost.id} post={pinnedPost} onClick={() => debouncedHandlePostClick(pinnedPost)} />
