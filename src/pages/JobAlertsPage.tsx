@@ -32,6 +32,7 @@ const axelonLogoUrl = '/axelon-logo.svg';
 const sohoSquareLogoUrl = '/soho-square-logo.svg';
 const mondoLogoUrl = '/mondo-logo.svg';
 const ptpLogoUrl = '/ptp-logo.png';
+const kforceLogoUrl = '/kforce-logo.png';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -760,6 +761,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return 'https://www.ptechpartners.com/jobs/';
   }
 
+  // Kforce: use job Link if present, else https://www.kforce.com/find-work/search-jobs/
+  if (lower.includes('kforce')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://www.kforce.com/find-work/search-jobs/';
+  }
+
 
 
 
@@ -796,10 +803,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
   const isSohoSquare = canonicalSource === "Soho Square Solutions" || canonicalSource.toLowerCase().includes("soho");
   const isMondo = canonicalSource === "Mondo" || canonicalSource.toLowerCase().includes("mondo");
   const isPtp = canonicalSource === "Peterson Technology Partners" || canonicalSource.toLowerCase().includes("peterson") || canonicalSource.toLowerCase() === "ptp";
+  const isKforce = canonicalSource === "Kforce" || canonicalSource.toLowerCase().includes("kforce");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp || isKforce) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -842,6 +850,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
           )}
           {isPtp && (
             <img src={ptpLogoUrl} alt="Peterson Technology Partners" className="h-7 w-auto object-contain" />
+          )}
+          {isKforce && (
+            <img src={kforceLogoUrl} alt="Kforce" className="h-7 w-auto object-contain" />
           )}
         </span>
       )}
