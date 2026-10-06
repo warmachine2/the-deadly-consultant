@@ -155,7 +155,8 @@ const sourceDescriptions: Record<string, string> = {
   "GTT (Global Technical Talent)": "Premier IT and Engineering staffing provider delivering top-tier Project Management, Scrum, and Agile talent across North America.",
   "Soho Square Solutions": "Financial services staffing and consulting firm connecting top talent with banks, fintechs, and investment firms.",
   "Mondo": "Leading US IT, tech, and digital staffing specialist providing contract PM, Agile, and technical consulting placements nationwide.",
-  "Peterson Technology Partners": "Premier Chicago-based IT & Tech Staffing firm founded in 1997, specializing in PM, Agile, and technology consulting placements.",
+  "Peterson Technology Partners (PTP)": "Premier Chicago-based IT & Tech Staffing firm founded in 1997, specializing in PM, Agile, and technology consulting placements.",
+  "Kforce": "Leading technology and professional staffing solutions firm, connecting premier Project Management and technology talent nationwide.",
 };
 
 // Map observed data-source spellings to the canonical source names above
@@ -188,9 +189,12 @@ const sourceNameMap: Record<string, string> = {
   "Mondo": "Mondo",
   "mondo": "Mondo",
   "Mondo (US)": "Mondo",
-  "Peterson Technology Partners": "Peterson Technology Partners",
-  "Peterson": "Peterson Technology Partners",
-  "PTP": "Peterson Technology Partners",
+  "Peterson Technology Partners": "Peterson Technology Partners (PTP)",
+  "Peterson Technology Partners (PTP)": "Peterson Technology Partners (PTP)",
+  "Peterson": "Peterson Technology Partners (PTP)",
+  "PTP": "Peterson Technology Partners (PTP)",
+  "Kforce": "Kforce",
+  "kforce": "Kforce",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
