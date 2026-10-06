@@ -1545,6 +1545,8 @@ const JobAlertsPage: React.FC = () => {
     }
 
     // Sort
+    // Original CSV row order, used to break date ties (newest appended row wins)
+    const originalIndex = new Map(data.map((job, i) => [job, i] as const));
     filtered.sort((a, b) => {
       const aValue = a[orderBy];
       const bValue = b[orderBy];
@@ -1555,7 +1557,9 @@ const JobAlertsPage: React.FC = () => {
       if (orderBy === 'date') {
         const dateA = parseDate(aValue as string)?.getTime() || 0;
         const dateB = parseDate(bValue as string)?.getTime() || 0;
-        return order === 'asc' ? dateA - dateB : dateB - dateA;
+        if (dateA !== dateB) return order === 'asc' ? dateA - dateB : dateB - dateA;
+        // Tied dates: newest appended CSV row first so fresh scrapes stay on top
+        return (originalIndex.get(b) ?? 0) - (originalIndex.get(a) ?? 0);
       }
       
       const aStr = (aValue as string) || '';
