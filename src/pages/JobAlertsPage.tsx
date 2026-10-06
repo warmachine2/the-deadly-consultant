@@ -299,8 +299,8 @@ const getMonthlyAmount = (raw: string, location: string = ''): number => {
 };
 
 // Map known cities to filter labels from the work-type/location description string
-const extractCity = (workType: string, location: string = ''): string => {
-  const combined = `${workType || ''} ${location || ''}`.trim();
+const extractCity = (workType: string, location: string = '', comments: string = ''): string => {
+  const combined = `${workType || ''} ${location || ''} ${comments || ''}`.trim();
   if (!combined) return 'Unknown';
   const lower = combined.toLowerCase();
 
@@ -309,8 +309,8 @@ const extractCity = (workType: string, location: string = ''): string => {
   if (lower.includes('new york city') || lower.includes('new york') || lower.includes('jersey city') || lower.includes('white plains')) return 'New York';
   if (lower.includes('chicago')) return 'Chicago';
   if (lower.includes('san francisco') || lower.includes('bay area') || lower.includes('san jose') || lower.includes('santa clara') || lower.includes('oakland') || lower.includes('sunnyvale')) return 'San Francisco';
-  if (lower.includes('boston')) return 'Boston';
-  if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving')) return 'Dallas';
+  if (lower.includes('boston') || lower.includes('massachusetts')) return 'Boston';
+  if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving') || lower.includes('el paso')) return 'Dallas';
   if (lower.includes('austin')) return 'Austin';
 
   // Remote-only roles
@@ -1408,7 +1408,7 @@ const JobAlertsPage: React.FC = () => {
       }
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
-      const city = extractCity(job.workType, job.location);
+      const city = extractCity(job.workType, job.location, job.comments);
       if (city) citySet.add(city);
       
       if (job.location) {
@@ -1464,7 +1464,7 @@ const JobAlertsPage: React.FC = () => {
     // Location filter (by city — extracted from the work type / location description)
     if (selectedLocation !== 'all') {
       filtered = filtered.filter(row => {
-        const city = extractCity(row.workType, row.location);
+        const city = extractCity(row.workType, row.location, row.comments);
         return city === selectedLocation;
       });
     }
