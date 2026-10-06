@@ -852,7 +852,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
             <img src={ptpLogoUrl} alt="Peterson Technology Partners" className="h-7 w-auto object-contain" />
           )}
           {isKforce && (
-            <img src={kforceLogoUrl} alt="Kforce" className="h-7 w-auto object-contain" />
+            <img src={kforceLogoUrl} alt="Kforce" className="h-5 w-auto object-contain" />
           )}
         </span>
       )}
