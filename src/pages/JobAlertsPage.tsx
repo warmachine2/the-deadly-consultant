@@ -221,7 +221,16 @@ const sourceDisplayNames: Record<string, string> = {
   "Hassan's recruiter Network": "Hassan's Recruiter Network",
   "Agilus Work Solutions": "Agilus",
   "Axelon Services Corporation": "Axelon Services",
+  // KAN-238: the four US target agencies are shown with their target city
+  "Kforce": "KForce - Boston",
+  "KForce": "KForce - Boston",
+  "Mondo": "Mondo - New York",
+  "Peterson Technology Partners (PTP)": "Peterson Technology Partners (PTP) - Chicago",
+  "Peterson Technology Partners": "Peterson Technology Partners (PTP) - Chicago",
+  "PTP": "Peterson Technology Partners (PTP) - Chicago",
+  "Insight Global Dallas": "Insight Global - Dallas",
 };
+
 
 const getSourceDisplayName = (source: string): string => sourceDisplayNames[source] || source;
 
@@ -1891,6 +1900,8 @@ const JobAlertsPage: React.FC = () => {
                                   return (
                                     <CommandItem
                                       key={source}
+                                      keywords={[source, getSourceDisplayName(source)]}
+
                                       onSelect={() => toggleSource(source)}
                                       className="cursor-pointer hover:bg-cyan-500/20 data-[selected=true]:bg-cyan-500/20 flex-col items-start gap-1 py-2"
                                     >
@@ -1914,6 +1925,8 @@ const JobAlertsPage: React.FC = () => {
                                   return (
                                     <CommandItem
                                       key={source}
+                                      keywords={[source, getSourceDisplayName(source)]}
+
                                       onSelect={() => toggleSource(source)}
                                       className="cursor-pointer hover:bg-cyan-500/20 data-[selected=true]:bg-cyan-500/20 flex-col items-start gap-1 py-2"
                                     >
