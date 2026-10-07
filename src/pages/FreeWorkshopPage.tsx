@@ -30,7 +30,7 @@ const QUALIFIER_OPTIONS = [
 const formSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required").max(100),
   email: z.string().trim().email("Invalid email address").max(255),
-  phone: z.string().trim().min(1, "Phone/WhatsApp is required").max(30),
+  phone: z.string().trim().max(30).optional().or(z.literal("")),
   qualifier: z.enum(QUALIFIER_OPTIONS, {
     required_error: "Please select the option that best describes you",
   }),
@@ -295,7 +295,7 @@ const FreeWorkshopPage = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-white text-base font-medium mb-1">
-                        Phone/WhatsApp (required)
+                        Phone/WhatsApp (For joining academy whatsapp group later on)
                       </FormLabel>
                       <FormControl>
                         <Input
