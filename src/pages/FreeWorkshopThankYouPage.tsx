@@ -30,7 +30,7 @@ const FreeWorkshopThankYouPage = () => {
             </div>
             <p className="text-white font-semibold mb-3">
               Mondays &amp; Wednesdays &bull; 12:00 PM &ndash; 1:00 PM ET | Saturdays &bull; 11:00
-              AM &ndash; 12:00 PM ET (Toronto / New York)
+              AM &ndash; 12:00 PM ET (Toronto / New York Time Zone)
             </p>
             <p className="text-white mb-6">
               We&rsquo;ve also sent the join link and meeting details directly to your email inbox.
