@@ -80,7 +80,7 @@ serve(async (req) => {
     const webhookPayload = {
       "First Name": String(firstName).trim(),
       "Email": String(email).trim(),
-      "Phone/WhatsApp": String(phone).trim(),
+      "Phone/WhatsApp": String(phone ?? "").trim(),
       "Qualifier": qualifier.trim(),
       "Source": normalizedSource,
     };
