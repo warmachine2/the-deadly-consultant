@@ -236,7 +236,7 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 };
 
 // Enforce monthly salary ($/mo) across all formats:
-// - Hourly rates (e.g. '$91/hr USD') convert at hourly * 160 * 1.13.
+// - Hourly rates (e.g. '$91/hr USD', '$85 - $96/Hours') convert at hourly * 1.14 * 160 (KAN-327).
 // - Annual salaries (e.g. '$76,000 - $126,000/yr USD') convert at annual / 12.
 // - Already-monthly amounts missing '/mo' (e.g. '$12,758 CAD') get '/mo' appended; '/month' standardizes to '/mo'.
 // - Currency (CAD/USD) is preserved from the string or inferred from the location
@@ -244,7 +244,7 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   if (!raw || !raw.trim()) return '';
   const str = raw.trim();
-  const isHourly = /\/\s*(hr|hour|h)\b/i.test(str);
+  const isHourly = /\/\s*(hr|hrs|hour|hours|h)\b/i.test(str);
   const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
   const hasEst = /\*\s*Est\.?/i.test(str);
 
@@ -265,7 +265,7 @@ const formatEarningsMonthly = (raw: string, location: string = ''): string => {
       .filter((s): s is string => s !== null);
 
   if (isHourly) {
-    const converted = convertNumbers(1, 160 * 1.13);
+    const converted = convertNumbers(1, 160 * 1.14);
     if (converted.length === 0) return str;
     let out = converted.join(' - ') + '/mo ' + currency;
     if (hasEst) out += ' *Est.';
