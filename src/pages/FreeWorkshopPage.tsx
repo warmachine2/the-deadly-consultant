@@ -232,7 +232,7 @@ const FreeWorkshopPage = () => {
               <button
                 type="button"
                 disabled={isSubmitting}
-                className="highlight-glow-button w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none"
+                className="cta-red w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none"
                 onClick={form.handleSubmit(onSubmit)}
               >
                 {isSubmitting ? (

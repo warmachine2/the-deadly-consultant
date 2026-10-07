@@ -1140,3 +1140,63 @@ All colors MUST be HSL.
     animation: none;
   }
 }
+
+/* Vibrant red variant for the two primary workshop CTAs (header pill + webinar form) */
+.cta-red {
+  position: relative !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc2626 !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 9999px !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.35) !important;
+  transition: transform 0.25s ease, background 0.25s ease;
+  overflow: visible !important;
+}
+
+/* Traveling light beam on the outside border track, in red */
+.cta-red::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: -2px !important;
+  border-radius: 9999px !important;
+  padding: 2px !important;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 75%,
+    rgba(220, 38, 38, 0.25) 82%,
+    #ef4444 90%,
+    #ffffff 95%,
+    #ef4444 97%,
+    rgba(127, 29, 29, 0.35) 99%,
+    transparent 100%
+  ) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  mask-composite: exclude !important;
+  animation: beam-orbit 4s linear infinite !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+
+.cta-red::after {
+  display: none !important;
+}
+
+.cta-red:hover {
+  transform: translateY(-1.5px);
+  background: #b91c1c !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-red::before {
+    animation: none;
+  }
+}
