@@ -1900,6 +1900,8 @@ const JobAlertsPage: React.FC = () => {
                                   return (
                                     <CommandItem
                                       key={source}
+                                      keywords={[source, getSourceDisplayName(source)]}
+
                                       onSelect={() => toggleSource(source)}
                                       className="cursor-pointer hover:bg-cyan-500/20 data-[selected=true]:bg-cyan-500/20 flex-col items-start gap-1 py-2"
                                     >
@@ -1923,6 +1925,8 @@ const JobAlertsPage: React.FC = () => {
                                   return (
                                     <CommandItem
                                       key={source}
+                                      keywords={[source, getSourceDisplayName(source)]}
+
                                       onSelect={() => toggleSource(source)}
                                       className="cursor-pointer hover:bg-cyan-500/20 data-[selected=true]:bg-cyan-500/20 flex-col items-start gap-1 py-2"
                                     >
