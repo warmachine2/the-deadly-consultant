@@ -379,7 +379,12 @@ const parseCSV = (csvText: string): JobData[] => {
     rowNumber++;
     // Only require that there's at least a date and role (first 2 columns)
     if (row.length >= 2 && row[0] && row[1]) {
-      const canonicalSource = normalizeSourceName(row[17] || '');
+      let canonicalSource = normalizeSourceName(row[17] || '');
+      // The Sources column rarely spells out "Dallas", so an Insight Global job
+      // that mentions Dallas anywhere in its row is classified as the Dallas team.
+      if (canonicalSource === 'Insight Global' && row.some(cell => /dallas/i.test(cell || ''))) {
+        canonicalSource = 'Insight Global Dallas';
+      }
       const parsedCompanyInfo = row[16] ? parseCompanyInfo(row[16]) : undefined;
       const companyInfo =
         canonicalSource === 'NTT Data' && (!parsedCompanyInfo || parsedCompanyInfo.length <= 1)
