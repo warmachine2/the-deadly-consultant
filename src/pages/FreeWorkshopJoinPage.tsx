@@ -55,12 +55,16 @@ const FreeWorkshopJoinPage = () => {
               Quick Links
             </h2>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/2026-bi-fintech-consulting-roadmap-pdf-unlock">
+              <a
+                href="https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <button className="gold-glow-border w-full px-5 py-3 font-bold text-white hover:text-[#F4C903] inline-flex items-center justify-center gap-2">
                   <FileText className="w-5 h-5" />
                   2026 Roadmap
                 </button>
-              </Link>
+              </a>
               <Link to="/ai-bi-fintech-pm-job-alerts-repo">
                 <button className="gold-glow-border w-full px-5 py-3 font-bold text-white hover:text-[#F4C903] inline-flex items-center justify-center gap-2">
                   <Briefcase className="w-5 h-5" />
