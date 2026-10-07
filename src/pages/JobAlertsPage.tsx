@@ -62,7 +62,7 @@ const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
 // --- KAN-311: stale-while-revalidate cache ---
-const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v3';
+const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v4';
 const readJobCache = (): JobData[] | null => {
   try {
     const raw = localStorage.getItem(JOB_CACHE_KEY);
@@ -145,6 +145,7 @@ const sourceDescriptions: Record<string, string> = {
   "Hassan's recruiter Network": "Recruiters and headhunters from Hassan's network directly from his email. Live connections built over a ten-year span. Insider hidden jobs.",
   "Proviso": "Toronto-based IT staffing agency supporting technology and business teams across Canada's financial industry for 15+ years.",
   "Insight Global": "Global staffing and professional services agency founded in 2001, specializing in IT, healthcare, finance, and engineering talent.",
+  "Insight Global Dallas": "Insight Global's Dallas team placing Project Management, Agile, and technology talent across Texas and the wider US market.",
   "S.i. Systems": "Canada's largest IT staffing agency offering contract and direct hire staffing since 1994, connecting top employers with IT talent.",
   "NTT Data": "Global IT services and consulting leader providing technology and business solutions, staffing, and outsourcing services.",
   "Agilus Work Solutions": "Canadian recruitment and staffing firm specializing in temporary, contract, and permanent placements across industries.",
@@ -206,7 +207,13 @@ const sourceAliasLookup: Record<string, string> = Object.fromEntries(
 const normalizeSourceName = (raw: string): string => {
   const trimmed = raw.trim();
   if (!trimmed) return '';
-  return sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
+  const mapped = sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
+  const lower = mapped.toLowerCase();
+  // "Insight Global" and "Insight Global Dallas" are tracked as separate sources
+  if (lower.includes('insight global')) {
+    return lower.includes('dallas') ? 'Insight Global Dallas' : 'Insight Global';
+  }
+  return mapped;
 };
 
 // Frontend display labels for sources (does not affect underlying data values)
@@ -791,7 +798,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
 
   const isSiSystems = canonicalSource === "S.i. Systems";
   const isProviso = canonicalSource === "Proviso";
-  const isInsightGlobal = canonicalSource === "Insight Global";
+  const isInsightGlobal = canonicalSource === "Insight Global" || canonicalSource === "Insight Global Dallas";
   const isProcom = canonicalSource === "Procom";
   const isAgilus = canonicalSource === "Agilus Work Solutions";
   const isTundra = canonicalSource === "Tundra Technical Solutions" || canonicalSource.toLowerCase().includes("tundra");
