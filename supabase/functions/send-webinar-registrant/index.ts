@@ -54,9 +54,14 @@ serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 },
       );
     }
-    if (!isNonEmptyString(phone, 30)) {
+    // Phone/WhatsApp is optional: empty, missing, or whitespace-only is allowed.
+    if (
+      phone !== undefined &&
+      phone !== null &&
+      !(typeof phone === "string" && phone.trim().length <= 30)
+    ) {
       return new Response(
-        JSON.stringify({ error: "Invalid or missing phone" }),
+        JSON.stringify({ error: "Invalid phone" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 },
       );
     }
