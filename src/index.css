@@ -1229,3 +1229,10 @@ All colors MUST be HSL.
   }
 }
 
+/* KAN-382: prevent touch-device sticky hover from darkening filter popover triggers */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  [data-radix-popover-trigger] span {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
