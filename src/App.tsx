@@ -14,6 +14,7 @@ import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import FreeWorkshopPage from "./pages/FreeWorkshopPage";
+import SeatIntakePage from "./pages/SeatIntakePage";
 import FreeWorkshopThankYouPage from "./pages/FreeWorkshopThankYouPage";
 import FreeWorkshopJoinPage from "./pages/FreeWorkshopJoinPage";
 import FreeWorkshopReplayPage from "./pages/FreeWorkshopReplayPage";
@@ -66,6 +67,7 @@ const App = () => (
             <Route path="/pm-strategy-guide-pdf" element={<Navigate to="/2026-bi-fintech-consulting-roadmap-pdf-unlock" replace />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/proof" element={<ProofPage />} />
+            <Route path="/seat" element={<SeatIntakePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="/:slug" element={<DynamicPage />} />
             <Route path="*" element={<NotFound />} />
