@@ -1864,9 +1864,19 @@ const JobAlertsPage: React.FC = () => {
                         <PopoverTrigger asChild>
                           <Button 
                             variant="outline" 
-                            className="w-full justify-between px-4 py-3 h-11 rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-white text-sm"
+                            className={cn(
+                              "w-full justify-between px-4 py-3 h-11 rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-sm transition-colors",
+                              selectedSources.length > 0 
+                                ? "border-[#FFDD40]/40 text-white" 
+                                : "text-white"
+                            )}
                           >
-                            <span className="truncate">
+                            <span className={cn(
+                              "truncate transition-colors",
+                              selectedSources.length > 0 
+                                ? "text-[#FFDD40] font-semibold md:text-white md:font-medium" 
+                                : "text-white font-medium"
+                            )}>
                               {selectedSources.length === 0 
                                 ? 'All Sources' 
                                 : selectedSources.length <= 2
@@ -1874,7 +1884,10 @@ const JobAlertsPage: React.FC = () => {
                                   : `${selectedSources.length} selected`
                               }
                             </span>
-                            <ChevronDown className="w-4 h-4 ml-2 shrink-0 opacity-50" />
+                            <ChevronDown className={cn(
+                              "w-4 h-4 ml-2 shrink-0 transition-colors",
+                              selectedSources.length > 0 ? "text-[#FFDD40] opacity-80 md:text-white md:opacity-50" : "text-white opacity-50"
+                            )} />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[320px] p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
