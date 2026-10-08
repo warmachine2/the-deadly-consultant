@@ -434,10 +434,15 @@ const SeatIntakePage = () => {
                               {CONSENT_OPTIONS.map((o) => (
                                 <label
                                   key={o}
-                                  className="flex items-center gap-3 rounded-lg border border-border p-3 cursor-pointer text-white"
+                                  htmlFor={`proof-${o}`}
+                                  className="flex items-center gap-3 rounded-lg border border-white/20 p-3 cursor-pointer text-white transition-colors hover:bg-white/5 has-[:checked]:border-[#FFE361] has-[:checked]:bg-[#FFE361]/10"
                                 >
-                                  <RadioGroupItem value={o} />
-                                  {o}
+                                  <RadioGroupItem
+                                    value={o}
+                                    id={`proof-${o}`}
+                                    className="h-5 w-5 border-white/60 text-white data-[state=checked]:border-[#FFE361] data-[state=checked]:text-[#FFE361] data-[state=checked]:bg-[#FFE361]/20 [&>span>svg]:h-3.5 [&>span>svg]:w-3.5 [&>span>svg]:fill-[#FFE361]"
+                                  />
+                                  <span className="text-white text-base leading-snug">{o}</span>
                                 </label>
                               ))}
                             </RadioGroup>
