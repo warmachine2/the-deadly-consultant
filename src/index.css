@@ -1200,3 +1200,32 @@ All colors MUST be HSL.
     animation: none;
   }
 }
+
+/* Mobile-only flicker elimination (KAN-381) */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  /* 1. Stop rapid 300ms stepped grain-flicker strobing on mobile screens */
+  body > #root::after {
+    animation: none !important;
+    opacity: 0.35 !important; /* Preserves the static texture without flickering */
+  }
+
+  /* 2. Prevent mobile GPU compositor thrashing under backdrop-filter */
+  body::after {
+    animation: none !important; /* Stops continuous mesh-float translations on mobile */
+  }
+
+  /* 3. Hardware-stabilize fixed background layers on mobile GPUs */
+  body > #root::before,
+  body > #root::after {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* 4. Stabilize mobile CTA button box-shadow pulse to prevent repaints */
+  .cta-glow-pulse-red {
+    animation: none !important;
+    box-shadow: 0 0 16px rgba(220, 38, 38, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
