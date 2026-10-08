@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import TopNav from "@/components/TopNav";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { Loader2, Lock } from "lucide-react";
 
 const PASSPHRASES = ["remake", "consultant", "accelerator", "seat"];
@@ -54,6 +56,19 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
+
+const clean = (v: string) =>
+  v.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9-]/g, "");
+
+/** "Jane Doe" + resume.pdf -> "Doe-Jane-original.pdf" */
+export const buildResumeFileName = (fullName: string, originalName: string) => {
+  const parts = fullName.trim().split(/\s+/).map(clean).filter(Boolean);
+  const last = parts.length > 1 ? parts[parts.length - 1] : "";
+  const first = parts.length > 1 ? parts.slice(0, -1).join("-") : parts[0] || "Student";
+  const ext = /\.docx$/i.test(originalName) ? "docx" : "pdf";
+  const base = [last, first].filter(Boolean).join("-").replace(/-+/g, "-");
+  return `${base || "Student"}-original.${ext}`;
+};
 
 const labelCls = "text-white text-base font-medium mb-1";
 const helperCls = "text-muted-foreground text-sm";
@@ -107,12 +122,42 @@ const SeatIntakePage = () => {
     }
   };
 
-  const onSubmit = async (_data: FormData) => {
+  const { toast } = useToast();
+
+  const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    // Submission destination to be wired in a later phase.
-    await new Promise((r) => setTimeout(r, 600));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    try {
+      const fileName = buildResumeFileName(data.fullName, data.resume.name);
+      // Unique folder per submission so files never overwrite each other.
+      const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}/${fileName}`;
+      const { error: upErr } = await supabase.storage
+        .from("student-resumes")
+        .upload(path, data.resume, { upsert: false, contentType: data.resume.type || undefined });
+      if (upErr) throw new Error("Resume upload failed. Please try again.");
+
+      const { error: dbErr } = await supabase.from("student_seat_intakes").insert({
+        full_name: data.fullName,
+        email: data.email,
+        whatsapp_number: data.whatsapp,
+        linkedin_url: data.linkedin,
+        resume_file_path: path,
+        current_title_employer: data.currentRole,
+        years_experience: data.yearsExperience,
+        contract_location: data.contractLocation,
+        proof_consent: data.proofConsent,
+        submitted_at: new Date().toISOString(),
+      });
+      if (dbErr) throw new Error("Could not save your intake. Please try again.");
+      setSubmitted(true);
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -148,15 +193,10 @@ const SeatIntakePage = () => {
                 </button>
               </form>
             ) : submitted ? (
-              <div className="text-center">
-                <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#FFE361" }}>
-                  Intake Received
-                </h1>
-                <p className="text-white text-base md:text-lg">
-                  Thank you. Your student intake has been submitted. I&rsquo;ll be in touch on
-                  WhatsApp shortly.
-                </p>
-              </div>
+              <p className="text-white text-center text-base md:text-lg leading-relaxed">
+                Got it. I will add this WhatsApp number to the student group within 24 hours. Do
+                not post the old resume. The remake starts from the file you just sent.
+              </p>
             ) : (
               <>
                 <h1

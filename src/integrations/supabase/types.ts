@@ -53,6 +53,48 @@ export type Database = {
         }
         Relationships: []
       }
+      student_seat_intakes: {
+        Row: {
+          contract_location: string
+          current_title_employer: string
+          email: string
+          full_name: string
+          id: string
+          linkedin_url: string
+          proof_consent: string
+          resume_file_path: string
+          submitted_at: string
+          whatsapp_number: string
+          years_experience: number
+        }
+        Insert: {
+          contract_location: string
+          current_title_employer: string
+          email: string
+          full_name: string
+          id?: string
+          linkedin_url: string
+          proof_consent: string
+          resume_file_path: string
+          submitted_at?: string
+          whatsapp_number: string
+          years_experience: number
+        }
+        Update: {
+          contract_location?: string
+          current_title_employer?: string
+          email?: string
+          full_name?: string
+          id?: string
+          linkedin_url?: string
+          proof_consent?: string
+          resume_file_path?: string
+          submitted_at?: string
+          whatsapp_number?: string
+          years_experience?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
