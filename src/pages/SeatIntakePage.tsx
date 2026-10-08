@@ -135,6 +135,7 @@ const SeatIntakePage = () => {
         .upload(path, data.resume, { upsert: false, contentType: data.resume.type || undefined });
       if (upErr) throw new Error("Resume upload failed. Please try again.");
 
+      const submittedAt = new Date().toISOString();
       const { error: dbErr } = await supabase.from("student_seat_intakes").insert({
         full_name: data.fullName,
         email: data.email,
@@ -145,9 +146,34 @@ const SeatIntakePage = () => {
         years_experience: data.yearsExperience,
         contract_location: data.contractLocation,
         proof_consent: data.proofConsent,
-        submitted_at: new Date().toISOString(),
+        submitted_at: submittedAt,
       });
       if (dbErr) throw new Error("Could not save your intake. Please try again.");
+
+      // Best-effort notification to the n8n pipeline. Its own try/catch keeps
+      // webhook downtime from ever breaking the student's submission.
+      try {
+        await fetch("https://n8n.srv1182241.hstgr.cloud/webhook/student-seat-intake", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName: data.fullName,
+            email: data.email,
+            whatsapp: data.whatsapp,
+            linkedin: data.linkedin,
+            fileName,
+            resumeFilePath: path,
+            currentRole: data.currentRole,
+            yearsExperience: data.yearsExperience,
+            contractLocation: data.contractLocation,
+            proofConsent: data.proofConsent,
+            submittedAt,
+          }),
+        });
+      } catch {
+        // Notification failed — the intake is already saved, so ignore silently.
+      }
+
       setSubmitted(true);
     } catch (err) {
       toast({
