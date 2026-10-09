@@ -1237,3 +1237,49 @@ All colors MUST be HSL.
   }
 }
 
+/* Hero CTA Cards: Static cyan glow + traveling blue/cyan light beam border (KAN-381 Fix #2) */
+.hero-card-beam {
+  position: relative !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba(34, 211, 238, 0.5) !important;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.45), 0 0 30px rgba(0, 212, 255, 0.25) !important;
+  overflow: visible !important;
+}
+
+.hero-card-beam::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: -2px !important;
+  border-radius: 0.75rem !important;
+  padding: 2px !important;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 75%,
+    rgba(30, 144, 255, 0.2) 82%,
+    #00a6ff 90%,
+    #ffffff 95%,
+    #00a6ff 97%,
+    rgba(30, 144, 255, 0.2) 99%,
+    transparent 100%
+  ) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  mask-composite: exclude !important;
+  animation: beam-orbit 4s linear infinite !important;
+  z-index: 10 !important;
+  pointer-events: none !important;
+}
+
+.hero-card-beam::after {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card-beam::before {
+    animation: none !important;
+  }
+}
+
