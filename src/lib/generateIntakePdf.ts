@@ -33,7 +33,7 @@ const MUTED = "#64748B";
 const LINE = "#E2E8F0";
 
 const pill = (text: string, bg: string, fg: string) =>
-  `<span style="display:inline-block;padding:3px 10px;border-radius:999px;background:${bg};color:${fg};font-size:10px;font-weight:700;letter-spacing:.04em;">${text}</span>`;
+  `<span style="display:inline-block;padding:0 10px 6px;line-height:14px;border-radius:999px;background:${bg};color:${fg};font-size:10px;font-weight:700;letter-spacing:.04em;">${text}</span>`;
 
 const emblem = `
 <svg width="96" height="96" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +104,7 @@ export async function generateIntakePdf(
     <div style="font-size:17px;font-weight:800;">Student Intake Record — Official Enrollment Dossier</div>
     <div style="display:flex;gap:6px;">
       ${pill("OFFICIAL DOSSIER", GOLD, "#fff")}
-      <span style="display:inline-block;padding:2px 9px;border-radius:999px;border:1px solid ${INK};color:${INK};font-size:10px;font-weight:700;letter-spacing:.04em;">INTERNAL USE</span>
+      <span style="display:inline-block;padding:0 9px 5px;line-height:14px;border-radius:999px;border:1px solid ${INK};color:${INK};font-size:10px;font-weight:700;letter-spacing:.04em;">INTERNAL USE</span>
     </div>
   </div>
   <div style="margin-top:10px;padding:8px 12px;background:#F1F5F9;border-radius:6px;font-size:10.5px;color:${MUTED};">
@@ -114,7 +114,7 @@ export async function generateIntakePdf(
   ${section("01", "Student Contact &amp; Identification")}
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
     ${card("Full Name", p.fullName)}
-    ${card("Email Used at Checkout", p.email, `<span style="margin-left:6px;padding:2px 6px;border-radius:4px;background:#FEF3C7;color:${GOLD};font-size:8.5px;">MATCH EMAIL TO PAYMENT</span>`)}
+    ${card("Email Used at Checkout", p.email, `<span style="margin-left:6px;padding:0 6px 4px;line-height:12px;border-radius:4px;background:#FEF3C7;color:${GOLD};font-size:8.5px;">MATCH EMAIL TO PAYMENT</span>`)}
     ${card("WhatsApp Number", p.whatsapp)}
     ${card("LinkedIn Profile", `<span style="color:#1D4ED8;text-decoration:underline;">${linkedinShort}</span>`)}
   </div>
