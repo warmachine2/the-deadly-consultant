@@ -157,7 +157,7 @@ const SeatIntakePage = () => {
               <form onSubmit={handleUnlock} className="text-center">
                 <Lock className="mx-auto mb-4 h-10 w-10" style={{ color: "#FFE361" }} />
                 <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#FFE361" }}>
-                  Student Intake
+                  Student Seat Access
                 </h1>
                 <Input
                   value={pass}
