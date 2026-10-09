@@ -2,4 +2,4 @@
 
 - [x] Make retired intake columns nullable.
 - [x] Update titles, password gate, and seven-field submission.
-- [ ] Verify validation and password behavior in preview.
+- [x] Verify validation and password behavior in preview (four tests passed; desktop/mobile checked; no live submission sent).
