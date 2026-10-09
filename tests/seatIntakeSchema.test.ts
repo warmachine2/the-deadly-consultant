@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { formSchema, matchesSeatPassword } from "./seatIntakeSchema";
+import { formSchema, matchesSeatPassword } from "../src/lib/seatIntakeSchema";
 
 const intake = {
   fullName: "Jane Doe",
