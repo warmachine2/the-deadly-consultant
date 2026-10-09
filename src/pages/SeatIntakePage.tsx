@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, LOCATION_OPTIONS, matchesSeatPassword, type FormData } from "@/lib/seatIntakeSchema";
+import { generateIntakePdf } from "@/lib/generateIntakePdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -93,14 +94,33 @@ const SeatIntakePage = () => {
     setIsSubmitting(true);
     try {
       const fileName = buildResumeFileName(data.fullName, data.resume.name);
+      const submittedAt = new Date().toISOString();
+      const pdf = await generateIntakePdf({
+        fullName: data.fullName,
+        email: data.email,
+        whatsapp: data.whatsapp,
+        linkedin: data.linkedin,
+        currentRole: data.currentRole,
+        contractLocation: data.contractLocation,
+        resumeFileName: fileName,
+        submittedAt,
+      });
       // Unique folder per submission so files never overwrite each other.
-      const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}/${fileName}`;
+      const folder = `${submittedAt.slice(0, 10)}/${crypto.randomUUID()}`;
+      const path = `${folder}/${fileName}`;
       const { error: upErr } = await supabase.storage
         .from("student-resumes")
         .upload(path, data.resume, { upsert: false, contentType: data.resume.type || undefined });
       if (upErr) throw new Error("Resume upload failed. Please try again.");
 
-      const submittedAt = new Date().toISOString();
+      if (pdf) {
+        // Best-effort: the dossier is a convenience copy, never blocks submission.
+        await supabase.storage
+          .from("student-resumes")
+          .upload(`${folder}/${pdf.pdfFileName}`, pdf.pdfBlob, { upsert: false, contentType: "application/pdf" })
+          .catch(() => undefined);
+      }
+
       const { error: dbErr } = await supabase.from("student_seat_intakes").insert({
         full_name: data.fullName,
         email: data.email,
@@ -113,23 +133,22 @@ const SeatIntakePage = () => {
       });
       if (dbErr) throw new Error("Could not save your intake. Please try again.");
 
-      // Best-effort notification to the n8n pipeline. Its own try/catch keeps
-      // webhook downtime from ever breaking the student's submission.
+      // Best-effort multipart notification to n8n; failure never breaks submission.
       try {
+        const body = new FormData();
+        body.append("fullName", data.fullName);
+        body.append("email", data.email);
+        body.append("whatsapp", data.whatsapp);
+        body.append("linkedin", data.linkedin);
+        body.append("currentRole", data.currentRole);
+        body.append("contractLocation", data.contractLocation);
+        body.append("resumeFilePath", path);
+        body.append("submittedAt", submittedAt);
+        body.append("resume", data.resume, fileName);
+        if (pdf) body.append("intakePdf", pdf.pdfBlob, pdf.pdfFileName);
         await fetch("https://n8n.srv1182241.hstgr.cloud/webhook/student-seat-intake", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fullName: data.fullName,
-            email: data.email,
-            whatsapp: data.whatsapp,
-            linkedin: data.linkedin,
-            fileName,
-            resumeFilePath: path,
-            currentRole: data.currentRole,
-            contractLocation: data.contractLocation,
-            submittedAt,
-          }),
+          body,
         });
       } catch {
         // Notification failed — the intake is already saved, so ignore silently.
