@@ -301,7 +301,7 @@ const SeatIntakePage = () => {
                         <FormItem>
                           <FormLabel className={labelCls}>Current Title and Employer</FormLabel>
                           <FormControl>
-                            <Input className="bg-input border-border" {...field} />
+                            <Input placeholder="e.g. Senior Business Analyst" className="bg-input border-border" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
