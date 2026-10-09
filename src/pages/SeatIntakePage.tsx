@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { formSchema, LOCATION_OPTIONS, matchesSeatPassword, type FormData } from "@/lib/seatIntakeSchema";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -18,44 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Lock } from "lucide-react";
 
-const PASSPHRASES = ["remake", "consultant", "accelerator", "seat"];
-const STORAGE_KEY = "seat_unlocked";
-const MAX_FILE_BYTES = 10 * 1024 * 1024;
-
-const LOCATION_OPTIONS = ["Canada", "USA", "Remote either"] as const;
-const CONSENT_OPTIONS = ["Full name ok", "First name only", "Do not use my name"] as const;
-
-const isAllowedResume = (f: File) => /\.(pdf|docx)$/i.test(f.name);
-
-const formSchema = z.object({
-  fullName: z.string().trim().min(1, "Full name is required").max(150),
-  email: z.string().trim().email("Invalid email address").max(255),
-  whatsapp: z
-    .string()
-    .trim()
-    .min(7, "WhatsApp number is required")
-    .max(30)
-    .regex(/^\+?[0-9\s\-()]+$/, "Include country code, digits only (e.g. +1 416 555 0123)"),
-  linkedin: z
-    .string()
-    .trim()
-    .url("Enter a valid URL")
-    .max(500)
-    .refine((v) => /linkedin\.com\//i.test(v), "Must be a LinkedIn profile URL"),
-  resume: z
-    .custom<File>((v) => v instanceof File, "Resume file is required")
-    .refine((f) => isAllowedResume(f), "Only PDF or DOCX files are accepted")
-    .refine((f) => f.size <= MAX_FILE_BYTES, "File must be 10MB or smaller"),
-  currentRole: z.string().trim().min(1, "Current title and employer is required").max(200),
-  yearsExperience: z.coerce
-    .number({ invalid_type_error: "Enter a number" })
-    .min(3, "Minimum 3 years of professional experience")
-    .max(60),
-  contractLocation: z.enum(LOCATION_OPTIONS, { required_error: "Please select an option" }),
-  proofConsent: z.enum(CONSENT_OPTIONS, { required_error: "Please select an option" }),
-});
-
-type FormData = z.infer<typeof formSchema>;
+const STORAGE_KEY = "seat_unlocked_password_v2";
 
 const clean = (v: string) =>
   v.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9-]/g, "");
@@ -84,7 +48,7 @@ const SeatIntakePage = () => {
 
   useEffect(() => {
     const prevTitle = document.title;
-    document.title = "Paid Student Seat Intake | Zero to PM Consultant";
+    document.title = "Student Intake | Zero to PM Consultant";
     let meta = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     const prevContent = meta?.getAttribute("content") ?? null;
     if (!meta) {
@@ -111,14 +75,15 @@ const SeatIntakePage = () => {
     },
   });
 
-  const handleUnlock = (e: React.FormEvent) => {
+  const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (PASSPHRASES.includes(pass.trim().toLowerCase())) {
+    if (await matchesSeatPassword(pass)) {
       sessionStorage.setItem(STORAGE_KEY, "true");
       setUnlocked(true);
       setPassError("");
+      setPass("");
     } else {
-      setPassError("Incorrect passphrase. Check your payment confirmation.");
+      setPassError("Incorrect password. Check your payment confirmation.");
     }
   };
 
@@ -143,9 +108,7 @@ const SeatIntakePage = () => {
         linkedin_url: data.linkedin,
         resume_file_path: path,
         current_title_employer: data.currentRole,
-        years_experience: data.yearsExperience,
         contract_location: data.contractLocation,
-        proof_consent: data.proofConsent,
         submitted_at: submittedAt,
       });
       if (dbErr) throw new Error("Could not save your intake. Please try again.");
@@ -164,9 +127,7 @@ const SeatIntakePage = () => {
             fileName,
             resumeFilePath: path,
             currentRole: data.currentRole,
-            yearsExperience: data.yearsExperience,
             contractLocation: data.contractLocation,
-            proofConsent: data.proofConsent,
             submittedAt,
           }),
         });
@@ -196,27 +157,24 @@ const SeatIntakePage = () => {
               <form onSubmit={handleUnlock} className="text-center">
                 <Lock className="mx-auto mb-4 h-10 w-10" style={{ color: "#FFE361" }} />
                 <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: "#FFE361" }}>
-                  Student Seat Access
+                  Student Intake
                 </h1>
-                <p className="text-white mb-8 text-base md:text-lg">
-                  Enter the passphrase provided in your payment confirmation (WhatsApp/Email) to
-                  unlock the student intake form.
-                </p>
                 <Input
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
-                  placeholder="Enter passphrase"
+                  type="password"
+                  placeholder="Enter password"
                   autoComplete="off"
                   maxLength={50}
                   className="bg-input border-border mb-2"
                 />
                 {passError && <p className="text-destructive text-sm mb-2">{passError}</p>}
-                <button
+                <Button
                   type="submit"
-                  className="cta-red w-full mt-4 px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none"
+                  className="cta-red h-auto w-full mt-4 px-6 py-3.5 font-bold text-primary-foreground text-base md:text-lg tracking-wide shadow-none"
                 >
-                  Unlock Intake Form
-                </button>
+                  Unlock Student Intake
+                </Button>
               </form>
             ) : submitted ? (
               <p className="text-white text-center text-base md:text-lg leading-relaxed">
@@ -229,11 +187,8 @@ const SeatIntakePage = () => {
                   className="text-3xl md:text-4xl font-bold mb-4 text-center"
                   style={{ color: "#FFE361" }}
                 >
-                  Paid Student Seat Intake
+                  Student Intake
                 </h1>
-                <p className="text-white text-center mb-8 text-base md:text-lg">
-                  Complete every field so we can start your resume remake and onboarding.
-                </p>
 
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -352,31 +307,6 @@ const SeatIntakePage = () => {
                               {...field}
                             />
                           </FormControl>
-                          <FormDescription className={helperCls}>
-                            Current title and employer — so the remake does not invent a job
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="yearsExperience"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className={labelCls}>
-                            Years of Professional Experience
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min={3}
-                              className="bg-input border-border"
-                              {...field}
-                              value={field.value ?? ""}
-                            />
-                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -415,47 +345,10 @@ const SeatIntakePage = () => {
                       )}
                     />
 
-                    <FormField
-                      control={form.control}
-                      name="proofConsent"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className={labelCls}>Proof Use Consent</FormLabel>
-                          <FormDescription className={helperCls}>
-                            Before/after resume and recruiter screenshots. This is how the next
-                            student believes it.
-                          </FormDescription>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              value={field.value}
-                              className="space-y-2"
-                            >
-                              {CONSENT_OPTIONS.map((o) => (
-                                <label
-                                  key={o}
-                                  htmlFor={`proof-${o}`}
-                                  className="flex items-center gap-3 rounded-lg border border-white/20 p-3 cursor-pointer text-white transition-colors hover:bg-white/5 has-[:checked]:border-[#FFE361] has-[:checked]:bg-[#FFE361]/10"
-                                >
-                                  <RadioGroupItem
-                                    value={o}
-                                    id={`proof-${o}`}
-                                    className="h-5 w-5 border-white/60 text-white data-[state=checked]:border-[#FFE361] data-[state=checked]:text-[#FFE361] data-[state=checked]:bg-[#FFE361]/20 [&>span>svg]:h-3.5 [&>span>svg]:w-3.5 [&>span>svg]:fill-[#FFE361]"
-                                  />
-                                  <span className="text-white text-base leading-snug">{o}</span>
-                                </label>
-                              ))}
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <button
+                    <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="cta-red w-full px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none"
+                      className="cta-red h-auto w-full px-6 py-3.5 font-bold text-primary-foreground text-base md:text-lg tracking-wide shadow-none"
                     >
                       {isSubmitting ? (
                         <>
@@ -465,7 +358,7 @@ const SeatIntakePage = () => {
                       ) : (
                         "Submit Student Intake"
                       )}
-                    </button>
+                    </Button>
                   </form>
                 </Form>
               </>

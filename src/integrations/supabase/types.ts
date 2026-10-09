@@ -61,11 +61,11 @@ export type Database = {
           full_name: string
           id: string
           linkedin_url: string
-          proof_consent: string
+          proof_consent: string | null
           resume_file_path: string
           submitted_at: string
           whatsapp_number: string
-          years_experience: number
+          years_experience: number | null
         }
         Insert: {
           contract_location: string
@@ -74,11 +74,11 @@ export type Database = {
           full_name: string
           id?: string
           linkedin_url: string
-          proof_consent: string
+          proof_consent?: string | null
           resume_file_path: string
           submitted_at?: string
           whatsapp_number: string
-          years_experience: number
+          years_experience?: number | null
         }
         Update: {
           contract_location?: string
@@ -87,11 +87,11 @@ export type Database = {
           full_name?: string
           id?: string
           linkedin_url?: string
-          proof_consent?: string
+          proof_consent?: string | null
           resume_file_path?: string
           submitted_at?: string
           whatsapp_number?: string
-          years_experience?: number
+          years_experience?: number | null
         }
         Relationships: []
       }
