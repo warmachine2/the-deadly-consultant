@@ -587,8 +587,6 @@ const AreYouReadyToPivotPage = () => {
           </div>
         </div>
 
-        <CriticalResourcesSection />
-
         {/* Results Footer */}
 
         <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
