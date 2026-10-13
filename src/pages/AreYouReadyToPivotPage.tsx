@@ -651,7 +651,6 @@ const AreYouReadyToPivotPage = () => {
             </div>
           )}
         </div>
-        </div>
       </main>
 
       <footer className="volumetric-glass rounded-t-3xl mt-12 py-6 px-6">
