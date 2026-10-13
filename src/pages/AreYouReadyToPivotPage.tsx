@@ -587,8 +587,6 @@ const AreYouReadyToPivotPage = () => {
           </div>
         </div>
 
-        <CriticalResourcesSection />
-
         {/* Results Footer */}
 
         <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
@@ -646,7 +644,12 @@ const AreYouReadyToPivotPage = () => {
         <div className="max-w-4xl mx-auto">
           {step === "hero" && HeroSection}
           {step === "quiz" && QuizSection}
-          {step === "result" && ResultSection}
+          {step === "result" && (
+            <div className="space-y-6 max-w-3xl mx-auto">
+              {ResultSection}
+              <CriticalResourcesSection />
+            </div>
+          )}
         </div>
       </main>
 
