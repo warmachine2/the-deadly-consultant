@@ -646,7 +646,13 @@ const AreYouReadyToPivotPage = () => {
         <div className="max-w-4xl mx-auto">
           {step === "hero" && HeroSection}
           {step === "quiz" && QuizSection}
-          {step === "result" && ResultSection}
+          {step === "result" && (
+            <div className="space-y-6 max-w-3xl mx-auto">
+              {ResultSection}
+              <CriticalResourcesSection />
+            </div>
+          )}
+        </div>
         </div>
       </main>
 
