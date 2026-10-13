@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import TopNav from "@/components/TopNav";
+import CriticalResourcesSection from "@/components/CriticalResourcesSection";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -585,7 +587,10 @@ const AreYouReadyToPivotPage = () => {
           </div>
         </div>
 
+        <CriticalResourcesSection />
+
         {/* Results Footer */}
+
         <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
           <p className="text-center text-sm text-white/60 mb-3">Connect with Hassan</p>
           <div className="flex flex-wrap items-start justify-center gap-6 md:gap-10">
