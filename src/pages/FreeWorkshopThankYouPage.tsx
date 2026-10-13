@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
+import CriticalResourcesSection from "@/components/CriticalResourcesSection";
 import { CheckCircle2, Briefcase, FileText, CalendarClock, Video } from "lucide-react";
+
 
 const FreeWorkshopThankYouPage = () => {
   return (
@@ -43,7 +45,10 @@ const FreeWorkshopThankYouPage = () => {
             </Link>
           </div>
 
+          <CriticalResourcesSection />
+
           <div className="volumetric-glass rounded-2xl p-8 text-center">
+
             <div className="flex justify-center items-center gap-3 mb-3">
               <Briefcase className="w-6 h-6 text-[#FFE361]" />
               <h2 className="text-2xl font-bold" style={{ color: "#FFE361" }}>
