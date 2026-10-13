@@ -26,7 +26,7 @@ const HeroSection = () => {
       </p>
 
         {/* Primary hero CTA */}
-        <div className="w-full max-w-2xl flex flex-col items-center gap-3 mt-2 md:mt-4">
+        <div className="w-full max-w-2xl flex flex-col items-center gap-4 md:gap-5 mt-2 md:mt-4">
           <a
             href={WORKSHOP_REGISTER_URL}
             target="_blank"
@@ -51,11 +51,16 @@ const HeroSection = () => {
 
           <Link
             to="/are-you-ready-to-pivot-to-pm-consulting"
-            className="inline-flex items-center gap-1.5 text-sm md:text-base text-white/80 hover:text-[#F4C903] transition-colors group cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F4C903]/50 bg-black/60 hover:bg-[#F4C903]/15 hover:border-[#F4C903] transition-all text-sm md:text-base text-white group cursor-pointer shadow-[0_0_15px_rgba(244,201,3,0.15)] whitespace-nowrap"
           >
-            <span>Take the PM Consulting Readiness Quiz</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-[#F4C903]" />
+            <span className="hidden sm:inline text-white/80">Prefer to check your fit first?</span>
+            <span className="font-semibold text-[#F4C903] underline underline-offset-4 decoration-[#F4C903]/60 group-hover:text-white transition-colors">
+              Take the PM Consulting Readiness Quiz
+            </span>
+            <ArrowRight className="w-4 h-4 text-[#F4C903] group-hover:text-white group-hover:translate-x-1 transition-all" />
           </Link>
+
+
         </div>
 
 
