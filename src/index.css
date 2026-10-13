@@ -11,6 +11,7 @@ All colors MUST be HSL.
     /* Deep charcoal gray theme */
     --background: 0 0% 10%;
     --foreground: 214 14% 91%;
+    --article-body: 0 0% 100%;
 
     /* Glass card with charcoal tint */
     --card: 0 0% 18%;
@@ -747,7 +748,7 @@ All colors MUST be HSL.
 
   /* Prose styling for Ghost content on dark backgrounds */
   .prose {
-    color: #f1f5f9;
+    color: hsl(var(--article-body));
   }
 
   .prose h1,
@@ -813,14 +814,14 @@ All colors MUST be HSL.
   }
 
   .prose p {
-    color: #f1f5f9 !important;
+    color: hsl(var(--article-body)) !important;
     margin-bottom: 1.25rem;
     line-height: 1.75;
   }
 
   .prose ul,
   .prose ol {
-    color: #9ca3af !important;
+    color: hsl(var(--article-body)) !important;
     padding-left: 1.5rem;
     margin-bottom: 1rem;
   }
@@ -835,7 +836,7 @@ All colors MUST be HSL.
 
   .prose ul li,
   .prose ol li {
-    color: #9ca3af !important;
+    color: hsl(var(--article-body)) !important;
     margin-bottom: 0.5rem;
   }
 
@@ -874,7 +875,7 @@ All colors MUST be HSL.
   .prose blockquote {
     border-left: 4px solid #9ca3af;
     padding-left: 1rem;
-    color: #9ca3af !important;
+    color: hsl(var(--article-body)) !important;
     font-style: italic;
     margin-bottom: 1rem;
   }
@@ -904,12 +905,22 @@ All colors MUST be HSL.
 
   .prose strong,
   .prose b {
-    color: #e5e7eb !important;
+    color: hsl(var(--article-body)) !important;
   }
 
   .prose em,
   .prose i {
-    color: #9ca3af !important;
+    color: hsl(var(--article-body)) !important;
+  }
+
+  /* Keep nested Ghost text and list markers readable on dark article surfaces. */
+  .prose :is(p, li, blockquote) *,
+  .prose span:not(:is(h1, h2, h3, h4, h5, h6) *) {
+    color: hsl(var(--article-body)) !important;
+  }
+
+  .prose li::marker {
+    color: hsl(var(--article-body)) !important;
   }
 
   /* Global gold headings for all prose content */
