@@ -25,14 +25,13 @@ const HeroSection = () => {
         <span className="text-[#9CA3AF]">Pivot into high-value consulting contracts</span>
       </p>
 
-        {/* Two primary hero cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 md:mt-4 w-full max-w-4xl">
-          {/* Card 1 - Workshop */}
+        {/* Primary hero CTA */}
+        <div className="w-full max-w-2xl flex flex-col items-center gap-3 mt-2 md:mt-4">
           <a
             href={WORKSHOP_REGISTER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hero-card-beam flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-center items-center cursor-pointer transition-colors duration-300"
+            className="hero-card-beam flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-center items-center cursor-pointer transition-colors duration-300 w-full"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
               backdropFilter: "blur(9px) saturate(150%)",
@@ -50,27 +49,15 @@ const HeroSection = () => {
             </span>
           </a>
 
-          {/* Card 2 - Quiz */}
           <Link
             to="/are-you-ready-to-pivot-to-pm-consulting"
-            className="hero-card-beam flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-center items-center cursor-pointer transition-colors duration-300"
-            style={{
-              background: "rgba(15, 15, 15, 0.85)",
-              backdropFilter: "blur(9px) saturate(150%)",
-              WebkitBackdropFilter: "blur(9px) saturate(150%)"
-            }}
+            className="inline-flex items-center gap-1.5 text-sm md:text-base text-white/80 hover:text-[#F4C903] transition-colors group cursor-pointer"
           >
-            <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#F4C903]">
-              Take the PM Consulting Readiness Quiz
-            </span>
-            <span className="text-sm md:text-base text-white/90">
-              3 minutes. See if you qualify — score is instant, no signup.
-            </span>
-            <span className="text-xs md:text-sm text-white/60">
-              Finish the quiz to unlock the 90-day roadmap.
-            </span>
+            <span>Take the PM Consulting Readiness Quiz</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-[#F4C903]" />
           </Link>
         </div>
+
 
         {/* Supporting List */}
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-2 md:gap-y-3 text-sm sm:text-base md:text-lg text-white/80 w-full max-w-4xl mt-2">
