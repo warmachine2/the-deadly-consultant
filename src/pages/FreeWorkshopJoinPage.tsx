@@ -80,13 +80,13 @@ const FreeWorkshopJoinPage = () => {
                 </a>
 
                 <div className="mt-auto border-t border-white/10 pt-4">
-                  <p className="text-white text-sm mb-1">
-                    Meeting ID:{" "}
-                    <span className="font-mono font-bold">{session.meetingId}</span>
+                  <p className="text-white/70 text-xs uppercase tracking-wide mb-1">Meeting ID</p>
+                  <p className="font-mono font-bold text-white text-sm whitespace-nowrap mb-3">
+                    {session.meetingId}
                   </p>
-                  <p className="text-white text-sm">
-                    Passcode:{" "}
-                    <span className="font-mono font-bold">{session.passcode}</span>
+                  <p className="text-white/70 text-xs uppercase tracking-wide mb-1">Passcode</p>
+                  <p className="font-mono font-bold text-white text-sm whitespace-nowrap">
+                    {session.passcode}
                   </p>
                 </div>
               </div>
