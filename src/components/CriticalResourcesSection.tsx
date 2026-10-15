@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Video } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface CriticalVideo {
   title: string;
@@ -21,6 +21,10 @@ const CRITICAL_VIDEOS: CriticalVideo[] = [
     articleHref:
       "/i-train-3-year-pros-into-10k-mo-data-ai-pm-consultants-full-walkthrough",
   },
+  {
+    title: "PM Consulting Secrets - How to make $10k/mo+",
+    embedSrc: "https://www.youtube.com/embed/rJnACxKL0Tk",
+  },
 ];
 
 const CriticalResourcesSection = () => {
@@ -37,8 +41,15 @@ const CriticalResourcesSection = () => {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        {CRITICAL_VIDEOS.map((video) => (
-          <article key={video.embedSrc} className="flex flex-col gap-3">
+        {CRITICAL_VIDEOS.map((video, index) => (
+          <article
+            key={video.embedSrc}
+            className={
+              index === 2
+                ? "flex flex-col gap-3 md:col-span-2 md:max-w-md md:mx-auto md:w-full"
+                : "flex flex-col gap-3"
+            }
+          >
             <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10">
               <iframe
                 className="absolute inset-0 w-full h-full"
@@ -62,22 +73,6 @@ const CriticalResourcesSection = () => {
             )}
           </article>
         ))}
-
-        {/* Video #3 — Coming Soon */}
-        <article className="flex flex-col gap-3 md:col-span-2">
-          <div className="w-full h-44 md:h-48 rounded-xl border border-dashed border-white/25 bg-white/5 flex flex-col items-center justify-center gap-3 text-center px-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4C903]/20 border border-[#F4C903]/40 text-[#F4C903] text-xs font-semibold uppercase tracking-wide">
-              <Video className="w-3.5 h-3.5" />
-              Coming Soon
-            </span>
-            <p className="text-white font-semibold text-sm md:text-base">
-              Video #3 — Coming Soon
-            </p>
-            <p className="text-white/70 text-xs md:text-sm max-w-md">
-              The 20-minute video walkthrough is in production and will appear here.
-            </p>
-          </div>
-        </article>
       </div>
 
       <div className="mt-8 flex justify-center">
