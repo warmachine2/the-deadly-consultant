@@ -253,13 +253,13 @@ const FreeWorkshopPage = () => {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">
+                      <FormLabel className="text-white text-[17px] font-medium mb-1">
                         First Name (required)
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="First Name"
-                          className="bg-input border-border"
+                          className="bg-input border-border text-[17px] md:text-[15px]"
                           {...field}
                         />
                       </FormControl>
@@ -273,14 +273,14 @@ const FreeWorkshopPage = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">
+                      <FormLabel className="text-white text-[17px] font-medium mb-1">
                         Email (required)
                       </FormLabel>
                       <FormControl>
                         <Input
                           type="email"
                           placeholder="you@example.com"
-                          className="bg-input border-border"
+                          className="bg-input border-border text-[17px] md:text-[15px]"
                           {...field}
                         />
                       </FormControl>
@@ -294,13 +294,13 @@ const FreeWorkshopPage = () => {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">
+                      <FormLabel className="text-white text-[17px] font-medium mb-1">
                         Phone/WhatsApp (For joining academy whatsapp group later on)
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="+1 555 123 4567"
-                          className="bg-input border-border"
+                          className="bg-input border-border text-[17px] md:text-[15px]"
                           {...field}
                         />
                       </FormControl>
@@ -314,7 +314,7 @@ const FreeWorkshopPage = () => {
                   name="qualifier"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base font-medium mb-1">
+                      <FormLabel className="text-white text-[17px] font-medium mb-1">
                         Which best describes you?
                       </FormLabel>
                       <FormControl>
@@ -334,7 +334,7 @@ const FreeWorkshopPage = () => {
                                 id={option}
                                 className="mt-0.5 h-5 w-5 border-white/60 text-white data-[state=checked]:border-[#F4C903] data-[state=checked]:text-[#F4C903] data-[state=checked]:bg-[#F4C903]/10 [&>span>svg]:h-3.5 [&>span>svg]:w-3.5 [&>span>svg]:fill-[#F4C903]"
                               />
-                              <span className="text-white text-sm leading-snug">
+                              <span className="text-white text-[15px] leading-snug">
                                 {option}
                               </span>
                             </label>
