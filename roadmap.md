@@ -42,3 +42,10 @@
 - [x] Add src/lib/countryUtils.ts (normalizeCountry, extractChartCountry) and use it for the Country dropdown options, the country filter and the analytics chart buckets.
 - [x] Add tests/countryNormalization.test.ts for US/Canada/other-country variants, chart buckets and the absence of "NY)"/"TX)" fragments (22 tests pass; typecheck clean).
 - [x] Verify live: dropdown lists Canada, USA, Brazil, Colombia, India, Peru, Portugal, Thailand, United Kingdom with no state fragments, and USA/Canada/Peru filters return only matching jobs.
+
+# Job board: Clear Filters date reset (KAN-413)
+
+- [x] Add src/lib/jobFilterState.ts (INITIAL_JOB_FILTERS, clearedJobFilters) so the page load and Clear Filters share one unbounded date default.
+- [x] Clear Filters now sets startDate/endDate to undefined instead of the current month; all other resets unchanged.
+- [x] Add tests/clearFilters.test.ts for the undefined default, the cleared range, and the other resets (27 tests pass; typecheck clean).
+- [x] Verify live: 1162 jobs on load, 123 after a start-date filter, back to 1162 with empty Start/End after Clear Filters.
