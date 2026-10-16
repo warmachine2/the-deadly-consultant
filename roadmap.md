@@ -35,4 +35,4 @@
 
 - [x] Export getSourceDestinationUrl; Insight Global uses the direct posting link with /job/ normalized to /jobs/, falling back to the project search; TEKsystems uses its link, else the careers search.
 - [x] Add tests/sourceDestination.test.ts for the rewrite, fallbacks and Hassan non-clickability (17 tests pass; typecheck and build clean).
-- [ ] Verify live Insight Global and TEKsystems badges point at the expected URLs in preview.
+- [x] Verify live badges in preview: Insight Global resolves to /jobs/<uuid> (200 OK, while /job/ 404s), TEKsystems uses its direct posting, Hassan stays a plain span (17 tests pass; typecheck and build clean).
