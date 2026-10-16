@@ -12,6 +12,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import { normalizeCountry } from '@/lib/countryUtils';
 import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -1463,15 +1464,9 @@ const JobAlertsPage: React.FC = () => {
       
       if (job.location) {
         locationSet.add(job.location);
-        // Try to extract country (assume last part after comma is country)
-        const parts = job.location.split(',').map(p => p.trim());
-        const lastPart = parts[parts.length - 1]?.toUpperCase();
-        if (lastPart === 'CANADA' || lastPart === 'CA' || lastPart === 'CAN') {
-          countrySet.add('Canada');
-        } else if (lastPart === 'USA' || lastPart === 'US' || lastPart === 'UNITED STATES') {
-          countrySet.add('USA');
-        } else if (parts.length > 0) {
-          countrySet.add(parts[parts.length - 1]);
+        const country = normalizeCountry(job.location);
+        if (country) {
+          countrySet.add(country);
         }
       }
     });
@@ -1501,13 +1496,11 @@ const JobAlertsPage: React.FC = () => {
     // Country filter
     if (selectedCountry !== 'all') {
       filtered = filtered.filter(row => {
-        const loc = row.location?.toUpperCase() || '';
-        if (selectedCountry === 'Canada') {
-          return loc.includes('CANADA') || loc.includes(', CA') || loc.endsWith(' CA');
-        } else if (selectedCountry === 'USA') {
-          return loc.includes('USA') || loc.includes('UNITED STATES') || loc.includes(', US') || loc.endsWith(' US');
+        if (selectedCountry === 'Other') {
+          const c = normalizeCountry(row.location);
+          return c !== 'Canada' && c !== 'USA';
         }
-        return loc.includes(selectedCountry.toUpperCase());
+        return normalizeCountry(row.location) === selectedCountry;
       });
     }
 

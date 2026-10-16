@@ -15,6 +15,7 @@ import {
 import { Pie, Bar, Line } from 'react-chartjs-2';
 import { useMediaQuery } from '@mui/material';
 import { format, parse } from 'date-fns';
+import { extractChartCountry } from '@/lib/countryUtils';
 
 ChartJS.register(
   CategoryScale,
@@ -89,16 +90,9 @@ const categorizeRole = (role: string): string => {
 };
 
 // Extract country from location
-const extractCountry = (location: string): string => {
+export const extractCountry = (location: string): string => {
   if (!location) return 'Unknown';
-  const loc = location.toUpperCase();
-  if (loc.includes('CANADA') || loc.includes(', CA') || loc.endsWith(' CA')) {
-    return 'Canada';
-  }
-  if (loc.includes('USA') || loc.includes('UNITED STATES') || loc.includes(', US') || loc.endsWith(' US')) {
-    return 'USA';
-  }
-  return 'Other';
+  return extractChartCountry(location);
 };
 
 const chartColors = {
