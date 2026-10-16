@@ -30,3 +30,9 @@
 - [x] Add "Kforce" to SOURCE_ORDER (17 sources) and to normalizeSourceName; export both for unit testing.
 - [x] Add tests/networkHealth.test.ts for Kforce aliases and the 17-source order (11 tests pass; typecheck and build clean).
 - [x] Verify the live panel shows Kforce between Mondo and Peterson Technology Partners with a real Last ingest date (desktop preview).
+
+# Job board: Insight Global and TEKsystems badge routing
+
+- [x] Export getSourceDestinationUrl; Insight Global uses the direct posting link with /job/ normalized to /jobs/, falling back to the project search; TEKsystems uses its link, else the careers search.
+- [x] Add tests/sourceDestination.test.ts for the rewrite, fallbacks and Hassan non-clickability (17 tests pass; typecheck and build clean).
+- [ ] Verify live Insight Global and TEKsystems badges point at the expected URLs in preview.
