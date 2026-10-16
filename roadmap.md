@@ -24,3 +24,9 @@
 
 - [x] Filter N/A / none / null / undefined out of company-info bullets and hide the banner when nothing valid remains.
 - [x] Verify Nomura (N/A) renders no banner, LanceSoft keeps its bullets, and NTT Data keeps its four fallback bullets (desktop preview; 8 tests pass; build OK).
+
+# Network Health: Kforce source
+
+- [x] Add "Kforce" to SOURCE_ORDER (17 sources) and to normalizeSourceName; export both for unit testing.
+- [x] Add tests/networkHealth.test.ts for Kforce aliases and the 17-source order (11 tests pass; typecheck and build clean).
+- [x] Verify the live panel shows Kforce between Mondo and Peterson Technology Partners with a real Last ingest date (desktop preview).
