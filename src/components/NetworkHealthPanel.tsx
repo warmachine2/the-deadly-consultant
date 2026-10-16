@@ -24,7 +24,7 @@ const WEBHOOK_URL = "https://n8n.srv1182241.hstgr.cloud/webhook/network-health";
 const SHEET_CSV_URL =
   "https://docs.google.com/spreadsheets/d/107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig/export?format=csv&gid=1354178862";
 
-const SOURCE_ORDER = [
+export const SOURCE_ORDER = [
   "Hassan’s Recruiter Network",
   "Proviso",
   "SI Systems",
@@ -39,11 +39,12 @@ const SOURCE_ORDER = [
   "Axelon Services",
   "Soho Square Solutions",
   "Mondo",
+  "Kforce",
   "Peterson Technology Partners",
   "TEKsystems",
 ];
 
-const normalizeSourceName = (name?: string): string => {
+export const normalizeSourceName = (name?: string): string => {
   if (!name) return "";
   const lower = name.toLowerCase().trim();
   if (lower.includes("hassan") || lower.includes("bifintechleads") || lower.includes("recruiter")) {
@@ -63,6 +64,7 @@ const normalizeSourceName = (name?: string): string => {
   if (lower.includes("soho")) return "Soho Square Solutions";
   if (lower.includes("mondo")) return "Mondo";
   if (lower.includes("peterson") || lower.includes("ptp")) return "Peterson Technology Partners";
+  if (lower.includes("kforce")) return "Kforce";
   if (lower.includes("teksystems") || lower.includes("tek systems")) return "TEKsystems";
   return name.trim();
 };
