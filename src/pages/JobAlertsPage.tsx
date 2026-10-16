@@ -365,17 +365,24 @@ const extractCity = (workType: string, location: string = '', comments: string =
 };
 
 // Parse Company Info JSON string to array
-const parseCompanyInfo = (infoStr: string): string[] => {
+export const parseCompanyInfo = (infoStr: string): string[] => {
   if (!infoStr) return [];
+  const isValidBioItem = (item: any): boolean => {
+    if (typeof item !== 'string') return false;
+    const trimmed = item.trim();
+    if (!trimmed) return false;
+    if (/^(n\/?a|none|null|undefined)$/i.test(trimmed)) return false;
+    return true;
+  };
   try {
     // Try parsing as JSON array
     const parsed = JSON.parse(infoStr);
     if (Array.isArray(parsed)) {
-      return parsed.filter(item => typeof item === 'string' && item.trim());
+      return parsed.map(s => (typeof s === 'string' ? s.trim() : '')).filter(isValidBioItem);
     }
   } catch {
     // If not valid JSON, split by newlines or semicolons
-    return infoStr.split(/[;\n]/).map(s => s.trim()).filter(Boolean);
+    return infoStr.split(/[;\n]/).map(s => s.trim()).filter(isValidBioItem);
   }
   return [];
 };
@@ -401,15 +408,17 @@ const parseCSV = (csvText: string): JobData[] => {
         canonicalSource = 'Insight Global Dallas';
       }
       const parsedCompanyInfo = row[16] ? parseCompanyInfo(row[16]) : undefined;
+      const sanitizedCompanyInfo =
+        parsedCompanyInfo && parsedCompanyInfo.length > 0 ? parsedCompanyInfo : undefined;
       const companyInfo =
-        canonicalSource === 'NTT Data' && (!parsedCompanyInfo || parsedCompanyInfo.length <= 1)
+        canonicalSource === 'NTT Data' && (!sanitizedCompanyInfo || sanitizedCompanyInfo.length <= 1)
           ? [
               'NTT DATA Corporation',
               'Global IT services and consulting leader operating in 50+ countries',
               'Premier provider of digital innovation, cloud transformation, and systems integration',
               'Delivering enterprise AI and BI-FinTech solutions worldwide',
             ]
-          : parsedCompanyInfo;
+          : sanitizedCompanyInfo;
       rows.push({
         date: row[0] || '',
         role: row[1] || '',

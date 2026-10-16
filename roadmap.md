@@ -19,3 +19,8 @@
 
 - [x] Save the TEKsystems logo to public/ and register the source (description, aliases, "TEKsystems - Austin" label, badge logo, Network Health order and normalization).
 - [x] Verify in preview: dropdown shows "TEKsystems - Austin", live card badge renders the logo on the white chip; typecheck and build clean.
+
+# Job board: hide "About" banner for placeholder company info
+
+- [x] Filter N/A / none / null / undefined out of company-info bullets and hide the banner when nothing valid remains.
+- [x] Verify Nomura (N/A) renders no banner, LanceSoft keeps its bullets, and NTT Data keeps its four fallback bullets (desktop preview; 8 tests pass; build OK).
