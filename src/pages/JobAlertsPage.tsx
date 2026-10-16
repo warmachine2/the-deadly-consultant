@@ -681,7 +681,7 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 
 // KAN-274: deterministic source destination routing
 // KAN-318: never dump candidates on generic directories, login gates, or unrelated roles
-const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: string): string | null => {
+export const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: string): string | null => {
   if (!source) return null;
   const s = source.trim();
   const lower = s.toLowerCase();
@@ -702,8 +702,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
     return 'https://myprocom-portal.procomservices.com/jobs?loginType=contractor&lang=en';
   }
 
-  // Insight Global: route to jobs search pre-typed with "project"
+  // Insight Global: use direct job link (normalizing /job/ -> /jobs/ so live links return 200 OK), else fallback to search
   if (lower.includes('insight global')) {
+    const jl = jobLink?.trim() ?? '';
+    if (jl.startsWith('http')) {
+      return jl.replace('insightglobal.com/job/', 'insightglobal.com/jobs/');
+    }
     return 'https://insightglobal.com/jobs/search/all/project?page=1&size=10';
   }
 
@@ -801,6 +805,12 @@ const getSourceDestinationUrl = (source?: string, jobLink?: string, roleTitle?: 
   if (lower.includes('kforce')) {
     if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
     return 'https://www.kforce.com/find-work/search-jobs/';
+  }
+
+  // TEKsystems: use job Link if present, else https://careers.teksystems.com/us/en/search-results
+  if (lower.includes('teksystems') || lower.includes('tek systems')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://careers.teksystems.com/us/en/search-results';
   }
 
 
