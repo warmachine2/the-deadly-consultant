@@ -367,15 +367,22 @@ const extractCity = (workType: string, location: string = '', comments: string =
 // Parse Company Info JSON string to array
 const parseCompanyInfo = (infoStr: string): string[] => {
   if (!infoStr) return [];
+  const isValidBioItem = (item: any): boolean => {
+    if (typeof item !== 'string') return false;
+    const trimmed = item.trim();
+    if (!trimmed) return false;
+    if (/^(n\/?a|none|null|undefined)$/i.test(trimmed)) return false;
+    return true;
+  };
   try {
     // Try parsing as JSON array
     const parsed = JSON.parse(infoStr);
     if (Array.isArray(parsed)) {
-      return parsed.filter(item => typeof item === 'string' && item.trim());
+      return parsed.map(s => (typeof s === 'string' ? s.trim() : '')).filter(isValidBioItem);
     }
   } catch {
     // If not valid JSON, split by newlines or semicolons
-    return infoStr.split(/[;\n]/).map(s => s.trim()).filter(Boolean);
+    return infoStr.split(/[;\n]/).map(s => s.trim()).filter(isValidBioItem);
   }
   return [];
 };
