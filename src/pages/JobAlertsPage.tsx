@@ -5,7 +5,8 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info, ArrowUpRight, Linkedin, Mail, Phone } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import NetworkHealthPanel from '@/components/NetworkHealthPanel';
-import { format, startOfMonth, endOfMonth, isWithinInterval, parse } from 'date-fns';
+import { format, isWithinInterval, parse } from 'date-fns';
+import { INITIAL_JOB_FILTERS, clearedJobFilters } from '@/lib/jobFilterState';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
@@ -1340,23 +1341,23 @@ const JobAlertsPage: React.FC = () => {
   const [order, setOrder] = useState<Order>('desc');
 
   // Filter states
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState<string>('all');
-  const [selectedLocation, setSelectedLocation] = useState<string>('all');
-  const [selectedRoleType, setSelectedRoleType] = useState<string>('all');
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState(INITIAL_JOB_FILTERS.searchQuery);
+  const [selectedCountry, setSelectedCountry] = useState<string>(INITIAL_JOB_FILTERS.selectedCountry);
+  const [selectedLocation, setSelectedLocation] = useState<string>(INITIAL_JOB_FILTERS.selectedLocation);
+  const [selectedRoleType, setSelectedRoleType] = useState<string>(INITIAL_JOB_FILTERS.selectedRoleType);
+  const [startDate, setStartDate] = useState<Date | undefined>(INITIAL_JOB_FILTERS.startDate);
+  const [endDate, setEndDate] = useState<Date | undefined>(INITIAL_JOB_FILTERS.endDate);
   const [showFilters, setShowFilters] = useState(true);
   const [showAnalytics, setShowAnalytics] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(INITIAL_JOB_FILTERS.currentPage);
   const [showStrategyModal, setShowStrategyModal] = useState(false);
   
   // New filter states
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
-  const [experienceFilter, setExperienceFilter] = useState<string>('all');
-  const [salaryFilter, setSalaryFilter] = useState<string>('all');
-  const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
-  const [selectedSources, setSelectedSources] = useState<string[]>([]);
+  const [experienceFilter, setExperienceFilter] = useState<string>(INITIAL_JOB_FILTERS.experienceFilter);
+  const [salaryFilter, setSalaryFilter] = useState<string>(INITIAL_JOB_FILTERS.salaryFilter);
+  const [workTypeFilter, setWorkTypeFilter] = useState<string>(INITIAL_JOB_FILTERS.workTypeFilter);
+  const [selectedSources, setSelectedSources] = useState<string[]>([...INITIAL_JOB_FILTERS.selectedSources]);
   const [filtersOpen, setFiltersOpen] = useState(true);
 
 
@@ -1634,17 +1635,18 @@ const JobAlertsPage: React.FC = () => {
   };
   
   const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedRoleType('all');
-    setSelectedCountry('all');
-    setSelectedLocation('all');
-    setStartDate(startOfMonth(new Date()));
-    setEndDate(endOfMonth(new Date()));
-    setExperienceFilter('all');
-    setSalaryFilter('all');
-    setWorkTypeFilter('all');
-    setSelectedSources([]);
-    setCurrentPage(1);
+    const next = clearedJobFilters();
+    setSearchQuery(next.searchQuery);
+    setSelectedRoleType(next.selectedRoleType);
+    setSelectedCountry(next.selectedCountry);
+    setSelectedLocation(next.selectedLocation);
+    setStartDate(next.startDate);
+    setEndDate(next.endDate);
+    setExperienceFilter(next.experienceFilter);
+    setSalaryFilter(next.salaryFilter);
+    setWorkTypeFilter(next.workTypeFilter);
+    setSelectedSources(next.selectedSources);
+    setCurrentPage(next.currentPage);
   };
   return <div className="min-h-screen overflow-x-hidden flex flex-col">
       <TopNav />
