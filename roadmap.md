@@ -36,3 +36,9 @@
 - [x] Export getSourceDestinationUrl; Insight Global uses the direct posting link with /job/ normalized to /jobs/, falling back to the project search; TEKsystems uses its link, else the careers search.
 - [x] Add tests/sourceDestination.test.ts for the rewrite, fallbacks and Hassan non-clickability (17 tests pass; typecheck and build clean).
 - [x] Verify live badges in preview: Insight Global resolves to /jobs/<uuid> (200 OK, while /job/ 404s), TEKsystems uses its direct posting, Hassan stays a plain span (17 tests pass; typecheck and build clean).
+
+# Job board: country normalization
+
+- [x] Add src/lib/countryUtils.ts (normalizeCountry, extractChartCountry) and use it for the Country dropdown options, the country filter and the analytics chart buckets.
+- [x] Add tests/countryNormalization.test.ts for US/Canada/other-country variants, chart buckets and the absence of "NY)"/"TX)" fragments (22 tests pass; typecheck clean).
+- [x] Verify live: dropdown lists Canada, USA, Brazil, Colombia, India, Peru, Portugal, Thailand, United Kingdom with no state fragments, and USA/Canada/Peru filters return only matching jobs.
