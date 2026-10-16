@@ -365,7 +365,7 @@ const extractCity = (workType: string, location: string = '', comments: string =
 };
 
 // Parse Company Info JSON string to array
-const parseCompanyInfo = (infoStr: string): string[] => {
+export const parseCompanyInfo = (infoStr: string): string[] => {
   if (!infoStr) return [];
   const isValidBioItem = (item: any): boolean => {
     if (typeof item !== 'string') return false;
