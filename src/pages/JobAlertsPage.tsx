@@ -401,15 +401,17 @@ const parseCSV = (csvText: string): JobData[] => {
         canonicalSource = 'Insight Global Dallas';
       }
       const parsedCompanyInfo = row[16] ? parseCompanyInfo(row[16]) : undefined;
+      const sanitizedCompanyInfo =
+        parsedCompanyInfo && parsedCompanyInfo.length > 0 ? parsedCompanyInfo : undefined;
       const companyInfo =
-        canonicalSource === 'NTT Data' && (!parsedCompanyInfo || parsedCompanyInfo.length <= 1)
+        canonicalSource === 'NTT Data' && (!sanitizedCompanyInfo || sanitizedCompanyInfo.length <= 1)
           ? [
               'NTT DATA Corporation',
               'Global IT services and consulting leader operating in 50+ countries',
               'Premier provider of digital innovation, cloud transformation, and systems integration',
               'Delivering enterprise AI and BI-FinTech solutions worldwide',
             ]
-          : parsedCompanyInfo;
+          : sanitizedCompanyInfo;
       rows.push({
         date: row[0] || '',
         role: row[1] || '',
