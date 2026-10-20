@@ -218,14 +218,14 @@ const Index = () => {
                         <RoadmapCard />
 
                         {/* Row 2 */}
+                        {whyPmpPost && (
+                          <BlogCard key={whyPmpPost.id} post={whyPmpPost} onClick={() => debouncedHandlePostClick(whyPmpPost)} />
+                        )}
                         {pmbokPost && (
                           <BlogCard key={pmbokPost.id} post={pmbokPost} onClick={() => debouncedHandlePostClick(pmbokPost)} />
                         )}
                         {pinnedPost && (
                           <BlogCard key={pinnedPost.id} post={pinnedPost} onClick={() => debouncedHandlePostClick(pinnedPost)} />
-                        )}
-                        {whyPmpPost && (
-                          <BlogCard key={whyPmpPost.id} post={whyPmpPost} onClick={() => debouncedHandlePostClick(whyPmpPost)} />
                         )}
 
                         {/* Row 3 and beyond */}
