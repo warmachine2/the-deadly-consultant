@@ -49,3 +49,7 @@
 - [x] Clear Filters now sets startDate/endDate to undefined instead of the current month; all other resets unchanged.
 - [x] Add tests/clearFilters.test.ts for the undefined default, the cleared range, and the other resets (27 tests pass; typecheck clean).
 - [x] Verify live: 1162 jobs on load, 123 after a start-date filter, back to 1162 with empty Start/End after Clear Filters.
+
+# Hero: contracts banner above workshop CTA
+
+- [x] Move the "Open PM Consulting Contracts" banner from below the bullet list to directly above the workshop CTA card, aligned to its width (desktop and phone checked in preview).
