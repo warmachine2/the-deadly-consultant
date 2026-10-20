@@ -170,25 +170,37 @@ const Index = () => {
                       (post) => !post.title.toLowerCase().includes('deadly job alerts')
                     );
                     
-                    // Find Video 1 to pin to position #1
-                    const pinnedIndex = postsToShow.findIndex(p => 
-                      p.title.toLowerCase().includes('18k/mo') || 
-                      p.slug.includes('18k-mo')
-                    );
-                    const pinnedPost = pinnedIndex !== -1 ? postsToShow.splice(pinnedIndex, 1)[0] : null;
-
-                    // Find the Full Walkthrough post and pin it to position #1
+                    // Find the Full Walkthrough post (Row 1, Col 1)
                     const walkthroughIndex = postsToShow.findIndex(p =>
                       p.title.toLowerCase().includes('full walkthrough')
                     );
                     const walkthroughPost = walkthroughIndex !== -1 ? postsToShow.splice(walkthroughIndex, 1)[0] : null;
-                    
+
+                    // Find Video 1 to pin to Row 2 (18k/mo Contract Beats 400k/yr Salary)
+                    const pinnedIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('18k/mo') ||
+                      p.slug.includes('18k-mo')
+                    );
+                    const pinnedPost = pinnedIndex !== -1 ? postsToShow.splice(pinnedIndex, 1)[0] : null;
+
+                    // Extract 'The PMBOK Trap' for Row 2
+                    const pmbokIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('pmbok')
+                    );
+                    const pmbokPost = pmbokIndex !== -1 ? postsToShow.splice(pmbokIndex, 1)[0] : null;
+
+                    // Extract 'Why PMP Alone Fails' for Row 2
+                    const whyPmpIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('why pmp alone fails')
+                    );
+                    const whyPmpPost = whyPmpIndex !== -1 ? postsToShow.splice(whyPmpIndex, 1)[0] : null;
+
                     // Find and reposition Hassan Hammer post
-                    const hassanIndex = postsToShow.findIndex(p => 
-                      p.title.toLowerCase().includes('introducing') && 
+                    const hassanIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('introducing') &&
                       p.title.toLowerCase().includes('hassan hammer')
                     );
-                    
+
                     if (hassanIndex !== -1) {
                       const hassanPost = postsToShow.splice(hassanIndex, 1)[0];
                       // Insert second to last (before the last item)
@@ -196,30 +208,27 @@ const Index = () => {
                       postsToShow.splice(insertPosition, 0, hassanPost);
                     }
 
-                    // Ensure 'The PMBOK Trap' comes immediately before 'Why PMP Alone Fails'
-                    const pmbokIndex = postsToShow.findIndex(p =>
-                      p.title.toLowerCase().includes('pmbok')
-                    );
-                    const whyPmpIndex = postsToShow.findIndex(p =>
-                      p.title.toLowerCase().includes('why pmp alone fails')
-                    );
-                    if (pmbokIndex !== -1 && whyPmpIndex !== -1 && pmbokIndex > whyPmpIndex) {
-                      const [pmbokPost] = postsToShow.splice(pmbokIndex, 1);
-                      postsToShow.splice(whyPmpIndex, 0, pmbokPost);
-                    }
-
                     return (
                       <>
-                        {/* Full Walkthrough post pinned to position #1 */}
+                        {/* Row 1 */}
                         {walkthroughPost && (
                           <BlogCard key={walkthroughPost.id} post={walkthroughPost} onClick={() => debouncedHandlePostClick(walkthroughPost)} />
                         )}
-                        {/* Proof tile pinned after it */}
                         <ProofTile />
                         <RoadmapCard />
+
+                        {/* Row 2 */}
+                        {pmbokPost && (
+                          <BlogCard key={pmbokPost.id} post={pmbokPost} onClick={() => debouncedHandlePostClick(pmbokPost)} />
+                        )}
                         {pinnedPost && (
                           <BlogCard key={pinnedPost.id} post={pinnedPost} onClick={() => debouncedHandlePostClick(pinnedPost)} />
                         )}
+                        {whyPmpPost && (
+                          <BlogCard key={whyPmpPost.id} post={whyPmpPost} onClick={() => debouncedHandlePostClick(whyPmpPost)} />
+                        )}
+
+                        {/* Row 3 and beyond */}
                         {postsToShow.map((post) => (
                           <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
                         ))}
