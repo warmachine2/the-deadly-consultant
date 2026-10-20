@@ -195,7 +195,19 @@ const Index = () => {
                       const insertPosition = Math.max(0, postsToShow.length - 1);
                       postsToShow.splice(insertPosition, 0, hassanPost);
                     }
-                    
+
+                    // Ensure 'The PMBOK Trap' comes immediately before 'Why PMP Alone Fails'
+                    const pmbokIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('pmbok')
+                    );
+                    const whyPmpIndex = postsToShow.findIndex(p =>
+                      p.title.toLowerCase().includes('why pmp alone fails')
+                    );
+                    if (pmbokIndex !== -1 && whyPmpIndex !== -1 && pmbokIndex > whyPmpIndex) {
+                      const [pmbokPost] = postsToShow.splice(pmbokIndex, 1);
+                      postsToShow.splice(whyPmpIndex, 0, pmbokPost);
+                    }
+
                     return (
                       <>
                         {/* Full Walkthrough post pinned to position #1 */}
