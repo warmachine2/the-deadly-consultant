@@ -204,10 +204,10 @@ const Index = () => {
                         )}
                         {/* Proof tile pinned after it */}
                         <ProofTile />
+                        <RoadmapCard />
                         {pinnedPost && (
                           <BlogCard key={pinnedPost.id} post={pinnedPost} onClick={() => debouncedHandlePostClick(pinnedPost)} />
                         )}
-                        <RoadmapCard />
                         {postsToShow.map((post) => (
                           <BlogCard key={post.id} post={post} onClick={() => debouncedHandlePostClick(post)} />
                         ))}
