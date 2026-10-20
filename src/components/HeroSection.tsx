@@ -90,19 +90,6 @@ const HeroSection = () => {
           </li>
         </ul>
 
-        {/* Gift strip */}
-        <div className="w-full max-w-4xl mt-2 rounded-xl border border-[#F4C903]/30 bg-black/40 px-4 py-3 md:px-5 md:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div className="min-w-0">
-            <p className="text-sm md:text-base font-semibold text-[#F4C903]">Open PM Consulting Contracts</p>
-            <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
-          </div>
-          <Link
-            to="/ai-bi-fintech-pm-job-alerts-repo"
-            className="flex items-center gap-1 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
-          >
-            Browse open contracts <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
       </div>
     </section>;
 };
