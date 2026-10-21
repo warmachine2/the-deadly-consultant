@@ -53,3 +53,9 @@
 # Hero: contracts banner above workshop CTA
 
 - [x] Move the "Open PM Consulting Contracts" banner from below the bullet list to directly above the workshop CTA card, aligned to its width (desktop and phone checked in preview).
+
+# Job board: TES – The Employment Solution (KAN-239)
+
+- [x] Add public/tes-logo.svg (purple #493083 wordmark, viewBox 0 0 160 40) and register TES in sourceDescriptions, sourceNameMap (TES / The Employment Solution / full name), sourceDisplayNames and the SourceBadge logo slot.
+- [x] Add TES to NetworkHealthPanel SOURCE_ORDER (after TEKsystems, 18 sources) and normalizeSourceName, with tests for the aliases and for the loose "tes" match not stealing other agencies (29 tests pass; typecheck clean).
+- [x] Verify live: Sources search lists the option, the filtered board shows TES jobs with the logo badge, and the Sources panel lists TES with its last ingest date.

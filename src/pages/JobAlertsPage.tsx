@@ -36,6 +36,7 @@ const mondoLogoUrl = '/mondo-logo.svg';
 const ptpLogoUrl = '/ptp-logo.png';
 const kforceLogoUrl = '/kforce-logo.png';
 const teksystemsLogoUrl = '/teksystems-logo.png';
+const tesLogoUrl = '/tes-logo.svg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -163,6 +164,7 @@ const sourceDescriptions: Record<string, string> = {
   "Peterson Technology Partners (PTP)": "Premier Chicago-based IT & Tech Staffing firm founded in 1997, specializing in PM, Agile, and technology consulting placements.",
   "Kforce": "Leading technology and professional staffing solutions firm, connecting premier Project Management and technology talent nationwide.",
   "TEKsystems": "Industry leader in IT staffing, talent solutions, and technology services, delivering digital transformation, cloud, and agile project delivery across North America.",
+  "TES – The Employment Solution": "Premier Canadian IT & engineering staffing and recruitment firm founded in 1975, delivering enterprise Project Management, Technology, and Digital Transformation consulting talent across Canada.",
 };
 
 // Map observed data-source spellings to the canonical source names above
@@ -204,6 +206,9 @@ const sourceNameMap: Record<string, string> = {
   "TEKsystems": "TEKsystems",
   "teksystems": "TEKsystems",
   "TEKsystems Austin": "TEKsystems",
+  "TES": "TES – The Employment Solution",
+  "The Employment Solution": "TES – The Employment Solution",
+  "TES – The Employment Solution": "TES – The Employment Solution",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -237,6 +242,7 @@ const sourceDisplayNames: Record<string, string> = {
   "PTP": "Peterson Technology Partners (PTP) - Chicago",
   "Insight Global Dallas": "Insight Global - Dallas",
   "TEKsystems": "TEKsystems - Austin",
+  "TES – The Employment Solution": "TES – The Employment Solution",
 };
 
 
@@ -853,10 +859,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
   const isPtp = canonicalSource === "Peterson Technology Partners" || canonicalSource.toLowerCase().includes("peterson") || canonicalSource.toLowerCase() === "ptp";
   const isKforce = canonicalSource === "Kforce" || canonicalSource.toLowerCase().includes("kforce");
   const isTeksystems = canonicalSource === "TEKsystems" || canonicalSource.toLowerCase().includes("teksystems");
+  const isTes = canonicalSource === "TES – The Employment Solution" || canonicalSource.toLowerCase().includes("tes") || canonicalSource.toLowerCase().includes("employment solution");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp || isKforce || isTeksystems) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp || isKforce || isTeksystems || isTes) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -905,6 +912,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
           )}
           {isTeksystems && (
             <img src={teksystemsLogoUrl} alt="TEKsystems" className="h-6 w-auto object-contain" />
+          )}
+          {isTes && (
+            <img src={tesLogoUrl} alt="TES – The Employment Solution" className="h-6 w-auto object-contain" />
           )}
         </span>
       )}

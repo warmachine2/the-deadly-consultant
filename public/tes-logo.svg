@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" role="img" aria-label="TES – The Employment Solution" text-rendering="geometricPrecision">
+  <title>TES – The Employment Solution</title>
+  <g fill="#493083" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" stroke="#ffffff" stroke-linejoin="round" paint-order="stroke">
+    <rect x="6" y="7" width="4" height="26" rx="2" stroke-width="0" />
+    <text x="16" y="21" font-size="26" font-weight="700" letter-spacing="2" stroke-width="1.1">TES</text>
+    <text x="16" y="34" font-size="9.5" font-weight="500" letter-spacing="0.5" stroke-width="0.8">The Employment Solution</text>
+  </g>
+</svg>
