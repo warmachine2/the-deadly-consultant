@@ -42,6 +42,7 @@ export const SOURCE_ORDER = [
   "Kforce",
   "Peterson Technology Partners",
   "TEKsystems",
+  "TES – The Employment Solution",
 ];
 
 export const normalizeSourceName = (name?: string): string => {
@@ -66,6 +67,7 @@ export const normalizeSourceName = (name?: string): string => {
   if (lower.includes("peterson") || lower.includes("ptp")) return "Peterson Technology Partners";
   if (lower.includes("kforce")) return "Kforce";
   if (lower.includes("teksystems") || lower.includes("tek systems")) return "TEKsystems";
+  if (lower.includes("tes") || lower.includes("employment solution")) return "TES – The Employment Solution";
   return name.trim();
 };
 

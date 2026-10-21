@@ -1,7 +1,9 @@
 import { test, expect } from "bun:test";
 import { normalizeSourceName, SOURCE_ORDER } from "../src/components/NetworkHealthPanel";
 
-// KAN: Kforce must be a recognized Network Health source (backend webhook sends 17 sources).
+const TES = "TES – The Employment Solution";
+
+// KAN: Kforce must be a recognized Network Health source.
 test("normalizeSourceName maps Kforce variants to the canonical name", () => {
   expect(normalizeSourceName("Kforce")).toBe("Kforce");
   expect(normalizeSourceName("kforce")).toBe("Kforce");
@@ -17,8 +19,27 @@ test("normalizeSourceName still maps other sources", () => {
   expect(normalizeSourceName("")).toBe("");
 });
 
-test("SOURCE_ORDER contains all 17 sources including Kforce", () => {
-  expect(SOURCE_ORDER).toHaveLength(17);
+// KAN-239: TES – The Employment Solution (Canadian agency) is a monitored source.
+test("normalizeSourceName maps TES variants to the canonical name", () => {
+  expect(normalizeSourceName("TES")).toBe(TES);
+  expect(normalizeSourceName("tes")).toBe(TES);
+  expect(normalizeSourceName("The Employment Solution")).toBe(TES);
+  expect(normalizeSourceName(TES)).toBe(TES);
+  expect(normalizeSourceName(`  ${TES}  `)).toBe(TES);
+});
+
+// The loose "tes" match must never capture another agency's rows.
+test("the TES match does not steal other agencies", () => {
+  expect(normalizeSourceName("TEKsystems")).toBe("TEKsystems");
+  expect(normalizeSourceName("SI Systems")).toBe("SI Systems");
+  expect(normalizeSourceName("Tundra Technical Solutions")).toBe("Tundra Technical Solutions");
+  expect(normalizeSourceName("GTT (Global Technical Talent)")).toBe("GTT (Global Technical Talent)");
+});
+
+test("SOURCE_ORDER contains all 18 sources including TES", () => {
+  expect(SOURCE_ORDER).toHaveLength(18);
   expect(SOURCE_ORDER).toContain("Kforce");
-  expect(new Set(SOURCE_ORDER).size).toBe(17);
+  expect(SOURCE_ORDER).toContain(TES);
+  expect(new Set(SOURCE_ORDER).size).toBe(18);
+  expect(SOURCE_ORDER.indexOf(TES)).toBe(SOURCE_ORDER.indexOf("TEKsystems") + 1);
 });
