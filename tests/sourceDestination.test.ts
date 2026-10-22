@@ -38,6 +38,19 @@ test("TEKsystems without a job link falls back to the careers search", () => {
   expect(getSourceDestinationUrl("TEK Systems")).toBe(TEK_CAREERS);
 });
 
+// Motion Recruitment: prefer the posting link, otherwise the public tech-jobs page.
+test("Motion Recruitment uses the direct job link when present", () => {
+  const direct = "https://motionrecruitment.com/tech-jobs/columbus/contract/technical-project-manager-contract-hybrid-columbus/892687";
+  expect(getSourceDestinationUrl("Motion Recruitment", direct)).toBe(direct);
+  expect(getSourceDestinationUrl("Motion", direct)).toBe(direct);
+});
+
+test("Motion Recruitment without a job link falls back to tech-jobs", () => {
+  expect(getSourceDestinationUrl("Motion Recruitment", "")).toBe("https://motionrecruitment.com/tech-jobs");
+  expect(getSourceDestinationUrl("Motion Recruitment")).toBe("https://motionrecruitment.com/tech-jobs");
+  expect(getSourceDestinationUrl("Motion Recruitment", "   ")).toBe("https://motionrecruitment.com/tech-jobs");
+});
+
 // Hassan's Recruiter Network listings are attribution-only, never clickable.
 test("Hassan's recruiter Network is never clickable", () => {
   expect(getSourceDestinationUrl("Hassan's recruiter Network", "https://example.com/job/1")).toBeNull();

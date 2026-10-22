@@ -36,10 +36,29 @@ test("the TES match does not steal other agencies", () => {
   expect(normalizeSourceName("GTT (Global Technical Talent)")).toBe("GTT (Global Technical Talent)");
 });
 
-test("SOURCE_ORDER contains all 18 sources including TES", () => {
-  expect(SOURCE_ORDER).toHaveLength(18);
+// Motion Recruitment is the 19th monitored source.
+test("normalizeSourceName maps Motion variants to the canonical name", () => {
+  expect(normalizeSourceName("Motion Recruitment")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("motion recruitment")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("MOTION RECRUITMENT")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("Motion")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("  Motion Recruitment  ")).toBe("Motion Recruitment");
+});
+
+// The loose "motion" match must never capture another agency's rows.
+test("the Motion match does not steal other agencies", () => {
+  expect(normalizeSourceName("TES – The Employment Solution")).toBe(TES);
+  expect(normalizeSourceName("Peterson Technology Partners")).toBe("Peterson Technology Partners");
+  expect(normalizeSourceName("Soho Square Solutions")).toBe("Soho Square Solutions");
+});
+
+
+test("SOURCE_ORDER contains all 19 sources including TES and Motion Recruitment", () => {
+  expect(SOURCE_ORDER).toHaveLength(19);
   expect(SOURCE_ORDER).toContain("Kforce");
   expect(SOURCE_ORDER).toContain(TES);
-  expect(new Set(SOURCE_ORDER).size).toBe(18);
+  expect(SOURCE_ORDER).toContain("Motion Recruitment");
+  expect(new Set(SOURCE_ORDER).size).toBe(19);
   expect(SOURCE_ORDER.indexOf(TES)).toBe(SOURCE_ORDER.indexOf("TEKsystems") + 1);
+  expect(SOURCE_ORDER.indexOf("Motion Recruitment")).toBe(SOURCE_ORDER.indexOf(TES) + 1);
 });

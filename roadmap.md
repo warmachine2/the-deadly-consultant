@@ -59,3 +59,9 @@
 - [x] Add public/tes-logo.svg (purple #493083 wordmark, viewBox 0 0 160 40) and register TES in sourceDescriptions, sourceNameMap (TES / The Employment Solution / full name), sourceDisplayNames and the SourceBadge logo slot.
 - [x] Add TES to NetworkHealthPanel SOURCE_ORDER (after TEKsystems, 18 sources) and normalizeSourceName, with tests for the aliases and for the loose "tes" match not stealing other agencies (29 tests pass; typecheck clean).
 - [x] Verify live: Sources search lists the option, the filtered board shows TES jobs with the logo badge, and the Sources panel lists TES with its last ingest date.
+
+# Job board: Motion Recruitment (19th source)
+
+- [x] Add public/motion-recruitment-logo.svg (navy #0C2340 "MOTION" wordmark with orange #FF5500 accent dot) and register the source in sourceDescriptions, sourceNameMap (Motion Recruitment / Motion / lowercase), sourceDisplayNames ("Motion Recruitment - San Francisco") and the SourceBadge logo slot.
+- [x] Add Motion Recruitment to NetworkHealthPanel SOURCE_ORDER (after TES, 19 sources) and normalizeSourceName, with tests for the aliases, the loose "motion" match not stealing other agencies, and badge routing (direct link else motionrecruitment.com/tech-jobs).
+- [x] Verify live: Sources search lists the option, the filtered board shows the Motion job with its logo badge, and the Sources panel lists Motion Recruitment 19th with last ingest 2026-10-22 (33 tests pass; typecheck and build clean).
