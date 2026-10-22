@@ -432,7 +432,16 @@ const parseCSV = (csvText: string): JobData[] => {
               'Premier provider of digital innovation, cloud transformation, and systems integration',
               'Delivering enterprise AI and BI-FinTech solutions worldwide',
             ]
-          : sanitizedCompanyInfo;
+          : canonicalSource === 'Motion Recruitment' &&
+              (!sanitizedCompanyInfo || sanitizedCompanyInfo.length <= 1)
+            ? [
+                'Motion Recruitment Partners',
+                'Leading North American IT staffing and consulting firm specializing in contract Project Management, Agile, and tech leadership',
+                'Deep recruitment expertise across the San Francisco Bay Area and 16+ nationwide tech hubs',
+                'Delivering enterprise IT solutions, digital transformation, and specialized consulting talent',
+              ]
+            : sanitizedCompanyInfo;
+
       rows.push({
         date: row[0] || '',
         role: row[1] || '',
