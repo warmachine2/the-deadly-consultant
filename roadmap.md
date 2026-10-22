@@ -71,3 +71,10 @@
 - [x] Save the official TES mark (purple/teal interlocking ribbon on white) as `public/tes-logo.jpg` and point `tesLogoUrl` at it; the superseded `public/tes-logo.svg` is removed.
 - [x] Render the TES badge at `h-6 w-auto object-contain rounded-[4px]` (explicit radius because `rounded-sm` resolves to 16px in this theme and turns a 24px square into a circle).
 - [x] Verify live: Sources search lists "TES – The Employment Solution", the filtered job shows the logo badge on desktop and phone, `/tes-logo.jpg` serves HTTP 200 (33 tests pass; build clean).
+
+# Job board: Motion Recruitment company overview fallback
+
+- [x] Add four fixed Motion Recruitment overview bullets when the sheet gives no company info or only one bullet (same pattern as NTT Data); two or more real bullets still win.
+- [x] Export parseCSV and add tests/companyInfo.test.ts cases for the empty/single-bullet fallback, the two-bullet pass-through, the unchanged NTT Data bullets, and no invented bullets for other sources (38 tests pass; typecheck and build clean).
+- [x] Verify live: the "About Motion Recruitment Client" banner renders all four bullets on desktop with no clipping.
+
