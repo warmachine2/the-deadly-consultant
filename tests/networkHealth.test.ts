@@ -36,10 +36,12 @@ test("the TES match does not steal other agencies", () => {
   expect(normalizeSourceName("GTT (Global Technical Talent)")).toBe("GTT (Global Technical Talent)");
 });
 
-test("SOURCE_ORDER contains all 18 sources including TES", () => {
-  expect(SOURCE_ORDER).toHaveLength(18);
+test("SOURCE_ORDER contains all 19 sources including TES and Motion Recruitment", () => {
+  expect(SOURCE_ORDER).toHaveLength(19);
   expect(SOURCE_ORDER).toContain("Kforce");
   expect(SOURCE_ORDER).toContain(TES);
-  expect(new Set(SOURCE_ORDER).size).toBe(18);
+  expect(SOURCE_ORDER).toContain("Motion Recruitment");
+  expect(new Set(SOURCE_ORDER).size).toBe(19);
   expect(SOURCE_ORDER.indexOf(TES)).toBe(SOURCE_ORDER.indexOf("TEKsystems") + 1);
+  expect(SOURCE_ORDER.indexOf("Motion Recruitment")).toBe(SOURCE_ORDER.indexOf(TES) + 1);
 });
