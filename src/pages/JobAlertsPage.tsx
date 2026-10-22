@@ -930,7 +930,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
             <img src={tesLogoUrl} alt="TES – The Employment Solution" className="h-6 w-auto object-contain" />
           )}
           {isMotion && (
-            <img src={motionLogoUrl} alt="Motion Recruitment" className="h-6 w-auto object-contain rounded-sm" />
+            <img src={motionLogoUrl} alt="Motion Recruitment" className="h-6 w-auto object-contain rounded-[4px]" />
           )}
         </span>
       )}
