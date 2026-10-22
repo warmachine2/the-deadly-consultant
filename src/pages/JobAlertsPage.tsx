@@ -401,7 +401,7 @@ export const parseCompanyInfo = (infoStr: string): string[] => {
   return [];
 };
 
-const parseCSV = (csvText: string): JobData[] => {
+export const parseCSV = (csvText: string): JobData[] => {
   // Handle multi-line quoted fields properly
   const rows: JobData[] = [];
   const chars = csvText.split('');
