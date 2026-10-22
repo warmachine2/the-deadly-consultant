@@ -36,7 +36,7 @@ const mondoLogoUrl = '/mondo-logo.svg';
 const ptpLogoUrl = '/ptp-logo.png';
 const kforceLogoUrl = '/kforce-logo.png';
 const teksystemsLogoUrl = '/teksystems-logo.png';
-const tesLogoUrl = '/tes-logo.svg';
+const tesLogoUrl = '/tes-logo.jpg';
 const motionLogoUrl = '/motion-recruitment-logo.jpg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
@@ -927,7 +927,7 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
             <img src={teksystemsLogoUrl} alt="TEKsystems" className="h-6 w-auto object-contain" />
           )}
           {isTes && (
-            <img src={tesLogoUrl} alt="TES – The Employment Solution" className="h-6 w-auto object-contain" />
+            <img src={tesLogoUrl} alt="TES – The Employment Solution" className="h-6 w-auto object-contain rounded-[4px]" />
           )}
           {isMotion && (
             <img src={motionLogoUrl} alt="Motion Recruitment" className="h-6 w-auto object-contain rounded-[4px]" />
