@@ -37,6 +37,7 @@ const ptpLogoUrl = '/ptp-logo.png';
 const kforceLogoUrl = '/kforce-logo.png';
 const teksystemsLogoUrl = '/teksystems-logo.png';
 const tesLogoUrl = '/tes-logo.svg';
+const motionLogoUrl = '/motion-recruitment-logo.svg';
 const ITEMS_PER_PAGE = 20;
 interface JobData {
   date: string;
@@ -165,6 +166,7 @@ const sourceDescriptions: Record<string, string> = {
   "Kforce": "Leading technology and professional staffing solutions firm, connecting premier Project Management and technology talent nationwide.",
   "TEKsystems": "Industry leader in IT staffing, talent solutions, and technology services, delivering digital transformation, cloud, and agile project delivery across North America.",
   "TES – The Employment Solution": "Premier Canadian IT & engineering staffing and recruitment firm founded in 1975, delivering enterprise Project Management, Technology, and Digital Transformation consulting talent across Canada.",
+  "Motion Recruitment": "Leading North American tech staffing and consulting firm specializing in contract Project Management, Agile, Product, and IT leadership roles with deep expertise in the San Francisco Bay Area and nationwide tech hubs.",
 };
 
 // Map observed data-source spellings to the canonical source names above
@@ -209,6 +211,9 @@ const sourceNameMap: Record<string, string> = {
   "TES": "TES – The Employment Solution",
   "The Employment Solution": "TES – The Employment Solution",
   "TES – The Employment Solution": "TES – The Employment Solution",
+  "Motion Recruitment": "Motion Recruitment",
+  "Motion": "Motion Recruitment",
+  "motion recruitment": "Motion Recruitment",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -243,6 +248,7 @@ const sourceDisplayNames: Record<string, string> = {
   "Insight Global Dallas": "Insight Global - Dallas",
   "TEKsystems": "TEKsystems - Austin",
   "TES – The Employment Solution": "TES – The Employment Solution",
+  "Motion Recruitment": "Motion Recruitment - San Francisco",
 };
 
 
@@ -821,6 +827,12 @@ export const getSourceDestinationUrl = (source?: string, jobLink?: string, roleT
     return 'https://careers.teksystems.com/us/en/search-results';
   }
 
+  // Motion Recruitment: use job Link if present, else https://motionrecruitment.com/tech-jobs
+  if (lower.includes('motion')) {
+    if (jobLink && jobLink.trim().startsWith('http')) return jobLink.trim();
+    return 'https://motionrecruitment.com/tech-jobs';
+  }
+
 
 
 
@@ -860,10 +872,11 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
   const isKforce = canonicalSource === "Kforce" || canonicalSource.toLowerCase().includes("kforce");
   const isTeksystems = canonicalSource === "TEKsystems" || canonicalSource.toLowerCase().includes("teksystems");
   const isTes = canonicalSource === "TES – The Employment Solution" || canonicalSource.toLowerCase().includes("tes") || canonicalSource.toLowerCase().includes("employment solution");
+  const isMotion = canonicalSource === "Motion Recruitment" || canonicalSource.toLowerCase().includes("motion");
 
   const content = (
     <>
-      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp || isKforce || isTeksystems || isTes) && (
+      {(isSiSystems || isProviso || isInsightGlobal || isProcom || isAgilus || isTundra || isGtt || isNerdyHire || isNttData || isHrBrain || isAxelon || isSohoSquare || isMondo || isPtp || isKforce || isTeksystems || isTes || isMotion) && (
         <span className="h-8 w-auto flex items-center justify-center rounded overflow-hidden bg-white px-1">
           {isSiSystems && (
             <img src={siSystemsLogoUrl} alt="SI Systems" className="h-7 w-auto object-contain" />
@@ -915,6 +928,9 @@ const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: str
           )}
           {isTes && (
             <img src={tesLogoUrl} alt="TES – The Employment Solution" className="h-6 w-auto object-contain" />
+          )}
+          {isMotion && (
+            <img src={motionLogoUrl} alt="Motion Recruitment" className="h-6 w-auto object-contain" />
           )}
         </span>
       )}
