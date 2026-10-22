@@ -62,6 +62,6 @@
 
 # Job board: Motion Recruitment (19th source)
 
-- [x] Add public/motion-recruitment-logo.svg (navy #0C2340 "MOTION" wordmark with orange #FF5500 accent dot) and register the source in sourceDescriptions, sourceNameMap (Motion Recruitment / Motion / lowercase), sourceDisplayNames ("Motion Recruitment - San Francisco") and the SourceBadge logo slot.
+- [x] Register Motion Recruitment in sourceDescriptions, sourceNameMap (Motion Recruitment / Motion / lowercase), sourceDisplayNames ("Motion Recruitment - San Francisco") and the SourceBadge logo slot, using the official `public/motion-recruitment-logo.jpg` (dark slate tile, white slanted M) rendered at `h-6 rounded-[4px]`.
 - [x] Add Motion Recruitment to NetworkHealthPanel SOURCE_ORDER (after TES, 19 sources) and normalizeSourceName, with tests for the aliases, the loose "motion" match not stealing other agencies, and badge routing (direct link else motionrecruitment.com/tech-jobs).
 - [x] Verify live: Sources search lists the option, the filtered board shows the Motion job with its logo badge, and the Sources panel lists Motion Recruitment 19th with last ingest 2026-10-22 (33 tests pass; typecheck and build clean).
