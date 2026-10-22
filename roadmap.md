@@ -65,3 +65,9 @@
 - [x] Register Motion Recruitment in sourceDescriptions, sourceNameMap (Motion Recruitment / Motion / lowercase), sourceDisplayNames ("Motion Recruitment - San Francisco") and the SourceBadge logo slot, using the official `public/motion-recruitment-logo.jpg` (dark slate tile, white slanted M) rendered at `h-6 rounded-[4px]`.
 - [x] Add Motion Recruitment to NetworkHealthPanel SOURCE_ORDER (after TES, 19 sources) and normalizeSourceName, with tests for the aliases, the loose "motion" match not stealing other agencies, and badge routing (direct link else motionrecruitment.com/tech-jobs).
 - [x] Verify live: Sources search lists the option, the filtered board shows the Motion job with its logo badge, and the Sources panel lists Motion Recruitment 19th with last ingest 2026-10-22 (33 tests pass; typecheck and build clean).
+
+# Job board: TES logo swap to the official image
+
+- [x] Save the official TES mark (purple/teal interlocking ribbon on white) as `public/tes-logo.jpg` and point `tesLogoUrl` at it; the superseded `public/tes-logo.svg` is removed.
+- [x] Render the TES badge at `h-6 w-auto object-contain rounded-[4px]` (explicit radius because `rounded-sm` resolves to 16px in this theme and turns a 24px square into a circle).
+- [x] Verify live: Sources search lists "TES – The Employment Solution", the filtered job shows the logo badge on desktop and phone, `/tes-logo.jpg` serves HTTP 200 (33 tests pass; build clean).
