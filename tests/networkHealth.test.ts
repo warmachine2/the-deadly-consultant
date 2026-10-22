@@ -36,6 +36,23 @@ test("the TES match does not steal other agencies", () => {
   expect(normalizeSourceName("GTT (Global Technical Talent)")).toBe("GTT (Global Technical Talent)");
 });
 
+// Motion Recruitment is the 19th monitored source.
+test("normalizeSourceName maps Motion variants to the canonical name", () => {
+  expect(normalizeSourceName("Motion Recruitment")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("motion recruitment")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("MOTION RECRUITMENT")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("Motion")).toBe("Motion Recruitment");
+  expect(normalizeSourceName("  Motion Recruitment  ")).toBe("Motion Recruitment");
+});
+
+// The loose "motion" match must never capture another agency's rows.
+test("the Motion match does not steal other agencies", () => {
+  expect(normalizeSourceName("TES – The Employment Solution")).toBe(TES);
+  expect(normalizeSourceName("Peterson Technology Partners")).toBe("Peterson Technology Partners");
+  expect(normalizeSourceName("Soho Square Solutions")).toBe("Soho Square Solutions");
+});
+
+
 test("SOURCE_ORDER contains all 19 sources including TES and Motion Recruitment", () => {
   expect(SOURCE_ORDER).toHaveLength(19);
   expect(SOURCE_ORDER).toContain("Kforce");
