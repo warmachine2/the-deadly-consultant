@@ -1527,6 +1527,27 @@ const JobAlertsPage: React.FC = () => {
       uniqueSources: Array.from(new Set([...Object.keys(sourceDescriptions), ...Array.from(sourceSet)])).sort()
     };
   }, [data]);
+
+  // Cities available for the selected country (cascading City dropdown)
+  const availableCities = useMemo(() => {
+    const list = selectedCountry === 'all'
+      ? cities
+      : Array.from(citiesByCountry.entries())
+          .filter(([, countrySet]) => selectedCountry === 'Other'
+            ? Array.from(countrySet).some(c => c !== 'Canada' && c !== 'USA')
+            : countrySet.has(selectedCountry))
+          .map(([city]) => city)
+          .sort();
+    return list.filter(city => city !== 'Canada');
+  }, [cities, citiesByCountry, selectedCountry]);
+
+  // Reset city selection when it doesn't exist in the selected country's city list
+  useEffect(() => {
+    if (selectedLocation !== 'all' && !availableCities.includes(selectedLocation)) {
+      setSelectedLocation('all');
+    }
+  }, [selectedCountry, selectedLocation, availableCities]);
+
   const filteredAndSortedData = useMemo(() => {
     let filtered = [...data];
 
@@ -2066,7 +2087,7 @@ const JobAlertsPage: React.FC = () => {
                         className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Cities</option>
-                        {cities.filter(city => city !== 'Canada').map(city => (
+                        {availableCities.map(city => (
                           <option key={city} value={city} className="bg-gray-900 text-white">{city}</option>
                         ))}
                       </select>
