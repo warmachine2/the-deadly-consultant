@@ -81,13 +81,52 @@ const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?forma
 
 // --- KAN-311: stale-while-revalidate cache ---
 const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v4';
+/**
+ * Cache-safe text coercion. localStorage can hold records written by an older
+ * build or hand-edited JSON, where a field is null, a number or a boolean
+ * instead of a string — any of which throws the moment a card calls
+ * .trim()/.toLowerCase() on it and blanks the whole board.
+ */
+export const asText = (value: unknown): string =>
+  typeof value === 'string' ? value
+    : typeof value === 'number' && Number.isFinite(value) ? String(value)
+    : '';
+
+const JOB_TEXT_FIELDS = [
+  'date', 'role', 'term', 'duties', 'requiredExperience', 'requiredSkills',
+  'additionalRequirements', 'comments', 'workType', 'company', 'recruiterEmail',
+  'recruiterPhone', 'recruiterName', 'recruiterLinkedIn', 'strategy',
+  'earningEstimate', 'location', 'source', 'jobId', 'jobLink',
+] as const;
+
+/** One cached record => a renderable JobData, or null when it is unusable. */
+export const sanitizeCachedJob = (value: unknown): JobData | null => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const raw = value as Record<string, unknown>;
+  const job = {} as Record<(typeof JOB_TEXT_FIELDS)[number], string>;
+  JOB_TEXT_FIELDS.forEach(field => { job[field] = asText(raw[field]); });
+  // A row without a role has nothing to render or categorise.
+  if (!job.role) return null;
+  const bullets = Array.isArray(raw.companyInfo)
+    ? raw.companyInfo.filter((item): item is string => typeof item === 'string' && item.trim() !== '')
+    : [];
+  return { ...job, companyInfo: bullets.length > 0 ? bullets : undefined };
+};
+
+/** Drop corrupt records and coerce the rest into safe JobData rows. */
+export const sanitizeCachedJobs = (values: unknown): JobData[] =>
+  Array.isArray(values)
+    ? values.map(sanitizeCachedJob).filter((job): job is JobData => job !== null)
+    : [];
+
 const readJobCache = (): JobData[] | null => {
   try {
     const raw = localStorage.getItem(JOB_CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     const jobs = Array.isArray(parsed) ? parsed : parsed?.jobs;
-    return Array.isArray(jobs) && jobs.length > 0 ? (jobs as JobData[]) : null;
+    const clean = sanitizeCachedJobs(jobs);
+    return clean.length > 0 ? clean : null;
   } catch {
     return null;
   }
