@@ -100,3 +100,9 @@
 - [x] Give the country bars a minimum visual height (minBarLength 14) and color "Other" muted violet (#8B5CF6) so a 13-job bar is visible, hoverable and clickable beside 1,000-job bars.
 - [x] Replace the static "5 Role Types" card with a dynamic "Active Sources" count (src/lib/jobSources.ts + tests/jobSources.test.ts).
 - [x] Verify live: clicking the violet bar filters the table 1561 -> 13 jobs (Portugal, India, Thailand, Peru), card 4 reads "20 Active Sources" (63 tests pass; build OK).
+
+# Job board: card state leak + pagination overflow (audit fixes)
+
+- [x] Key job cards and table rows with a stable identifier (`getJobRowKey` in JobAlertsPage.tsx: Job ID, then job link, then row position) so an expanded card or open video drawer no longer follows a card onto the next page; the row position is appended because the live feed repeats Job IDs across scraped rows.
+- [x] Clamp `currentPage` back to 1 when the feed shrinks below it, and reset to page 1 when Refresh is clicked.
+- [x] Verify live: card 1 collapsed on page 1 stays expanded on page 2; Refresh to a 5-job feed lands on page 1 with rows; table and mobile paging render with no duplicate-key warnings (69 tests pass; typecheck and build clean).
