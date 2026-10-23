@@ -275,7 +275,7 @@ const sourceAliasLookup: Record<string, string> = Object.fromEntries(
 );
 
 const normalizeSourceName = (raw: string): string => {
-  const trimmed = raw.trim();
+  const trimmed = asText(raw).trim();
   if (!trimmed) return '';
   const mapped = sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
   const lower = mapped.toLowerCase();
@@ -309,7 +309,7 @@ const getSourceDisplayName = (source: string): string => sourceDisplayNames[sour
 
 // Normalize raw work-type strings to clean badges: Remote / Hybrid / On-site (or null = no chip)
 const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | null => {
-  const lower = (workType || '').toLowerCase().trim();
+  const lower = asText(workType).toLowerCase().trim();
   if (!lower) return null;
   if (lower === 'true' || lower.includes('remote')) return 'Remote';
   if (lower.includes('hybrid')) return 'Hybrid';
@@ -324,8 +324,8 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 // - Currency (CAD/USD) is preserved from the string or inferred from the location
 //   (Canadian cities => CAD, otherwise USD).
 const formatEarningsMonthly = (raw: string, location: string = ''): string => {
-  if (!raw || !raw.trim()) return '';
-  const str = raw.trim();
+  const str = asText(raw).trim();
+  if (!str) return '';
   const isHourly = /\/\s*(hr|hrs|hour|hours|h)\b/i.test(str);
   const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
   const hasEst = /\*\s*Est\.?/i.test(str);
@@ -389,7 +389,7 @@ const getMonthlyAmount = (raw: string, location: string = ''): number => {
 
 // Map known cities to filter labels from the work-type/location description string
 const extractCity = (workType: string, location: string = '', comments: string = ''): string => {
-  const combined = `${workType || ''} ${location || ''} ${comments || ''}`.trim();
+  const combined = `${asText(workType)} ${asText(location)} ${asText(comments)}`.trim();
   if (!combined) return 'Unknown';
   const lower = combined.toLowerCase();
 
@@ -434,13 +434,13 @@ const extractCity = (workType: string, location: string = '', comments: string =
 // Parse the minimum years of experience from a job's experience text (and role as fallback):
 // ranges ("5-7 years" -> 5), simple ("5+ years" -> 5, "3 years" -> 3), and senior-role defaults.
 export const parseExperienceYears = (requiredExperience: string, role: string = ''): number => {
-  const expText = (requiredExperience || '').toLowerCase();
+  const expText = asText(requiredExperience).toLowerCase();
   // Range first (e.g. "5-7 years" -> 5), then simple "5+ years" / "3 years"
   const rangeMatch = expText.match(/(\d+)\s*[-–to]+\s*\d+\+?\s*(?:years?|yrs?)/i);
   const yearMatch = rangeMatch ? rangeMatch : expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
   if (yearMatch) return parseInt(yearMatch[1]);
   // Senior-level roles without an explicit number count as 5+ years
-  if (/senior|lead|principal|director|head/.test(expText + ' ' + (role || '').toLowerCase())) {
+  if (/senior|lead|principal|director|head/.test(expText + ' ' + asText(role).toLowerCase())) {
     return 5;
   }
   return 0;
@@ -583,13 +583,14 @@ export const parseCSV = (csvText: string): JobData[] => {
   return rows;
 };
 const parseDate = (dateStr: string): Date | null => {
-  if (!dateStr) return null;
+  const text = asText(dateStr);
+  if (!text) return null;
 
   // Try various date formats
   const formats = ['yyyy-MM-dd', 'yyyy-M-d', 'MM/dd/yyyy', 'M/d/yyyy', 'dd/MM/yyyy'];
   for (const fmt of formats) {
     try {
-      const parsed = parse(dateStr, fmt, new Date());
+      const parsed = parse(text, fmt, new Date());
       if (!isNaN(parsed.getTime())) return parsed;
     } catch {
       continue;
@@ -597,7 +598,7 @@ const parseDate = (dateStr: string): Date | null => {
   }
 
   // Fallback to native parsing
-  const date = new Date(dateStr);
+  const date = new Date(text);
   return isNaN(date.getTime()) ? null : date;
 };
 const columns: {
