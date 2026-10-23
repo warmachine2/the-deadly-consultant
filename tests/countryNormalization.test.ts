@@ -73,3 +73,32 @@ test("city/state and recruiter notes are never overwritten in chips", () => {
   expect(formatLocationLabel("Hybrid - 3 days onsite Boston, MA (US)")).toBe("Hybrid - 3 days onsite Boston, MA (US)");
   expect(normalizeCountry("Toronto, ON")).toBe("Canada");
 });
+
+import { buildCountryFilterOptions } from "../src/lib/countryUtils";
+
+// The Country dropdown must carry the same "Other" bucket the chart's bar uses.
+test("country dropdown offers an Other bucket alongside Canada and USA", () => {
+  const values = buildCountryFilterOptions([
+    "India",
+    "Peru",
+    "Canada",
+    "USA",
+    "Other",
+    "N/A",
+    "No job text provided",
+  ]).map(o => o.value);
+
+  expect(values[0]).toBe("all");
+  expect(values.filter(v => v === "Other").length).toBe(1);
+  expect(values.filter(v => v === "Canada").length).toBe(1);
+  expect(values.filter(v => v === "USA").length).toBe(1);
+  expect(values).toContain("India");
+  expect(values).toContain("Peru");
+  expect(values).not.toContain("N/A");
+  expect(values).not.toContain("No job text provided");
+  expect(values.indexOf("Other")).toBeLessThan(values.indexOf("India"));
+});
+
+test("country dropdown keeps its four buckets when the data has no countries", () => {
+  expect(buildCountryFilterOptions([]).map(o => o.value)).toEqual(["all", "Canada", "USA", "Other"]);
+});
