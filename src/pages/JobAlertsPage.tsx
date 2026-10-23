@@ -1476,12 +1476,14 @@ const JobAlertsPage: React.FC = () => {
     countries,
     locations,
     cities,
+    citiesByCountry,
     uniqueRoleTypes,
     uniqueSources
   } = useMemo(() => {
     const countrySet = new Set<string>();
     const locationSet = new Set<string>();
     const citySet = new Set<string>();
+    const cityCountriesMap = new Map<string, Set<string>>();
     const roleTypeSet = new Set<string>();
     const sourceSet = new Set<string>();
     
@@ -1496,7 +1498,16 @@ const JobAlertsPage: React.FC = () => {
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
       const city = extractCity(job.workType, job.location, job.comments);
-      if (city) citySet.add(city);
+      if (city) {
+        citySet.add(city);
+        // Track which countries each city belongs to (for cascading City dropdown)
+        const country = normalizeCountry(job.location);
+        if (country) {
+          const set = cityCountriesMap.get(city) ?? new Set<string>();
+          set.add(country);
+          cityCountriesMap.set(city, set);
+        }
+      }
       
       if (job.location) {
         locationSet.add(job.location);
@@ -1510,11 +1521,33 @@ const JobAlertsPage: React.FC = () => {
       countries: Array.from(countrySet).sort(),
       locations: Array.from(locationSet).sort(),
       cities: Array.from(citySet).sort(),
+      citiesByCountry: cityCountriesMap,
       uniqueRoleTypes: Array.from(roleTypeSet).sort(),
       // Merge canonical sources with any additional sources found in the data
       uniqueSources: Array.from(new Set([...Object.keys(sourceDescriptions), ...Array.from(sourceSet)])).sort()
     };
   }, [data]);
+
+  // Cities available for the selected country (cascading City dropdown)
+  const availableCities = useMemo(() => {
+    const list = selectedCountry === 'all'
+      ? cities
+      : Array.from(citiesByCountry.entries())
+          .filter(([, countrySet]) => selectedCountry === 'Other'
+            ? Array.from(countrySet).some(c => c !== 'Canada' && c !== 'USA')
+            : countrySet.has(selectedCountry))
+          .map(([city]) => city)
+          .sort();
+    return list.filter(city => city !== 'Canada');
+  }, [cities, citiesByCountry, selectedCountry]);
+
+  // Reset city selection when it doesn't exist in the selected country's city list
+  useEffect(() => {
+    if (selectedLocation !== 'all' && !availableCities.includes(selectedLocation)) {
+      setSelectedLocation('all');
+    }
+  }, [selectedCountry, selectedLocation, availableCities]);
+
   const filteredAndSortedData = useMemo(() => {
     let filtered = [...data];
 
@@ -2054,7 +2087,7 @@ const JobAlertsPage: React.FC = () => {
                         className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                         <option value="all" className="bg-gray-900 text-white">All Cities</option>
-                        {cities.filter(city => city !== 'Canada').map(city => (
+                        {availableCities.map(city => (
                           <option key={city} value={city} className="bg-gray-900 text-white">{city}</option>
                         ))}
                       </select>
