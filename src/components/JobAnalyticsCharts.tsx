@@ -16,6 +16,7 @@ import { Pie, Bar, Line } from 'react-chartjs-2';
 import { useMediaQuery } from '@mui/material';
 import { extractChartCountry } from '@/lib/countryUtils';
 import { buildJobTimeline } from '@/lib/jobTimeline';
+import { countActiveSources } from '@/lib/jobSources';
 
 ChartJS.register(
   CategoryScale,
@@ -46,6 +47,7 @@ interface JobData {
   strategy: string;
   earningEstimate: string;
   location: string;
+  source?: string;
 }
 
 interface JobAnalyticsChartsProps {
@@ -87,6 +89,8 @@ const chartColors = {
   other: 'rgba(156, 163, 175, 0.8)',
   canada: 'rgba(220, 38, 38, 0.8)',
   usa: 'rgba(59, 130, 246, 0.8)',
+  // "Other" countries: muted violet so a low-volume bar still reads next to red/blue.
+  otherCountry: 'rgba(139, 92, 246, 0.85)',
 };
 
 const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
@@ -116,6 +120,9 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
     });
     return countries;
   }, [data]);
+
+  // Unique recruitment sources present in the data (e.g. "19 Sources").
+  const activeSourceCount = useMemo(() => countActiveSources(data), [data]);
 
   // Active weeks in the last 90 days; retain exact ranges for point clicks.
   const timelineData = useMemo(() => buildJobTimeline(data), [data]);
@@ -166,15 +173,23 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
   };
 
   // Bar chart config (Country)
+  const visibleCountries = Object.keys(countryData).filter(c => countryData[c] > 0);
+  const countryBarColors: Record<string, string> = {
+    Canada: chartColors.canada,
+    USA: chartColors.usa,
+    Other: chartColors.otherCountry,
+  };
   const barChartData = {
-    labels: Object.keys(countryData).filter(c => countryData[c] > 0),
+    labels: visibleCountries,
     datasets: [{
       label: 'Jobs',
-      data: Object.keys(countryData).filter(c => countryData[c] > 0).map(c => countryData[c]),
-      backgroundColor: [chartColors.canada, chartColors.usa, chartColors.other],
+      data: visibleCountries.map(c => countryData[c]),
+      backgroundColor: visibleCountries.map(c => countryBarColors[c] ?? chartColors.other),
       borderColor: 'rgba(0, 0, 0, 0.3)',
       borderWidth: 2,
       borderRadius: 8,
+      // Keeps a 13-job "Other" bar visible, hoverable and clickable next to 1,000-job bars.
+      minBarLength: 6,
     }],
   };
 
@@ -204,7 +219,6 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
     onClick: (_event: any, elements: any[]) => {
       if (elements.length > 0) {
         const index = elements[0].index;
-        const visibleCountries = Object.keys(countryData).filter(c => countryData[c] > 0);
         const country = visibleCountries[index];
         onCountryFilterClick(country);
       }
@@ -316,8 +330,8 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
           <div className="text-xs text-muted-foreground">USA</div>
         </div>
         <div className="text-center p-3 rounded-xl bg-white/5">
-          <div className="text-2xl font-bold" style={{ color: '#8b5cf6' }}>{Object.keys(roleData).filter(k => roleData[k] > 0).length}</div>
-          <div className="text-xs text-muted-foreground">Role Types</div>
+          <div className="text-2xl font-bold" style={{ color: '#8b5cf6' }}>{activeSourceCount}</div>
+          <div className="text-xs text-muted-foreground">Active Sources</div>
         </div>
       </div>
     </div>
