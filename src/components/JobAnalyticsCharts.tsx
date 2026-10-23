@@ -188,8 +188,8 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
       borderColor: 'rgba(0, 0, 0, 0.3)',
       borderWidth: 2,
       borderRadius: 8,
-      // Keeps a 13-job "Other" bar visible, hoverable and clickable next to 1,000-job bars.
-      minBarLength: 6,
+      // Keeps a 13-job "Other" bar clearly visible, hoverable and clickable next to 1,000-job bars.
+      minBarLength: 14,
     }],
   };
 

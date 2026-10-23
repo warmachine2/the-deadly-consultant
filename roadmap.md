@@ -94,3 +94,9 @@
 
 - [x] Limit timeline to active weekly buckets in the last 90 days, excluding legacy dates without changing default board filters.
 - [x] Verify weekly counts and inclusive date boundaries (60 tests pass; preview build clean); live Oct 19 point sets Oct 19–23 and table displays jobs within that week.
+
+# Job Analytics: visible "Other" country bar + Active Sources metric
+
+- [x] Give the country bars a minimum visual height (minBarLength 14) and color "Other" muted violet (#8B5CF6) so a 13-job bar is visible, hoverable and clickable beside 1,000-job bars.
+- [x] Replace the static "5 Role Types" card with a dynamic "Active Sources" count (src/lib/jobSources.ts + tests/jobSources.test.ts).
+- [x] Verify live: clicking the violet bar filters the table 1561 -> 13 jobs (Portugal, India, Thailand, Peru), card 4 reads "20 Active Sources" (63 tests pass; build OK).
