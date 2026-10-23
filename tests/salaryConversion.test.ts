@@ -28,3 +28,32 @@ test('getMonthlyAmount sees the k-expanded amount so salary filters group correc
 test("a 'k' without a dollar amount (e.g. '401k') is not treated as thousands", () => {
   expect(getMonthlyAmount('$60k/yr plus 401k', '')).toBe(5000);
 });
+
+// KAN salary conversion: single-amount regression set covering every input shape.
+// Currency is always appended (USD inferred from an empty/non-Canadian location),
+// so the assertions include the suffix the board actually renders.
+
+test("'$120k/yr' converts to '$10,000/mo'", () => {
+  expect(formatEarningsMonthly('$120k/yr', '')).toBe('$10,000/mo USD');
+  expect(getMonthlyAmount('$120k/yr', '')).toBe(10000);
+});
+
+test("'$120k - $140k/yr USD' converts to '$10,000 - $11,667/mo USD'", () => {
+  expect(formatEarningsMonthly('$120k - $140k/yr USD', '')).toBe('$10,000 - $11,667/mo USD');
+  expect(getMonthlyAmount('$120k - $140k/yr USD', '')).toBe(10000);
+});
+
+test("'$10k/mo' converts to '$10,000/mo'", () => {
+  expect(formatEarningsMonthly('$10k/mo', '')).toBe('$10,000/mo USD');
+  expect(getMonthlyAmount('$10k/mo', '')).toBe(10000);
+});
+
+test("'$75/hr' converts with the hourly formula 75 * 1.14 * 160 = '$13,680/mo'", () => {
+  expect(formatEarningsMonthly('$75/hr', '')).toBe('$13,680/mo USD');
+  expect(getMonthlyAmount('$75/hr', '')).toBe(13680);
+});
+
+test("'$150,000/yr' converts to '$12,500/mo'", () => {
+  expect(formatEarningsMonthly('$150,000/yr', '')).toBe('$12,500/mo USD');
+  expect(getMonthlyAmount('$150,000/yr', '')).toBe(12500);
+});
