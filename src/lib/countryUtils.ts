@@ -68,3 +68,24 @@ export const extractChartCountry = (location: string): 'Canada' | 'USA' | 'Other
   if (c === 'Canada' || c === 'USA') return c;
   return 'Other';
 };
+
+const COUNTRY_DROPDOWN_EXCLUDES = new Set(['Canada', 'USA', 'Other', 'N/A', 'No job text provided']);
+
+/**
+ * Country dropdown options: "All Countries" first, then Canada, USA and the
+ * "Other" bucket (every job that is not Canada or USA), then the specific
+ * countries found in the data. Keeps the dropdown in sync with the chart's
+ * Canada / USA / Other grouping so a chart click and a dropdown pick agree.
+ */
+export const buildCountryFilterOptions = (countries: string[]): { value: string; label: string }[] => {
+  const extras = countries
+    .filter(c => !COUNTRY_DROPDOWN_EXCLUDES.has(c))
+    .map(c => ({ value: c, label: c }));
+  return [
+    { value: 'all', label: 'All Countries' },
+    { value: 'Canada', label: 'Canada' },
+    { value: 'USA', label: 'USA' },
+    { value: 'Other', label: 'Other' },
+    ...extras,
+  ];
+};
