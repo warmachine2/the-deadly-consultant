@@ -78,3 +78,9 @@
 - [x] Export parseCSV and add tests/companyInfo.test.ts cases for the empty/single-bullet fallback, the two-bullet pass-through, the unchanged NTT Data bullets, and no invented bullets for other sources (38 tests pass; typecheck and build clean).
 - [x] Verify live: the "About Motion Recruitment Client" banner renders all four bullets on desktop with no clipping.
 
+
+# Job board: cascading City dropdown by Country
+
+- [x] Build city-to-country map in the location useMemo and derive `availableCities` (all cities when Country = All; country-scoped otherwise, matching the 'Other' filter rule).
+- [x] Reset `selectedLocation` to 'all' automatically when it's missing from the selected country's city list; "All Cities" remains the first option.
+- [x] Verify live: Canada/USA lists are country-scoped, Boston (USA) resets to "All Cities" after switching to Canada (38 tests pass; typecheck and build clean).
