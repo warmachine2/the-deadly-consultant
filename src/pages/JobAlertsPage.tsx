@@ -63,6 +63,19 @@ interface JobData {
   jobLink?: string; // Original job posting link
 }
 type Order = 'asc' | 'desc';
+/**
+ * Stable, unique row key for the card and table lists.
+ * The live feed contains duplicate scrapes (the same Job ID on several rows),
+ * so the row's position in the filtered list is appended: keys stay unique and
+ * a key changes whenever a different job takes that slot, which is what stops an
+ * expanded card or open video drawer from following a card onto the next page.
+ */
+export const getJobRowKey = (job: JobData, rowIndex: number): string => {
+  if (job.jobId) return `job-${job.jobId}-${rowIndex}`;
+  if (job.jobLink) return `${job.jobLink}-${rowIndex}`;
+  return `job-idx-${rowIndex}`;
+};
+
 const SHEET_ID = '107YoIhvv0VYBWQXlvNNB4T98iw7POO_YRVJ633alVig';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
@@ -1709,6 +1722,15 @@ const JobAlertsPage: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedRoleType, selectedCountry, selectedLocation, startDate, endDate, experienceFilter, salaryFilter, workTypeFilter, selectedSources]);
+
+  // Clamp: when the data shrinks (refresh or tighter filters) so the current page
+  // no longer exists, fall back to page 1 instead of rendering a blank list.
+  useEffect(() => {
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [totalPages, currentPage]);
+
   
   // Toggle source selection
   const toggleSource = (source: string) => {
@@ -2200,8 +2222,10 @@ const JobAlertsPage: React.FC = () => {
                           } catch {
                             /* ignore */
                           }
+                          setCurrentPage(1);
                           fetchData();
                         }} 
+
                         disabled={loading} 
                         className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-white transition-colors flex items-center gap-2 font-medium shadow-lg shadow-cyan-500/25"
                       >
@@ -2328,7 +2352,7 @@ const JobAlertsPage: React.FC = () => {
                       const earningsHasEst = /\*\s*Est\.?/i.test(formattedEarnings);
                       
                       return (
-                        <TableRow key={index} className="border-white/10 hover:bg-white/5">
+                        <TableRow key={getJobRowKey(job, (currentPage - 1) * ITEMS_PER_PAGE + index)} className="border-white/10 hover:bg-white/5">
                           <TableCell className="text-white whitespace-nowrap">
                             <div className="flex flex-col">
                               <span>{job.date}</span>
@@ -2436,7 +2460,7 @@ const JobAlertsPage: React.FC = () => {
             {filteredAndSortedData.length === 0 ? <div className="volumetric-glass rounded-3xl p-8 text-center">
                 <p className="text-muted-foreground">No jobs found for the selected filters.</p>
               </div> : <>
-                {paginatedData.map((job, index) => <JobCard key={index} job={job} />)}
+                {paginatedData.map((job, index) => <JobCard key={getJobRowKey(job, (currentPage - 1) * ITEMS_PER_PAGE + index)} job={job} />)}
                 {/* Pagination for Mobile */}
                 {totalPages > 1 && <div className="flex justify-center items-center gap-4 mt-6 mb-4">
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-xl bg-white/5 border border-white/10 disabled:opacity-30 hover:border-[#FFDD40]/50 transition-colors">
@@ -2457,7 +2481,7 @@ const JobAlertsPage: React.FC = () => {
                 <p className="text-muted-foreground">No jobs found for the selected filters.</p>
               </div> : <>
                 <div className="flex flex-col gap-6">
-                  {paginatedData.map((job, index) => <JobCard key={index} job={job} isDesktop />)}
+                  {paginatedData.map((job, index) => <JobCard key={getJobRowKey(job, (currentPage - 1) * ITEMS_PER_PAGE + index)} job={job} isDesktop />)}
                 </div>
                 {/* Pagination for Desktop */}
                 {totalPages > 1 && <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
