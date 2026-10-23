@@ -118,3 +118,8 @@
 - [x] Add explicit unit tests for the requested locations: "San Francisco, CA", "Dallas, TX", "Boston, MA" → USA; "London, ON", "Toronto, ON", "Vancouver, BC" → Canada; "Lisbon, Portugal" and "Lima, Peru" → chart bucket Other with their clean country names kept for the filter (tests/countryNormalization.test.ts).
 - [x] Confirm no regressions: 83 tests pass across 11 files, typecheck and build clean.
 
+# Salary conversion: single-amount regression tests
+
+- [x] Add unit cases to tests/salaryConversion.test.ts for "$120k/yr" -> "$10,000/mo USD", "$120k - $140k/yr USD" -> "$10,000 - $11,667/mo USD", "$10k/mo" -> "$10,000/mo USD", "$75/hr" -> "$13,680/mo USD" (75 * 1.14 * 160), "$150,000/yr" -> "$12,500/mo USD", each also asserting getMonthlyAmount reads the same normalized amount.
+- [x] Confirm no regressions: 94 tests pass across 12 files, typecheck and build clean.
+
