@@ -106,7 +106,7 @@ export const sanitizeCachedJob = (value: unknown): JobData | null => {
   const job = {} as Record<(typeof JOB_TEXT_FIELDS)[number], string>;
   JOB_TEXT_FIELDS.forEach(field => { job[field] = asText(raw[field]); });
   // A row without a role has nothing to render or categorise.
-  if (!job.role) return null;
+  if (!job.role.trim()) return null;
   const bullets = Array.isArray(raw.companyInfo)
     ? raw.companyInfo.filter((item): item is string => typeof item === 'string' && item.trim() !== '')
     : [];
