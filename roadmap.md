@@ -112,3 +112,9 @@
 - [x] Validate localStorage hydration in JobAlertsPage.tsx (`asText`, `sanitizeCachedJob`, `sanitizeCachedJobs`): non-object rows and role-less rows are dropped, every field is coerced to a string, and `companyInfo` is kept only when it is a real array of bullets.
 - [x] Make card, table and filter accessors null-safe: `asText(...)` for role, company, duties, location, term, source, recruiter fields and the sort comparator; `Array.isArray` guard on the About banner; hardened date parsing, earnings/experience/city/work-mode parsing and the country helpers in `src/lib/countryUtils.ts`.
 - [x] Verify live: seeding the cache with null roles, a string `companyInfo`, numbers and junk entries still renders 4 cards and 4 table rows with no runtime error; live data still shows 20 cards, the About banner and 20 table rows per page (76 tests pass; typecheck and build clean).
+
+# Country classification test coverage
+
+- [x] Add explicit unit tests for the requested locations: "San Francisco, CA", "Dallas, TX", "Boston, MA" → USA; "London, ON", "Toronto, ON", "Vancouver, BC" → Canada; "Lisbon, Portugal" and "Lima, Peru" → chart bucket Other with their clean country names kept for the filter (tests/countryNormalization.test.ts).
+- [x] Confirm no regressions: 83 tests pass across 11 files, typecheck and build clean.
+
