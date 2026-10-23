@@ -102,3 +102,47 @@ test("country dropdown offers an Other bucket alongside Canada and USA", () => {
 test("country dropdown keeps its four buckets when the data has no countries", () => {
   expect(buildCountryFilterOptions([]).map(o => o.value)).toEqual(["all", "Canada", "USA", "Other"]);
 });
+
+// "CA" is California, not Canada — US state abbreviations classify as USA.
+test("US state abbreviations classify as USA, including CA", () => {
+  expect(normalizeCountry("San Francisco, CA")).toBe("USA");
+  expect(normalizeCountry("Dallas, TX")).toBe("USA");
+  expect(normalizeCountry("Boston, MA")).toBe("USA");
+  expect(normalizeCountry("Chicago, IL")).toBe("USA");
+  expect(normalizeCountry("New York, NY")).toBe("USA");
+  expect(normalizeCountry("Miami, FL")).toBe("USA");
+  expect(normalizeCountry("Seattle, WA")).toBe("USA");
+  expect(normalizeCountry("Jersey City, NJ")).toBe("USA");
+  expect(normalizeCountry("Atlanta, GA")).toBe("USA");
+  expect(normalizeCountry("Denver, CO")).toBe("USA");
+  expect(normalizeCountry("Philadelphia, PA")).toBe("USA");
+  expect(normalizeCountry("Richmond, VA")).toBe("USA");
+  expect(normalizeCountry("Columbus, OH")).toBe("USA");
+  expect(normalizeCountry("Charlotte, NC")).toBe("USA");
+  expect(extractChartCountry("San Francisco, CA")).toBe("USA");
+});
+
+// Province abbreviations win over generic city names — "London, ON" is Canada.
+test("Canadian provinces take priority over generic city names", () => {
+  expect(normalizeCountry("London, ON")).toBe("Canada");
+  expect(normalizeCountry("Vancouver, BC")).toBe("Canada");
+  expect(normalizeCountry("Calgary, AB")).toBe("Canada");
+  expect(normalizeCountry("Halifax, NS")).toBe("Canada");
+  expect(normalizeCountry("Winnipeg, MB")).toBe("Canada");
+  expect(extractChartCountry("London, ON")).toBe("Canada");
+});
+
+// Hassan/email sources and detailed recruiter addresses keep raw text untouched.
+test("Hassan and email sourced rows are never reclassified", () => {
+  expect(normalizeCountry("Dallas, TX", "Hassan's recruiter Network")).toBe("Dallas, TX");
+  expect(normalizeCountry("Toronto, ON", "Email from Hassan")).toBe("Toronto, ON");
+  expect(normalizeCountry("Contact jane@agency.com for details")).toBe("Contact jane@agency.com for details");
+  expect(normalizeCountry("Hassan - refer to recruiter notes")).toBe("Hassan - refer to recruiter notes");
+});
+
+// Display text is preserved; only the bucket changes.
+test("raw city/state display text is preserved while the bucket resolves", () => {
+  expect(formatLocationLabel("San Francisco, CA")).toBe("San Francisco, CA");
+  expect(formatLocationLabel("Dallas, TX")).toBe("Dallas, TX");
+  expect(formatLocationLabel("London, ON")).toBe("London, ON");
+});

@@ -1577,7 +1577,7 @@ const JobAlertsPage: React.FC = () => {
       if (city) {
         citySet.add(city);
         // Track which countries each city belongs to (for cascading City dropdown)
-        const country = normalizeCountry(job.location);
+        const country = normalizeCountry(job.location, job.source);
         if (country) {
           const set = cityCountriesMap.get(city) ?? new Set<string>();
           set.add(country);
@@ -1587,7 +1587,7 @@ const JobAlertsPage: React.FC = () => {
       
       if (job.location) {
         locationSet.add(job.location);
-        const country = normalizeCountry(job.location);
+        const country = normalizeCountry(job.location, job.source);
         if (country) {
           countrySet.add(country);
         }
@@ -1645,10 +1645,10 @@ const JobAlertsPage: React.FC = () => {
     if (selectedCountry !== 'all') {
       filtered = filtered.filter(row => {
         if (selectedCountry === 'Other') {
-          const c = normalizeCountry(row.location);
+          const c = normalizeCountry(row.location, row.source);
           return c !== 'Canada' && c !== 'USA';
         }
-        return normalizeCountry(row.location) === selectedCountry;
+        return normalizeCountry(row.location, row.source) === selectedCountry;
       });
     }
 

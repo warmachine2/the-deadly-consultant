@@ -76,9 +76,9 @@ const categorizeRole = (role: string): string => {
 };
 
 // Extract country from location
-export const extractCountry = (location: string): string => {
+export const extractCountry = (location: string, source?: string): string => {
   if (!location) return 'Unknown';
-  return extractChartCountry(location);
+  return extractChartCountry(location, source);
 };
 
 const chartColors = {
@@ -115,7 +115,7 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
   const countryData = useMemo(() => {
     const countries: Record<string, number> = { Canada: 0, USA: 0, Other: 0 };
     data.forEach(job => {
-      const country = extractCountry(job.location);
+      const country = extractCountry(job.location, job.source);
       countries[country]++;
     });
     return countries;
