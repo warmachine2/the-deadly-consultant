@@ -333,7 +333,7 @@ const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   // Currency: preserve from the string, else infer from location
   let currency = /\bCAD\b/i.test(str) ? 'CAD' : /\bUSD\b/i.test(str) ? 'USD' : '';
   if (!currency) {
-    const loc = (location || '').toLowerCase();
+    const loc = asText(location).toLowerCase();
     currency = /(canada|canadian|toronto|vancouver|montreal|calgary|ottawa)/.test(loc) ? 'CAD' : 'USD';
   }
 
@@ -925,7 +925,7 @@ export const getSourceDestinationUrl = (source?: string, jobLink?: string, roleT
 // Source attribution badge shown on every job card
 const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: string }> = ({ source, jobLink, roleTitle }) => {
   if (!source) return null;
-  const normalizedSource = source.trim();
+  const normalizedSource = asText(source).trim();
   const canonicalSource = normalizeSourceName(normalizedSource);
   const isHassanEmail = /hassan|email/i.test(normalizedSource) || canonicalSource === "Hassan's recruiter Network";
   const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(canonicalSource);
@@ -1216,7 +1216,7 @@ const JobCard: React.FC<{
 
 
       {/* Company Info Banner - Centered below header */}
-      {job.companyInfo && job.companyInfo.length > 0 && (
+      {Array.isArray(job.companyInfo) && job.companyInfo.length > 0 && (
         <div className="mt-4 p-4 md:p-5 rounded-xl" style={{
           background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 180, 0.05))',
           border: '1px solid rgba(0, 212, 255, 0.25)',
@@ -1229,7 +1229,7 @@ const JobCard: React.FC<{
             }}>About {job.company}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
-            {job.companyInfo.map((info, index) => (
+            {(Array.isArray(job.companyInfo) ? job.companyInfo : []).map((info, index) => (
               <div key={index} className="flex items-start gap-2">
                 <span className="mt-2.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#FFDD40' }} />
                 <span className="text-lg text-white/90 leading-relaxed">{info}</span>
@@ -1247,7 +1247,7 @@ const JobCard: React.FC<{
         border: '1px solid rgba(0, 212, 255, 0.3)'
       }}>
           {(() => {
-            const termLower = job.term.toLowerCase();
+            const termLower = asText(job.term).toLowerCase();
             const hasYear = termLower.includes('year') || termLower.includes('12 month');
             const monthMatch = termLower.match(/(\d+)\s*month/);
             const months = monthMatch ? parseInt(monthMatch[1]) : (hasYear ? 12 : 0);
@@ -1287,7 +1287,7 @@ const JobCard: React.FC<{
           })()}
           {(() => {
             const formatted = formatEarningsMonthly(job.earningEstimate, job.location);
-            const locationLower = job.location?.toLowerCase() || '';
+            const locationLower = asText(job.location).toLowerCase();
             const fallbackCurrency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
             const hasCurrency = /\b(CAD|USD)\b/i.test(formatted);
             const hasEst = /\*\s*Est\.?/i.test(formatted);
@@ -1370,22 +1370,28 @@ const JobCard: React.FC<{
               <p className="text-xl md:text-2xl text-white">{job.comments}</p>
             </div>}
           
-          {(job.recruiterName?.trim() || (job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a') || (job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a') || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
+          {((() => {
+            const name = asText(job.recruiterName).trim();
+            const email = asText(job.recruiterEmail).trim();
+            const phone = asText(job.recruiterPhone).trim();
+            const linkedIn = asText(job.recruiterLinkedIn).trim();
+            return Boolean(name || (email && email.toLowerCase() !== 'n/a') || (phone && phone.toLowerCase() !== 'n/a') || linkedIn);
+          })()) && <div className="pt-3 border-t border-white/10">
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
               <div className="space-y-3">
-                {job.recruiterName?.trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
+                {asText(job.recruiterName).trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
                 <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                  {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {asText(job.recruiterEmail).trim().toLowerCase() !== 'n/a' && asText(job.recruiterEmail).trim() && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Mail className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterEmail}
                     </a>}
-                  {job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a' && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {asText(job.recruiterPhone).trim().toLowerCase() !== 'n/a' && asText(job.recruiterPhone).trim() && <a href={`tel:${asText(job.recruiterPhone).replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Phone className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterPhone}
                     </a>}
-                  {job.recruiterLinkedIn?.trim() && job.recruiterLinkedIn.trim().toLowerCase() !== 'n/a' && <a href={job.recruiterLinkedIn.startsWith('http') ? job.recruiterLinkedIn : `https://${job.recruiterLinkedIn}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {asText(job.recruiterLinkedIn).trim().toLowerCase() !== 'n/a' && asText(job.recruiterLinkedIn).trim() && <a href={asText(job.recruiterLinkedIn).startsWith('http') ? job.recruiterLinkedIn : `https://${job.recruiterLinkedIn}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Linkedin className="w-5 h-5 text-[#00d4ff]" />
                       LinkedIn
                     </a>}
@@ -1467,7 +1473,7 @@ const JobAlertsPage: React.FC = () => {
 
   // Role categorization helper
   const categorizeRole = (role: string): string => {
-    const roleLower = role.toLowerCase();
+    const roleLower = asText(role).toLowerCase();
     if (roleLower.includes('fintech') || roleLower.includes('finance') || roleLower.includes('financial')) return 'FinTech';
     if (roleLower.includes('bi') || roleLower.includes('business intelligence') || roleLower.includes('data') || roleLower.includes('analytics')) return 'BI/Data';
     if (roleLower.includes('ai') || roleLower.includes('artificial') || roleLower.includes('machine learning') || roleLower.includes('ml')) return 'AI/ML';
@@ -1561,8 +1567,9 @@ const JobAlertsPage: React.FC = () => {
       roleTypeSet.add(categorizeRole(job.role));
       
       // Extract source (filter out blanks)
-      if (job.source && job.source.trim()) {
-        sourceSet.add(job.source.trim());
+      const sourceName = asText(job.source).trim();
+      if (sourceName) {
+        sourceSet.add(sourceName);
       }
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
@@ -1626,7 +1633,7 @@ const JobAlertsPage: React.FC = () => {
     // Search filter (Role, Duties, Company)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(row => row.role.toLowerCase().includes(query) || row.duties.toLowerCase().includes(query) || row.company.toLowerCase().includes(query));
+      filtered = filtered.filter(row => asText(row.role).toLowerCase().includes(query) || asText(row.duties).toLowerCase().includes(query) || asText(row.company).toLowerCase().includes(query));
     }
 
     // Role type filter (from chart click or dropdown)
@@ -1701,7 +1708,7 @@ const JobAlertsPage: React.FC = () => {
     // Sources filter (multi-select)
     if (selectedSources.length > 0) {
       filtered = filtered.filter(row => {
-        const jobSource = row.source?.trim() || '';
+        const jobSource = asText(row.source).trim();
         return selectedSources.includes(jobSource);
       });
     }
@@ -1744,8 +1751,8 @@ const JobAlertsPage: React.FC = () => {
         return (originalIndex.get(b) ?? 0) - (originalIndex.get(a) ?? 0);
       }
       
-      const aStr = (aValue as string) || '';
-      const bStr = (bValue as string) || '';
+      const aStr = asText(aValue);
+      const bStr = asText(bValue);
       return order === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
     });
     return filtered;
@@ -2386,7 +2393,7 @@ const JobAlertsPage: React.FC = () => {
                       const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
                       const workMode = normalizeWorkMode(job.workType);
                       const formattedEarnings = formatEarningsMonthly(job.earningEstimate, job.location);
-                      const locationLower = job.location?.toLowerCase() || '';
+                      const locationLower = asText(job.location).toLowerCase();
                       const currency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
                       const earningsHasCurrency = /\b(CAD|USD)\b/i.test(formattedEarnings);
                       const earningsHasEst = /\*\s*Est\.?/i.test(formattedEarnings);
@@ -2441,7 +2448,7 @@ const JobAlertsPage: React.FC = () => {
                             </span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
-                            {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && (
+                            {asText(job.recruiterEmail).trim().toLowerCase() !== 'n/a' && asText(job.recruiterEmail).trim() && (
                               <a href={`mailto:${job.recruiterEmail}`} className="text-[#00d4ff] hover:underline text-xs">
                                 Email
                               </a>
