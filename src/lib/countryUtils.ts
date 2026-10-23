@@ -1,8 +1,29 @@
+const US_STANDALONE = new Set(['US', 'USA', 'UNITEDSTATES', 'UNITEDSTATESOFAMERICA', 'AMERICA']);
+
+/** True only when the whole string is a bare US country label (no city/state). */
+export const isStandaloneUSA = (raw?: string): boolean => {
+  if (!raw) return false;
+  const key = raw.trim().toUpperCase().replace(/[.\s]/g, '');
+  return US_STANDALONE.has(key);
+};
+
+/**
+ * Display label for job card location chips. Only bare US country labels are
+ * rewritten to "USA"; any city/state/address or recruiter note is kept verbatim.
+ */
+export const formatLocationLabel = (raw?: string): string => {
+  if (!raw) return '';
+  return isStandaloneUSA(raw) ? 'USA' : raw;
+};
+
 export const normalizeCountry = (rawLocation?: string): string => {
   if (!rawLocation) return '';
   const trimmed = rawLocation.trim().replace(/[\r\n]+/g, '');
   if (!trimmed) return '';
   const loc = trimmed.toUpperCase();
+
+  // Standalone US variants ("United States", "U.S.A.", "US", "U.S.") → USA
+  if (isStandaloneUSA(trimmed)) return 'USA';
 
   // Canada indicators
   if (
