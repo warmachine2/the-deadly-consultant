@@ -76,9 +76,9 @@ const categorizeRole = (role: string): string => {
 };
 
 // Extract country from location
-export const extractCountry = (location: string): string => {
+export const extractCountry = (location: string, source?: string): string => {
   if (!location) return 'Unknown';
-  return extractChartCountry(location);
+  return extractChartCountry(location, source);
 };
 
 const chartColors = {

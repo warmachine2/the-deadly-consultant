@@ -87,8 +87,8 @@ export const normalizeCountry = (rawLocation?: string, source?: string): string 
   return trimmed;
 };
 
-export const extractChartCountry = (location: string): 'Canada' | 'USA' | 'Other' => {
-  const c = normalizeCountry(location);
+export const extractChartCountry = (location: string, source?: string): 'Canada' | 'USA' | 'Other' => {
+  const c = normalizeCountry(location, source);
   if (c === 'Canada' || c === 'USA') return c;
   return 'Other';
 };
