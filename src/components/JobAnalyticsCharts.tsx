@@ -14,8 +14,8 @@ import {
 } from 'chart.js';
 import { Pie, Bar, Line } from 'react-chartjs-2';
 import { useMediaQuery } from '@mui/material';
-import { format, parse } from 'date-fns';
 import { extractChartCountry } from '@/lib/countryUtils';
+import { buildJobTimeline } from '@/lib/jobTimeline';
 
 ChartJS.register(
   CategoryScale,
@@ -54,22 +54,6 @@ interface JobAnalyticsChartsProps {
   onCountryFilterClick: (country: string) => void;
   onDateRangeClick: (startDate: Date, endDate: Date) => void;
 }
-
-// Parse date helper
-const parseDate = (dateStr: string): Date | null => {
-  if (!dateStr) return null;
-  const formats = ['yyyy-MM-dd', 'yyyy-M-d', 'MM/dd/yyyy', 'M/d/yyyy'];
-  for (const fmt of formats) {
-    try {
-      const parsed = parse(dateStr, fmt, new Date());
-      if (!isNaN(parsed.getTime())) return parsed;
-    } catch {
-      continue;
-    }
-  }
-  const date = new Date(dateStr);
-  return isNaN(date.getTime()) ? null : date;
-};
 
 // Auto-categorize role into PM, BI, FinTech, AI, or Other
 const categorizeRole = (role: string): string => {
@@ -133,29 +117,8 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
     return countries;
   }, [data]);
 
-  // Jobs over time (by month)
-  const timelineData = useMemo(() => {
-    const monthCounts: Record<string, number> = {};
-    data.forEach(job => {
-      const date = parseDate(job.date);
-      if (date) {
-        const monthKey = format(date, 'MMM yyyy');
-        monthCounts[monthKey] = (monthCounts[monthKey] || 0) + 1;
-      }
-    });
-    
-    // Sort by date
-    const sortedEntries = Object.entries(monthCounts).sort((a, b) => {
-      const dateA = parse(a[0], 'MMM yyyy', new Date());
-      const dateB = parse(b[0], 'MMM yyyy', new Date());
-      return dateA.getTime() - dateB.getTime();
-    });
-    
-    return {
-      labels: sortedEntries.map(([label]) => label),
-      counts: sortedEntries.map(([, count]) => count),
-    };
-  }, [data]);
+  // Active weeks in the last 90 days; retain exact ranges for point clicks.
+  const timelineData = useMemo(() => buildJobTimeline(data), [data]);
 
   // Pie chart config (Role Types)
   const pieChartData = {
@@ -250,10 +213,10 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
 
   // Line chart config (Timeline)
   const lineChartData = {
-    labels: timelineData.labels,
+    labels: timelineData.map(bucket => bucket.label),
     datasets: [{
       label: 'Jobs Posted',
-      data: timelineData.counts,
+      data: timelineData.map(bucket => bucket.count),
       borderColor: 'rgba(0, 212, 255, 1)',
       backgroundColor: 'rgba(0, 212, 255, 0.2)',
       fill: true,
@@ -291,11 +254,8 @@ const JobAnalyticsCharts: React.FC<JobAnalyticsChartsProps> = ({
     onClick: (_event: any, elements: any[]) => {
       if (elements.length > 0) {
         const index = elements[0].index;
-        const monthLabel = timelineData.labels[index];
-        const date = parse(monthLabel, 'MMM yyyy', new Date());
-        const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-        const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        onDateRangeClick(startOfMonth, endOfMonth);
+        const bucket = timelineData[index];
+        if (bucket) onDateRangeClick(bucket.startDate, bucket.endDate);
       }
     },
   };

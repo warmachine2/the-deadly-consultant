@@ -89,3 +89,8 @@
 
 - [x] Extract `parseExperienceYears` (range "5-7 years" -> 5, "5+ years"/"3 years" simple match, senior/lead/principal/director/head without a number default to 5, otherwise 0) and use it in the experience filter.
 - [x] Add tests/experienceParsing.test.ts covering ranges, en dash, "to", plus, senior defaults and explicit-number precedence (53 tests pass; typecheck clean).
+
+# Job Analytics: recent timeline
+
+- [x] Limit timeline to active weekly buckets in the last 90 days, excluding legacy dates without changing default board filters.
+- [ ] Verify weekly counts, date boundaries, and live point-to-table filtering.
