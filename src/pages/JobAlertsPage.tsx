@@ -1585,8 +1585,14 @@ const JobAlertsPage: React.FC = () => {
     if (experienceFilter !== 'all') {
       filtered = filtered.filter(row => {
         const expText = row.requiredExperience.toLowerCase();
-        const yearMatch = expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
-        const years = yearMatch ? parseInt(yearMatch[1]) : 0;
+        // Range first (e.g. "5-7 years" -> 5), then simple "5+ years" / "3 years"
+        const rangeMatch = expText.match(/(\d+)\s*[-–to]+\s*\d+\+?\s*(?:years?|yrs?)/i);
+        const yearMatch = rangeMatch ? rangeMatch : expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
+        let years = yearMatch ? parseInt(yearMatch[1]) : 0;
+        // Senior-level roles without an explicit number count as 5+ years
+        if (!yearMatch && /senior|lead|principal|director|head/.test(expText + ' ' + row.role.toLowerCase())) {
+          years = 5;
+        }
         
         if (experienceFilter === 'less5') {
           return years < 5;
