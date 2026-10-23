@@ -106,3 +106,9 @@
 - [x] Key job cards and table rows with a stable identifier (`getJobRowKey` in JobAlertsPage.tsx: Job ID, then job link, then row position) so an expanded card or open video drawer no longer follows a card onto the next page; the row position is appended because the live feed repeats Job IDs across scraped rows.
 - [x] Clamp `currentPage` back to 1 when the feed shrinks below it, and reset to page 1 when Refresh is clicked.
 - [x] Verify live: card 1 collapsed on page 1 stays expanded on page 2; Refresh to a 5-job feed lands on page 1 with rows; table and mobile paging render with no duplicate-key warnings (69 tests pass; typecheck and build clean).
+
+# Job board: corrupt-cache hardening
+
+- [x] Validate localStorage hydration in JobAlertsPage.tsx (`asText`, `sanitizeCachedJob`, `sanitizeCachedJobs`): non-object rows and role-less rows are dropped, every field is coerced to a string, and `companyInfo` is kept only when it is a real array of bullets.
+- [x] Make card, table and filter accessors null-safe: `asText(...)` for role, company, duties, location, term, source, recruiter fields and the sort comparator; `Array.isArray` guard on the About banner; hardened date parsing, earnings/experience/city/work-mode parsing and the country helpers in `src/lib/countryUtils.ts`.
+- [x] Verify live: seeding the cache with null roles, a string `companyInfo`, numbers and junk entries still renders 4 cards and 4 table rows with no runtime error; live data still shows 20 cards, the About banner and 20 table rows per page (76 tests pass; typecheck and build clean).
