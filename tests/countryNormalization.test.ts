@@ -146,3 +146,35 @@ test("raw city/state display text is preserved while the bucket resolves", () =>
   expect(formatLocationLabel("Dallas, TX")).toBe("Dallas, TX");
   expect(formatLocationLabel("London, ON")).toBe("London, ON");
 });
+
+// Explicit job-board classification cases: each location resolves to the
+// country the Country filter and Jobs-by-Country chart must show.
+test("US city/state locations resolve to USA", () => {
+  expect(normalizeCountry("San Francisco, CA")).toBe("USA");
+  expect(normalizeCountry("Dallas, TX")).toBe("USA");
+  expect(normalizeCountry("Boston, MA")).toBe("USA");
+  expect(extractChartCountry("San Francisco, CA")).toBe("USA");
+  expect(extractChartCountry("Dallas, TX")).toBe("USA");
+  expect(extractChartCountry("Boston, MA")).toBe("USA");
+});
+
+test("Canadian city/province locations resolve to Canada", () => {
+  expect(normalizeCountry("London, ON")).toBe("Canada");
+  expect(normalizeCountry("Toronto, ON")).toBe("Canada");
+  expect(normalizeCountry("Vancouver, BC")).toBe("Canada");
+  expect(extractChartCountry("London, ON")).toBe("Canada");
+  expect(extractChartCountry("Toronto, ON")).toBe("Canada");
+  expect(extractChartCountry("Vancouver, BC")).toBe("Canada");
+});
+
+// International rows are neither Canada nor USA, so the chart buckets them as
+// "Other" while the filter still carries their clean country name.
+test("international locations resolve to the Other bucket", () => {
+  expect(extractChartCountry("Lisbon, Portugal")).toBe("Other");
+  expect(extractChartCountry("Lima, Peru")).toBe("Other");
+  expect(normalizeCountry("Lisbon, Portugal")).toBe("Portugal");
+  expect(normalizeCountry("Lima, Peru")).toBe("Peru");
+  expect(formatLocationLabel("Lisbon, Portugal")).toBe("Lisbon, Portugal");
+  expect(formatLocationLabel("Lima, Peru")).toBe("Lima, Peru");
+});
+
