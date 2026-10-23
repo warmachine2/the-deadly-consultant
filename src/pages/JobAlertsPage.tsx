@@ -13,7 +13,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { normalizeCountry, formatLocationLabel } from '@/lib/countryUtils';
+import { normalizeCountry, formatLocationLabel, buildCountryFilterOptions } from '@/lib/countryUtils';
 import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -1557,6 +1557,9 @@ const JobAlertsPage: React.FC = () => {
     return list.filter(city => city !== 'Canada');
   }, [cities, citiesByCountry, selectedCountry]);
 
+  // Country dropdown options, including the "Other" bucket the chart uses
+  const countryOptions = useMemo(() => buildCountryFilterOptions(countries), [countries]);
+
   // Reset city selection when it doesn't exist in the selected country's city list
   useEffect(() => {
     if (selectedLocation !== 'all' && !availableCities.includes(selectedLocation)) {
@@ -2080,12 +2083,9 @@ const JobAlertsPage: React.FC = () => {
                         onChange={e => setSelectedCountry(e.target.value)} 
                         className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Countries</option>
-                        <option value="Canada" className="bg-gray-900 text-white">Canada</option>
-                        <option value="USA" className="bg-gray-900 text-white">USA</option>
-                        {countries.filter(c => c !== 'Canada' && c !== 'USA' && c !== 'N/A' && c !== 'No job text provided').map(country => (
-                          <option key={country} value={country} className="bg-gray-900 text-white">{country}</option>
-                        ))}
+                      {countryOptions.map(option => (
+                        <option key={option.value} value={option.value} className="bg-gray-900 text-white">{option.label}</option>
+                      ))}
                       </select>
                     </div>
                     
