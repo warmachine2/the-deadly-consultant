@@ -56,3 +56,20 @@ test("no closing-parenthesis artifacts are produced", () => {
   expect(entries).toContain("USA");
   expect(entries).toContain("Canada");
 });
+
+import { formatLocationLabel, isStandaloneUSA } from "../src/lib/countryUtils";
+
+test("dotted and spelled-out US variants normalize to USA", () => {
+  for (const v of ["United States", "U.S.A.", "US", "U.S.", "u.s.a", " USA "]) {
+    expect(normalizeCountry(v)).toBe("USA");
+    expect(formatLocationLabel(v)).toBe("USA");
+    expect(isStandaloneUSA(v)).toBe(true);
+  }
+});
+
+test("city/state and recruiter notes are never overwritten in chips", () => {
+  expect(formatLocationLabel("Dallas, TX")).toBe("Dallas, TX");
+  expect(formatLocationLabel("Toronto, ON")).toBe("Toronto, ON");
+  expect(formatLocationLabel("Hybrid - 3 days onsite Boston, MA (US)")).toBe("Hybrid - 3 days onsite Boston, MA (US)");
+  expect(normalizeCountry("Toronto, ON")).toBe("Canada");
+});

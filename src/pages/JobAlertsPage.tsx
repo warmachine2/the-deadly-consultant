@@ -13,7 +13,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { normalizeCountry } from '@/lib/countryUtils';
+import { normalizeCountry, formatLocationLabel } from '@/lib/countryUtils';
 import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -1058,7 +1058,7 @@ const JobCard: React.FC<{
             </span>
             {job.location && <>
               <span>•</span>
-              <span className="truncate">{job.location}</span>
+              <span className="truncate">{formatLocationLabel(job.location)}</span>
             </>}
             {job.jobId && job.jobId !== 'N/A' && job.jobId !== 'n/a' && <>
               <span>•</span>
@@ -1104,7 +1104,7 @@ const JobCard: React.FC<{
             </span>
             {job.location && <>
               <span>•</span>
-              <span className="truncate">{job.location}</span>
+              <span className="truncate">{formatLocationLabel(job.location)}</span>
             </>}
             {job.jobId && job.jobId !== 'N/A' && job.jobId !== 'n/a' && <>
               <span>•</span>
@@ -2339,7 +2339,7 @@ const JobAlertsPage: React.FC = () => {
                             <span className="line-clamp-2">{job.role}</span>
                           </TableCell>
                           <TableCell className="text-white whitespace-nowrap">{job.company}</TableCell>
-                          <TableCell className="text-white/80 whitespace-nowrap max-w-[150px] truncate">{job.location}</TableCell>
+                          <TableCell className="text-white/80 whitespace-nowrap max-w-[150px] truncate">{formatLocationLabel(job.location)}</TableCell>
                           <TableCell className="whitespace-nowrap">
                             <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
                               {job.term}
