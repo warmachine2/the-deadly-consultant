@@ -93,4 +93,4 @@
 # Job Analytics: recent timeline
 
 - [x] Limit timeline to active weekly buckets in the last 90 days, excluding legacy dates without changing default board filters.
-- [ ] Verify weekly counts, date boundaries, and live point-to-table filtering.
+- [x] Verify weekly counts and inclusive date boundaries (60 tests pass; preview build clean); live Oct 19 point sets Oct 19–23 and table displays jobs within that week.
