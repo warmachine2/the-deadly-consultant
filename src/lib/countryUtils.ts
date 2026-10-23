@@ -2,7 +2,7 @@ const US_STANDALONE = new Set(['US', 'USA', 'UNITEDSTATES', 'UNITEDSTATESOFAMERI
 
 /** True only when the whole string is a bare US country label (no city/state). */
 export const isStandaloneUSA = (raw?: string): boolean => {
-  if (!raw) return false;
+  if (typeof raw !== 'string' || !raw) return false;
   const key = raw.trim().toUpperCase().replace(/[.\s]/g, '');
   return US_STANDALONE.has(key);
 };
@@ -17,7 +17,7 @@ export const formatLocationLabel = (raw?: string): string => {
 };
 
 export const normalizeCountry = (rawLocation?: string): string => {
-  if (!rawLocation) return '';
+  if (typeof rawLocation !== 'string' || !rawLocation) return '';
   const trimmed = rawLocation.trim().replace(/[\r\n]+/g, '');
   if (!trimmed) return '';
   const loc = trimmed.toUpperCase();

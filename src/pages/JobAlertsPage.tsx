@@ -81,13 +81,52 @@ const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?forma
 
 // --- KAN-311: stale-while-revalidate cache ---
 const JOB_CACHE_KEY = 'ztopm_job_alerts_cache_v4';
+/**
+ * Cache-safe text coercion. localStorage can hold records written by an older
+ * build or hand-edited JSON, where a field is null, a number or a boolean
+ * instead of a string — any of which throws the moment a card calls
+ * .trim()/.toLowerCase() on it and blanks the whole board.
+ */
+export const asText = (value: unknown): string =>
+  typeof value === 'string' ? value
+    : typeof value === 'number' && Number.isFinite(value) ? String(value)
+    : '';
+
+const JOB_TEXT_FIELDS = [
+  'date', 'role', 'term', 'duties', 'requiredExperience', 'requiredSkills',
+  'additionalRequirements', 'comments', 'workType', 'company', 'recruiterEmail',
+  'recruiterPhone', 'recruiterName', 'recruiterLinkedIn', 'strategy',
+  'earningEstimate', 'location', 'source', 'jobId', 'jobLink',
+] as const;
+
+/** One cached record => a renderable JobData, or null when it is unusable. */
+export const sanitizeCachedJob = (value: unknown): JobData | null => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const raw = value as Record<string, unknown>;
+  const job = {} as Record<(typeof JOB_TEXT_FIELDS)[number], string>;
+  JOB_TEXT_FIELDS.forEach(field => { job[field] = asText(raw[field]); });
+  // A row without a role has nothing to render or categorise.
+  if (!job.role.trim()) return null;
+  const bullets = Array.isArray(raw.companyInfo)
+    ? raw.companyInfo.filter((item): item is string => typeof item === 'string' && item.trim() !== '')
+    : [];
+  return { ...job, companyInfo: bullets.length > 0 ? bullets : undefined };
+};
+
+/** Drop corrupt records and coerce the rest into safe JobData rows. */
+export const sanitizeCachedJobs = (values: unknown): JobData[] =>
+  Array.isArray(values)
+    ? values.map(sanitizeCachedJob).filter((job): job is JobData => job !== null)
+    : [];
+
 const readJobCache = (): JobData[] | null => {
   try {
     const raw = localStorage.getItem(JOB_CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     const jobs = Array.isArray(parsed) ? parsed : parsed?.jobs;
-    return Array.isArray(jobs) && jobs.length > 0 ? (jobs as JobData[]) : null;
+    const clean = sanitizeCachedJobs(jobs);
+    return clean.length > 0 ? clean : null;
   } catch {
     return null;
   }
@@ -236,7 +275,7 @@ const sourceAliasLookup: Record<string, string> = Object.fromEntries(
 );
 
 const normalizeSourceName = (raw: string): string => {
-  const trimmed = raw.trim();
+  const trimmed = asText(raw).trim();
   if (!trimmed) return '';
   const mapped = sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
   const lower = mapped.toLowerCase();
@@ -270,7 +309,7 @@ const getSourceDisplayName = (source: string): string => sourceDisplayNames[sour
 
 // Normalize raw work-type strings to clean badges: Remote / Hybrid / On-site (or null = no chip)
 const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | null => {
-  const lower = (workType || '').toLowerCase().trim();
+  const lower = asText(workType).toLowerCase().trim();
   if (!lower) return null;
   if (lower === 'true' || lower.includes('remote')) return 'Remote';
   if (lower.includes('hybrid')) return 'Hybrid';
@@ -285,8 +324,8 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 // - Currency (CAD/USD) is preserved from the string or inferred from the location
 //   (Canadian cities => CAD, otherwise USD).
 const formatEarningsMonthly = (raw: string, location: string = ''): string => {
-  if (!raw || !raw.trim()) return '';
-  const str = raw.trim();
+  const str = asText(raw).trim();
+  if (!str) return '';
   const isHourly = /\/\s*(hr|hrs|hour|hours|h)\b/i.test(str);
   const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
   const hasEst = /\*\s*Est\.?/i.test(str);
@@ -294,7 +333,7 @@ const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   // Currency: preserve from the string, else infer from location
   let currency = /\bCAD\b/i.test(str) ? 'CAD' : /\bUSD\b/i.test(str) ? 'USD' : '';
   if (!currency) {
-    const loc = (location || '').toLowerCase();
+    const loc = asText(location).toLowerCase();
     currency = /(canada|canadian|toronto|vancouver|montreal|calgary|ottawa)/.test(loc) ? 'CAD' : 'USD';
   }
 
@@ -350,7 +389,7 @@ const getMonthlyAmount = (raw: string, location: string = ''): number => {
 
 // Map known cities to filter labels from the work-type/location description string
 const extractCity = (workType: string, location: string = '', comments: string = ''): string => {
-  const combined = `${workType || ''} ${location || ''} ${comments || ''}`.trim();
+  const combined = `${asText(workType)} ${asText(location)} ${asText(comments)}`.trim();
   if (!combined) return 'Unknown';
   const lower = combined.toLowerCase();
 
@@ -395,13 +434,13 @@ const extractCity = (workType: string, location: string = '', comments: string =
 // Parse the minimum years of experience from a job's experience text (and role as fallback):
 // ranges ("5-7 years" -> 5), simple ("5+ years" -> 5, "3 years" -> 3), and senior-role defaults.
 export const parseExperienceYears = (requiredExperience: string, role: string = ''): number => {
-  const expText = (requiredExperience || '').toLowerCase();
+  const expText = asText(requiredExperience).toLowerCase();
   // Range first (e.g. "5-7 years" -> 5), then simple "5+ years" / "3 years"
   const rangeMatch = expText.match(/(\d+)\s*[-–to]+\s*\d+\+?\s*(?:years?|yrs?)/i);
   const yearMatch = rangeMatch ? rangeMatch : expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
   if (yearMatch) return parseInt(yearMatch[1]);
   // Senior-level roles without an explicit number count as 5+ years
-  if (/senior|lead|principal|director|head/.test(expText + ' ' + (role || '').toLowerCase())) {
+  if (/senior|lead|principal|director|head/.test(expText + ' ' + asText(role).toLowerCase())) {
     return 5;
   }
   return 0;
@@ -544,13 +583,14 @@ export const parseCSV = (csvText: string): JobData[] => {
   return rows;
 };
 const parseDate = (dateStr: string): Date | null => {
-  if (!dateStr) return null;
+  const text = asText(dateStr);
+  if (!text) return null;
 
   // Try various date formats
   const formats = ['yyyy-MM-dd', 'yyyy-M-d', 'MM/dd/yyyy', 'M/d/yyyy', 'dd/MM/yyyy'];
   for (const fmt of formats) {
     try {
-      const parsed = parse(dateStr, fmt, new Date());
+      const parsed = parse(text, fmt, new Date());
       if (!isNaN(parsed.getTime())) return parsed;
     } catch {
       continue;
@@ -558,7 +598,7 @@ const parseDate = (dateStr: string): Date | null => {
   }
 
   // Fallback to native parsing
-  const date = new Date(dateStr);
+  const date = new Date(text);
   return isNaN(date.getTime()) ? null : date;
 };
 const columns: {
@@ -885,7 +925,7 @@ export const getSourceDestinationUrl = (source?: string, jobLink?: string, roleT
 // Source attribution badge shown on every job card
 const SourceBadge: React.FC<{ source?: string; jobLink?: string; roleTitle?: string }> = ({ source, jobLink, roleTitle }) => {
   if (!source) return null;
-  const normalizedSource = source.trim();
+  const normalizedSource = asText(source).trim();
   const canonicalSource = normalizeSourceName(normalizedSource);
   const isHassanEmail = /hassan|email/i.test(normalizedSource) || canonicalSource === "Hassan's recruiter Network";
   const displayName = isHassanEmail ? "Hassan's Email" : getSourceDisplayName(canonicalSource);
@@ -1176,7 +1216,7 @@ const JobCard: React.FC<{
 
 
       {/* Company Info Banner - Centered below header */}
-      {job.companyInfo && job.companyInfo.length > 0 && (
+      {Array.isArray(job.companyInfo) && job.companyInfo.length > 0 && (
         <div className="mt-4 p-4 md:p-5 rounded-xl" style={{
           background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 150, 180, 0.05))',
           border: '1px solid rgba(0, 212, 255, 0.25)',
@@ -1189,7 +1229,7 @@ const JobCard: React.FC<{
             }}>About {job.company}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2">
-            {job.companyInfo.map((info, index) => (
+            {(Array.isArray(job.companyInfo) ? job.companyInfo : []).map((info, index) => (
               <div key={index} className="flex items-start gap-2">
                 <span className="mt-2.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#FFDD40' }} />
                 <span className="text-lg text-white/90 leading-relaxed">{info}</span>
@@ -1207,7 +1247,7 @@ const JobCard: React.FC<{
         border: '1px solid rgba(0, 212, 255, 0.3)'
       }}>
           {(() => {
-            const termLower = job.term.toLowerCase();
+            const termLower = asText(job.term).toLowerCase();
             const hasYear = termLower.includes('year') || termLower.includes('12 month');
             const monthMatch = termLower.match(/(\d+)\s*month/);
             const months = monthMatch ? parseInt(monthMatch[1]) : (hasYear ? 12 : 0);
@@ -1247,7 +1287,7 @@ const JobCard: React.FC<{
           })()}
           {(() => {
             const formatted = formatEarningsMonthly(job.earningEstimate, job.location);
-            const locationLower = job.location?.toLowerCase() || '';
+            const locationLower = asText(job.location).toLowerCase();
             const fallbackCurrency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
             const hasCurrency = /\b(CAD|USD)\b/i.test(formatted);
             const hasEst = /\*\s*Est\.?/i.test(formatted);
@@ -1330,22 +1370,28 @@ const JobCard: React.FC<{
               <p className="text-xl md:text-2xl text-white">{job.comments}</p>
             </div>}
           
-          {(job.recruiterName?.trim() || (job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a') || (job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a') || job.recruiterLinkedIn?.trim()) && <div className="pt-3 border-t border-white/10">
+          {((() => {
+            const name = asText(job.recruiterName).trim();
+            const email = asText(job.recruiterEmail).trim();
+            const phone = asText(job.recruiterPhone).trim();
+            const linkedIn = asText(job.recruiterLinkedIn).trim();
+            return Boolean(name || (email && email.toLowerCase() !== 'n/a') || (phone && phone.toLowerCase() !== 'n/a') || linkedIn);
+          })()) && <div className="pt-3 border-t border-white/10">
               <p className="text-lg md:text-xl font-semibold uppercase tracking-wider mb-3" style={{
             color: '#FFDD40'
           }}>Recruiter Contact</p>
               <div className="space-y-3">
-                {job.recruiterName?.trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
+                {asText(job.recruiterName).trim() && <p className="text-xl md:text-2xl font-semibold text-white">{job.recruiterName}</p>}
                 <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                  {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {asText(job.recruiterEmail).trim().toLowerCase() !== 'n/a' && asText(job.recruiterEmail).trim() && <a href={`mailto:${job.recruiterEmail}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Mail className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterEmail}
                     </a>}
-                  {job.recruiterPhone?.trim() && job.recruiterPhone.trim().toLowerCase() !== 'n/a' && <a href={`tel:${job.recruiterPhone.replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {asText(job.recruiterPhone).trim().toLowerCase() !== 'n/a' && asText(job.recruiterPhone).trim() && <a href={`tel:${asText(job.recruiterPhone).replace(/[^0-9+\-]/g, '')}`} className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Phone className="w-5 h-5 text-[#00d4ff]" />
                       {job.recruiterPhone}
                     </a>}
-                  {job.recruiterLinkedIn?.trim() && job.recruiterLinkedIn.trim().toLowerCase() !== 'n/a' && <a href={job.recruiterLinkedIn.startsWith('http') ? job.recruiterLinkedIn : `https://${job.recruiterLinkedIn}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
+                  {asText(job.recruiterLinkedIn).trim().toLowerCase() !== 'n/a' && asText(job.recruiterLinkedIn).trim() && <a href={asText(job.recruiterLinkedIn).startsWith('http') ? job.recruiterLinkedIn : `https://${job.recruiterLinkedIn}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-lg md:text-xl text-white hover:text-[#00d4ff] transition-colors">
                       <Linkedin className="w-5 h-5 text-[#00d4ff]" />
                       LinkedIn
                     </a>}
@@ -1427,7 +1473,7 @@ const JobAlertsPage: React.FC = () => {
 
   // Role categorization helper
   const categorizeRole = (role: string): string => {
-    const roleLower = role.toLowerCase();
+    const roleLower = asText(role).toLowerCase();
     if (roleLower.includes('fintech') || roleLower.includes('finance') || roleLower.includes('financial')) return 'FinTech';
     if (roleLower.includes('bi') || roleLower.includes('business intelligence') || roleLower.includes('data') || roleLower.includes('analytics')) return 'BI/Data';
     if (roleLower.includes('ai') || roleLower.includes('artificial') || roleLower.includes('machine learning') || roleLower.includes('ml')) return 'AI/ML';
@@ -1521,8 +1567,9 @@ const JobAlertsPage: React.FC = () => {
       roleTypeSet.add(categorizeRole(job.role));
       
       // Extract source (filter out blanks)
-      if (job.source && job.source.trim()) {
-        sourceSet.add(job.source.trim());
+      const sourceName = asText(job.source).trim();
+      if (sourceName) {
+        sourceSet.add(sourceName);
       }
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
@@ -1586,7 +1633,7 @@ const JobAlertsPage: React.FC = () => {
     // Search filter (Role, Duties, Company)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(row => row.role.toLowerCase().includes(query) || row.duties.toLowerCase().includes(query) || row.company.toLowerCase().includes(query));
+      filtered = filtered.filter(row => asText(row.role).toLowerCase().includes(query) || asText(row.duties).toLowerCase().includes(query) || asText(row.company).toLowerCase().includes(query));
     }
 
     // Role type filter (from chart click or dropdown)
@@ -1661,7 +1708,7 @@ const JobAlertsPage: React.FC = () => {
     // Sources filter (multi-select)
     if (selectedSources.length > 0) {
       filtered = filtered.filter(row => {
-        const jobSource = row.source?.trim() || '';
+        const jobSource = asText(row.source).trim();
         return selectedSources.includes(jobSource);
       });
     }
@@ -1704,8 +1751,8 @@ const JobAlertsPage: React.FC = () => {
         return (originalIndex.get(b) ?? 0) - (originalIndex.get(a) ?? 0);
       }
       
-      const aStr = (aValue as string) || '';
-      const bStr = (bValue as string) || '';
+      const aStr = asText(aValue);
+      const bStr = asText(bValue);
       return order === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
     });
     return filtered;
@@ -2346,7 +2393,7 @@ const JobAlertsPage: React.FC = () => {
                       const dollarCount = amount >= 18000 ? 3 : amount > 15000 ? 2 : 1;
                       const workMode = normalizeWorkMode(job.workType);
                       const formattedEarnings = formatEarningsMonthly(job.earningEstimate, job.location);
-                      const locationLower = job.location?.toLowerCase() || '';
+                      const locationLower = asText(job.location).toLowerCase();
                       const currency = locationLower.includes('canada') || locationLower.includes('toronto') || locationLower.includes('vancouver') || locationLower.includes('montreal') || locationLower.includes('calgary') || locationLower.includes('ottawa') ? 'CAD' : 'USD';
                       const earningsHasCurrency = /\b(CAD|USD)\b/i.test(formattedEarnings);
                       const earningsHasEst = /\*\s*Est\.?/i.test(formattedEarnings);
@@ -2401,7 +2448,7 @@ const JobAlertsPage: React.FC = () => {
                             </span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
-                            {job.recruiterEmail?.trim() && job.recruiterEmail.trim().toLowerCase() !== 'n/a' && (
+                            {asText(job.recruiterEmail).trim().toLowerCase() !== 'n/a' && asText(job.recruiterEmail).trim() && (
                               <a href={`mailto:${job.recruiterEmail}`} className="text-[#00d4ff] hover:underline text-xs">
                                 Email
                               </a>
