@@ -166,7 +166,7 @@ const sourceDescriptions: Record<string, string> = {
   "Kforce": "Leading technology and professional staffing solutions firm, connecting premier Project Management and technology talent nationwide.",
   "TEKsystems": "Industry leader in IT staffing, talent solutions, and technology services, delivering digital transformation, cloud, and agile project delivery across North America.",
   "TES – The Employment Solution": "Premier Canadian IT & engineering staffing and recruitment firm founded in 1975, delivering enterprise Project Management, Technology, and Digital Transformation consulting talent across Canada.",
-  "Motion Recruitment": "Leading North American tech staffing and consulting firm specializing in contract Project Management, Agile, Product, and IT leadership roles with deep expertise in the San Francisco Bay Area and nationwide tech hubs.",
+  "Motion Recruitment": "Leading nationwide IT and technology recruitment agency specializing in Project Management, Software Engineering, and digital transformation consulting across the San Francisco Bay Area and USA.",
 };
 
 // Map observed data-source spellings to the canonical source names above
@@ -214,6 +214,7 @@ const sourceNameMap: Record<string, string> = {
   "Motion Recruitment": "Motion Recruitment",
   "Motion": "Motion Recruitment",
   "motion recruitment": "Motion Recruitment",
+  "Motion Recruitment - San Francisco": "Motion Recruitment",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
