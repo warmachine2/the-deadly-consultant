@@ -321,10 +321,22 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 // - Hourly rates (e.g. '$91/hr USD', '$85 - $96/Hours') convert at hourly * 1.14 * 160 (KAN-327).
 // - Annual salaries (e.g. '$76,000 - $126,000/yr USD') convert at annual / 12.
 // - Already-monthly amounts missing '/mo' (e.g. '$12,758 CAD') get '/mo' appended; '/month' standardizes to '/mo'.
+// - Compact 'k'/'K' thousands amounts (e.g. '$120k', '$85K') are expanded to full
+//   numbers ('$120,000') before any conversion, so hourly, annual, monthly and
+//   getMonthlyAmount all see the same normalized amounts.
 // - Currency (CAD/USD) is preserved from the string or inferred from the location
 //   (Canadian cities => CAD, otherwise USD).
-const formatEarningsMonthly = (raw: string, location: string = ''): string => {
-  const str = asText(raw).trim();
+// Expand '$120k'/'$85K' style compact amounts to '$120,000'. Requires a leading '$'
+// so ordinary words like '401k' are never mistaken for a salary.
+const expandKAmounts = (s: string): string =>
+  s.replace(/\$\s*([\d,]+(?:\.\d+)?)\s*([kK])(?![a-zA-Z])/g, (match, num: string) => {
+    const v = parseFloat(num.replace(/,/g, ''));
+    if (!isFinite(v) || v <= 0) return match;
+    return '$' + (v * 1000).toLocaleString('en-US');
+  });
+
+export const formatEarningsMonthly = (raw: string, location: string = ''): string => {
+  const str = expandKAmounts(asText(raw).trim());
   if (!str) return '';
   const isHourly = /\/\s*(hr|hrs|hour|hours|h)\b/i.test(str);
   const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
@@ -338,11 +350,14 @@ const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   }
 
   const convertNumbers = (divisor: number, multiplier: number = 1): string[] =>
-    (str.match(/\$?\s*([\d,]+(?:\.\d+)?)/g) || [])
-      .map(n => {
-        const v = parseFloat(n.replace(/[^0-9.]/g, ''));
+    Array.from(str.matchAll(/\$?\s*([\d,]+(?:\.\d+)?)\s*([kK])?(?![a-zA-Z])/g))
+      .map(m => {
+        const v = parseFloat(m[1].replace(/[^0-9.]/g, ''));
         if (!isFinite(v) || v <= 0) return null;
-        return '$' + Math.round((v * multiplier) / divisor).toLocaleString('en-US');
+        // 'k'/'K' thousands apply only to $-prefixed amounts, so bare words like
+        // '401k' keep their pre-existing plain-number behavior.
+        const scaled = m[0].includes('$') && m[2] ? v * 1000 : v;
+        return '$' + Math.round((scaled * multiplier) / divisor).toLocaleString('en-US');
       })
       .filter((s): s is string => s !== null);
 
@@ -381,7 +396,7 @@ const formatEarningsMonthly = (raw: string, location: string = ''): string => {
 };
 
 // First numeric amount of the (possibly converted) monthly earnings string, for filtering/ratings
-const getMonthlyAmount = (raw: string, location: string = ''): number => {
+export const getMonthlyAmount = (raw: string, location: string = ''): number => {
   const formatted = formatEarningsMonthly(raw, location);
   const m = formatted.match(/([\d,]+(?:\.\d+)?)/);
   return m ? Math.round(parseFloat(m[1].replace(/,/g, ''))) : 0;
