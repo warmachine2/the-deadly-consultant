@@ -1476,12 +1476,14 @@ const JobAlertsPage: React.FC = () => {
     countries,
     locations,
     cities,
+    citiesByCountry,
     uniqueRoleTypes,
     uniqueSources
   } = useMemo(() => {
     const countrySet = new Set<string>();
     const locationSet = new Set<string>();
     const citySet = new Set<string>();
+    const cityCountriesMap = new Map<string, Set<string>>();
     const roleTypeSet = new Set<string>();
     const sourceSet = new Set<string>();
     
@@ -1496,7 +1498,16 @@ const JobAlertsPage: React.FC = () => {
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
       const city = extractCity(job.workType, job.location, job.comments);
-      if (city) citySet.add(city);
+      if (city) {
+        citySet.add(city);
+        // Track which countries each city belongs to (for cascading City dropdown)
+        const country = normalizeCountry(job.location);
+        if (country) {
+          const set = cityCountriesMap.get(city) ?? new Set<string>();
+          set.add(country);
+          cityCountriesMap.set(city, set);
+        }
+      }
       
       if (job.location) {
         locationSet.add(job.location);
@@ -1510,6 +1521,7 @@ const JobAlertsPage: React.FC = () => {
       countries: Array.from(countrySet).sort(),
       locations: Array.from(locationSet).sort(),
       cities: Array.from(citySet).sort(),
+      citiesByCountry: cityCountriesMap,
       uniqueRoleTypes: Array.from(roleTypeSet).sort(),
       // Merge canonical sources with any additional sources found in the data
       uniqueSources: Array.from(new Set([...Object.keys(sourceDescriptions), ...Array.from(sourceSet)])).sort()
