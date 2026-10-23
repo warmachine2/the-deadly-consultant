@@ -84,3 +84,8 @@
 - [x] Build city-to-country map in the location useMemo and derive `availableCities` (all cities when Country = All; country-scoped otherwise, matching the 'Other' filter rule).
 - [x] Reset `selectedLocation` to 'all' automatically when it's missing from the selected country's city list; "All Cities" remains the first option.
 - [x] Verify live: Canada/USA lists are country-scoped, Boston (USA) resets to "All Cities" after switching to Canada (38 tests pass; typecheck and build clean).
+
+# Job board: experience filter parsing
+
+- [x] Extract `parseExperienceYears` (range "5-7 years" -> 5, "5+ years"/"3 years" simple match, senior/lead/principal/director/head without a number default to 5, otherwise 0) and use it in the experience filter.
+- [x] Add tests/experienceParsing.test.ts covering ranges, en dash, "to", plus, senior defaults and explicit-number precedence (53 tests pass; typecheck clean).

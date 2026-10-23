@@ -378,6 +378,21 @@ const extractCity = (workType: string, location: string = '', comments: string =
   return 'Other';
 };
 
+// Parse the minimum years of experience from a job's experience text (and role as fallback):
+// ranges ("5-7 years" -> 5), simple ("5+ years" -> 5, "3 years" -> 3), and senior-role defaults.
+export const parseExperienceYears = (requiredExperience: string, role: string = ''): number => {
+  const expText = (requiredExperience || '').toLowerCase();
+  // Range first (e.g. "5-7 years" -> 5), then simple "5+ years" / "3 years"
+  const rangeMatch = expText.match(/(\d+)\s*[-–to]+\s*\d+\+?\s*(?:years?|yrs?)/i);
+  const yearMatch = rangeMatch ? rangeMatch : expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
+  if (yearMatch) return parseInt(yearMatch[1]);
+  // Senior-level roles without an explicit number count as 5+ years
+  if (/senior|lead|principal|director|head/.test(expText + ' ' + (role || '').toLowerCase())) {
+    return 5;
+  }
+  return 0;
+};
+
 // Parse Company Info JSON string to array
 export const parseCompanyInfo = (infoStr: string): string[] => {
   if (!infoStr) return [];
@@ -1584,9 +1599,7 @@ const JobAlertsPage: React.FC = () => {
     // Experience filter
     if (experienceFilter !== 'all') {
       filtered = filtered.filter(row => {
-        const expText = row.requiredExperience.toLowerCase();
-        const yearMatch = expText.match(/(\d+)\+?\s*(?:years?|yrs?)/i);
-        const years = yearMatch ? parseInt(yearMatch[1]) : 0;
+        const years = parseExperienceYears(row.requiredExperience, row.role);
         
         if (experienceFilter === 'less5') {
           return years < 5;
