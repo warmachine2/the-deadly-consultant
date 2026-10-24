@@ -119,14 +119,15 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
             </div>
           </Link>
 
-          {/* PM Consulting Job Board Button - Desktop */}
-          <a data-formkit-toggle="63221ca346" href="https://bi-fintech-consultant-academy.kit.com/63221ca346" className="hidden md:block flex-shrink-0">
-            <button
-              className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-[#F4C903] hover:text-white cta-glow-pulse"
-            >
-              Open PM Contracts
-            </button>
+          {/* PM Consulting Job Board Button - Desktop (anchor styled as the button so Kit's click handler targets it directly) */}
+          <a
+            data-formkit-toggle="63221ca346"
+            href="https://bi-fintech-consultant-academy.kit.com/63221ca346"
+            className="hidden md:flex flex-shrink-0 items-center justify-center px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-[#F4C903] hover:text-white cta-glow-pulse"
+          >
+            Open PM Contracts
           </a>
+
 
           <Link to="/proof" className="hidden md:block flex-shrink-0">
             <button className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button text-[#F4C903] hover:text-white">
