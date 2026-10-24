@@ -42,19 +42,17 @@
   <body>
     <div id="root"></div>
     <script>
-      // Load Kit (ConvertKit) modal forms only on the Job Board page
-      if (window.location.pathname.indexOf('/ai-bi-fintech-pm-job-alerts-repo') === 0) {
-        ['27ad03da2d', '0edbc71770'].forEach(function (uid) {
-          var s = document.createElement('script');
-          s.async = true;
-          s.setAttribute('data-uid', uid);
-          s.src = 'https://bi-fintech-consultant-academy.kit.com/' + uid + '/index.js';
-          s.onload = function () {
-            (window.__kitLoaded = window.__kitLoaded || {})[uid] = true;
-          };
-          document.body.appendChild(s);
-        });
-      }
+      (function () {
+        var uid = '63221ca346';
+        var s = document.createElement('script');
+        s.async = true;
+        s.setAttribute('data-uid', uid);
+        s.src = 'https://bi-fintech-consultant-academy.kit.com/' + uid + '/index.js';
+        s.onload = function () {
+          (window.__kitLoaded = window.__kitLoaded || {})[uid] = true;
+        };
+        document.body.appendChild(s);
+      })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>

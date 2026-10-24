@@ -1,5 +1,11 @@
 # KAN-364 Student Intake
 
+# KAN-432 Unified Kit popup
+
+- [ ] Load the unified Kit form site-wide and update navigation, hero and job-board triggers.
+- [ ] Remove job-board Free Book banners and alert signup buttons; update the remaining header CTA.
+- [ ] Run regression tests and verify desktop/mobile popup behavior and a clean build.
+
 - [x] Make retired intake columns nullable.
 - [x] Update titles, password gate, and seven-field submission.
 - [x] Verify validation and password behavior in preview (four tests passed; desktop/mobile checked; no live submission sent).
