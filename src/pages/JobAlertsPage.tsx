@@ -1533,7 +1533,7 @@ const JobAlertsPage: React.FC = () => {
 
   // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
   useEffect(() => {
-    const uid = '63221ca346';
+    const uid = window.innerWidth < 768 ? '28fef2dc22' : '63221ca346';
     // Only click once the Kit embed script has actually loaded (flag set by the
     // loader in index.html). If Kit is blocked/slow, we skip — a programmatic
     // click on an unbound toggle anchor would otherwise navigate the page away.

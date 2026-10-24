@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { WORKSHOP_REGISTER_URL } from "@/components/TopNav";
 
+const DESKTOP_KIT_UID = "63221ca346";
+const MOBILE_KIT_UID = "28fef2dc22";
+
 const HeroSection = () => {
+  const [kitUid, setKitUid] = useState(
+    () => (typeof window !== "undefined" && window.innerWidth < 768 ? MOBILE_KIT_UID : DESKTOP_KIT_UID)
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 768px)");
+    const apply = () => setKitUid(mql.matches ? DESKTOP_KIT_UID : MOBILE_KIT_UID);
+    apply();
+    mql.addEventListener("change", apply);
+    return () => mql.removeEventListener("change", apply);
+  }, []);
+
   return <section className="volumetric-glass rounded-3xl p-4 md:p-12 mb-0 md:mb-8 hero-bokeh relative overflow-hidden mx-2 md:mx-0">
       {/* Bokeh orbs layer */}
       <div className="bokeh-orbs" aria-hidden="true">
@@ -32,8 +48,8 @@ const HeroSection = () => {
             <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
           </div>
           <a
-            data-formkit-toggle="63221ca346"
-            href="https://bi-fintech-consultant-academy.kit.com/63221ca346"
+            data-formkit-toggle={kitUid}
+            href={`https://bi-fintech-consultant-academy.kit.com/${kitUid}`}
             className="flex items-center gap-1 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
           >
             Browse open contracts <ArrowRight className="w-4 h-4" />
