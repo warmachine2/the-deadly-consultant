@@ -1308,9 +1308,12 @@ All colors MUST be HSL.
   }
 }
 
-.formkit-overlay:has(.formkit-form[data-uid="28fef2dc22"]) {
+.formkit-overlay:not([data-active="true"]) {
+  pointer-events: none !important;
+}
+
+.formkit-overlay[data-active="true"]:has(.formkit-form[data-uid="28fef2dc22"]) {
   padding: 12px !important;
-  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
