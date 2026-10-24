@@ -73,7 +73,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 </div>
 
                 {/* Job Board pill */}
-                <a data-formkit-toggle="63221ca346" href="https://bi-fintech-consultant-academy.kit.com/63221ca346" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                <a data-formkit-toggle="28fef2dc22" href="https://bi-fintech-consultant-academy.kit.com/28fef2dc22" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
                   Open PM Contracts
                 </a>
                 <Link to="/proof" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>

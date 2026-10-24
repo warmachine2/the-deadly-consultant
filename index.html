@@ -43,15 +43,18 @@
     <div id="root"></div>
     <script>
       (function () {
-        var uid = '63221ca346';
-        var s = document.createElement('script');
-        s.async = true;
-        s.setAttribute('data-uid', uid);
-        s.src = 'https://bi-fintech-consultant-academy.kit.com/' + uid + '/index.js';
-        s.onload = function () {
-          (window.__kitLoaded = window.__kitLoaded || {})[uid] = true;
-        };
-        document.body.appendChild(s);
+        var desktopUid = '63221ca346';
+        var mobileUid = '28fef2dc22';
+        [desktopUid, mobileUid].forEach(function (uid) {
+          var s = document.createElement('script');
+          s.async = true;
+          s.setAttribute('data-uid', uid);
+          s.src = 'https://bi-fintech-consultant-academy.kit.com/' + uid + '/index.js';
+          s.onload = function () {
+            (window.__kitLoaded = window.__kitLoaded || {})[uid] = true;
+          };
+          document.body.appendChild(s);
+        });
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
