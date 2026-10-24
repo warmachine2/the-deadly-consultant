@@ -1294,3 +1294,108 @@ All colors MUST be HSL.
   }
 }
 
+
+/* KAN-432: Kit Modal Mobile & Viewport Isolation */
+@media (max-width: 767px) {
+  .formkit-overlay:has(.formkit-form[data-uid="63221ca346"]) {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .formkit-overlay:has(.formkit-form[data-uid="28fef2dc22"]) {
+    display: none !important;
+  }
+}
+
+.formkit-overlay:has(.formkit-form[data-uid="28fef2dc22"]) {
+  padding: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.formkit-overlay:has(.formkit-form[data-uid="28fef2dc22"]) .formkit-modal {
+  max-width: 360px !important;
+  width: 92vw !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] {
+  max-width: 100% !important;
+  width: 100% !important;
+  border-radius: 22px !important;
+  overflow: hidden !important;
+  margin: 0 auto !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65) !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] + .formkit-close {
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-column:first-of-type {
+  aspect-ratio: 1.08 / 1 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 0 !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-background {
+  background-size: 190% auto !important;
+  background-repeat: no-repeat !important;
+  background-position: 46.5% 100% !important;
+  background-color: #071936 !important;
+  opacity: 1 !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-column:last-of-type {
+  padding: 14px 16px 16px 16px !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-field {
+  margin: 0 0 8px 0 !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-input {
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
+  line-height: 1.2 !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] legend {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  margin-bottom: 6px !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-checkboxes {
+  padding: 2px 0 !important;
+  margin-bottom: 4px !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-checkboxes label {
+  font-size: 12.5px !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-submit {
+  margin: 6px 0 0 0 !important;
+  width: 100% !important;
+  border-radius: 8px !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-submit > span {
+  padding: 12px 14px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-powered-by-convertkit-container {
+  display: none !important;
+}

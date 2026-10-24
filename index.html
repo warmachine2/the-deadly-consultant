@@ -43,9 +43,10 @@
     <div id="root"></div>
     <script>
       (function () {
-        var desktopUid = '63221ca346';
-        var mobileUid = '28fef2dc22';
-        [desktopUid, mobileUid].forEach(function (uid) {
+        var loaded = {};
+        function loadKit(uid) {
+          if (loaded[uid]) return;
+          loaded[uid] = true;
           var s = document.createElement('script');
           s.async = true;
           s.setAttribute('data-uid', uid);
@@ -54,7 +55,13 @@
             (window.__kitLoaded = window.__kitLoaded || {})[uid] = true;
           };
           document.body.appendChild(s);
-        });
+        }
+        function syncKitForViewport() {
+          var uid = window.innerWidth < 768 ? '28fef2dc22' : '63221ca346';
+          loadKit(uid);
+        }
+        syncKitForViewport();
+        window.addEventListener('resize', syncKitForViewport);
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
