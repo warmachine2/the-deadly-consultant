@@ -31,12 +31,13 @@ const HeroSection = () => {
             <p className="text-sm md:text-base font-semibold text-[#F4C903]">Open PM Consulting Contracts</p>
             <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
           </div>
-          <Link
-            to="/ai-bi-fintech-pm-job-alerts-repo"
+          <a
+            data-formkit-toggle="63221ca346"
+            href="https://bi-fintech-consultant-academy.kit.com/63221ca346"
             className="flex items-center gap-1 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
           >
             Browse open contracts <ArrowRight className="w-4 h-4" />
-          </Link>
+          </a>
         </div>
 
         {/* Primary hero CTA */}

@@ -19,7 +19,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import strategyGuideThumbnail from '@/assets/strategy-guide-thumbnail.jpg';
 const siSystemsLogoUrl = '/si-systems-logo.jpg';
 const provisoLogoUrl = '/proviso-logo.jpg';
 const insightGlobalLogoUrl = '/insight-global-logo.jpg';
@@ -1533,9 +1532,8 @@ const JobAlertsPage: React.FC = () => {
   }, []);
 
   // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
-  // Desktop form: 27ad03da2d, Mobile form: 0edbc71770
   useEffect(() => {
-    const uid = window.innerWidth < 768 ? '0edbc71770' : '27ad03da2d';
+    const uid = '63221ca346';
     // Only click once the Kit embed script has actually loaded (flag set by the
     // loader in index.html). If Kit is blocked/slow, we skip — a programmatic
     // click on an unbound toggle anchor would otherwise navigate the page away.
@@ -1824,58 +1822,6 @@ const JobAlertsPage: React.FC = () => {
         {/* Network Health Control Panel */}
         <NetworkHealthPanel jobs={data} />
 
-        {/* Strategy Guide Banner - Mobile */}
-        {/* Strategy Guide Banner - Mobile */}
-        <div 
-          className="flex md:hidden flex-row items-center gap-3 px-4 py-2 mb-4 rounded-xl border border-white/20"
-          style={{
-            background: "rgba(15, 15, 15, 0.85)",
-            backdropFilter: "blur(9px) saturate(150%)",
-            WebkitBackdropFilter: "blur(9px) saturate(150%)"
-          }}
-        >
-          <img 
-            src={strategyGuideThumbnail} 
-            alt="Strategy Guide Preview" 
-            className="w-12 h-14 object-cover rounded-md flex-shrink-0 -my-1"
-          />
-          <span className="text-base font-bold text-white flex-1">
-            <span className="text-[#F4C903]">Free Book:</span> Autonomous Agents - PMs Handbook
-          </span>
-          <a 
-            data-formkit-toggle="0edbc71770"
-            href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-            className="px-4 py-2 text-sm font-bold rounded-lg bg-gradient-to-r from-[#F4C903] to-[#FFE361] text-black hover:from-[#FFE361] hover:to-[#F4C903] transition-all shadow-[0_0_12px_rgba(244,201,3,0.5)] hover:shadow-[0_0_20px_rgba(244,201,3,0.7)] flex-shrink-0"
-          >
-            Download
-          </a>
-        </div>
-        
-        {/* Strategy Guide Banner - Desktop */}
-        <div 
-          className="hidden md:flex flex-row items-center gap-5 px-6 py-2 mb-4 mt-2 rounded-xl border border-white/20"
-          style={{
-            background: "rgba(15, 15, 15, 0.85)",
-            backdropFilter: "blur(9px) saturate(150%)",
-            WebkitBackdropFilter: "blur(9px) saturate(150%)"
-          }}
-        >
-          <img 
-            src={strategyGuideThumbnail} 
-            alt="Strategy Guide Preview" 
-            className="w-16 h-20 object-cover rounded-md flex-shrink-0 -my-1"
-          />
-          <span className="text-2xl font-bold text-white flex-1">
-            <span className="text-[#F4C903]">Free Book:</span> Autonomous Agents - PMs Handbook
-          </span>
-          <a 
-            data-formkit-toggle="27ad03da2d"
-            href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-            className="px-7 py-3 text-lg font-bold rounded-lg bg-gradient-to-r from-[#F4C903] to-[#FFE361] text-black hover:from-[#FFE361] hover:to-[#F4C903] transition-all shadow-[0_0_15px_rgba(244,201,3,0.5)] hover:shadow-[0_0_25px_rgba(244,201,3,0.7)] flex-shrink-0"
-          >
-            Download
-          </a>
-        </div>
         {/* Header Section */}
         <div className="volumetric-glass rounded-3xl p-6 md:p-10 mb-6">
           <h1 className="text-3xl md:text-5xl font-bold mb-4" style={{
@@ -1911,37 +1857,7 @@ const JobAlertsPage: React.FC = () => {
               border: '1px solid rgba(0, 150, 255, 0.4)'
             }}>
                 <CalendarCheck className="w-5 h-5 mr-2" />
-                Free 30-Min Strategy Session
-              </a>
-              {/* Mobile Link */}
-              <a 
-                data-formkit-toggle="0edbc71770"
-                href="https://bi-fintech-consultant-academy.kit.com/0edbc71770"
-                className="md:hidden inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 desktop-hover-scale-105 cursor-pointer" 
-                style={{
-                  background: 'linear-gradient(135deg, rgba(244, 201, 3, 0.8), rgba(255, 221, 64, 0.6))',
-                  boxShadow: '0 0 30px rgba(244, 201, 3, 0.5), 0 0 60px rgba(244, 201, 3, 0.3)',
-                  border: '1px solid rgba(244, 201, 3, 0.4)',
-                  color: '#0a0a0a'
-                }}
-              >
-                <Users className="w-5 h-5 mr-2" />
-                Sign-up for new PM Contract Alerts
-              </a>
-              {/* Desktop Link */}
-              <a 
-                data-formkit-toggle="27ad03da2d"
-                href="https://bi-fintech-consultant-academy.kit.com/27ad03da2d"
-                className="hidden md:inline-flex items-center px-8 py-4 rounded-2xl font-bold text-white transition-all duration-300 desktop-hover-scale-105 cursor-pointer" 
-                style={{
-                  background: 'linear-gradient(135deg, rgba(244, 201, 3, 0.8), rgba(255, 221, 64, 0.6))',
-                  boxShadow: '0 0 30px rgba(244, 201, 3, 0.5), 0 0 60px rgba(244, 201, 3, 0.3)',
-                  border: '1px solid rgba(244, 201, 3, 0.4)',
-                  color: '#0a0a0a'
-                }}
-              >
-                <Users className="w-5 h-5 mr-2" />
-                Sign-up for new PM Contract Alerts
+                Free 10-Min $10k/mo Path Call
               </a>
             </div>
             <p className="text-base md:text-lg mt-3" style={{

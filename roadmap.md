@@ -1,3 +1,10 @@
+# KAN-432 Unified Kit popup
+
+- [x] Load the unified Kit form site-wide and update navigation, hero and job-board triggers.
+- [x] Remove job-board Free Book banners and alert signup buttons; update the remaining header CTA.
+- [x] Verify 94 regression tests pass, build OK, and desktop/mobile links and layout without runtime errors.
+- [ ] Verify live Kit popup opening: Kit's Cloudflare challenge blocks the external script in automated browser checks (HTTP 403); requires an unblocked browser.
+
 # KAN-364 Student Intake
 
 - [x] Make retired intake columns nullable.
