@@ -130,3 +130,9 @@
 - [x] Add unit cases to tests/salaryConversion.test.ts for "$120k/yr" -> "$10,000/mo USD", "$120k - $140k/yr USD" -> "$10,000 - $11,667/mo USD", "$10k/mo" -> "$10,000/mo USD", "$75/hr" -> "$13,680/mo USD" (75 * 1.14 * 160), "$150,000/yr" -> "$12,500/mo USD", each also asserting getMonthlyAmount reads the same normalized amount.
 - [x] Confirm no regressions: 94 tests pass across 12 files, typecheck and build clean.
 
+
+# KAN-435 Phase 1: direct meeting link on webinar page
+
+- [x] Update BookSessionPage header to the 3+ years / skip-the-webinar-wait headline with the 15-Minute Experience Diagnostic & Resume Audit paragraph.
+- [x] Add the Direct Meeting Callout glass card below the FreeWorkshopPage registration form with a Link to /book-session.
+- [x] Confirm no regressions: 94 tests pass across 12 files, typecheck and build clean; preview-only, not published.
