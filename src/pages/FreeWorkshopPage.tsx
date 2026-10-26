@@ -213,6 +213,21 @@ const FreeWorkshopPage = () => {
       <TopNav />
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-2xl mx-auto">
+          {/* Direct Meeting Callout: Skip Webinar Wait */}
+          <div className="mb-8 volumetric-glass rounded-2xl p-6 md:p-8 text-center border border-[#F4C903]/30">
+            <h2 className="text-xl md:text-2xl font-bold mb-3" style={{ color: '#FFE361' }}>
+              Have 3+ Years of Professional Experience? Skip the 48-Hour Webinar Wait.
+            </h2>
+            <p className="text-white/80 text-sm md:text-base leading-relaxed mb-6 max-w-xl mx-auto">
+              Book your private <strong className="text-white font-semibold">15-Minute Experience Diagnostic & Resume Audit</strong> directly with Hassan below. We will pull up your LinkedIn live, match your background to active $85–$120/hr contracts on the board, and check if you qualify for one of our <strong className="text-white font-semibold">10 Founding Case-Study Scholarships (50% Off)</strong>.
+            </p>
+            <Link to="/book-session">
+              <button type="button" className="px-6 py-3 rounded-xl font-bold text-sm md:text-base transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-[#F4C903] hover:text-white cta-glow-pulse">
+                Book Private 15-Min Diagnostic Call →
+              </button>
+            </Link>
+          </div>
+
           <div className="volumetric-glass rounded-2xl p-8 md:p-12">
             <h1
               className="text-3xl md:text-4xl font-bold mb-4 text-center"
