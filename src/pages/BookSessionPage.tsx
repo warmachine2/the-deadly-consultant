@@ -121,10 +121,10 @@ const BookSessionPage = () => {
 
           <div className="volumetric-glass rounded-2xl p-8 md:p-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ color: '#FFE361' }}>
-              Book Free Pivot Strategy Session
+              Have 3+ Years of Professional Experience? Skip the 48-Hour Webinar Wait.
             </h1>
-            <p className="text-muted-foreground text-center mb-8">
-              Share your grind - I'll personally vet if you're ready for the AI-Proof PM Pivot (limited spots; my $15k/mo system got me ocean-side Focus Zone freedom)
+            <p className="text-muted-foreground text-center mb-8 max-w-xl mx-auto leading-relaxed">
+              Book your private <strong className="text-white font-semibold">15-Minute Experience Diagnostic & Resume Audit</strong> directly with Hassan below. We will pull up your LinkedIn live, match your background to active $85–$120/hr contracts on the board, and check if you qualify for one of our <strong className="text-white font-semibold">10 Founding Case-Study Scholarships (50% Off)</strong>.
             </p>
 
             <Form {...form}>
