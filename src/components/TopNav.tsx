@@ -1,6 +1,7 @@
 import { Search, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { isJobBoardUnlocked, JOB_BOARD_PATH } from "@/lib/jobBoardGate";
 import {
   Sheet,
   SheetContent,
@@ -84,7 +85,7 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 </div>
 
                 {/* Job Board pill */}
-                <a data-formkit-toggle="28fef2dc22" href="https://bi-fintech-consultant-academy.kit.com/28fef2dc22" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                <a data-formkit-toggle={boardUnlocked ? undefined : "28fef2dc22"} href={boardUnlocked ? JOB_BOARD_PATH : "https://bi-fintech-consultant-academy.kit.com/28fef2dc22"} className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={(e) => { closeMobileMenu(); handleContractsClick(e); }}>
                   Open PM Contracts
                 </a>
                 <Link to="/proof" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
@@ -136,8 +137,9 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
           {/* PM Consulting Job Board Button - Desktop (anchor styled as the button so Kit's click handler targets it directly) */}
           <a
-            data-formkit-toggle="63221ca346"
-            href="https://bi-fintech-consultant-academy.kit.com/63221ca346"
+            data-formkit-toggle={boardUnlocked ? undefined : "63221ca346"}
+            href={boardUnlocked ? JOB_BOARD_PATH : "https://bi-fintech-consultant-academy.kit.com/63221ca346"}
+            onClick={handleContractsClick}
             className="hidden md:flex flex-shrink-0 items-center justify-center px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button border-2 border-[#F4C903] text-[#F4C903] hover:text-white cta-glow-pulse"
           >
             Open PM Contracts

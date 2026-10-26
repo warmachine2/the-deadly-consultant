@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { markJobBoardUnlocked } from "@/lib/jobBoardGate";
 import { useToast } from '@/hooks/use-toast';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';

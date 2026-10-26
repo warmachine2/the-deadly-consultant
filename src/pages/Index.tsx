@@ -1,6 +1,7 @@
 // Index page - Main blog home
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { isJobBoardUnlocked, getKitUid } from "@/lib/jobBoardGate";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
