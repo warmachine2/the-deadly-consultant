@@ -48,8 +48,8 @@ const HeroSection = () => {
             <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
           </div>
           <a
-            data-formkit-toggle={kitUid}
-            href={`https://bi-fintech-consultant-academy.kit.com/${kitUid}`}
+            data-formkit-toggle={unlocked ? undefined : kitUid}
+            href={unlocked ? JOB_BOARD_PATH : `https://bi-fintech-consultant-academy.kit.com/${kitUid}`}
             className="flex items-center gap-1 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
           >
             Browse open contracts <ArrowRight className="w-4 h-4" />

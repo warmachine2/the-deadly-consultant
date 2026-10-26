@@ -44,8 +44,23 @@
     <script>
       (function () {
         var loaded = {};
+        function isUnlocked() {
+          try {
+            if (sessionStorage.getItem('ztopm_job_board_unlocked') === 'true') return true;
+            if (localStorage.getItem('ztopm_job_board_unlocked') === 'true') return true;
+          } catch (e) {}
+          return document.cookie.indexOf('ztopm_job_board_unlocked=true') !== -1;
+        }
+        function shouldSkipKit() {
+          return isUnlocked() || window.location.pathname.indexOf('/ai-bi-fintech-pm-job-alerts-repo') !== -1;
+        }
         function loadKit(uid) {
           if (loaded[uid]) return;
+          // Unlocked visitors / job board: never load Kit, so its built-in 5s timer can't fire.
+          if (shouldSkipKit()) {
+            document.documentElement.classList.add('job-board-unlocked');
+            return;
+          }
           loaded[uid] = true;
           var s = document.createElement('script');
           s.async = true;
@@ -62,6 +77,21 @@
         }
         syncKitForViewport();
         window.addEventListener('resize', syncKitForViewport);
+
+        // Unlock immediately when a Kit form is submitted (from any page).
+        document.addEventListener('submit', function (e) {
+          var form = e.target;
+          if (form && (form.classList.contains('formkit-form') || form.getAttribute('data-sv-form'))) {
+            try {
+              sessionStorage.setItem('ztopm_job_board_unlocked', 'true');
+              localStorage.setItem('ztopm_job_board_unlocked', 'true');
+            } catch (err) {}
+            document.cookie = 'ztopm_job_board_unlocked=true; path=/; max-age=172800; SameSite=Lax';
+            document.documentElement.classList.add('job-board-unlocked');
+            var modals = document.querySelectorAll('.formkit-modal, [data-uid="63221ca346"], [data-uid="28fef2dc22"]');
+            modals.forEach(function (m) { m.style.display = 'none'; });
+          }
+        }, true);
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>
