@@ -110,6 +110,10 @@ const Index = () => {
 
   const handlePostClick = useCallback((post: BlogPost) => {
     if (!post?.slug) return;
+    if (post.slug === "ai-bi-fintech-pm-job-alerts-repo" && !isJobBoardUnlocked()) {
+      const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${getKitUid()}"]`);
+      if (trigger) { trigger.click(); return; }
+    }
     navigate(`/${post.slug}`);
   }, [navigate]);
 

@@ -37,6 +37,17 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   };
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const navigate = useNavigate();
+  // When unlocked, drop the Kit toggle attribute so Kit's own listener never opens the popup.
+  const [boardUnlocked, setBoardUnlocked] = useState(isJobBoardUnlocked);
+  const handleContractsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isJobBoardUnlocked()) {
+      e.preventDefault();
+      e.stopPropagation();
+      setBoardUnlocked(true);
+      navigate(JOB_BOARD_PATH);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 volumetric-glass">
