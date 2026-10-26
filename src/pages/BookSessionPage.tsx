@@ -85,24 +85,11 @@ const BookSessionPage = () => {
         console.error("Supabase backup error:", supabaseError);
       }
 
-      // Check years experience for qualification
-      const yearsExp = data.years_experience;
-
-      if (yearsExp >= 3) {
-        toast({
-          title: "Qualified!",
-          description: "Redirecting you to book your strategy session...",
-        });
-        // Redirect immediately after a short delay for toast visibility
-        window.location.href = "https://calendly.com/hassan-hammer/30min";
-      } else {
-        toast({
-          title: "Thanks!",
-          description: "I'll review your info and follow up if it's a strong fit.",
-        });
-        form.reset();
-        setIsSubmitting(false);
-      }
+      toast({
+        title: "Redirecting...",
+        description: "Taking you directly to Hassan's Calendly to choose your time...",
+      });
+      window.location.href = "https://calendly.com/hassan-hammer/30min";
     } catch (error) {
       toast({
         title: "Error",
@@ -239,7 +226,7 @@ const BookSessionPage = () => {
                       Submitting...
                     </>
                   ) : (
-                    "Book Free 30-Min Pivot Strategy Session"
+                    "Book Free 15-Min Pivot Strategy Session"
                   )}
                 </Button>
               </form>
