@@ -136,3 +136,8 @@
 - [x] Update BookSessionPage header to the 3+ years / skip-the-webinar-wait headline with the 15-Minute Experience Diagnostic & Resume Audit paragraph.
 - [x] Add the Direct Meeting Callout glass card below the FreeWorkshopPage registration form with a Link to /book-session.
 - [x] Confirm no regressions: 94 tests pass across 12 files, typecheck and build clean; preview-only, not published.
+
+# KAN-435: direct meeting callout moved to top of webinar page
+
+- [x] Move the "Have 3+ Years of Professional Experience? Skip the 48-Hour Webinar Wait." glass card from below the FreeWorkshopPage registration form to the top of the page column, directly above the Free Live Workshop registration card, and switch its `mt-8` to `mb-8`.
+- [x] Confirm live: desktop (1280px) and mobile (390px) previews show the callout heading and "Book Private 15-Min Diagnostic Call →" button above the workshop headline and "Reserve My Free Spot" button, with no overlap or clipped copy; 94 tests pass and build is clean. Preview-only, not published.
