@@ -761,7 +761,7 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
       {/* Header with close button */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
         <span className="text-sm md:text-base font-bold text-white">
-          <span className="text-[#F4C903]">10k/mo+</span> AI / BI-FinTech PM Strategy Guide <span className="text-white/70">[12min]</span>
+          <span className="text-[#F4C903]">10k/mo+</span> AI / BI-FinTech PM Strategy Guide <span className="text-white/70">[20min]</span>
         </span>
         <button
           onClick={onClose}
@@ -774,7 +774,7 @@ const StrategyVideoPlayer: React.FC<{ onClose: () => void }> = ({ onClose }) => 
       {/* Video Embed */}
       <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
         <iframe
-          src="https://www.youtube.com/embed/ydWdjQYqoMc?autoplay=1"
+          src="https://www.youtube.com/embed/rJnACxKL0Tk?autoplay=1"
           title="10k/mo+ AI / BI-FinTech PM Strategy Guide"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -1338,7 +1338,7 @@ const JobCard: React.FC<{
             <span className="hidden md:inline">Strategy Guide</span>
             <span className="md:hidden">Video</span>
           </span>
-          <span className="text-white/60 text-base">[12m]</span>
+          <span className="text-white/60 text-base">[20m]</span>
         </button>
       </div>
 
