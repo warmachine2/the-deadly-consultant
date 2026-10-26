@@ -1,6 +1,7 @@
 // Index page - Main blog home
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { isJobBoardUnlocked, getKitUid } from "@/lib/jobBoardGate";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
@@ -110,6 +111,10 @@ const Index = () => {
 
   const handlePostClick = useCallback((post: BlogPost) => {
     if (!post?.slug) return;
+    if (post.slug === "ai-bi-fintech-pm-job-alerts-repo" && !isJobBoardUnlocked()) {
+      const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${getKitUid()}"]`);
+      if (trigger) { trigger.click(); return; }
+    }
     navigate(`/${post.slug}`);
   }, [navigate]);
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { markJobBoardUnlocked } from "@/lib/jobBoardGate";
 import { useToast } from '@/hooks/use-toast';
 import { Table as MuiTable, TableBody as MuiTableBody, TableCell as MuiTableCell, TableContainer, TableHead as MuiTableHead, TableRow as MuiTableRow, TableSortLabel, Tooltip, IconButton, Collapse, useMediaQuery, Stack } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
@@ -1531,27 +1532,9 @@ const JobAlertsPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Auto-open the Kit (ConvertKit) modal 5 seconds after page mount.
+  // KAN-432 Phase 2: visitors who reach the board are unlocked for 48h; never auto-open Kit here.
   useEffect(() => {
-    const uid = window.innerWidth < 768 ? '28fef2dc22' : '63221ca346';
-    // Only click once the Kit embed script has actually loaded (flag set by the
-    // loader in index.html). If Kit is blocked/slow, we skip — a programmatic
-    // click on an unbound toggle anchor would otherwise navigate the page away.
-    const tryOpen = () => {
-      const loaded = (window as unknown as { __kitLoaded?: Record<string, boolean> }).__kitLoaded;
-      if (!loaded?.[uid]) return false;
-      const trigger = document.querySelector<HTMLElement>(`[data-formkit-toggle="${uid}"]`);
-      trigger?.click();
-      return true;
-    };
-    const timer = setTimeout(() => {
-      if (tryOpen()) return;
-      const poll = setInterval(() => {
-        if (tryOpen()) clearInterval(poll);
-      }, 1000);
-      setTimeout(() => clearInterval(poll), 25000);
-    }, 5000);
-    return () => clearTimeout(timer);
+    markJobBoardUnlocked();
   }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
