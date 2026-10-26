@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { WORKSHOP_REGISTER_URL } from "@/components/TopNav";
+import { isJobBoardUnlocked, JOB_BOARD_PATH } from "@/lib/jobBoardGate";
 
 const DESKTOP_KIT_UID = "63221ca346";
 const MOBILE_KIT_UID = "28fef2dc22";
 
 const HeroSection = () => {
+  // Unlocked visitors never load Kit, so link them straight to the board.
+  const [unlocked] = useState(isJobBoardUnlocked);
   const [kitUid, setKitUid] = useState(
     () => (typeof window !== "undefined" && window.innerWidth < 768 ? MOBILE_KIT_UID : DESKTOP_KIT_UID)
   );
@@ -48,8 +51,8 @@ const HeroSection = () => {
             <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
           </div>
           <a
-            data-formkit-toggle={kitUid}
-            href={`https://bi-fintech-consultant-academy.kit.com/${kitUid}`}
+            data-formkit-toggle={unlocked ? undefined : kitUid}
+            href={unlocked ? JOB_BOARD_PATH : `https://bi-fintech-consultant-academy.kit.com/${kitUid}`}
             className="flex items-center gap-1 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
           >
             Browse open contracts <ArrowRight className="w-4 h-4" />

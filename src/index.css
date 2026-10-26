@@ -1402,3 +1402,13 @@ body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-submit > span {
 body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-powered-by-convertkit-container {
   display: none !important;
 }
+
+/* KAN-432 Phase 2: never show the Kit popup to visitors who already signed up */
+.job-board-unlocked .formkit-modal,
+.job-board-unlocked [data-uid="63221ca346"],
+.job-board-unlocked [data-uid="28fef2dc22"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
