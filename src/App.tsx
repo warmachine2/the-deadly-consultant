@@ -54,6 +54,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/2026-bi-fintech-consulting-roadmap-pdf-unlock" element={<RoadmapPage />} />
             <Route path="/about-post" element={<AboutPage />} />
+            <Route path="/about" element={<Navigate to="/about-post" replace />} />
+
             <Route path="/3ks-tracker" element={<ProductivityTrackerPage />} />
             <Route path="/ai-bi-fintech-pm-job-alerts-repo" element={<JobAlertsPage />} />
             <Route path="/book-session" element={<BookSessionPage />} />

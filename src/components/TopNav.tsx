@@ -79,6 +79,10 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <Link to="/proof" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
                   Student Results
                 </Link>
+                <Link to="/about-post" className="px-4 py-3 text-[#F4C903] hover:text-white hover:bg-white/10 transition-all" onClick={closeMobileMenu}>
+                  About
+                </Link>
+
 
                 {/* Divider */}
                 <div className="my-4 border-t border-white/10" />
@@ -134,6 +138,12 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
               Student Results
             </button>
           </Link>
+          <Link to="/about-post" className="hidden md:block flex-shrink-0">
+            <button className="px-2 py-2 rounded-xl font-semibold text-[10px] 2xl:text-xs transition-colors duration-300 whitespace-nowrap volumetric-glass-button text-[#F4C903] hover:text-white">
+              About
+            </button>
+          </Link>
+
 
           {/* Desktop search stays in the left group, separated from the Job Board pill */}
           <div className="hidden md:flex items-center ml-1 flex-shrink-0">
