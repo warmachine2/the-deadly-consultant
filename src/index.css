@@ -1412,3 +1412,20 @@ body form.seva-form.formkit-form[data-uid="28fef2dc22"] .formkit-powered-by-conv
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+/* Hard kill-switch: Absolutely forbid ConvertKit modals from displaying on job board */
+html.job-board-page .formkit-modal,
+html.job-board-page .formkit-slide-in,
+html.job-board-page [data-uid="63221ca346"],
+html.job-board-page [data-uid="28fef2dc22"],
+html.job-board-page div[id^="formkit-"],
+body.job-board-page .formkit-modal,
+body.job-board-page .formkit-slide-in,
+body.job-board-page [data-uid="63221ca346"],
+body.job-board-page [data-uid="28fef2dc22"],
+body.job-board-page div[id^="formkit-"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}

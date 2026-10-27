@@ -42,6 +42,35 @@ const GoogleAnalytics = () => {
   return null;
 };
 
+const JOB_BOARD_PATHS = ["/ai-bi-fintech-pm-job-alerts-repo", "/pm-job-board-canada"];
+const KIT_SELECTORS =
+  '.formkit-modal, .formkit-slide-in, [data-uid="63221ca346"], [data-uid="28fef2dc22"], div[id^="formkit-"]';
+
+const JobBoardKitGuard = () => {
+  const location = useLocation();
+  useEffect(() => {
+    const path = location.pathname.toLowerCase();
+    const onBoard = JOB_BOARD_PATHS.some((p) => path.includes(p));
+    const targets = [document.documentElement, document.body];
+    if (!onBoard) {
+      targets.forEach((el) => el.classList.remove("job-board-page"));
+      return;
+    }
+    targets.forEach((el) => el.classList.add("job-board-page", "job-board-unlocked"));
+    const purge = () => {
+      document.querySelectorAll<HTMLElement>(KIT_SELECTORS).forEach((el) => {
+        if (el.tagName === "SCRIPT") return;
+        el.remove();
+      });
+    };
+    purge();
+    const observer = new MutationObserver(purge);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [location.pathname]);
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -50,6 +79,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <GoogleAnalytics />
+          <JobBoardKitGuard />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/2026-bi-fintech-consulting-roadmap-pdf-unlock" element={<RoadmapPage />} />
