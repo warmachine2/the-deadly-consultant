@@ -106,7 +106,7 @@ const BookSessionPage = () => {
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-2xl mx-auto">
 
-          <div className="volumetric-glass rounded-2xl p-8 md:p-12">
+          <div className="volumetric-glass rounded-2xl p-5 sm:p-8 md:p-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center" style={{ color: '#FFE361' }}>
               Have 3+ Years of Professional Experience? Skip the 48-Hour Webinar Wait.
             </h1>
@@ -214,7 +214,7 @@ const BookSessionPage = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full font-semibold py-6 text-lg text-white desktop-hover-scale-105 transition-transform"
+                  className="w-full font-semibold py-4 md:py-6 h-auto text-base sm:text-lg text-white whitespace-normal text-center leading-snug desktop-hover-scale-105 transition-transform"
                   style={{
                     background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
                     boxShadow: '0 0 20px rgba(220, 38, 38, 0.5), 0 0 40px rgba(220, 38, 38, 0.3)',
