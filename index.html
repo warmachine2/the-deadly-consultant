@@ -51,8 +51,19 @@
           } catch (e) {}
           return document.cookie.indexOf('ztopm_job_board_unlocked=true') !== -1;
         }
+        function isJobBoardPath() {
+          var p = (window.location.pathname || '').toLowerCase();
+          return p.indexOf('/ai-bi-fintech-pm-job-alerts-repo') !== -1 ||
+                 p.indexOf('/pm-job-board-canada') !== -1 ||
+                 p.indexOf('/job-board') !== -1 ||
+                 p.indexOf('/jobs') !== -1;
+        }
         function shouldSkipKit() {
-          return isUnlocked() || window.location.pathname.indexOf('/ai-bi-fintech-pm-job-alerts-repo') !== -1;
+          return isUnlocked() || isJobBoardPath();
+        }
+        if (isJobBoardPath()) {
+          document.documentElement.classList.add('job-board-page', 'job-board-unlocked');
+          return;
         }
         function loadKit(uid) {
           if (loaded[uid]) return;
