@@ -61,10 +61,8 @@ const HeroSection = () => {
 
         {/* Primary hero CTA */}
         <div className="w-full max-w-2xl flex flex-col items-center gap-4 md:gap-5 mt-2 md:mt-4">
-          <a
-            href={WORKSHOP_REGISTER_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/free-workshop"
             className="hero-card-beam flex flex-col justify-center gap-2 px-5 py-5 md:px-6 md:py-6 rounded-xl text-center items-center cursor-pointer transition-colors duration-300 w-full"
             style={{
               background: "rgba(15, 15, 15, 0.85)",
