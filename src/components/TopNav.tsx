@@ -100,11 +100,11 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
                 <div className="my-4 border-t border-white/10" />
 
                 <div className="px-4">
-                  <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>
+                  <Link to="/free-workshop" onClick={closeMobileMenu}>
                     <button className="cta-red w-full px-4 py-3 font-bold text-white">
                       Reserve My Free Workshop
                     </button>
-                  </a>
+                  </Link>
                 </div>
 
               </div>
@@ -201,13 +201,13 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
 
 
           {/* Workshop CTA - gold glowing animated border */}
-          <a href={WORKSHOP_REGISTER_URL} target="_blank" rel="noopener noreferrer">
+          <Link to="/free-workshop">
             <button
               className="cta-red px-2.5 py-1.5 text-[11px] leading-tight text-center whitespace-normal font-bold text-white hover:text-white transition-colors duration-300 max-w-[130px] sm:max-w-none md:px-4 md:py-2.5 md:text-xs 2xl:px-5 2xl:py-3 2xl:text-sm shadow-none"
             >
               Reserve My Free Workshop
             </button>
-          </a>
+          </Link>
 
         </div>
       </div>
