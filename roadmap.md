@@ -141,3 +141,9 @@
 
 - [x] Move the "Have 3+ Years of Professional Experience? Skip the 48-Hour Webinar Wait." glass card from below the FreeWorkshopPage registration form to the top of the page column, directly above the Free Live Workshop registration card, and switch its `mt-8` to `mb-8`.
 - [x] Confirm live: desktop (1280px) and mobile (390px) previews show the callout heading and "Book Private 15-Min Diagnostic Call →" button above the workshop headline and "Reserve My Free Spot" button, with no overlap or clipped copy; 94 tests pass and build is clean. Preview-only, not published.
+
+# KAN-450: mobile filter drawer viewport trap & content hierarchy
+
+- [x] Mobile drawer (isMobile && isOpen) renders as a viewport-anchored sheet: fixed inset-0 z-50 w-full h-[100dvh] overflow-y-auto bg-background/95 backdrop-blur-md p-6 pb-16, so it always opens from top-0 regardless of page scroll; backdrop is fixed inset-0 z-40 bg-black/60 backdrop-blur-sm. Closed state stays hidden (no first-paint flash).
+- [x] Filters first on mobile: header row with "Filter by Tags" + X close, prominent "Clear all filters" directly below the title when tags are active, tag pills expanded by default, then testimonials carousel and the "Book Free 30-Min Strategy Session" CTA below a border-t border-white/10 separator; -webkit-overflow-scrolling: touch shipped as .touch-scroll in index.css.
+- [x] Desktop sidebar unchanged: sticky 256px glass panel, testimonials -> CTA -> "Filter by Tags" -> collapsed Tags -> "Clear All Filters"; verified at 1280x900, mobile verified at 390x844 (drawer top 0, 14 pills above the fold, CTA bottom 809 of 844), 94 tests pass, typecheck and build clean. Preview-only, not published.

@@ -281,6 +281,11 @@ All colors MUST be HSL.
     z-index: 3;
   }
 
+  /* iOS momentum scrolling for scrollable panels (mobile filter drawer) */
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* Modal variant with better visibility */
   [data-radix-portal] .volumetric-glass {
     background: rgba(20, 20, 20, 0.92);
