@@ -121,11 +121,10 @@ const Sidebar = ({ isOpen, onClose, selectedTags, onTagToggle, availableTags }: 
 
       <aside
         ref={sidebarRef}
-        style={{ WebkitOverflowScrolling: "touch" }}
         className={`
           md:sticky top-0 md:top-0 left-0
           w-full md:w-64 md:rounded-2xl
-          transition-transform duration-300 overflow-y-auto
+          transition-transform duration-300 overflow-y-auto touch-scroll
           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
           ${
             isOpen
