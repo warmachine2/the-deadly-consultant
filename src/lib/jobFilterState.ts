@@ -38,3 +38,35 @@ export const clearedJobFilters = (): JobFilterState => ({
   ...INITIAL_JOB_FILTERS,
   selectedSources: [],
 });
+
+// KAN-444: how many filters are actually narrowing the feed right now.
+// Each single-select filter counts once, every selected source counts once, and
+// a date range (either bound set) counts once. Used for the "N Active" badge and
+// the mobile "Clear All Filters" shortcut, so both always agree with the board.
+export const countActiveJobFilters = (
+  filters: Pick<
+    JobFilterState,
+    | "searchQuery"
+    | "selectedCountry"
+    | "selectedLocation"
+    | "selectedRoleType"
+    | "startDate"
+    | "endDate"
+    | "experienceFilter"
+    | "salaryFilter"
+    | "workTypeFilter"
+    | "selectedSources"
+  >,
+): number => {
+  let count = 0;
+  if (filters.searchQuery !== "") count += 1;
+  if (filters.selectedRoleType !== "all") count += 1;
+  if (filters.selectedCountry !== "all") count += 1;
+  if (filters.selectedLocation !== "all") count += 1;
+  if (filters.experienceFilter !== "all") count += 1;
+  if (filters.salaryFilter !== "all") count += 1;
+  if (filters.workTypeFilter !== "all") count += 1;
+  if (filters.selectedSources.length > 0) count += filters.selectedSources.length;
+  if (filters.startDate || filters.endDate) count += 1;
+  return count;
+};
