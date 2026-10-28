@@ -1784,6 +1784,21 @@ const JobAlertsPage: React.FC = () => {
     );
   };
   
+  // KAN-444: how many filters are narrowing the feed right now. Drives the
+  // "N Active" badge and the mobile "Clear All Filters" shortcut.
+  const activeFilterCount = useMemo(() => countActiveJobFilters({
+    searchQuery,
+    selectedRoleType,
+    selectedCountry,
+    selectedLocation,
+    experienceFilter,
+    salaryFilter,
+    workTypeFilter,
+    selectedSources,
+    startDate,
+    endDate
+  }), [searchQuery, selectedRoleType, selectedCountry, selectedLocation, experienceFilter, salaryFilter, workTypeFilter, selectedSources, startDate, endDate]);
+
   const clearFilters = () => {
     const next = clearedJobFilters();
     setSearchQuery(next.searchQuery);
