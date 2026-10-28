@@ -754,6 +754,9 @@ All colors MUST be HSL.
   /* Prose styling for Ghost content on dark backgrounds */
   .prose {
     color: hsl(var(--article-body));
+    /* Long unbreakable tokens (e.g. ZeroToPMConsultant.com) must wrap inside the
+       card instead of overflowing it and being clipped off-screen on phones. */
+    overflow-wrap: anywhere;
   }
 
   .prose h1,
