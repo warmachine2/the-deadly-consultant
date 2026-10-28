@@ -1088,7 +1088,7 @@ const JobCard: React.FC<{
               color: '#FFDD40'
             }}>
               <CalendarCheck className="w-3.5 h-3.5 shrink-0" />
-              <span>Free 30-Min Strategy Session</span>
+              <span>Free 10-Min Path Call</span>
             </a>
             <span className="text-[10px] mt-1" style={{
               color: 'rgba(255, 255, 255, 0.5)'
@@ -1210,7 +1210,7 @@ const JobCard: React.FC<{
             }}>
               <CalendarCheck className="w-3.5 h-3.5" />
               <span className="flex flex-col items-start leading-tight">
-                <span>Free 30-Min Strategy Session</span>
+                <span>Free 10-Min Path Call</span>
               </span>
             </a>
             <span className="text-[10px] mt-1" style={{
