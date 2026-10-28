@@ -7,7 +7,7 @@ import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, B
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import NetworkHealthPanel from '@/components/NetworkHealthPanel';
 import { format, isWithinInterval, parse } from 'date-fns';
-import { INITIAL_JOB_FILTERS, clearedJobFilters } from '@/lib/jobFilterState';
+import { INITIAL_JOB_FILTERS, clearedJobFilters, countActiveJobFilters } from '@/lib/jobFilterState';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
