@@ -637,10 +637,10 @@ const AreYouReadyToPivotPage = () => {
   );
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
-      <main className="pt-24 lg:pt-28 px-4 md:px-6 pb-12">
+      <main className="flex-1 pt-24 lg:pt-28 px-4 md:px-6 pb-12 flex flex-col justify-center">
         <div className="max-w-4xl mx-auto">
           {step === "hero" && HeroSection}
           {step === "quiz" && QuizSection}
@@ -653,7 +653,7 @@ const AreYouReadyToPivotPage = () => {
         </div>
       </main>
 
-      <footer className="volumetric-glass rounded-t-3xl mt-12 py-6 px-6">
+      <footer className="volumetric-glass rounded-t-3xl mt-auto py-6 px-6">
         <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
           <p>© 2026 Zero to PM Consultant. All rights reserved.</p>
         </div>
