@@ -809,6 +809,15 @@ All colors MUST be HSL.
     font-size: 2.25rem;
   }
 
+  /* Phones: "ZeroToPMConsultant.com" is one 22-character word and needs ~440px at
+     36px, so it split mid-word in the 310px article column. 24px keeps it whole. */
+  @media (max-width: 640px) {
+    .prose h3 {
+      font-size: 1.5rem;
+    }
+  }
+
+
   .prose h4 {
     font-size: 1.75rem;
   }
