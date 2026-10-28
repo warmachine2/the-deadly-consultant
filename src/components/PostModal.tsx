@@ -58,7 +58,7 @@ export default function PostModal({
             )}
           </div>
 
-          <div className="p-6 pt-0 border-t flex justify-end">
+          <div className="p-4 sm:p-6 pt-0 border-t flex justify-end">
             <button
               onClick={onClose}
               className="px-4 py-2 bg-accent text-accent-foreground rounded-md hover:bg-accent/90 transition-colors"
