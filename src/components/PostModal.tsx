@@ -36,7 +36,7 @@ export default function PostModal({
       <FocusScope>
         {/* Frosted glass panel */}
         <DialogContent className="max-w-4xl mx-auto max-h-[90vh] overflow-y-auto p-0 !bg-transparent glass-effect rounded-3xl border-border/50 backdrop-blur-md bg-background/20">
-          <DialogHeader className="p-6 border-b">
+          <DialogHeader className="p-4 sm:p-6 border-b">
             <DialogTitle className="text-2xl font-bold">{post?.title || "Loading Post..."}</DialogTitle>
           </DialogHeader>
 
