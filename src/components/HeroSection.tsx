@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { WORKSHOP_REGISTER_URL } from "@/components/TopNav";
 import { isJobBoardUnlocked, JOB_BOARD_PATH } from "@/lib/jobBoardGate";
 
 const DESKTOP_KIT_UID = "63221ca346";
@@ -79,7 +78,7 @@ const HeroSection = () => {
             <span className="text-xs md:text-sm text-white/60">
               Includes the 90-day roadmap when you register.
             </span>
-          </a>
+          </Link>
 
           <Link
             to="/are-you-ready-to-pivot-to-pm-consulting"
