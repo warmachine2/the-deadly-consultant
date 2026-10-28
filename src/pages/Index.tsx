@@ -30,15 +30,6 @@ const Index = () => {
 
   const isOpeningRef = useRef(false);
 
-  // TEMP-KAN445: force modal open with a video for the mobile overflow check
-  useEffect(() => {
-    setSelectedPost({ id: "temp", title: "KAN-445 temp check", excerpt: "", published_at: "", slug: "temp-check" });
-    setFullContent('<p>Intro paragraph.</p><iframe width="560" height="315" src="https://www.youtube.com/embed/3nd0-AwWh2k" frameborder="0" allowfullscreen></iframe><p>After paragraph.</p>');
-    setModalLoading(false);
-    setModalOpen(true);
-  }, []);
-
-
   // Extract unique tags from all posts
   const availableTags = useMemo(() => {
     const tagSet = new Set<string>();
