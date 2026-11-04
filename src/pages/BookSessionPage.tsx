@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -30,6 +31,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const BookSessionPage = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormData>({
@@ -86,10 +88,10 @@ const BookSessionPage = () => {
       }
 
       toast({
-        title: "Redirecting...",
-        description: "Taking you directly to Hassan's Calendly to choose your time...",
+        title: "Booking Submitted!",
+        description: "Taking you to select your strategy session time slot...",
       });
-      window.location.href = "https://calendly.com/hassan-hammer/30min";
+      navigate("/book-session/thank-you");
     } catch (error) {
       toast({
         title: "Error",
