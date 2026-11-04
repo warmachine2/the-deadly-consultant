@@ -54,7 +54,7 @@ const BookSessionThankYou = () => {
       </main>
     </div>
   );
-
 };
+
 
 export default BookSessionThankYou;
