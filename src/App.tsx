@@ -12,6 +12,7 @@ import DynamicPage from "./pages/DynamicPage";
 import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
+import BookSessionThankYou from "./pages/BookSessionThankYou";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import FreeWorkshopPage from "./pages/FreeWorkshopPage";
 import SeatIntakePage from "./pages/SeatIntakePage";
