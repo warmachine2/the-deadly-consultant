@@ -88,10 +88,10 @@ const BookSessionPage = () => {
       }
 
       toast({
-        title: "Redirecting...",
-        description: "Taking you directly to Hassan's Calendly to choose your time...",
+        title: "Booking Submitted!",
+        description: "Taking you to select your strategy session time slot...",
       });
-      window.location.href = "https://calendly.com/hassan-hammer/30min";
+      navigate("/book-session/thank-you");
     } catch (error) {
       toast({
         title: "Error",
