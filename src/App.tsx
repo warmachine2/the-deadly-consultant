@@ -12,6 +12,7 @@ import DynamicPage from "./pages/DynamicPage";
 import ProductivityTrackerPage from "./pages/ProductivityTrackerPage";
 import JobAlertsPage from "./pages/JobAlertsPage";
 import BookSessionPage from "./pages/BookSessionPage";
+import BookSessionThankYou from "./pages/BookSessionThankYou";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import FreeWorkshopPage from "./pages/FreeWorkshopPage";
 import SeatIntakePage from "./pages/SeatIntakePage";
@@ -91,6 +92,8 @@ const App = () => (
             <Route path="/pm-job-board-canada" element={<Navigate to="/ai-bi-fintech-pm-job-alerts-repo" replace />} />
 
             <Route path="/book-session" element={<BookSessionPage />} />
+            <Route path="/book-session/thank-you" element={<BookSessionThankYou />} />
+            <Route path="/free-workshop/book-calendly" element={<Navigate to="/book-session/thank-you" replace />} />
             <Route path="/are-you-ready-to-pivot-to-pm-consulting" element={<AreYouReadyToPivotPage />} />
             <Route path="/free-workshop" element={<FreeWorkshopPage />} />
             <Route path="/free-workshop/thank-you" element={<FreeWorkshopThankYouPage />} />
