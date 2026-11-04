@@ -23,7 +23,7 @@ const CRITICAL_VIDEOS: CriticalVideo[] = [
   },
   {
     title: "PM Consulting Secrets - How to make $10k/mo+",
-    embedSrc: "https://www.youtube.com/embed/rJnACxKL0Tk",
+    embedSrc: "https://www.youtube.com/embed/HvAX-kLqfx0",
     articleHref: "/pm-consulting-secrets-how-to-make-10kmo",
   },
 ];
