@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import TopNav from "@/components/TopNav";
+import ThankYouContent from "@/components/ThankYouContent";
 
 const CALENDLY_SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js";
 
@@ -22,12 +23,7 @@ const BookSessionThankYou = () => {
           style={{ minWidth: "320px", width: "100%", height: "700px" }}
         />
 
-        <iframe
-          src="/free-workshop/thank-you"
-          className="w-full rounded-2xl border border-white/10 shadow-lg"
-          style={{ minHeight: "1200px", width: "100%" }}
-          title="Workshop Confirmation & Resources"
-        />
+        <ThankYouContent />
       </div>
     </div>
   );
