@@ -7,6 +7,7 @@ import {
   nextQuizScreen,
   previousQuizScreen,
   questionIndexForScreen,
+  currentQuestionIndexForScreen,
   resultScreen,
   startAssessmentScreen,
 } from '../src/lib/quizScreens';
