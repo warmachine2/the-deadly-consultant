@@ -12,6 +12,7 @@ All colors MUST be HSL.
     --background: 0 0% 10%;
     --foreground: 214 14% 91%;
     --article-body: 0 0% 100%;
+    --quiz-highlight: 50 100% 69%;
 
     /* Glass card with charcoal tint */
     --card: 0 0% 18%;
