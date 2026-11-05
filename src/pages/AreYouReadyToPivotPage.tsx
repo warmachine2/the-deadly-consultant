@@ -4,6 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import TopNav from "@/components/TopNav";
 import CriticalResourcesSection from "@/components/CriticalResourcesSection";
+import {
+  QUIZ_LANDING_SCREEN,
+  isQuestionScreen,
+  isResultScreen,
+  nextQuizScreen,
+  previousQuizScreen,
+  questionIndexForScreen,
+  startAssessmentScreen,
+} from "@/lib/quizScreens";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,8 +56,6 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-
-type Step = "hero" | "contact" | "quiz" | "result";
 
 type QuestionType = "yesno" | "choice";
 
@@ -206,9 +213,9 @@ const QUESTIONS: Question[] = [
 ];
 
 const AreYouReadyToPivotPage = () => {
-  const [step, setStep] = useState<Step>("hero");
+  // Screen 0 = landing, screens 1-12 = questions, screen 13 = results
+  const [currentScreen, setCurrentScreen] = useState<number>(QUIZ_LANDING_SCREEN);
   const [contactData, setContactData] = useState<ContactFormData | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
 
   const form = useForm<ContactFormData>({
@@ -264,23 +271,18 @@ const AreYouReadyToPivotPage = () => {
   };
 
   const handleAnswer = (value: string) => {
-    setAnswers((prev) => ({ ...prev, [QUESTIONS[currentQuestionIndex].id]: value }));
+    setAnswers((prev) => ({ ...prev, [QUESTIONS[questionIndexForScreen(currentScreen)].id]: value }));
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < QUESTIONS.length - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-    } else {
-      setStep("result");
-    }
+    setCurrentScreen((prev) => nextQuizScreen(prev, QUESTIONS.length));
   };
 
   const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prev) => prev - 1);
-    }
+    setCurrentScreen((prev) => previousQuizScreen(prev));
   };
 
+  const currentQuestionIndex = questionIndexForScreen(currentScreen);
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id];
   const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
@@ -642,9 +644,9 @@ const AreYouReadyToPivotPage = () => {
 
       <main className="flex-1 pt-24 lg:pt-28 px-4 md:px-6 pb-12 flex flex-col justify-center">
         <div className="max-w-4xl mx-auto">
-          {step === "hero" && HeroSection}
-          {step === "quiz" && QuizSection}
-          {step === "result" && (
+          {currentScreen === QUIZ_LANDING_SCREEN && LandingSection}
+          {isQuestionScreen(currentScreen, QUESTIONS.length) && QuizSection}
+          {isResultScreen(currentScreen, QUESTIONS.length) && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {ResultSection}
               <CriticalResourcesSection />
