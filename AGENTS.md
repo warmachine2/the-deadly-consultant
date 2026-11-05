@@ -10,3 +10,5 @@
 - Keep quiz question weights and answer-derived score and qualification in `src/lib/quizDiagnostic.ts`; recompute from the answer map so answer changes cannot double-count points or leave stale qualification.
 - Share quiz lead schema definitions from the quiz delivery function directory with the browser via injected Zod, so both runtimes enforce identical contact and payload validation without importing browser code into deployed functions.
 - Deliver quiz leads through the server-side function to the user-selected public n8n webhook; bound waiting and retain results when delivery is unavailable.
+- Keep quiz result tiers and qualification routing in `src/lib/quizResults.ts`; the results component mounts the calendar only on the Q1-qualified branch, independently of score.
+- Reuse `CalendlyInlineWidget` across booking thank-you and quiz results; initialize after script load and validate resize message origin/source so delayed mounting and dynamic sizing remain safe.

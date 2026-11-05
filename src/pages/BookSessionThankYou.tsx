@@ -1,33 +1,8 @@
-import { useEffect, useState } from "react";
 import TopNav from "@/components/TopNav";
 import ThankYouContent from "@/components/ThankYouContent";
-
-const CALENDLY_SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js";
+import CalendlyInlineWidget from "@/components/CalendlyInlineWidget";
 
 const BookSessionThankYou = () => {
-  const [widgetHeight, setWidgetHeight] = useState(1060);
-
-  useEffect(() => {
-    if (document.querySelector(`script[src="${CALENDLY_SCRIPT_SRC}"]`)) return;
-    const script = document.createElement("script");
-    script.src = CALENDLY_SCRIPT_SRC;
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
-      if (e.data?.event === "calendly.page_height" && e.data?.payload?.height) {
-        const h = parseInt(String(e.data.payload.height), 10);
-        if (!isNaN(h) && h > 400) {
-          setWidgetHeight(Math.max(1060, h + 40));
-        }
-      }
-    };
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
-
   return (
     <div className="min-h-screen">
       <TopNav />
@@ -41,12 +16,7 @@ const BookSessionThankYou = () => {
               Your information has been received! Select a date and time slot below to lock in your 1-on-1 Pivot Strategy Call with Hassan.
             </p>
 
-            <div
-              className="calendly-inline-widget bg-white rounded-xl overflow-hidden"
-              data-url="https://calendly.com/hassan-hammer/30min?hide_gdpr_banner=1"
-              data-resize="true"
-              style={{ minWidth: "100%", width: "100%", height: `${widgetHeight}px`, overflow: "hidden" }}
-            />
+            <CalendlyInlineWidget />
           </div>
 
           <ThankYouContent />
