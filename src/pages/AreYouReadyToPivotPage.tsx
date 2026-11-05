@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,12 +8,15 @@ import {
   QUIZ_LANDING_SCREEN,
   isQuestionScreen,
   isResultScreen,
+  isLeadCaptureScreen,
+  resultScreen,
   nextQuizScreen,
   previousQuizScreen,
-  questionIndexForScreen,
   currentQuestionIndexForScreen,
   startAssessmentScreen,
 } from "@/lib/quizScreens";
+
+import { QUESTIONS, summarizeQuizAnswers } from "@/lib/quizDiagnostic";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,161 +61,6 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-type QuestionType = "yesno" | "choice";
-
-interface Question {
-  id: number;
-  type: QuestionType;
-  text: React.ReactNode;
-  options: { value: string; label: string }[];
-}
-
-const QUESTIONS: Question[] = [
-  {
-    id: 1,
-    type: "yesno",
-    text: (
-      <>
-        Have you examined the job board for the types of jobs you’d be interested in doing?{" "}
-        <a
-          href="https://www.zerotopmconsultant.com/ai-bi-fintech-pm-job-alerts-repo"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-[#F4C903] hover:underline font-semibold"
-        >
-          View the Job Board
-        </a>
-      </>
-    ),
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 2,
-    type: "yesno",
-    text: "Do you have at least 3 years of professional experience + a degree, or 5+ years of experience without a degree?",
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 3,
-    type: "yesno",
-    text: "Are you comfortable working remotely from home most (or all) of the time?",
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 4,
-    type: "yesno",
-    text: "Are you computer-savvy? (You can handle email, learn new tools, and don’t hate technology)",
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 5,
-    type: "yesno",
-    text: "Can you type at least 40 words per minute (or are you willing to practice to get there)?",
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 6,
-    type: "yesno",
-    text: (
-      <>
-        Are you open to moving from a traditional full-time employee role to a consultant setup?{" "}
-        <span className="text-white/80 block mt-2 text-sm md:text-base">
-          (This means much higher pay - 2x+ usually - and more freedom. You must register your own business and be on your own payroll instead of being an employee.)
-        </span>
-      </>
-    ),
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 7,
-    type: "yesno",
-    text: (
-      <>
-        Are you willing to take a Hassan’s proven segmented approach to breaking in?{" "}
-        <span className="text-white/80 block mt-2 text-sm md:text-base">
-          (Learn how the real job is done → build a strong portfolio → then fast-track 3 key certifications, with training and guidance provided.)
-        </span>
-      </>
-    ),
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 8,
-    type: "yesno",
-    text: "Can you follow step-by-step self-paced video training and then show up to live group Q&A sessions (2x per week) when you have questions?",
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-  {
-    id: 9,
-    type: "choice",
-    text: "Which best describes your current situation?",
-    options: [
-      { value: "a", label: "Employed full-time but under-earning / stuck" },
-      { value: "b", label: "Looking for higher-paying contract work" },
-      { value: "c", label: "Career changer from a technical background" },
-      { value: "d", label: "Already freelancing / consulting and want to level up" },
-      { value: "e", label: "Other" },
-    ],
-  },
-  {
-    id: 10,
-    type: "choice",
-    text: "What is your main desired outcome in the next 6–12 months?",
-    options: [
-      { value: "a", label: "Land my first $8k–$12k/mo contract" },
-      { value: "b", label: "Replace my full-time job with consulting income" },
-      { value: "c", label: "Significantly increase my income while working remotely" },
-      { value: "d", label: "Build a more flexible / location-independent career" },
-      { value: "e", label: "Other" },
-    ],
-  },
-  {
-    id: 11,
-    type: "choice",
-    text: "What has been the biggest obstacle so far?",
-    options: [
-      { value: "a", label: "Don’t know how to break into consulting" },
-      { value: "b", label: "Lack of the right experience or portfolio" },
-      { value: "c", label: "Unsure which certifications actually matter" },
-      { value: "d", label: "Don’t have a clear step-by-step path" },
-      { value: "e", label: "Other" },
-    ],
-  },
-  {
-    id: 12,
-    type: "yesno",
-    text: "Can you commit approximately 15 hours per week for the next 12 weeks (or an equivalent total, such as 7–8 hours per week over 24 weeks)?",
-    options: [
-      { value: "Yes", label: "Yes" },
-      { value: "No", label: "No" },
-    ],
-  },
-];
-
 const LANDING_CHECKMARKS = [
   "Check Your PMP & Enterprise Contract Eligibility (3+ Years Experience Benchmark)",
   "Audit Your Resume & Portfolio Against Live $85–$120/Hr GTA & North American Specs",
@@ -220,10 +68,26 @@ const LANDING_CHECKMARKS = [
 ];
 
 const AreYouReadyToPivotPage = () => {
-  // Screen 0 = landing, screens 1-12 = questions, screen 13 = results
+  // Screen 0 = landing, 1–10 = questions, 11 = lead capture, 12 = results
   const [currentScreen, setCurrentScreen] = useState<number>(QUIZ_LANDING_SCREEN);
   const [contactData, setContactData] = useState<ContactFormData | null>(null);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [quizState, setQuizState] = useState(() => ({ answers: {} as Record<number, string>, ...summarizeQuizAnswers({}) }));
+  const { answers, score } = quizState;
+  const [pendingScreen, setPendingScreen] = useState<number | null>(null);
+  const questionHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (pendingScreen === null) return;
+    const timeout = window.setTimeout(() => {
+      setCurrentScreen(nextQuizScreen(pendingScreen, QUESTIONS.length));
+      setPendingScreen(null);
+    }, 250);
+    return () => window.clearTimeout(timeout);
+  }, [pendingScreen]);
+
+  useEffect(() => {
+    if (isQuestionScreen(currentScreen, QUESTIONS.length)) questionHeadingRef.current?.focus();
+  }, [currentScreen]);
 
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -252,7 +116,7 @@ const AreYouReadyToPivotPage = () => {
           name: data.name,
           email: data.email,
           location: data.location,
-          score: calculateScore(),
+          score,
           q1: answers[1] || "N/A",
           q2: answers[2] || "N/A",
           q3: answers[3] || "N/A",
@@ -273,59 +137,29 @@ const AreYouReadyToPivotPage = () => {
     } finally {
       setSubmittingRoadmap(false);
       setRoadmapOpen(false);
+      setCurrentScreen(resultScreen(QUESTIONS.length));
       if (!pdfWindow) window.location.href = ROADMAP_PDF_URL;
     }
   };
 
   const handleAnswer = (value: string) => {
-    setAnswers((prev) => ({ ...prev, [QUESTIONS[questionIndexForScreen(currentScreen)].id]: value }));
-  };
-
-  const handleNext = () => {
-    setCurrentScreen((prev) => nextQuizScreen(prev, QUESTIONS.length));
+    if (pendingScreen !== null || !isQuestionScreen(currentScreen, QUESTIONS.length)) return;
+    setQuizState(previous => {
+      const updatedAnswers = { ...previous.answers, [currentScreen]: value };
+      return { answers: updatedAnswers, ...summarizeQuizAnswers(updatedAnswers) };
+    });
+    setPendingScreen(currentScreen);
   };
 
   const handleBack = () => {
-    setCurrentScreen((prev) => previousQuizScreen(prev));
+    setPendingScreen(null);
+    setCurrentScreen(previous => previousQuizScreen(previous));
   };
 
   const currentQuestionIndex = currentQuestionIndexForScreen(currentScreen, QUESTIONS.length);
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id];
   const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
-
-  const SCORING_CONFIG: Record<number, Record<string, number>> = {
-    1: { Yes: 8, No: 0 },
-    2: { Yes: 12, No: 0 },
-    3: { Yes: 8, No: 0 },
-    4: { Yes: 8, No: 0 },
-    5: { Yes: 6, No: 0 },
-    6: { Yes: 12, No: 0 },
-    7: { Yes: 10, No: 0 },
-    8: { Yes: 10, No: 0 },
-    9: { a: 8, b: 8, c: 8, d: 6, e: 3 },
-    10: { a: 8, b: 8, c: 8, d: 6, e: 3 },
-    11: { a: 5, b: 5, c: 5, d: 5, e: 2 },
-    12: { Yes: 15, No: 0 },
-  };
-
-  const MAX_RAW_SCORE = 110;
-
-  const calculateRawScore = () => {
-    let raw = 0;
-    Object.entries(answers).forEach(([id, value]) => {
-      const questionPoints = SCORING_CONFIG[Number(id)];
-      if (questionPoints && value in questionPoints) {
-        raw += questionPoints[value];
-      }
-    });
-    return raw;
-  };
-
-  const calculateScore = () => {
-    const raw = calculateRawScore();
-    return Math.round((raw / MAX_RAW_SCORE) * 100);
-  };
 
   const LandingSection = (
     <section className="volumetric-glass rounded-3xl p-8 md:p-16 text-center relative overflow-hidden">
@@ -469,87 +303,62 @@ const AreYouReadyToPivotPage = () => {
   );
 
   const QuizSection = (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-12 max-w-3xl mx-auto relative overflow-hidden">
-      <div className="relative z-10">
-        {/* Progress bar */}
-        <div className="mb-8">
-          <div className="flex justify-between text-sm text-white/80 mb-2">
-            <span>Question {currentQuestionIndex + 1} of {QUESTIONS.length}</span>
-            <span>{Math.round(progress)}%</span>
-          </div>
-          <div className="h-3 rounded-full bg-white/10 overflow-hidden border border-white/10">
-            <div
-              className="h-full rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${progress}%`,
-                background: "linear-gradient(90deg, #F4C903, #FFE361)",
-              }}
-            />
-          </div>
+    <section className="volumetric-glass rounded-3xl p-5 sm:p-8 md:p-12 max-w-3xl mx-auto relative overflow-hidden">
+      <div className="mb-8">
+        <div className="flex justify-between text-sm text-foreground mb-2" aria-live="polite">
+          <span>Question {currentScreen} of {QUESTIONS.length}</span>
+          <span>{Math.round(progress)}%</span>
         </div>
-
-        {/* Question */}
-        <div className="mb-8">
-          <h2
-            className="text-xl md:text-2xl font-bold leading-relaxed"
-            style={{ color: "#FFE361" }}
-          >
-            {currentQuestion.text}
-          </h2>
+        <div role="progressbar" aria-label="Assessment progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}
+          className="h-3 rounded-full bg-muted overflow-hidden border border-border/10">
+          <div className="h-full rounded-full bg-[hsl(var(--quiz-highlight))] transition-[width] duration-200 motion-reduce:transition-none" style={{ width: `${progress}%` }} />
         </div>
+      </div>
 
-        {/* Options */}
-        <div className={`grid gap-3 ${currentQuestion.type === "yesno" ? "grid-cols-2" : "grid-cols-1"}`}>
-          {currentQuestion.options.map((option) => {
+      <div key={currentScreen} className="animate-in fade-in duration-200 motion-reduce:animate-none">
+        <h2 ref={questionHeadingRef} tabIndex={-1} className="mb-8 text-xl md:text-2xl font-bold leading-relaxed text-[hsl(var(--quiz-highlight))] focus:outline-none">
+          {currentQuestion.text}
+        </h2>
+        <div className="grid grid-cols-1 gap-3">
+          {currentQuestion.options.map(option => {
             const isSelected = currentAnswer === option.value;
             return (
-              <button
-                key={option.value}
-                type="button"
+              <Button key={option.value} type="button" variant="outline" aria-pressed={isSelected}
+                aria-disabled={pendingScreen !== null}
                 onClick={() => handleAnswer(option.value)}
-                className={`relative flex items-center gap-3 px-5 py-4 rounded-xl border-2 text-left transition-all duration-200 ${
+                className={`h-auto min-h-16 w-full justify-start whitespace-normal gap-3 px-4 sm:px-5 py-4 rounded-[8px] border-2 text-left text-foreground hover:text-foreground transition-colors motion-reduce:transition-none ${
                   isSelected
-                    ? "border-[#F4C903] bg-[#F4C903]/20 text-white"
-                    : "border-white/20 bg-white/5 text-white/90 hover:border-white/40 hover:bg-white/10"
-                }`}
-              >
-                <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                    isSelected ? "border-[#F4C903] bg-[#F4C903]" : "border-white/40"
-                  }`}
-                >
-                  {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-gray-900" />}
-                </div>
+                    ? "border-[hsl(var(--quiz-highlight))] bg-[hsl(var(--quiz-highlight)/0.2)] hover:bg-[hsl(var(--quiz-highlight)/0.2)]"
+                    : "border-border/20 bg-accent/5 hover:border-border/20 hover:bg-accent/5"
+                }`}>
+                <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                  isSelected ? "border-[hsl(var(--quiz-highlight))] text-[hsl(var(--quiz-highlight))]" : "border-border/40"
+                }`}>
+                  {isSelected && <CheckCircle2 className="w-4 h-4" />}
+                </span>
                 <span className="font-medium text-base md:text-lg">{option.label}</span>
-              </button>
+              </Button>
             );
           })}
         </div>
+      </div>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-10 gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleBack}
-            disabled={currentQuestionIndex === 0}
-            className="px-6 py-5 text-base border-white/20 text-white hover:bg-white/10 hover:text-white disabled:opacity-40"
-          >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Back
-          </Button>
-
-          <Button
-            type="button"
-            onClick={handleNext}
-            disabled={!currentAnswer}
-            className={`px-8 py-5 text-base font-bold rounded-xl disabled:opacity-50 ${GOLD_BUTTON_CLASS}`}
-          >
-            {currentQuestionIndex === QUESTIONS.length - 1 ? "See Results" : "Next"}
-            <ArrowRight className="w-5 h-5 ml-2" />
+      {currentScreen > 1 && (
+        <div className="mt-6">
+          <Button type="button" variant="ghost" onClick={handleBack}
+            className="text-muted-foreground hover:text-foreground px-0 hover:bg-transparent">
+            <ArrowLeft className="w-4 h-4" /> Back
           </Button>
         </div>
-      </div>
+      )}
+    </section>
+  );
+
+  const LeadCaptureSection = (
+    <section className="volumetric-glass rounded-3xl p-6 md:p-12 max-w-xl mx-auto animate-in fade-in duration-200 motion-reduce:animate-none">
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--quiz-highlight))] mb-4">Unlock Your Readiness Score & Roadmap</h2>
+      <p className="text-muted-foreground text-center mb-8">Enter your details to unlock the roadmap immediately.</p>
+      {RoadmapForm}
     </section>
   );
 
@@ -564,16 +373,16 @@ const AreYouReadyToPivotPage = () => {
 
       <div className="relative z-10 flex flex-col items-center gap-6">
         <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-[#F4C903]/20 border-4 border-[#F4C903]/40 mb-2">
-          <span className="text-4xl md:text-5xl font-bold text-[#F4C903]">{calculateScore()}</span>
+          <span className="text-4xl md:text-5xl font-bold text-[#F4C903]">{score}</span>
         </div>
 
         <h2
           className="text-3xl md:text-4xl font-bold"
           style={{ color: "#FFE361" }}
         >
-          {calculateScore() >= 80
+          {score >= 80
             ? "High Readiness"
-            : calculateScore() >= 60
+            : score >= 60
             ? "Moderate Readiness"
             : "Lower Readiness"}
         </h2>
@@ -673,6 +482,7 @@ const AreYouReadyToPivotPage = () => {
         <div className="max-w-4xl mx-auto">
           {currentScreen === QUIZ_LANDING_SCREEN && LandingSection}
           {isQuestionScreen(currentScreen, QUESTIONS.length) && QuizSection}
+          {isLeadCaptureScreen(currentScreen, QUESTIONS.length) && LeadCaptureSection}
           {isResultScreen(currentScreen, QUESTIONS.length) && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {ResultSection}
