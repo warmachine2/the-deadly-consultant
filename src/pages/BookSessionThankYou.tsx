@@ -3,9 +3,6 @@ import ThankYouContent from "@/components/ThankYouContent";
 import CalendlyInlineWidget from "@/components/CalendlyInlineWidget";
 
 const BookSessionThankYou = () => {
-  return () => window.removeEventListener("message", handleMessage);
-  }, []);
-
   return (
     <div className="min-h-screen">
       <TopNav />
