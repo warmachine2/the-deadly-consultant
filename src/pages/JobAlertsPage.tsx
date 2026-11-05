@@ -318,7 +318,8 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 };
 
 // Enforce monthly salary ($/mo) across all formats:
-// - Hourly rates (e.g. '$91/hr USD', '$85 - $96/Hours') convert at hourly * 1.14 * 160 (KAN-327).
+// - Hourly rates (e.g. '$91/hr USD', '$85 - $96/Hours', '$35 USD hourly') convert
+//   at hourly * 1.14 * 160 (KAN-327). Slash-free 'hourly' wording counts too.
 // - Annual salaries (e.g. '$76,000 - $126,000/yr USD') convert at annual / 12.
 // - Already-monthly amounts missing '/mo' (e.g. '$12,758 CAD') get '/mo' appended; '/month' standardizes to '/mo'.
 // - Compact 'k'/'K' thousands amounts (e.g. '$120k', '$85K') are expanded to full
