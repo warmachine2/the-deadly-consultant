@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, buildQuizLeadPayload, type ContactFormData } from "@/lib/quizLead";
 import { Checkbox } from "@/components/ui/checkbox";
 import TopNav from "@/components/TopNav";
-import CriticalResourcesSection from "@/components/CriticalResourcesSection";
+import QuizResults from "@/components/QuizResults";
 import {
   QUIZ_LANDING_SCREEN,
   isQuestionScreen,
@@ -29,12 +29,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Sparkles,
@@ -46,14 +40,8 @@ import {
   Phone,
   CheckCircle2,
   ArrowLeft,
-  Globe,
-  Instagram,
   Linkedin,
-  Youtube,
 } from "lucide-react";
-
-const GOLD_BUTTON_CLASS =
-  "bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300 transition-colors";
 
 const LANDING_CHECKMARKS = [
   "Check Your PMP & Enterprise Contract Eligibility (3+ Years Experience Benchmark)",
@@ -66,7 +54,7 @@ const AreYouReadyToPivotPage = () => {
   const [currentScreen, setCurrentScreen] = useState<number>(QUIZ_LANDING_SCREEN);
 
   const [quizState, setQuizState] = useState(() => ({ answers: {} as Record<number, string>, ...summarizeQuizAnswers({}) }));
-  const { answers, score } = quizState;
+  const { answers, score, mqlQualified, rolePond } = quizState;
   const [pendingScreen, setPendingScreen] = useState<number | null>(null);
   const questionHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -95,10 +83,8 @@ const AreYouReadyToPivotPage = () => {
     },
   });
 
-  const [roadmapOpen, setRoadmapOpen] = useState(false);
   const [submittingRoadmap, setSubmittingRoadmap] = useState(false);
 
-  const ROADMAP_PDF_URL = "https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf";
 
   const onRoadmapSubmit = async (data: ContactFormData) => {
     if (submittingRoadmap) return;
@@ -117,7 +103,6 @@ const AreYouReadyToPivotPage = () => {
       console.warn("Quiz delivery unavailable; results remain accessible.");
     } finally {
       setSubmittingRoadmap(false);
-      setRoadmapOpen(false);
       setCurrentScreen(resultScreen(QUESTIONS.length));
       window.scrollTo({ top: 0, behavior: "instant" });
     }
@@ -327,132 +312,17 @@ const AreYouReadyToPivotPage = () => {
     </section>
   );
 
-  const ResultSection = (
-    <section className="volumetric-glass rounded-3xl p-8 md:p-16 text-center max-w-3xl mx-auto relative overflow-hidden">
-      <div className="absolute inset-0 rounded-3xl pointer-events-none opacity-30"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 30%, rgba(244, 201, 3, 0.15) 0%, transparent 60%)",
-        }}
-      />
-
-      <div className="relative z-10 flex flex-col items-center gap-6">
-        <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-[#F4C903]/20 border-4 border-[#F4C903]/40 mb-2">
-          <span className="text-4xl md:text-5xl font-bold text-[#F4C903]">{score}</span>
-        </div>
-
-        <h2
-          className="text-3xl md:text-4xl font-bold"
-          style={{ color: "#FFE361" }}
-        >
-          {score >= 80
-            ? "High Readiness"
-            : score >= 60
-            ? "Moderate Readiness"
-            : "Lower Readiness"}
-        </h2>
-
-
-        {/* Next Steps */}
-        <div className="w-full max-w-xl mt-4">
-          <h3 className="text-lg md:text-xl font-semibold text-white text-center mb-4">
-            Next Steps
-          </h3>
-          <div className="grid gap-3">
-            <a
-              href="https://calendly.com/hassan-hammer/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
-            >
-              <span className="font-medium text-base md:text-lg">Book a meeting</span>
-              <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
-            </a>
-
-            <a
-              href="https://calendly.com/hassan-hammer/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
-            >
-              <span className="font-medium text-base md:text-lg">PM Consulting Pivot Group Workshop (Free)</span>
-              <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
-            </a>
-
-            <button
-              type="button"
-              onClick={() => window.open(ROADMAP_PDF_URL, "_blank", "noopener,noreferrer")}
-              className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white text-left hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
-            >
-              <span className="font-medium text-base md:text-lg">$10k/mo+ Data & AI Orchestration PM Accelerator Roadmap</span>
-              <ArrowRight className="w-5 h-5 text-[#F4C903] flex-shrink-0 ml-3" />
-            </button>
-          </div>
-        </div>
-
-        {/* Results Footer */}
-
-        <div className="w-full max-w-xl mt-8 pt-6 border-t border-white/10">
-          <p className="text-center text-sm text-white/60 mb-3">Connect with Hassan</p>
-          <div className="flex flex-wrap items-start justify-center gap-6 md:gap-10">
-            {[
-              { label: "Website", href: "https://www.zerotopmconsultant.com/", Icon: Globe },
-              { label: "Instagram", href: "https://www.instagram.com/hassan.hammer.sr71/", Icon: Instagram },
-              { label: "LinkedIn", href: "https://www.linkedin.com/in/hassanhammer", Icon: Linkedin },
-              { label: "YouTube", href: "https://www.youtube.com/@hassanhammer-sr71", Icon: Youtube },
-            ].map(({ label, href, Icon }) => (
-              <div key={label} className="flex flex-col items-center gap-2">
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm md:text-base text-[#F4C903] hover:underline"
-                >
-                  {label}
-                </a>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="text-[#F4C903]/80 hover:text-[#F4C903]"
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Roadmap unlock dialog */}
-      <Dialog open={roadmapOpen} onOpenChange={setRoadmapOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center" style={{ color: "#FFE361" }}>
-              Enter your details to unlock the roadmap immediately
-            </DialogTitle>
-          </DialogHeader>
-          <div className="text-left">{RoadmapForm}</div>
-        </DialogContent>
-      </Dialog>
-    </section>
-  );
-
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       <TopNav onSearchChange={() => {}} onToggleSidebar={() => {}} />
 
       <main className="flex-1 pt-24 lg:pt-28 px-4 md:px-6 pb-12 flex flex-col justify-center">
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full max-w-4xl mx-auto">
           {currentScreen === QUIZ_LANDING_SCREEN && LandingSection}
           {isQuestionScreen(currentScreen, QUESTIONS.length) && QuizSection}
           {isLeadCaptureScreen(currentScreen, QUESTIONS.length) && LeadCaptureSection}
           {isResultScreen(currentScreen, QUESTIONS.length) && (
-            <div className="space-y-6 max-w-3xl mx-auto">
-              {ResultSection}
-              <CriticalResourcesSection />
-            </div>
+            <QuizResults score={score} mqlQualified={mqlQualified} rolePond={rolePond} />
           )}
         </div>
       </main>
