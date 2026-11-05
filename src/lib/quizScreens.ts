@@ -8,6 +8,11 @@ export const resultScreen = (questionCount: number) => questionCount + FIRST_QUE
 
 export const questionIndexForScreen = (screen: number) => screen - FIRST_QUESTION_SCREEN;
 
+// The landing screen has no question, so derived "current question" values
+// clamp to the first one instead of reading QUESTIONS[-1].
+export const currentQuestionIndexForScreen = (screen: number) =>
+  Math.max(0, questionIndexForScreen(screen));
+
 export const isQuestionScreen = (screen: number, questionCount: number) =>
   screen >= FIRST_QUESTION_SCREEN && screen <= questionCount;
 

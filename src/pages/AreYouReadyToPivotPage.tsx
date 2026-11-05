@@ -11,6 +11,7 @@ import {
   nextQuizScreen,
   previousQuizScreen,
   questionIndexForScreen,
+  currentQuestionIndexForScreen,
   startAssessmentScreen,
 } from "@/lib/quizScreens";
 
@@ -288,7 +289,7 @@ const AreYouReadyToPivotPage = () => {
     setCurrentScreen((prev) => previousQuizScreen(prev));
   };
 
-  const currentQuestionIndex = questionIndexForScreen(currentScreen);
+  const currentQuestionIndex = currentQuestionIndexForScreen(currentScreen);
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id];
   const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;

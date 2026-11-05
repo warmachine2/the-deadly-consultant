@@ -43,4 +43,11 @@ describe('quiz screen machine', () => {
     expect(previousQuizScreen(7)).toBe(6);
     expect(previousQuizScreen(1)).toBe(1);
   });
+
+  test('the landing screen clamps the current question index to the first question', () => {
+    expect(questionIndexForScreen(QUIZ_LANDING_SCREEN)).toBe(-1);
+    expect(currentQuestionIndexForScreen(QUIZ_LANDING_SCREEN)).toBe(0);
+    expect(currentQuestionIndexForScreen(FIRST_QUESTION_SCREEN)).toBe(0);
+    expect(currentQuestionIndexForScreen(5)).toBe(4);
+  });
 });
