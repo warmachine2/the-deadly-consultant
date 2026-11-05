@@ -316,7 +316,7 @@ const AreYouReadyToPivotPage = () => {
       </div>
 
       <div key={currentScreen} className="animate-in fade-in duration-200 motion-reduce:animate-none">
-        <h2 ref={questionHeadingRef} tabIndex={-1} className="mb-8 text-xl md:text-2xl font-bold leading-relaxed focus:outline-none">
+        <h2 ref={questionHeadingRef} tabIndex={-1} className="mb-8 text-xl md:text-2xl font-bold leading-relaxed text-[hsl(var(--quiz-highlight))] focus:outline-none">
           {currentQuestion.text}
         </h2>
         <div className="grid grid-cols-1 gap-3">
@@ -356,7 +356,7 @@ const AreYouReadyToPivotPage = () => {
 
   const LeadCaptureSection = (
     <section className="volumetric-glass rounded-3xl p-6 md:p-12 max-w-xl mx-auto animate-in fade-in duration-200 motion-reduce:animate-none">
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">Unlock Your Readiness Score & Roadmap</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--quiz-highlight))] mb-4">Unlock Your Readiness Score & Roadmap</h2>
       <p className="text-muted-foreground text-center mb-8">Enter your details to unlock the roadmap immediately.</p>
       {RoadmapForm}
     </section>
