@@ -57,3 +57,33 @@ test("'$150,000/yr' converts to '$12,500/mo'", () => {
   expect(formatEarningsMonthly('$150,000/yr', '')).toBe('$12,500/mo USD');
   expect(getMonthlyAmount('$150,000/yr', '')).toBe(12500);
 });
+
+// KAN salary conversion: hourly rates written without a slash (e.g. '$35 USD
+// hourly') must still be detected as hourly and converted, and the badge must
+// not echo the word 'hourly'.
+
+test("'$35 USD hourly' is detected as hourly and converts at 35 * 1.14 * 160", () => {
+  expect(formatEarningsMonthly('$35 USD hourly', '')).toBe('$6,384/mo USD');
+  expect(getMonthlyAmount('$35 USD hourly', '')).toBe(6384);
+});
+
+test("'$45 CAD hourly' converts to CAD monthly", () => {
+  expect(formatEarningsMonthly('$45 CAD hourly', '')).toBe('$8,208/mo CAD');
+  expect(getMonthlyAmount('$45 CAD hourly', '')).toBe(8208);
+});
+
+test("'$35 - $42 USD hourly' converts both ends of the range", () => {
+  expect(formatEarningsMonthly('$35 - $42 USD hourly', '')).toBe('$6,384 - $7,661/mo USD');
+});
+
+test("'$35 USD hourly *Est.' keeps the estimate marker without repeating 'hourly'", () => {
+  expect(formatEarningsMonthly('$35 USD hourly *Est.', '')).toBe('$6,384/mo USD *Est.');
+});
+
+test("slash hourly notation is unchanged ('$91/hr USD')", () => {
+  expect(formatEarningsMonthly('$91/hr USD', '')).toBe('$16,598/mo USD');
+});
+
+test("'annual' wording still converts by /12 and never matches the hourly rule", () => {
+  expect(formatEarningsMonthly('$84,000 annual USD', '')).toBe('$7,000/mo USD');
+});
