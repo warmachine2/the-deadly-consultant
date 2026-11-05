@@ -1,5 +1,9 @@
 # Quiz ten-question diagnostic
 
+- [ ] Rebuild results tiers and three personalized gap diagnoses.
+- [ ] Show briefing and inline Calendly only for Q1-qualified candidates; show foundation/workshop resources otherwise.
+- [ ] Test tier boundaries and strict calendar exclusion; verify both complete quiz paths on desktop/mobile.
+
 - [x] Update Screen 11 candidate form, scholarship checkbox and copy.
 - [x] Validate and send the complete diagnostic to the selected n8n webhook; preserve results on delivery failure.
 - [x] Verify n8n accepted a test submission (HTTP 200), invalid inputs, offline progression and mobile layout; 141 tests pass. Downstream workflow actions/email notifications were not verified.
