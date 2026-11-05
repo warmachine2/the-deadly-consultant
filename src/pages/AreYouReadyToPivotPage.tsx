@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { contactSchema, buildQuizLeadPayload, type ContactFormData } from "@/lib/quizLead";
+import { Checkbox } from "@/components/ui/checkbox";
 import TopNav from "@/components/TopNav";
 import CriticalResourcesSection from "@/components/CriticalResourcesSection";
 import {
@@ -42,6 +43,7 @@ import {
   User,
   Mail,
   MapPin,
+  Phone,
   CheckCircle2,
   ArrowLeft,
   Globe,
@@ -53,14 +55,6 @@ import {
 const GOLD_BUTTON_CLASS =
   "bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-400 text-gray-900 border-2 border-amber-300/60 hover:from-amber-400 hover:via-yellow-400 hover:to-amber-300 transition-colors";
 
-const contactSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
-  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
-  location: z.string().trim().min(1, "Location is required").max(200, "Location must be less than 200 characters"),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
-
 const LANDING_CHECKMARKS = [
   "Check Your PMP & Enterprise Contract Eligibility (3+ Years Experience Benchmark)",
   "Audit Your Resume & Portfolio Against Live $85–$120/Hr GTA & North American Specs",
@@ -70,7 +64,7 @@ const LANDING_CHECKMARKS = [
 const AreYouReadyToPivotPage = () => {
   // Screen 0 = landing, 1–10 = questions, 11 = lead capture, 12 = results
   const [currentScreen, setCurrentScreen] = useState<number>(QUIZ_LANDING_SCREEN);
-  const [contactData, setContactData] = useState<ContactFormData | null>(null);
+
   const [quizState, setQuizState] = useState(() => ({ answers: {} as Record<number, string>, ...summarizeQuizAnswers({}) }));
   const { answers, score } = quizState;
   const [pendingScreen, setPendingScreen] = useState<number | null>(null);
@@ -92,9 +86,12 @@ const AreYouReadyToPivotPage = () => {
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
-      location: "",
+      phone: "",
+      linkedIn: "",
+      city: "",
+      vipScholarship: false,
     },
   });
 
@@ -104,41 +101,25 @@ const AreYouReadyToPivotPage = () => {
   const ROADMAP_PDF_URL = "https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf";
 
   const onRoadmapSubmit = async (data: ContactFormData) => {
-    setContactData(data);
+    if (submittingRoadmap) return;
     setSubmittingRoadmap(true);
-
-    // Open the PDF immediately (synchronously) so it is not blocked by the browser
-    const pdfWindow = window.open(ROADMAP_PDF_URL, "_blank", "noopener,noreferrer");
-
     try {
-      await supabase.functions.invoke("send-quiz-lead", {
-        body: {
-          name: data.name,
-          email: data.email,
-          location: data.location,
-          score,
-          q1: answers[1] || "N/A",
-          q2: answers[2] || "N/A",
-          q3: answers[3] || "N/A",
-          q4: answers[4] || "N/A",
-          q5: answers[5] || "N/A",
-          q6: answers[6] || "N/A",
-          q7: answers[7] || "N/A",
-          q8: answers[8] || "N/A",
-          q9: answers[9] || "N/A",
-          q10: answers[10] || "N/A",
-          q11: answers[11] || "N/A",
-          q12: answers[12] || "N/A",
-          timestamp: new Date().toISOString(),
-        },
-      });
-    } catch (err) {
-      console.error("Failed to send quiz lead:", err);
+      const payload = buildQuizLeadPayload(data, answers);
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 10000);
+      try {
+        const { error } = await supabase.functions.invoke("send-quiz-lead", { body: payload, signal: controller.signal });
+        if (error) console.warn("Quiz delivery unavailable; results remain accessible.");
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    } catch {
+      console.warn("Quiz delivery unavailable; results remain accessible.");
     } finally {
       setSubmittingRoadmap(false);
       setRoadmapOpen(false);
       setCurrentScreen(resultScreen(QUESTIONS.length));
-      if (!pdfWindow) window.location.href = ROADMAP_PDF_URL;
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
   };
 
@@ -238,65 +219,44 @@ const AreYouReadyToPivotPage = () => {
 
   const RoadmapForm = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onRoadmapSubmit)} className="space-y-5">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
+      <form onSubmit={form.handleSubmit(onRoadmapSubmit)} className="space-y-5" noValidate>
+        {([
+          { name: "fullName", label: "Full Name", type: "text", placeholder: "e.g. Adrian San Diego", maxLength: 100, autoComplete: "name", Icon: User },
+          { name: "email", label: "Work / Best Email", type: "email", placeholder: "adrian@example.com", maxLength: 255, autoComplete: "email", Icon: Mail },
+          { name: "phone", label: "Mobile / WhatsApp Number", type: "tel", placeholder: "+1 (416) 555-0199", maxLength: 40, autoComplete: "tel", Icon: Phone },
+          { name: "linkedIn", label: "LinkedIn Profile URL", type: "url", placeholder: "https://linkedin.com/in/yourprofile", maxLength: 500, autoComplete: "url", Icon: Linkedin },
+          { name: "city", label: "City & Country", type: "text", placeholder: "e.g. Toronto, Canada", maxLength: 200, autoComplete: "off", Icon: MapPin },
+        ] as const).map(({ name, label, Icon, ...inputProps }) => (
+          <FormField key={name} control={form.control} name={name} render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                <User className="w-4 h-4 text-[#F4C903]" />
-                Name <span className="text-[#F4C903]">*</span>
+              <FormLabel className="text-foreground text-base font-medium flex items-center gap-2">
+                <Icon className="w-4 h-4 text-[hsl(var(--quiz-highlight))]" />
+                {label} <span className="text-[hsl(var(--quiz-highlight))]">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Your full name" className="bg-input border-border" {...field} />
+                <Input {...inputProps} required disabled={submittingRoadmap} className="bg-input border-border/30 text-foreground" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
-          )}
-        />
+          )} />
+        ))}
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#F4C903]" />
-                Email <span className="text-[#F4C903]">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="you@example.com" className="bg-input border-border" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormField control={form.control} name="vipScholarship" render={({ field }) => (
+          <FormItem className="flex items-start gap-3 space-y-0 rounded-[8px] border border-[hsl(var(--quiz-highlight)/0.5)] bg-[hsl(var(--quiz-highlight)/0.08)] p-4">
+            <FormControl>
+              <Checkbox checked={field.value} onCheckedChange={checked => field.onChange(checked === true)}
+                disabled={submittingRoadmap} className="mt-1 rounded-[4px] border-[hsl(var(--quiz-highlight)/0.6)] data-[state=checked]:bg-[hsl(var(--quiz-highlight))] data-[state=checked]:border-[hsl(var(--quiz-highlight))]" />
+            </FormControl>
+            <FormLabel className="text-foreground text-sm sm:text-base leading-relaxed cursor-pointer">
+              ⭐ Yes! Check my eligibility for one of the 10 Founding 50%-Off Case-Study Scholarships ($2,500 value) and fast-track my application review.
+            </FormLabel>
+          </FormItem>
+        )} />
 
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-white text-base font-medium flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#F4C903]" />
-                Location <span className="text-[#F4C903]">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="City, Country" className="bg-input border-border" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button
-          type="submit"
-          disabled={submittingRoadmap}
-          className={`w-full font-bold py-6 text-lg rounded-xl ${GOLD_BUTTON_CLASS}`}
-        >
-          {submittingRoadmap ? "Unlocking..." : "Submit & Open Roadmap"}
-          <ArrowRight className="w-5 h-5 ml-2" />
+        <Button type="submit" disabled={submittingRoadmap} aria-busy={submittingRoadmap}
+          className="highlight-glow-button h-auto min-h-16 w-full whitespace-normal font-bold px-4 py-4 text-base sm:text-lg rounded-xl">
+          {submittingRoadmap ? "Calculating Your Score & Matching Contract Specs..." : "Reveal My Score & Unlock My Contract Roadmap"}
+          {!submittingRoadmap && <ArrowRight className="w-5 h-5 shrink-0" />}
         </Button>
       </form>
     </Form>
@@ -356,8 +316,13 @@ const AreYouReadyToPivotPage = () => {
 
   const LeadCaptureSection = (
     <section className="volumetric-glass rounded-3xl p-6 md:p-12 max-w-xl mx-auto animate-in fade-in duration-200 motion-reduce:animate-none">
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--quiz-highlight))] mb-4">Unlock Your Readiness Score & Roadmap</h2>
-      <p className="text-muted-foreground text-center mb-8">Enter your details to unlock the roadmap immediately.</p>
+      <div className="text-center mb-6">
+        <span className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--quiz-highlight)/0.4)] bg-[hsl(var(--quiz-highlight)/0.15)] text-[hsl(var(--quiz-highlight))] px-3 py-2 text-xs font-semibold">
+          <ShieldCheck className="w-4 h-4 shrink-0" /> ASSESSMENT COMPLETE • SCORE LOCKED
+        </span>
+      </div>
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--quiz-highlight))] mb-4">Enter Your Details to Unlock Your 0–100 Readiness Score & 90-Day Roadmap</h2>
+      <p className="text-muted-foreground text-center mb-8">We will immediately calculate your score, pinpoint your packaging gaps against live GTA enterprise contracts, and unlock your personalized roadmap.</p>
       {RoadmapForm}
     </section>
   );
@@ -416,7 +381,7 @@ const AreYouReadyToPivotPage = () => {
 
             <button
               type="button"
-              onClick={() => setRoadmapOpen(true)}
+              onClick={() => window.open(ROADMAP_PDF_URL, "_blank", "noopener,noreferrer")}
               className="flex items-center justify-between px-5 py-4 rounded-xl border-2 border-white/20 bg-white/5 text-white text-left hover:border-[#F4C903]/60 hover:bg-[#F4C903]/10 transition-all duration-200"
             >
               <span className="font-medium text-base md:text-lg">$10k/mo+ Data & AI Orchestration PM Accelerator Roadmap</span>
