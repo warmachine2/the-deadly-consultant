@@ -318,7 +318,8 @@ const normalizeWorkMode = (workType: string): 'Remote' | 'Hybrid' | 'On-site' | 
 };
 
 // Enforce monthly salary ($/mo) across all formats:
-// - Hourly rates (e.g. '$91/hr USD', '$85 - $96/Hours') convert at hourly * 1.14 * 160 (KAN-327).
+// - Hourly rates (e.g. '$91/hr USD', '$85 - $96/Hours', '$35 USD hourly') convert
+//   at hourly * 1.14 * 160 (KAN-327). Slash-free 'hourly' wording counts too.
 // - Annual salaries (e.g. '$76,000 - $126,000/yr USD') convert at annual / 12.
 // - Already-monthly amounts missing '/mo' (e.g. '$12,758 CAD') get '/mo' appended; '/month' standardizes to '/mo'.
 // - Compact 'k'/'K' thousands amounts (e.g. '$120k', '$85K') are expanded to full
@@ -338,7 +339,7 @@ const expandKAmounts = (s: string): string =>
 export const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   const str = expandKAmounts(asText(raw).trim());
   if (!str) return '';
-  const isHourly = /\/\s*(hr|hrs|hour|hours|h)\b/i.test(str);
+  const isHourly = /(\/\s*(hr|hrs|hour|hours|h)\b|\bhourly\b)/i.test(str);
   const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
   const hasEst = /\*\s*Est\.?/i.test(str);
 
@@ -349,8 +350,12 @@ export const formatEarningsMonthly = (raw: string, location: string = ''): strin
     currency = /(canada|canadian|toronto|vancouver|montreal|calgary|ottawa)/.test(loc) ? 'CAD' : 'USD';
   }
 
-  const convertNumbers = (divisor: number, multiplier: number = 1): string[] =>
-    Array.from(str.matchAll(/\$?\s*([\d,]+(?:\.\d+)?)\s*([kK])?(?![a-zA-Z])/g))
+  // Standalone rate words carry no amount; drop them before pulling numbers out
+  // so '$35 USD hourly' yields exactly one rate (35) and nothing else.
+  const stripRateWords = (s: string): string => s.replace(/\b(hourly|USD|CAD)\b/gi, ' ');
+
+  const convertNumbers = (divisor: number, multiplier: number = 1, source: string = str): string[] =>
+    Array.from(source.matchAll(/\$?\s*([\d,]+(?:\.\d+)?)\s*([kK])?(?![a-zA-Z])/g))
       .map(m => {
         const v = parseFloat(m[1].replace(/[^0-9.]/g, ''));
         if (!isFinite(v) || v <= 0) return null;
@@ -362,7 +367,7 @@ export const formatEarningsMonthly = (raw: string, location: string = ''): strin
       .filter((s): s is string => s !== null);
 
   if (isHourly) {
-    const converted = convertNumbers(1, 160 * 1.14);
+    const converted = convertNumbers(1, 160 * 1.14, stripRateWords(str));
     if (converted.length === 0) return str;
     let out = converted.join(' - ') + '/mo ' + currency;
     if (hasEst) out += ' *Est.';
@@ -370,7 +375,7 @@ export const formatEarningsMonthly = (raw: string, location: string = ''): strin
   }
 
   if (isAnnual) {
-    const converted = convertNumbers(12);
+    const converted = convertNumbers(12, 1, stripRateWords(str));
     if (converted.length === 0) return str;
     let out = converted.join(' - ') + '/mo ' + currency;
     if (hasEst) out += ' *Est.';
