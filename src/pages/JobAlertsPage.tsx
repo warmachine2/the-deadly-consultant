@@ -366,7 +366,7 @@ export const formatEarningsMonthly = (raw: string, location: string = ''): strin
       .filter((s): s is string => s !== null);
 
   if (isHourly) {
-    const converted = convertNumbers(1, 160 * 1.14);
+    const converted = convertNumbers(1, 160 * 1.14, stripRateWords(str));
     if (converted.length === 0) return str;
     let out = converted.join(' - ') + '/mo ' + currency;
     if (hasEst) out += ' *Est.';
@@ -374,7 +374,7 @@ export const formatEarningsMonthly = (raw: string, location: string = ''): strin
   }
 
   if (isAnnual) {
-    const converted = convertNumbers(12);
+    const converted = convertNumbers(12, 1, stripRateWords(str));
     if (converted.length === 0) return str;
     let out = converted.join(' - ') + '/mo ' + currency;
     if (hasEst) out += ' *Est.';
