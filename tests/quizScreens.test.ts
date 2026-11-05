@@ -45,10 +45,12 @@ describe('quiz screen machine', () => {
     expect(previousQuizScreen(1)).toBe(1);
   });
 
-  test('the landing screen clamps the current question index to the first question', () => {
+  test('the landing and result screens clamp the current question index into the list', () => {
     expect(questionIndexForScreen(QUIZ_LANDING_SCREEN)).toBe(-1);
-    expect(currentQuestionIndexForScreen(QUIZ_LANDING_SCREEN)).toBe(0);
-    expect(currentQuestionIndexForScreen(FIRST_QUESTION_SCREEN)).toBe(0);
-    expect(currentQuestionIndexForScreen(5)).toBe(4);
+    expect(questionIndexForScreen(13)).toBe(12);
+    expect(currentQuestionIndexForScreen(QUIZ_LANDING_SCREEN, QUESTION_COUNT)).toBe(0);
+    expect(currentQuestionIndexForScreen(FIRST_QUESTION_SCREEN, QUESTION_COUNT)).toBe(0);
+    expect(currentQuestionIndexForScreen(5, QUESTION_COUNT)).toBe(4);
+    expect(currentQuestionIndexForScreen(13, QUESTION_COUNT)).toBe(11);
   });
 });

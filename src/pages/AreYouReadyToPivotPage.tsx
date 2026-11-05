@@ -289,7 +289,7 @@ const AreYouReadyToPivotPage = () => {
     setCurrentScreen((prev) => previousQuizScreen(prev));
   };
 
-  const currentQuestionIndex = currentQuestionIndexForScreen(currentScreen);
+  const currentQuestionIndex = currentQuestionIndexForScreen(currentScreen, QUESTIONS.length);
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id];
   const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
