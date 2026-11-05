@@ -1,3 +1,9 @@
+# Quiz ten-question diagnostic
+
+- [ ] Replace question definitions and test weighted 0–100 scoring and qualification metadata.
+- [ ] Add delayed automatic progression, answer review and Screen 11 lead capture; preserve landing and results.
+- [ ] Verify complete quiz flow and mobile layout in preview only.
+
 # KAN-432 Unified Kit popup
 
 - [x] Load the unified Kit form site-wide and update navigation, hero and job-board triggers.
