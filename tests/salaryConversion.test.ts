@@ -87,3 +87,12 @@ test("slash hourly notation is unchanged ('$91/hr USD')", () => {
 test("'annual' wording still converts by /12 and never matches the hourly rule", () => {
   expect(formatEarningsMonthly('$84,000 annual USD', '')).toBe('$7,000/mo USD');
 });
+
+// Shapes taken verbatim from live sheet rows: decimals, a tight dash range,
+// capitalised 'Hourly', and no explicit currency (inferred from location).
+test("live slash-free hourly shapes convert cleanly", () => {
+  expect(formatEarningsMonthly('$100.00-$130.00 hourly', '')).toBe('$18,240 - $23,712/mo USD');
+  expect(formatEarningsMonthly('$85 USD Hourly', '')).toBe('$15,504/mo USD');
+  expect(formatEarningsMonthly('$51 USD Hourly', '')).toBe('$9,302/mo USD');
+  expect(getMonthlyAmount('$100.00-$130.00 hourly', '')).toBe(18240);
+});
