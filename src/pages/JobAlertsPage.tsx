@@ -338,7 +338,7 @@ const expandKAmounts = (s: string): string =>
 export const formatEarningsMonthly = (raw: string, location: string = ''): string => {
   const str = expandKAmounts(asText(raw).trim());
   if (!str) return '';
-  const isHourly = /\/\s*(hr|hrs|hour|hours|h)\b/i.test(str);
+  const isHourly = /(\/\s*(hr|hrs|hour|hours|h)\b|\bhourly\b)/i.test(str);
   const isAnnual = /\/\s*(yr|year|annum)\b/i.test(str) || /\bannual(ly)?\b/i.test(str);
   const hasEst = /\*\s*Est\.?/i.test(str);
 
@@ -349,8 +349,12 @@ export const formatEarningsMonthly = (raw: string, location: string = ''): strin
     currency = /(canada|canadian|toronto|vancouver|montreal|calgary|ottawa)/.test(loc) ? 'CAD' : 'USD';
   }
 
-  const convertNumbers = (divisor: number, multiplier: number = 1): string[] =>
-    Array.from(str.matchAll(/\$?\s*([\d,]+(?:\.\d+)?)\s*([kK])?(?![a-zA-Z])/g))
+  // Standalone rate words carry no amount; drop them before pulling numbers out
+  // so '$35 USD hourly' yields exactly one rate (35) and nothing else.
+  const stripRateWords = (s: string): string => s.replace(/\b(hourly|USD|CAD)\b/gi, ' ');
+
+  const convertNumbers = (divisor: number, multiplier: number = 1, source: string = str): string[] =>
+    Array.from(source.matchAll(/\$?\s*([\d,]+(?:\.\d+)?)\s*([kK])?(?![a-zA-Z])/g))
       .map(m => {
         const v = parseFloat(m[1].replace(/[^0-9.]/g, ''));
         if (!isFinite(v) || v <= 0) return null;
