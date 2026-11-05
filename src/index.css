@@ -13,6 +13,9 @@ All colors MUST be HSL.
     --foreground: 214 14% 91%;
     --article-body: 0 0% 100%;
     --quiz-highlight: 50 100% 69%;
+    --quiz-enterprise: 158 64% 45%;
+    --quiz-emerging: 38 92% 50%;
+    --quiz-foundation: 199 89% 48%;
 
     /* Glass card with charcoal tint */
     --card: 0 0% 18%;
