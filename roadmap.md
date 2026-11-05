@@ -1,5 +1,9 @@
 # Quiz ten-question diagnostic
 
+- [ ] Update Screen 11 candidate form, scholarship checkbox and copy.
+- [ ] Validate and send the complete diagnostic to the selected n8n webhook; preserve results on delivery failure.
+- [ ] Verify delivery, invalid inputs, offline progression and mobile layout.
+
 - [x] Replace question definitions and test weighted 0–100 scoring and qualification metadata (supplied maximum 110 normalized to 100).
 - [x] Add delayed automatic progression, answer review and Screen 11 lead capture; preserve landing and results.
 - [x] Verify complete quiz through lead capture on desktop and 375px mobile in preview only; 130 tests pass.
