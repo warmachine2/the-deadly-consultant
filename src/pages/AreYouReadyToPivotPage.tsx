@@ -4,6 +4,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import TopNav from "@/components/TopNav";
 import CriticalResourcesSection from "@/components/CriticalResourcesSection";
+import {
+  QUIZ_LANDING_SCREEN,
+  isQuestionScreen,
+  isResultScreen,
+  nextQuizScreen,
+  previousQuizScreen,
+  questionIndexForScreen,
+  currentQuestionIndexForScreen,
+  startAssessmentScreen,
+} from "@/lib/quizScreens";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,8 +57,6 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-
-type Step = "hero" | "contact" | "quiz" | "result";
 
 type QuestionType = "yesno" | "choice";
 
@@ -205,10 +213,16 @@ const QUESTIONS: Question[] = [
   },
 ];
 
+const LANDING_CHECKMARKS = [
+  "Check Your PMP & Enterprise Contract Eligibility (3+ Years Experience Benchmark)",
+  "Audit Your Resume & Portfolio Against Live $85–$120/Hr GTA & North American Specs",
+  "Unlock Your Custom 0–100 Readiness Score + The V4 90-Day Pivot Roadmap PDF",
+];
+
 const AreYouReadyToPivotPage = () => {
-  const [step, setStep] = useState<Step>("hero");
+  // Screen 0 = landing, screens 1-12 = questions, screen 13 = results
+  const [currentScreen, setCurrentScreen] = useState<number>(QUIZ_LANDING_SCREEN);
   const [contactData, setContactData] = useState<ContactFormData | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
 
   const form = useForm<ContactFormData>({
@@ -264,23 +278,18 @@ const AreYouReadyToPivotPage = () => {
   };
 
   const handleAnswer = (value: string) => {
-    setAnswers((prev) => ({ ...prev, [QUESTIONS[currentQuestionIndex].id]: value }));
+    setAnswers((prev) => ({ ...prev, [QUESTIONS[questionIndexForScreen(currentScreen)].id]: value }));
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < QUESTIONS.length - 1) {
-      setCurrentQuestionIndex((prev) => prev + 1);
-    } else {
-      setStep("result");
-    }
+    setCurrentScreen((prev) => nextQuizScreen(prev, QUESTIONS.length));
   };
 
   const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prev) => prev - 1);
-    }
+    setCurrentScreen((prev) => previousQuizScreen(prev));
   };
 
+  const currentQuestionIndex = currentQuestionIndexForScreen(currentScreen, QUESTIONS.length);
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id];
   const progress = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
@@ -318,7 +327,7 @@ const AreYouReadyToPivotPage = () => {
     return Math.round((raw / MAX_RAW_SCORE) * 100);
   };
 
-  const HeroSection = (
+  const LandingSection = (
     <section className="volumetric-glass rounded-3xl p-8 md:p-16 text-center relative overflow-hidden">
       {/* Subtle static glow behind title */}
       <div
@@ -330,10 +339,10 @@ const AreYouReadyToPivotPage = () => {
       />
 
       <div className="relative z-10 flex flex-col items-center gap-6 md:gap-8">
-        {/* Free badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F4C903]/20 border border-[#F4C903]/40 text-[#F4C903] font-semibold text-sm md:text-base">
+        {/* Eyebrow badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F4C903]/20 border border-[#F4C903]/40 text-[#F4C903] font-semibold text-xs md:text-sm tracking-wider">
           <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
-          <span>Free</span>
+          <span>FREE 3-MINUTE PM CONSULTING READINESS AUDIT</span>
         </div>
 
         {/* Main title */}
@@ -346,29 +355,49 @@ const AreYouReadyToPivotPage = () => {
             WebkitTextStroke: "0.5px #000",
           }}
         >
-          Are You Ready to Pivot to PM Consulting?
+          Are You Ready to Pivot Into $10,000–$18,000/Mo Data & AI PM Consulting Contracts?
         </h1>
 
-        {/* No signup required text */}
-        <p className="flex items-center gap-2 text-base md:text-lg text-white/90 font-medium">
-          <ShieldCheck className="w-5 h-5 text-[#F4C903]" />
-          <span>No signup required to see your readiness score</span>
+        {/* Sub-headline */}
+        <p className="max-w-2xl text-base md:text-lg text-muted-foreground">
+          Take this 10-question diagnostic to see if your current work history qualifies for
+          $85–$120/hr incorporated enterprise contracts—and uncover the exact packaging gaps keeping
+          recruiters from calling you back.
         </p>
 
-        {/* Start Quiz button */}
-        <div className="mt-4 md:mt-6">
+        {/* Value checkmarks */}
+        <ul className="w-full max-w-2xl space-y-3 text-left">
+          {LANDING_CHECKMARKS.map((checkmark) => (
+            <li
+              key={checkmark}
+              className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4"
+            >
+              <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-[#F4C903] flex-shrink-0 mt-0.5" />
+              <span className="text-base md:text-lg text-white font-medium">{checkmark}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Start assessment button */}
+        <div className="mt-2 md:mt-4">
           <button
             type="button"
-            onClick={() => {
-              setCurrentQuestionIndex(0);
-              setStep("quiz");
-            }}
+            onClick={() => setCurrentScreen(startAssessmentScreen())}
             className="highlight-glow-button inline-flex items-center justify-center gap-3 px-10 py-4 md:px-12 md:py-5 text-xl md:text-2xl font-bold text-white hover:text-white tracking-wide shadow-none"
           >
-            <span>Start Quiz</span>
+            <span>Start My 3-Minute Assessment</span>
             <ArrowRight className="w-6 h-6 md:w-7 md:h-7" />
           </button>
         </div>
+
+        {/* Trust badge */}
+        <p className="flex flex-wrap items-center justify-center gap-2 text-sm md:text-base text-muted-foreground">
+          <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-[#F4C903] flex-shrink-0" />
+          <span>
+            Free & Confidential • 4,800+ Live Enterprise Roles Monitored Daily • Trusted by GTA Data
+            & Tech Leaders
+          </span>
+        </p>
       </div>
     </section>
   );
@@ -642,9 +671,9 @@ const AreYouReadyToPivotPage = () => {
 
       <main className="flex-1 pt-24 lg:pt-28 px-4 md:px-6 pb-12 flex flex-col justify-center">
         <div className="max-w-4xl mx-auto">
-          {step === "hero" && HeroSection}
-          {step === "quiz" && QuizSection}
-          {step === "result" && (
+          {currentScreen === QUIZ_LANDING_SCREEN && LandingSection}
+          {isQuestionScreen(currentScreen, QUESTIONS.length) && QuizSection}
+          {isResultScreen(currentScreen, QUESTIONS.length) && (
             <div className="space-y-6 max-w-3xl mx-auto">
               {ResultSection}
               <CriticalResourcesSection />

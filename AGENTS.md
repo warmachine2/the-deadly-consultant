@@ -6,3 +6,4 @@
 - Keep job-board filter defaults and the Clear Filters reset in `src/lib/jobFilterState.ts` and import them from the page, so the unbounded date range that shows all jobs stays testable without rendering the board.
 - Keep timeline bucketing and click ranges in `src/lib/jobTimeline.ts` so chart counts and inclusive table date ranges stay aligned and independently testable.
 - Give small icons and logos explicit pixel radii (e.g. `rounded-[4px]`) instead of `rounded-sm`/`rounded-md`, because this theme derives `borderRadius` from `--radius` (1.25rem) so `rounded-sm` resolves to 16px and renders a small square image as a circle.
+- Keep the readiness quiz's screen progression in `src/lib/quizScreens.ts` (screen 0 = landing, screens 1..N = questions, screen N+1 = results) and derive the current question from that number, so the zero-input landing screen and the results screen stay testable without rendering the page.
