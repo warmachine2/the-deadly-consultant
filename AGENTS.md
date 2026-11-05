@@ -8,3 +8,5 @@
 - Give small icons and logos explicit pixel radii (e.g. `rounded-[4px]`) instead of `rounded-sm`/`rounded-md`, because this theme derives `borderRadius` from `--radius` (1.25rem) so `rounded-sm` resolves to 16px and renders a small square image as a circle.
 - Keep readiness quiz progression in `src/lib/quizScreens.ts` (0 = landing, 1..N = questions, N+1 = lead capture, N+2 = results) and derive the current question from that number, so progression stays independently testable.
 - Keep quiz question weights and answer-derived score and qualification in `src/lib/quizDiagnostic.ts`; recompute from the answer map so answer changes cannot double-count points or leave stale qualification.
+- Share quiz lead schema definitions from the quiz delivery function directory with the browser via injected Zod, so both runtimes enforce identical contact and payload validation without importing browser code into deployed functions.
+- Deliver quiz leads through the server-side function to the user-selected public n8n webhook; bound waiting and retain results when delivery is unavailable.
