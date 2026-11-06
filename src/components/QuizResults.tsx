@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Download, BriefcaseBusiness, ClipboardList, Building2, Video, CalendarDays, GraduationCap } from "lucide-react";
+import { ArrowRight, Download, BriefcaseBusiness, ClipboardList, Building2, CalendarDays, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CalendlyInlineWidget from "@/components/CalendlyInlineWidget";
 import CriticalResourcesSection from "@/components/CriticalResourcesSection";
