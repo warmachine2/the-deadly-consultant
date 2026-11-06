@@ -41,7 +41,11 @@ export default function PostModal({
             <DialogTitle className="text-2xl font-bold">{post?.title || "Loading Post..."}</DialogTitle>
           </DialogHeader>
 
-          <div className="p-4 sm:p-8 prose prose-invert max-w-none [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:h-auto [&_iframe]:max-w-full [&_iframe]:rounded-lg [&_iframe]:shadow-lg [&_figure]:glass-effect [&_figure]:rounded-3xl [&_figure]:overflow-hidden [&_div[class*='kg-embed']]:glass-effect [&_div[class*='kg-embed']]:rounded-3xl [&_div[class*='kg-embed']]:overflow-hidden">
+          <div className={`p-4 sm:p-8 prose prose-invert max-w-none [&_iframe]:w-full [&_iframe]:h-auto [&_iframe]:max-w-full [&_iframe]:rounded-lg [&_iframe]:shadow-lg [&_figure]:glass-effect [&_figure]:rounded-3xl [&_figure]:overflow-hidden [&_div[class*='kg-embed']]:glass-effect [&_div[class*='kg-embed']]:rounded-3xl [&_div[class*='kg-embed']]:overflow-hidden ${
+            isVertical
+              ? "[&_iframe]:aspect-[9/16] [&_iframe]:max-w-[380px] md:[&_iframe]:max-w-[440px] [&_iframe]:mx-auto"
+              : "[&_iframe]:aspect-video"
+          }`}>
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
                 <Loader2 className="w-8 h-8 animate-spin text-accent" />
