@@ -1450,3 +1450,17 @@ body.job-board-page div[id^="formkit-"] {
   pointer-events: none !important;
   opacity: 0 !important;
 }
+
+/* KAN-472: vertical Talking Head / Short embeds (9:16) */
+.vertical-embed iframe {
+  display: block !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  aspect-ratio: 9 / 16 !important;
+  height: auto !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+@media (min-width: 768px) {
+  .vertical-embed iframe { max-width: 440px !important; }
+}

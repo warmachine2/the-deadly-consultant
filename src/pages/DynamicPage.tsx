@@ -1,3 +1,5 @@
+import { isVerticalVideo } from "@/lib/blogOrdering";
+
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TopNav from "@/components/TopNav";
