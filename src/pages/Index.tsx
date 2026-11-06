@@ -1,3 +1,4 @@
+import { sortBlogPosts } from "@/lib/blogOrdering";
 // Index page - Main blog home
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
