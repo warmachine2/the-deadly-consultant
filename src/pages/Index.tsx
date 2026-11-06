@@ -43,6 +43,12 @@ const Index = () => {
   // Fetch initial posts
   useEffect(() => {
     const loadPosts = async () => {
+      // Drop any cached Ghost post lists so the grid always reflects the latest episodes.
+      try {
+        Object.keys(sessionStorage)
+          .filter((key) => key.startsWith("ghost:posts:"))
+          .forEach((key) => sessionStorage.removeItem(key));
+      } catch {}
       setLoading(true);
       try {
         const response = await fetchPosts(1, 20);
