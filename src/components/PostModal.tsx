@@ -32,6 +32,8 @@ export default function PostModal({
   // Only render when explicitly open
   if (!isOpen) return null;
 
+  const isVertical = isVerticalVideo(post?.title, fullContent);
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <FocusScope>
@@ -53,7 +55,7 @@ export default function PostModal({
               </div>
             ) : (
               <div
-                className={isVerticalVideo(post?.title, fullContent) ? "vertical-embed" : undefined}
+                className={isVertical ? "vertical-embed" : undefined}
                 dangerouslySetInnerHTML={{
                   __html: rebrandHtml(
                     fullContent ||
