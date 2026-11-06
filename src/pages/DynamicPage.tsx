@@ -252,6 +252,30 @@ const DynamicPage = () => {
                   height: auto;
                 }
 
+                /* Vertical (Shorts-style) embeds - forced 9:16, centered */
+                .dynamic-page-content.vertical-embed iframe,
+                .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
+                .dynamic-page-content .vertical-embed iframe,
+                .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
+                  display: block !important;
+                  width: 100% !important;
+                  max-width: 380px !important;
+                  aspect-ratio: 9 / 16 !important;
+                  height: auto !important;
+                  margin-left: auto !important;
+                  margin-right: auto !important;
+                  border-radius: 1rem !important;
+                }
+
+                @media (min-width: 768px) {
+                  .dynamic-page-content.vertical-embed iframe,
+                  .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
+                  .dynamic-page-content .vertical-embed iframe,
+                  .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
+                    max-width: 440px !important;
+                  }
+                }
+
                 /* YouTube Shorts - vertical 9:16 */
                 .dynamic-page-content iframe[src*="youtube.com/embed/shorts"],
                 .dynamic-page-content .youtube-short iframe {
