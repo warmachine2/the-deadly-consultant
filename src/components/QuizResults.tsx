@@ -51,17 +51,9 @@ const QuizResults = ({ score, mqlQualified, rolePond }: { score: number; mqlQual
         <>
           <section className="space-y-6 text-center" aria-label="Consulting diagnostic booking">
             <h2 className="text-2xl md:text-3xl font-bold text-[hsl(var(--quiz-highlight))]">Your Experience Qualifies for $10,000–$18,000/Mo PM Consulting Contracts</h2>
-            <p className="text-foreground max-w-2xl mx-auto">Watch the 12-minute executive briefing below, then schedule your 15-minute 1-on-1 Consulting Diagnostic directly with Hassan.</p>
-            <div className="max-w-3xl mx-auto rounded-[8px] overflow-hidden border border-border/20">
-              <div className="flex items-center justify-between gap-3 bg-card px-4 py-3 text-foreground text-sm">
-                <span className="flex items-center gap-2"><Video className="w-4 h-4" /> Executive Briefing</span><span>12 min</span>
-              </div>
-              <div className="aspect-video relative">
-                <iframe src="https://www.youtube.com/embed/rJnACxKL0Tk" title="PM Consulting Executive Briefing"
-                  className="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-              </div>
-            </div>
+            <p className="text-foreground max-w-2xl mx-auto">Watch the critical resources below, then schedule your 15-minute 1-on-1 Consulting Diagnostic directly with Hassan.</p>
           </section>
+          <CriticalResourcesSection />
           <section className="max-w-2xl mx-auto space-y-4" aria-label="Book your 1-on-1 consulting diagnostic">
             <h3 className="text-xl font-semibold text-center text-[hsl(var(--quiz-highlight))] flex items-center justify-center gap-2"><CalendarDays className="w-5 h-5" /> Choose Your Consulting Diagnostic Time</h3>
             <CalendlyInlineWidget />
