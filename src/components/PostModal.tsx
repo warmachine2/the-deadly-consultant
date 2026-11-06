@@ -49,6 +49,7 @@ export default function PostModal({
               </div>
             ) : (
               <div
+                className={isVerticalVideo(post?.title, fullContent) ? "vertical-embed" : undefined}
                 dangerouslySetInnerHTML={{
                   __html: rebrandHtml(
                     fullContent ||

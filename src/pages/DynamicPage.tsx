@@ -271,7 +271,8 @@ const DynamicPage = () => {
               <div
                 className={`prose prose-invert prose-lg max-w-none text-foreground dynamic-page-content
                   [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold
-                  ${slug === "roadmap-thank-you" ? "roadmap-thank-you-content" : ""}`}
+                  ${slug === "roadmap-thank-you" ? "roadmap-thank-you-content" : ""}
+                  ${isVerticalVideo(content.title, content.html) ? "vertical-embed" : ""}`}
               >
                 {renderedContent}
               </div>
