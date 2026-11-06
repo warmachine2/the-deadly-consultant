@@ -262,8 +262,7 @@ const DynamicPage = () => {
                   max-width: 380px !important;
                   aspect-ratio: 9 / 16 !important;
                   height: auto !important;
-                  margin-left: auto !important;
-                  margin-right: auto !important;
+                  margin: 0 auto !important;
                   border-radius: 1rem !important;
                 }
 
