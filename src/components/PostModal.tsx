@@ -1,3 +1,4 @@
+import { isVerticalVideo } from "@/lib/blogOrdering";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BlogPost } from "./BlogCard";
 import { Loader2 } from "lucide-react";
@@ -48,6 +49,7 @@ export default function PostModal({
               </div>
             ) : (
               <div
+                className={isVerticalVideo(post?.title, fullContent) ? "vertical-embed" : undefined}
                 dangerouslySetInnerHTML={{
                   __html: rebrandHtml(
                     fullContent ||

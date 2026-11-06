@@ -1,3 +1,5 @@
+import { isVerticalVideo } from "@/lib/blogOrdering";
+
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TopNav from "@/components/TopNav";
@@ -269,7 +271,8 @@ const DynamicPage = () => {
               <div
                 className={`prose prose-invert prose-lg max-w-none text-foreground dynamic-page-content
                   [&_h1]:font-bold [&_h2]:font-bold [&_h3]:font-bold [&_h4]:font-bold
-                  ${slug === "roadmap-thank-you" ? "roadmap-thank-you-content" : ""}`}
+                  ${slug === "roadmap-thank-you" ? "roadmap-thank-you-content" : ""}
+                  ${isVerticalVideo(content.title, content.html) ? "vertical-embed" : ""}`}
               >
                 {renderedContent}
               </div>
