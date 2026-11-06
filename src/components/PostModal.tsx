@@ -54,6 +54,21 @@ export default function PostModal({
                 <span className="ml-2 text-muted-foreground">Loading post content...</span>
               </div>
             ) : (
+              <div className="dynamic-page-content">
+              <style>{`
+                .dynamic-page-content.vertical-embed iframe,
+                .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
+                .dynamic-page-content .vertical-embed iframe,
+                .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
+                  display: block !important;
+                  width: 100% !important;
+                  max-width: 380px !important;
+                  aspect-ratio: 9 / 16 !important;
+                  height: auto !important;
+                  margin: 0 auto !important;
+                  border-radius: 1rem !important;
+                }
+              `}</style>
               <div
                 className={isVertical ? "vertical-embed" : undefined}
                 dangerouslySetInnerHTML={{
