@@ -36,7 +36,7 @@ test('every requested agency is recognized in Company using shared aliases', () 
 });
 
 test('matching uses boundaries, multiple agencies, and distinct Dallas attribution', () => {
-  expect(getJobMatchingSources({ company: 'United States testing systems' })).toEqual(['United States testing systems']);
+  expect(getJobMatchingSources({ company: 'United States testing systems' })).toEqual([]);
   expect(getJobMatchingSources({ company: 'Insight Global Dallas (for client)' })).toEqual(['Insight Global Dallas']);
   expect(getJobMatchingSources({ company: 'Procom / S.I. Systems' }).sort()).toEqual(['Procom', 'S.i. Systems']);
   expect(matchesJobSources({ company: 'Procom' }, ['Mondo'])).toBe(false);
@@ -76,10 +76,20 @@ test('Tanisha variants produce one dropdown option and filter all recruiter jobs
   }
 });
 
-test('unseen companies and sources automatically become filter options', () => {
-  const jobs = [{ source: network, company: 'Acme Staffing LLC' }, { source: 'New Recruiter', company: 'Acme Staffing LLC (via partner)' }];
-  expect(getUniqueJobSources(jobs)).toEqual(['Acme Staffing LLC', network, 'New Recruiter']);
-  expect(jobs.filter(job => matchesJobSources(job, ['Acme Staffing LLC']))).toHaveLength(2);
+test('arbitrary end-client companies do not become source options', () => {
+  const jobs = ['407 ETR', 'Ontario Health', 'E-Solutions', 'Not specified (posted via Monster)', 'Acme Staffing LLC'].map(company => ({ source: network, company }));
+  expect(getUniqueJobSources(jobs)).toEqual([network]);
+  for (const job of jobs) {
+    expect(getJobMatchingSources(job)).toEqual([network]);
+    expect(matchesJobSources(job, [job.company])).toBe(false);
+    expect(matchesJobSources(job, [network])).toBe(true);
+  }
+});
+
+test('new Sources-column values automatically become dropdown options', () => {
+  const jobs = [{ source: network, company: '407 ETR' }, { source: 'New Recruiter', company: '407 ETR' }];
+  expect(getUniqueJobSources(jobs)).toEqual([network, 'New Recruiter']);
+  expect(jobs.filter(job => matchesJobSources(job, ['New Recruiter']))).toHaveLength(1);
   expect(jobs.filter(job => matchesJobSources(job, [network]))).toHaveLength(1);
 });
 
@@ -104,10 +114,10 @@ test('known agency aliases merge without altering existing canonical source valu
   }
 });
 
-test('trailing client qualifiers are removed from new company options', () => {
+test('trailing client qualifiers are removed from new Sources-column options', () => {
   for (const qualifier of ['for client', 'client undisclosed', 'undisclosed client', 'staffing agency for technology', 'recruiter for enterprise', 'End Client', 'via partner']) {
-    const job = { source: network, company: `Acme Staffing LLC (${qualifier})` };
-    expect(getUniqueJobSources([job])).toEqual(['Acme Staffing LLC', network]);
+    const job = { source: `Acme Staffing LLC (${qualifier})`, company: '407 ETR' };
+    expect(getUniqueJobSources([job])).toEqual(['Acme Staffing LLC']);
     expect(matchesJobSources(job, ['Acme Staffing LLC'])).toBe(true);
   }
 });

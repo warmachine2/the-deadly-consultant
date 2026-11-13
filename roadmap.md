@@ -1,5 +1,10 @@
 # Quiz ten-question diagnostic
 
+# Sources dropdown cleanup
+
+- [x] Remove arbitrary Company fallback; preserve official agencies, Tanisha aliases, and dynamic Sources-column values.
+- [x] All 194 tests pass and production build is clean; live dropdown has 21 official options with no random end clients, and Tanisha still returns 16 jobs including Release Manager.
+
 # KAN-495 Dynamic source dropdown
 
 - [x] Normalize Tanisha aliases and include new non-placeholder companies through the shared source resolver.

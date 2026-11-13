@@ -84,7 +84,7 @@ export const normalizeSourceName = (raw: string): string => {
   return mapped;
 };
 
-/** Resolve source attribution plus canonical agencies or new companies in Company.
+/** Resolve any Sources-column attribution plus only known agencies in Company.
  * Word boundaries prevent short aliases (TES, GTT, NTT) matching inside words.
  * Longer aliases win when their spans overlap, keeping Dallas distinct.
  */
@@ -108,12 +108,6 @@ export const getJobMatchingSources = (job: { source?: string; company?: string }
         sources.add(canonical);
       }
     });
-  // Known agencies keep their established canonical labels; unseen companies
-  // become searchable too, without changing the original recruiter attribution.
-  if (occupied.length === 0) {
-    const companySource = normalizeSourceName(company);
-    if (companySource) sources.add(companySource);
-  }
   return [...sources];
 };
 

@@ -1,6 +1,6 @@
 # Architecture rules
 
-- Keep job source aliases, qualifier cleanup, and source/company matching in `src/lib/jobSourceMatching.ts`; use its resolver for both dropdown membership and filtering so new non-placeholder companies appear automatically while recruiter attribution and known agency canonical values remain preserved.
+- Keep job source aliases, qualifier cleanup, and source/company matching in `src/lib/jobSourceMatching.ts`; use its resolver for both dropdown membership and filtering, accepting new Sources-column values but only known agency aliases from Company so end-client names never pollute Sources and recruiter attribution remains preserved.
 
 - Keep Student Intake validation and password-digest verification in a focused library module so submission requirements can be tested independently of rendering.
 - Treat the shared-password session gate as a convenience screen, not authorization; private resume access remains controlled by database and storage policies.
