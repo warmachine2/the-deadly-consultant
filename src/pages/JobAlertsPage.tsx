@@ -7,7 +7,7 @@ import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, B
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import NetworkHealthPanel from '@/components/NetworkHealthPanel';
 import { format, isWithinInterval, parse } from 'date-fns';
-import { normalizeSourceName, getJobMatchingSources, matchesJobSources } from '@/lib/jobSourceMatching';
+import { normalizeSourceName, getUniqueJobSources, matchesJobSources } from '@/lib/jobSourceMatching';
 import { INITIAL_JOB_FILTERS, clearedJobFilters, countActiveJobFilters } from '@/lib/jobFilterState';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
@@ -220,6 +220,7 @@ const sourceDescriptions: Record<string, string> = {
   "TEKsystems": "Industry leader in IT staffing, talent solutions, and technology services, delivering digital transformation, cloud, and agile project delivery across North America.",
   "TES – The Employment Solution": "Premier Canadian IT & engineering staffing and recruitment firm founded in 1975, delivering enterprise Project Management, Technology, and Digital Transformation consulting talent across Canada.",
   "Motion Recruitment": "Leading nationwide IT and technology recruitment agency specializing in Project Management, Software Engineering, and digital transformation consulting across the San Francisco Bay Area and USA.",
+  "Tanisha Systems Inc.": "Specialized boutique IT staffing and consulting firm placing contract Project Management and technology talent",
 };
 
 // Frontend display labels for sources (does not affect underlying data values)
@@ -1455,14 +1456,10 @@ const JobAlertsPage: React.FC = () => {
     const citySet = new Set<string>();
     const cityCountriesMap = new Map<string, Set<string>>();
     const roleTypeSet = new Set<string>();
-    const sourceSet = new Set<string>();
     
     data.forEach(job => {
       // Extract role type
       roleTypeSet.add(categorizeRole(job.role));
-      
-      // Keep dropdown membership aligned with Source filtering.
-      getJobMatchingSources(job).forEach(source => sourceSet.add(source));
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
       const city = extractCity(job.workType, job.location, job.comments);
@@ -1492,7 +1489,7 @@ const JobAlertsPage: React.FC = () => {
       citiesByCountry: cityCountriesMap,
       uniqueRoleTypes: Array.from(roleTypeSet).sort(),
       // Merge canonical sources with any additional sources found in the data
-      uniqueSources: Array.from(new Set([...Object.keys(sourceDescriptions), ...Array.from(sourceSet)])).sort()
+      uniqueSources: getUniqueJobSources(data, Object.keys(sourceDescriptions))
     };
   }, [data]);
 

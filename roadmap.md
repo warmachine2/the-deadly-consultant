@@ -1,5 +1,10 @@
 # Quiz ten-question diagnostic
 
+# KAN-495 Dynamic source dropdown
+
+- [x] Normalize Tanisha aliases and include new non-placeholder companies through the shared source resolver.
+- [x] Verify one Tanisha dropdown option returns all 16 live jobs, including Release Manager; recruiter filtering still includes it. All 193 tests pass and preview build is clean.
+
 # KAN-494 Source matching and undated jobs
 
 - [x] Match Source filters and dropdown membership using source attribution plus recognized Company agencies.

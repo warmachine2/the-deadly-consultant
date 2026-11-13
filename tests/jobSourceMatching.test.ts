@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { getJobMatchingSources, matchesJobSources } from '../src/lib/jobSourceMatching';
+import { getJobMatchingSources, getUniqueJobSources, normalizeSourceName, matchesJobSources } from '../src/lib/jobSourceMatching';
 import { extractCity } from '../src/lib/countryUtils';
 import { parseCSV } from '../src/pages/JobAlertsPage';
 
@@ -36,7 +36,7 @@ test('every requested agency is recognized in Company using shared aliases', () 
 });
 
 test('matching uses boundaries, multiple agencies, and distinct Dallas attribution', () => {
-  expect(getJobMatchingSources({ company: 'United States testing systems' })).toEqual([]);
+  expect(getJobMatchingSources({ company: 'United States testing systems' })).toEqual(['United States testing systems']);
   expect(getJobMatchingSources({ company: 'Insight Global Dallas (for client)' })).toEqual(['Insight Global Dallas']);
   expect(getJobMatchingSources({ company: 'Procom / S.I. Systems' }).sort()).toEqual(['Procom', 'S.i. Systems']);
   expect(matchesJobSources({ company: 'Procom' }, ['Mondo'])).toBe(false);
@@ -63,4 +63,51 @@ test('blank-date Winnipeg recruiter row parses as N/A without dropping its role'
 
 test('rows without a role still do not parse', () => {
   expect(parseCSV('Date,Role\n2026-11-13," "\n,')).toEqual([]);
+});
+
+test('Tanisha variants produce one dropdown option and filter all recruiter jobs', () => {
+  const variants = ['Tanisha Systems', 'Tanisha Systems Inc', 'Tanisha Systems Inc.', 'Tanisha Systems, Inc.', 'Tanisha Systems Inc. (client undisclosed)', 'Tanisha Systems Inc (staffing agency for enterprise clients)'];
+  const jobs = variants.map(company => ({ source: network, company, role: 'Release Manager', date: '2026-11-13' }));
+  expect(getUniqueJobSources(jobs, ['Tanisha Systems Inc.'])).toEqual([network, 'Tanisha Systems Inc.']);
+  for (const job of jobs) {
+    expect(normalizeSourceName(job.company)).toBe('Tanisha Systems Inc.');
+    expect(matchesJobSources(job, ['Tanisha Systems Inc.'])).toBe(true);
+    expect(matchesJobSources(job, [network])).toBe(true);
+  }
+});
+
+test('unseen companies and sources automatically become filter options', () => {
+  const jobs = [{ source: network, company: 'Acme Staffing LLC' }, { source: 'New Recruiter', company: 'Acme Staffing LLC (via partner)' }];
+  expect(getUniqueJobSources(jobs)).toEqual(['Acme Staffing LLC', network, 'New Recruiter']);
+  expect(jobs.filter(job => matchesJobSources(job, ['Acme Staffing LLC']))).toHaveLength(2);
+  expect(jobs.filter(job => matchesJobSources(job, [network]))).toHaveLength(1);
+});
+
+test('SI Systems variants merge and placeholder companies are ignored', () => {
+  const jobs = ['S.i. Systems', 'SI Systems', 'S.I. Systems (for client)', 'N/A', 'None', 'Unknown', 'Undisclosed', '-', ''].map(company => ({ source: network, company }));
+  expect(getUniqueJobSources(jobs)).toEqual([network, 'S.i. Systems']);
+  expect(jobs.filter(job => matchesJobSources(job, ['SI Systems']))).toHaveLength(3);
+});
+
+test('known agency aliases merge without altering existing canonical source values', () => {
+  const cases = [
+    ['NTT DATA', 'NTT Data'], ['Motion Recruitment Client', 'Motion Recruitment'],
+    ['HR Brain client', 'HR Brain'], ['Axelon Services Corporation', 'Axelon Services Corporation'],
+    ['Agilus Work Solutions', 'Agilus Work Solutions'],
+    ['Global Technical Talent (GTT)', 'GTT (Global Technical Talent)'],
+    ['Peterson Technology Partners', 'Peterson Technology Partners (PTP)'],
+  ];
+  for (const [company, canonical] of cases) {
+    const jobs = [{ source: network, company }, { source: network, company: canonical }];
+    expect(getUniqueJobSources(jobs)).toEqual([network, canonical].sort());
+    expect(matchesJobSources(jobs[0], [canonical])).toBe(true);
+  }
+});
+
+test('trailing client qualifiers are removed from new company options', () => {
+  for (const qualifier of ['for client', 'client undisclosed', 'undisclosed client', 'staffing agency for technology', 'recruiter for enterprise', 'End Client', 'via partner']) {
+    const job = { source: network, company: `Acme Staffing LLC (${qualifier})` };
+    expect(getUniqueJobSources([job])).toEqual(['Acme Staffing LLC', network]);
+    expect(matchesJobSources(job, ['Acme Staffing LLC'])).toBe(true);
+  }
 });

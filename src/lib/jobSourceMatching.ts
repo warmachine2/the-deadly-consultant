@@ -8,6 +8,7 @@ export const sourceNameMap: Record<string, string> = {
   "Agilus": "Agilus Work Solutions",
   "Agilus (Canada)": "Agilus Work Solutions",
   "SI Systems": "S.i. Systems",
+  "S.I. Systems": "S.i. Systems",
   "S.i. Systems": "S.i. Systems",
   "Nerdyhire": "Nerdy Hire",
   "Nerdy Hire": "Nerdy Hire",
@@ -17,6 +18,7 @@ export const sourceNameMap: Record<string, string> = {
   "GTT": "GTT (Global Technical Talent)",
   "GTT (Global Technical Talent)": "GTT (Global Technical Talent)",
   "Global Technical Talent": "GTT (Global Technical Talent)",
+  "Global Technical Talent (GTT)": "GTT (Global Technical Talent)",
   "NTT Data": "NTT Data",
   "NTT DATA": "NTT Data",
   "NTT": "NTT Data",
@@ -49,6 +51,11 @@ export const sourceNameMap: Record<string, string> = {
   "Motion": "Motion Recruitment",
   "motion recruitment": "Motion Recruitment",
   "Motion Recruitment - San Francisco": "Motion Recruitment",
+  "Tanisha Systems": "Tanisha Systems Inc.",
+  "Tanisha Systems Inc": "Tanisha Systems Inc.",
+  "Tanisha Systems Inc.": "Tanisha Systems Inc.",
+  "Tanisha Systems, Inc.": "Tanisha Systems Inc.",
+  "Tanisha Systems, Inc": "Tanisha Systems Inc.",
 };
 
 // Case-insensitive, trimmed alias lookup so variants never appear as separate sources
@@ -56,10 +63,19 @@ const sourceAliasLookup: Record<string, string> = Object.fromEntries(
   Object.entries(sourceNameMap).map(([alias, canonical]) => [alias.trim().toLowerCase(), canonical])
 );
 
+const stripSourceQualifiers = (raw: string): string => raw.trim().replace(
+  /(?:\s*\((?:for client|client undisclosed|undisclosed client|staffing agency|recruiter for|end client|via)\b[^()]*\))+\s*$/i,
+  '',
+).trim();
+
+const isPlaceholderSource = (value: string): boolean =>
+  /^(?:n\/?a|none|unknown|undisclosed|null|undefined|[-–—])$/i.test(value);
+
 export const normalizeSourceName = (raw: string): string => {
-  const trimmed = (typeof raw === 'string' ? raw : '').trim();
-  if (!trimmed) return '';
-  const mapped = sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
+  const trimmed = stripSourceQualifiers(typeof raw === 'string' ? raw : '');
+  if (!trimmed || isPlaceholderSource(trimmed)) return '';
+  const withoutClient = trimmed.replace(/\s+client$/i, '');
+  const mapped = sourceAliasLookup[trimmed.toLowerCase()] || sourceAliasLookup[withoutClient.toLowerCase()] || trimmed;
   const lower = mapped.toLowerCase();
   // "Insight Global" and "Insight Global Dallas" are tracked as separate sources
   if (lower.includes('insight global')) {
@@ -68,7 +84,7 @@ export const normalizeSourceName = (raw: string): string => {
   return mapped;
 };
 
-/** Resolve source attribution plus recognized agency names embedded in Company.
+/** Resolve source attribution plus canonical agencies or new companies in Company.
  * Word boundaries prevent short aliases (TES, GTT, NTT) matching inside words.
  * Longer aliases win when their spans overlap, keeping Dallas distinct.
  */
@@ -76,13 +92,14 @@ export const getJobMatchingSources = (job: { source?: string; company?: string }
   const sources = new Set<string>();
   const source = normalizeSourceName(job.source ?? '');
   if (source) sources.add(source);
-  const company = job.company ?? '';
+  const company = stripSourceQualifiers(job.company ?? '');
+  if (!company || isPlaceholderSource(company)) return [...sources];
   const occupied: Array<[number, number]> = [];
   Object.entries(sourceNameMap)
     .sort(([a], [b]) => b.length - a.length)
     .forEach(([alias, canonical]) => {
       const escaped = alias.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const pattern = new RegExp(`\\b${escaped}\\b`, 'gi');
+      const pattern = new RegExp(`(?<!\\w)${escaped}(?!\\w)`, 'gi');
       for (const match of company.matchAll(pattern)) {
         const start = match.index;
         const end = start + match[0].length;
@@ -91,7 +108,22 @@ export const getJobMatchingSources = (job: { source?: string; company?: string }
         sources.add(canonical);
       }
     });
+  // Known agencies keep their established canonical labels; unseen companies
+  // become searchable too, without changing the original recruiter attribution.
+  if (occupied.length === 0) {
+    const companySource = normalizeSourceName(company);
+    if (companySource) sources.add(companySource);
+  }
   return [...sources];
+};
+
+/** The dropdown and filtering share exactly the same source resolver. */
+export const getUniqueJobSources = (
+  jobs: Array<{ source?: string; company?: string }>, registeredSources: string[] = [],
+): string[] => {
+  const sources = new Set(registeredSources.map(normalizeSourceName).filter(Boolean));
+  jobs.forEach(job => getJobMatchingSources(job).forEach(source => sources.add(source)));
+  return [...sources].sort();
 };
 
 export const matchesJobSources = (
