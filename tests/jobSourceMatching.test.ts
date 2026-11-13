@@ -1,0 +1,66 @@
+import { expect, test } from 'bun:test';
+import { getJobMatchingSources, matchesJobSources } from '../src/lib/jobSourceMatching';
+import { extractCity } from '../src/lib/countryUtils';
+import { parseCSV } from '../src/pages/JobAlertsPage';
+
+const network = "Hassan's recruiter Network";
+
+test('Calgary recruiter jobs match SI Systems and preserve network attribution', () => {
+  for (const role of ['Junior Project Manager/Senior Coordinator', 'Project Coordinator']) {
+    const job = { role, source: network, company: 'S.i. Systems (for client)', workType: 'In-Person - Calgary, AB', location: '', comments: '', date: 'N/A' };
+    expect(extractCity(job.workType, job.location, job.comments)).toBe('Calgary');
+    expect(matchesJobSources(job, ['S.i. Systems'])).toBe(true);
+    expect(matchesJobSources(job, [network])).toBe(true);
+    expect(getJobMatchingSources(job)).toEqual([network, 'S.i. Systems']);
+    expect(job.source).toBe(network);
+  }
+});
+
+test('every requested agency is recognized in Company using shared aliases', () => {
+  const cases = [
+    ['SI Systems', 'S.i. Systems'], ['S.I. Systems', 'S.i. Systems'],
+    ['Procom', 'Procom'], ['Insight Global', 'Insight Global'],
+    ['Agilus', 'Agilus Work Solutions'], ['Tundra', 'Tundra Technical Solutions'],
+    ['Proviso', 'Proviso'], ['TEKsystems', 'TEKsystems'], ['Kforce', 'Kforce'],
+    ['Mondo', 'Mondo'], ['Axelon', 'Axelon Services Corporation'],
+    ['NTT Data', 'NTT Data'], ['HR Brain', 'HR Brain'], ['Nerdy Hire', 'Nerdy Hire'],
+    ['GTT', 'GTT (Global Technical Talent)'], ['Soho Square', 'Soho Square Solutions'],
+    ['Peterson Technology Partners', 'Peterson Technology Partners (PTP)'],
+    ['TES', 'TES – The Employment Solution'], ['Motion Recruitment', 'Motion Recruitment'],
+  ];
+  for (const [alias, canonical] of cases) {
+    const job = { source: network, company: `${alias} (for client)` };
+    expect(getJobMatchingSources(job)).toContain(canonical);
+    expect(matchesJobSources(job, [canonical])).toBe(true);
+  }
+});
+
+test('matching uses boundaries, multiple agencies, and distinct Dallas attribution', () => {
+  expect(getJobMatchingSources({ company: 'United States testing systems' })).toEqual([]);
+  expect(getJobMatchingSources({ company: 'Insight Global Dallas (for client)' })).toEqual(['Insight Global Dallas']);
+  expect(getJobMatchingSources({ company: 'Procom / S.I. Systems' }).sort()).toEqual(['Procom', 'S.i. Systems']);
+  expect(matchesJobSources({ company: 'Procom' }, ['Mondo'])).toBe(false);
+  expect(matchesJobSources({ company: 'Procom' }, [])).toBe(true);
+});
+
+test('blank-date Winnipeg recruiter row parses as N/A without dropping its role', () => {
+  for (const date of ['', '   ']) {
+    const cells = Array<string>(18).fill('');
+    cells[0] = date;
+    cells[1] = 'Project Coordinator';
+    cells[8] = 'In-Person - Winnipeg, MB';
+    cells[9] = 'S.i. Systems (for client)';
+    cells[17] = network;
+    const csv = ['Date,Role', cells.map(value => `"${value}"`).join(',')].join('\n');
+    const jobs = parseCSV(csv);
+    expect(jobs).toHaveLength(1);
+    expect(jobs[0].date).toBe('N/A');
+    expect(jobs[0].role).toBe('Project Coordinator');
+    expect(matchesJobSources(jobs[0], ['S.i. Systems'])).toBe(true);
+    expect(extractCity(jobs[0].workType, jobs[0].location, jobs[0].comments)).toBe('Winnipeg');
+  }
+});
+
+test('rows without a role still do not parse', () => {
+  expect(parseCSV('Date,Role\n2026-11-13," "\n,')).toEqual([]);
+});

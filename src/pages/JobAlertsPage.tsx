@@ -7,6 +7,7 @@ import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, B
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import NetworkHealthPanel from '@/components/NetworkHealthPanel';
 import { format, isWithinInterval, parse } from 'date-fns';
+import { normalizeSourceName, getJobMatchingSources, matchesJobSources } from '@/lib/jobSourceMatching';
 import { INITIAL_JOB_FILTERS, clearedJobFilters, countActiveJobFilters } from '@/lib/jobFilterState';
 import TopNav from '@/components/TopNav';
 import { Button } from '@/components/ui/button';
@@ -221,71 +222,6 @@ const sourceDescriptions: Record<string, string> = {
   "Motion Recruitment": "Leading nationwide IT and technology recruitment agency specializing in Project Management, Software Engineering, and digital transformation consulting across the San Francisco Bay Area and USA.",
 };
 
-// Map observed data-source spellings to the canonical source names above
-const sourceNameMap: Record<string, string> = {
-  "ProViso": "Proviso",
-  "Agilus": "Agilus Work Solutions",
-  "Agilus (Canada)": "Agilus Work Solutions",
-  "SI Systems": "S.i. Systems",
-  "S.i. Systems": "S.i. Systems",
-  "Nerdyhire": "Nerdy Hire",
-  "Nerdy Hire": "Nerdy Hire",
-  "Tundra Technical": "Tundra Technical Solutions",
-  "Tundra Technical Solutions": "Tundra Technical Solutions",
-  "GTT": "GTT (Global Technical Talent)",
-  "GTT (Global Technical Talent)": "GTT (Global Technical Talent)",
-  "Global Technical Talent": "GTT (Global Technical Talent)",
-  "NTT Data": "NTT Data",
-  "NTT DATA": "NTT Data",
-  "NTT": "NTT Data",
-  "NTT DATA Services": "NTT Data",
-  "HR Brain": "HR Brain",
-  "hrbrain": "HR Brain",
-  "HRBrain": "HR Brain",
-  "Axelon Services": "Axelon Services Corporation",
-  "Axelon Services Corporation": "Axelon Services Corporation",
-  "Axelon": "Axelon Services Corporation",
-  "Soho Square Solutions": "Soho Square Solutions",
-  "Soho Square": "Soho Square Solutions",
-  "Soho": "Soho Square Solutions",
-  "Mondo": "Mondo",
-  "mondo": "Mondo",
-  "Mondo (US)": "Mondo",
-  "Peterson Technology Partners": "Peterson Technology Partners (PTP)",
-  "Peterson Technology Partners (PTP)": "Peterson Technology Partners (PTP)",
-  "Peterson": "Peterson Technology Partners (PTP)",
-  "PTP": "Peterson Technology Partners (PTP)",
-  "Kforce": "Kforce",
-  "kforce": "Kforce",
-  "TEKsystems": "TEKsystems",
-  "teksystems": "TEKsystems",
-  "TEKsystems Austin": "TEKsystems",
-  "TES": "TES – The Employment Solution",
-  "The Employment Solution": "TES – The Employment Solution",
-  "TES – The Employment Solution": "TES – The Employment Solution",
-  "Motion Recruitment": "Motion Recruitment",
-  "Motion": "Motion Recruitment",
-  "motion recruitment": "Motion Recruitment",
-  "Motion Recruitment - San Francisco": "Motion Recruitment",
-};
-
-// Case-insensitive, trimmed alias lookup so variants never appear as separate sources
-const sourceAliasLookup: Record<string, string> = Object.fromEntries(
-  Object.entries(sourceNameMap).map(([alias, canonical]) => [alias.trim().toLowerCase(), canonical])
-);
-
-const normalizeSourceName = (raw: string): string => {
-  const trimmed = asText(raw).trim();
-  if (!trimmed) return '';
-  const mapped = sourceAliasLookup[trimmed.toLowerCase()] || trimmed;
-  const lower = mapped.toLowerCase();
-  // "Insight Global" and "Insight Global Dallas" are tracked as separate sources
-  if (lower.includes('insight global')) {
-    return lower.includes('dallas') ? 'Insight Global Dallas' : 'Insight Global';
-  }
-  return mapped;
-};
-
 // Frontend display labels for sources (does not affect underlying data values)
 const sourceDisplayNames: Record<string, string> = {
   "Hassan's recruiter Network": "Hassan's Recruiter Network",
@@ -457,8 +393,8 @@ export const parseCSV = (csvText: string): JobData[] => {
   
   const addRow = (row: string[]) => {
     rowNumber++;
-    // Only require that there's at least a date and role (first 2 columns)
-    if (row.length >= 2 && row[0] && row[1]) {
+    // Undated recruiter rows remain valid when they contain a role.
+    if (row.length >= 2 && row[1]?.trim()) {
       let canonicalSource = normalizeSourceName(row[17] || '');
       // The Sources column rarely spells out "Dallas", so an Insight Global job
       // that mentions Dallas anywhere in its row is classified as the Dallas team.
@@ -487,7 +423,7 @@ export const parseCSV = (csvText: string): JobData[] => {
             : sanitizedCompanyInfo;
 
       rows.push({
-        date: row[0] || '',
+        date: row[0]?.trim() || 'N/A',
         role: row[1] || '',
         term: row[2] || '',
         duties: row[3] || '',
@@ -1525,11 +1461,8 @@ const JobAlertsPage: React.FC = () => {
       // Extract role type
       roleTypeSet.add(categorizeRole(job.role));
       
-      // Extract source (filter out blanks)
-      const sourceName = asText(job.source).trim();
-      if (sourceName) {
-        sourceSet.add(sourceName);
-      }
+      // Keep dropdown membership aligned with Source filtering.
+      getJobMatchingSources(job).forEach(source => sourceSet.add(source));
       
       // Extract city from the work type / location description (e.g. "Hybrid - Toronto, ON")
       const city = extractCity(job.workType, job.location, job.comments);
@@ -1666,10 +1599,7 @@ const JobAlertsPage: React.FC = () => {
     
     // Sources filter (multi-select)
     if (selectedSources.length > 0) {
-      filtered = filtered.filter(row => {
-        const jobSource = asText(row.source).trim();
-        return selectedSources.includes(jobSource);
-      });
+      filtered = filtered.filter(row => matchesJobSources(row, selectedSources));
     }
 
     // Date range filter

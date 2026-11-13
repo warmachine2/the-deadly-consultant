@@ -1,5 +1,10 @@
 # Quiz ten-question diagnostic
 
+# KAN-494 Source matching and undated jobs
+
+- [x] Match Source filters and dropdown membership using source attribution plus recognized Company agencies.
+- [x] Preserve role-bearing blank-date CSV rows as N/A; 188 tests pass, preview build is clean, and live Calgary/S.i. Systems and Network filters both return the specified recruiter roles.
+
 - [x] Rebuild results tiers and three personalized gap diagnoses.
 - [x] Show existing strategy briefing and inline Calendly only for Q1-qualified candidates; show foundation/workshop resources otherwise.
 - [x] Test tier boundaries and strict calendar exclusion; verify both complete quiz paths on desktop/mobile and existing booking-page embed; 147 tests pass. Supplied Calendly URL displays a 30-minute meeting despite requested 15-minute copy.

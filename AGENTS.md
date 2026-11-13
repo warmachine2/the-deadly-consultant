@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Keep job source aliases and source/company matching in `src/lib/jobSourceMatching.ts`; use its resolver for both dropdown membership and filtering so recruiter attribution is preserved while embedded agencies remain searchable.
+
 - Keep Student Intake validation and password-digest verification in a focused library module so submission requirements can be tested independently of rendering.
 - Treat the shared-password session gate as a convenience screen, not authorization; private resume access remains controlled by database and storage policies.
 - Keep country/location normalization in `src/lib/countryUtils.ts` and import it from job-board filters and analytics charts, so the dropdown, filtering and charts always agree on one country label instead of each re-implementing location string matching.
