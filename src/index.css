@@ -1464,3 +1464,9 @@ body.job-board-page div[id^="formkit-"] {
 @media (min-width: 768px) {
   .vertical-embed iframe { max-width: 440px !important; }
 }
+
+/* SEO prerender: build-time readable HTML for non-JS crawlers lives in the raw
+   response but must never be seen by humans — React replaces it on mount. */
+.seo-prerender {
+  display: none !important;
+}
