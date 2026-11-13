@@ -90,6 +90,32 @@ export const normalizeCountry = (rawLocation?: string, source?: string): string 
 const asText = (value: unknown): string =>
   typeof value === 'string' ? value : value == null ? '' : String(value);
 
+// US state + Canadian province codes accepted by the generic city parse
+// (case-sensitive, so lowercase sentence words never match).
+const CITY_STATE_CODES = 'CA|TN|NJ|NY|TX|IL|WA|MA|FL|GA|NC|VA|OH|PA|CO|AZ|AB|BC|ON|QC|MB|SK';
+const CITY_STATE_RE = new RegExp(`(?:^|[\\n;•|:\\-–—])\\s*([A-Za-z][A-Za-z .']*?),?\\s+(${CITY_STATE_CODES})\\b`, 'g');
+const LEADING_NOISE_RE = /^(?:in|at|or|and|onsite|on-site|on site|hybrid|remote)\b[\s,\-–—]*/i;
+
+/**
+ * Parse "City, ST" / "City ST" patterns (e.g. "Irvine, CA", "Nashville, TN")
+ * from recruiter free text. Returns the city name or '' when no match.
+ */
+const parseCityStateCode = (text: string): string => {
+  if (!text) return '';
+  CITY_STATE_RE.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = CITY_STATE_RE.exec(text))) {
+    let city = m[1].trim().replace(/[\s,.\-–—]+$/, '');
+    let prev: string;
+    do {
+      prev = city;
+      city = city.replace(LEADING_NOISE_RE, '').trim().replace(/^[\s,.\-–—]+/, '');
+    } while (city !== prev);
+    if (city && !/^(in|at|or|and|onsite|hybrid|remote)$/i.test(city)) return city;
+  }
+  return '';
+};
+
 /**
  * Map known cities to filter labels from the work-type/location description
  * string. Shared by the City filter dropdown and the job-card/table city
@@ -102,12 +128,17 @@ export const extractCity = (workType: string, location: string = '', comments: s
 
   // 7 Target Cities (KAN-227)
   if (lower.includes('toronto')) return 'Toronto';
-  if (lower.includes('new york city') || lower.includes('new york') || lower.includes('jersey city') || lower.includes('white plains')) return 'New York';
+  if (lower.includes('new york city') || lower.includes('new york') || /\bnyc\b/.test(lower) || lower.includes('jersey city') || lower.includes('white plains')) return 'New York';
   if (lower.includes('chicago')) return 'Chicago';
   if (lower.includes('san francisco') || lower.includes('bay area') || lower.includes('san jose') || lower.includes('santa clara') || lower.includes('oakland') || lower.includes('sunnyvale')) return 'San Francisco';
   if (lower.includes('boston') || lower.includes('massachusetts')) return 'Boston';
   if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving') || lower.includes('el paso')) return 'Dallas';
   if (lower.includes('austin')) return 'Austin';
+
+  // Generic "<City>, <2-letter state/province code>" parse (e.g. recruiter
+  // emails like "Irvine, CA" or "Nashville, TN") before the broad fallbacks.
+  const parsed = parseCityStateCode(asText(location)) || parseCityStateCode(asText(comments));
+  if (parsed) return parsed;
 
   // Remote-only roles
   if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
@@ -179,7 +210,7 @@ export const formatCardCityCountry = (job: CardCityJob): string => {
   const country = formatLocationLabel(job.location);
   if (!country) return city;
   if (country === city || country.startsWith(city)) return country;
-  return `${city} • ${country}`;
+  return `${city}, ${country}`;
 };
 
 export const extractChartCountry = (location: string, source?: string): 'Canada' | 'USA' | 'Other' => {

@@ -32,13 +32,35 @@ describe('formatCardCity', () => {
     // location "London" extracts city "London" and the country label is also "London"
     expect(formatCardCity({ workType: '', location: 'London', comments: '' })).toBe(CITY_NOT_LISTED);
   });
+
+  it('parses "<City>, <state code>" from recruiter emails', () => {
+    expect(formatCardCity({ workType: '', location: 'Irvine, CA', comments: '' })).toBe('Irvine');
+    expect(formatCardCity({ workType: '', location: 'Nashville, TN', comments: '' })).toBe('Nashville');
+    expect(formatCardCity({ workType: '', location: 'Alameda, CA', comments: '' })).toBe('Alameda');
+    expect(formatCardCity({ workType: '', location: 'Irvine CA', comments: '' })).toBe('Irvine');
+    expect(formatCardCity({ workType: 'Onsite', location: '', comments: 'Location: Burbank, CA' })).toBe('Burbank');
+  });
+
+  it('maps NYC and Jersey City to New York', () => {
+    expect(formatCardCity({ workType: '', location: 'NYC', comments: '' })).toBe('New York');
+    expect(formatCardCity({ workType: '', location: 'Jersey City, NJ', comments: '' })).toBe('New York');
+  });
+
+  it('ignores leading work-type words when parsing city/state', () => {
+    expect(formatCardCity({ workType: '', location: 'Onsite - Irvine, CA', comments: '' })).toBe('Irvine');
+    expect(formatCardCity({ workType: '', location: 'Hybrid - Nashville, TN', comments: '' })).toBe('Nashville');
+  });
+
+  it('still returns Remote for remote-only roles with a state code', () => {
+    expect(formatCardCity({ workType: 'Remote', location: 'Remote, ON', comments: '' })).toBe('Remote');
+  });
 });
 
 describe('formatCardCityCountry', () => {
-  it('renders "City • Country" when both are present and distinct', () => {
-    expect(formatCardCityCountry({ workType: 'Hybrid - Calgary', location: 'Canada', comments: '' })).toBe('Calgary • Canada');
-    expect(formatCardCityCountry({ workType: 'Remote', location: 'Canada', comments: '' })).toBe('Remote • Canada');
-    expect(formatCardCityCountry({ workType: 'Onsite', location: 'Canada', comments: '' })).toBe('City not listed • Canada');
+  it('renders "City, Country" when both are present and distinct', () => {
+    expect(formatCardCityCountry({ workType: 'Hybrid - Calgary', location: 'Canada', comments: '' })).toBe('Calgary, Canada');
+    expect(formatCardCityCountry({ workType: 'Remote', location: 'Canada', comments: '' })).toBe('Remote, Canada');
+    expect(formatCardCityCountry({ workType: 'Onsite', location: 'Canada', comments: '' })).toBe('City not listed, Canada');
   });
 
   it('does not duplicate the city when the location already starts with it', () => {
@@ -52,6 +74,6 @@ describe('formatCardCityCountry', () => {
   });
 
   it('keeps bare US labels as USA', () => {
-    expect(formatCardCityCountry({ workType: 'Remote', location: 'US', comments: '' })).toBe('Remote • USA');
+    expect(formatCardCityCountry({ workType: 'Remote', location: 'US', comments: '' })).toBe('Remote, USA');
   });
 });
