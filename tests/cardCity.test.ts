@@ -54,6 +54,22 @@ describe('formatCardCity', () => {
   it('still returns Remote for remote-only roles with a state code', () => {
     expect(formatCardCity({ workType: 'Remote', location: 'Remote, ON', comments: '' })).toBe('Remote');
   });
+
+  it('never swallows lowercase words or digits into the city', () => {
+    expect(formatCardCity({ workType: '', location: 'Oil and Gas sector in Calgary, AB', comments: '' })).toBe('Calgary');
+    expect(formatCardCity({ workType: '', location: 'onsite from day 1 in Nashville, TN', comments: '' })).toBe('Nashville');
+  });
+
+  it('does not extract non-city capitalized words', () => {
+    expect(formatCardCity({ workType: '', location: 'supporting BC Hydro', comments: '' })).toBe(CITY_NOT_LISTED);
+    expect(formatCardCity({ workType: '', location: 'Project, ON', comments: '' })).toBe(CITY_NOT_LISTED);
+  });
+
+  it('checks known cities before the generic City, ST fallback', () => {
+    expect(formatCardCity({ workType: '', location: 'Plano, TX', comments: '' })).toBe('Dallas');
+    expect(formatCardCity({ workType: '', location: 'San Jose, CA', comments: '' })).toBe('San Francisco');
+    expect(formatCardCity({ workType: '', location: 'London, ON', comments: '' })).toBe('London');
+  });
 });
 
 describe('formatCardCityCountry', () => {

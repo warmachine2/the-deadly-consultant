@@ -93,8 +93,14 @@ const asText = (value: unknown): string =>
 // US state + Canadian province codes accepted by the generic city parse
 // (case-sensitive, so lowercase sentence words never match).
 const CITY_STATE_CODES = 'CA|TN|NJ|NY|TX|IL|WA|MA|FL|GA|NC|VA|OH|PA|CO|AZ|AB|BC|ON|QC|MB|SK';
-const CITY_STATE_RE = new RegExp(`(?:^|[\\n;•|:\\-–—])\\s*([A-Za-z][A-Za-z .']*?),?\\s+(${CITY_STATE_CODES})\\b`, 'g');
-const LEADING_NOISE_RE = /^(?:in|at|or|and|onsite|on-site|on site|hybrid|remote)\b[\s,\-–—]*/i;
+// 1–3 Title-Case words immediately before the code — lowercase words and
+// digits ("day 1 in Nashville, TN") can never be swallowed into the city.
+const CITY_STATE_RE = new RegExp(`\\b([A-Z][a-z.'-]+(?:\\s+[A-Z][a-z.'-]+){0,2}),?\\s+(${CITY_STATE_CODES})\\b`, 'g');
+// Capitalized words that look like a city match but are role/work-type noise.
+const NON_CITY_WORDS = new Set([
+  'Project', 'Program', 'Senior', 'Junior', 'Lead', 'Manager', 'Contract',
+  'Remote', 'Hybrid', 'Onsite', 'Supporting', 'Client', 'Location', 'Located',
+]);
 
 /**
  * Parse "City, ST" / "City ST" patterns (e.g. "Irvine, CA", "Nashville, TN")
@@ -105,13 +111,8 @@ const parseCityStateCode = (text: string): string => {
   CITY_STATE_RE.lastIndex = 0;
   let m: RegExpExecArray | null;
   while ((m = CITY_STATE_RE.exec(text))) {
-    let city = m[1].trim().replace(/[\s,.\-–—]+$/, '');
-    let prev: string;
-    do {
-      prev = city;
-      city = city.replace(LEADING_NOISE_RE, '').trim().replace(/^[\s,.\-–—]+/, '');
-    } while (city !== prev);
-    if (city && !/^(in|at|or|and|onsite|hybrid|remote)$/i.test(city)) return city;
+    const city = m[1].trim();
+    if (city && !NON_CITY_WORDS.has(city)) return city;
   }
   return '';
 };
@@ -135,16 +136,6 @@ export const extractCity = (workType: string, location: string = '', comments: s
   if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving') || lower.includes('el paso')) return 'Dallas';
   if (lower.includes('austin')) return 'Austin';
 
-  // Generic "<City>, <2-letter state/province code>" parse (e.g. recruiter
-  // emails like "Irvine, CA" or "Nashville, TN") before the broad fallbacks.
-  const parsed = parseCityStateCode(asText(location)) || parseCityStateCode(asText(comments));
-  if (parsed) return parsed;
-
-  // Remote-only roles
-  if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
-    return 'Remote';
-  }
-
   // Canadian cities
   if (lower.includes('mississauga')) return 'Mississauga';
   if (lower.includes('vancouver')) return 'Vancouver';
@@ -155,7 +146,6 @@ export const extractCity = (workType: string, location: string = '', comments: s
   if (lower.includes('brampton')) return 'Brampton';
   if (lower.includes('hamilton')) return 'Hamilton';
   if (lower.includes('london')) return 'London';
-  if (lower.includes('canada')) return 'Canada';
 
   // Other US cities
   if (lower.includes('charlotte')) return 'Charlotte';
@@ -164,6 +154,20 @@ export const extractCity = (workType: string, location: string = '', comments: s
   if (lower.includes('columbia')) return 'Columbia';
   if (lower.includes('jackson')) return 'Jackson';
   if (lower.includes('miami')) return 'Miami';
+
+  // Generic "<City>, <2-letter state/province code>" parse (e.g. recruiter
+  // emails like "Irvine, CA" or "Nashville, TN") — after every known city,
+  // before the broad Remote / country fallbacks.
+  const parsed = parseCityStateCode(asText(location)) || parseCityStateCode(asText(comments));
+  if (parsed) return parsed;
+
+  // Remote-only roles
+  if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
+    return 'Remote';
+  }
+
+  // Country fallbacks
+  if (lower.includes('canada')) return 'Canada';
   if (lower.includes('usa') || lower.includes('united states')) return 'USA';
 
   return 'Other';
