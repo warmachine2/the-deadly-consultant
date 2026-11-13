@@ -12,3 +12,4 @@
 - Deliver quiz leads through the server-side function to the user-selected public n8n webhook; bound waiting and retain results when delivery is unavailable.
 - Keep quiz result tiers and qualification routing in `src/lib/quizResults.ts`; the results component mounts the calendar only on the Q1-qualified branch, independently of score.
 - Reuse `CalendlyInlineWidget` across booking thank-you and quiz results; initialize after script load and validate resize message origin/source so delayed mounting and dynamic sizing remain safe.
+- Keep crawlable page copy in `src/lib/seoPages.ts` and let the `prerender-seo-pages` Vite build plugin write it into `dist/` inside `<div id="root">`; never prerender `/seat`, keep the injected block hidden by `.seo-prerender` so humans see the React app only, and reuse that module instead of adding browser-based prerendering.
