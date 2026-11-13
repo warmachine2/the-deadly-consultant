@@ -14,7 +14,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { normalizeCountry, formatLocationLabel, buildCountryFilterOptions } from '@/lib/countryUtils';
+import { normalizeCountry, buildCountryFilterOptions, extractCity, formatCardCityCountry } from '@/lib/countryUtils';
 import JobAnalyticsCharts from '@/components/JobAnalyticsCharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -405,50 +405,6 @@ export const getMonthlyAmount = (raw: string, location: string = ''): number => 
   const formatted = formatEarningsMonthly(raw, location);
   const m = formatted.match(/([\d,]+(?:\.\d+)?)/);
   return m ? Math.round(parseFloat(m[1].replace(/,/g, ''))) : 0;
-};
-
-// Map known cities to filter labels from the work-type/location description string
-const extractCity = (workType: string, location: string = '', comments: string = ''): string => {
-  const combined = `${asText(workType)} ${asText(location)} ${asText(comments)}`.trim();
-  if (!combined) return 'Unknown';
-  const lower = combined.toLowerCase();
-
-  // 7 Target Cities (KAN-227)
-  if (lower.includes('toronto')) return 'Toronto';
-  if (lower.includes('new york city') || lower.includes('new york') || lower.includes('jersey city') || lower.includes('white plains')) return 'New York';
-  if (lower.includes('chicago')) return 'Chicago';
-  if (lower.includes('san francisco') || lower.includes('bay area') || lower.includes('san jose') || lower.includes('santa clara') || lower.includes('oakland') || lower.includes('sunnyvale')) return 'San Francisco';
-  if (lower.includes('boston') || lower.includes('massachusetts')) return 'Boston';
-  if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving') || lower.includes('el paso')) return 'Dallas';
-  if (lower.includes('austin')) return 'Austin';
-
-  // Remote-only roles
-  if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
-    return 'Remote';
-  }
-
-  // Canadian cities
-  if (lower.includes('mississauga')) return 'Mississauga';
-  if (lower.includes('vancouver')) return 'Vancouver';
-  if (lower.includes('calgary')) return 'Calgary';
-  if (lower.includes('winnipeg')) return 'Winnipeg';
-  if (lower.includes('ottawa')) return 'Ottawa';
-  if (lower.includes('montreal')) return 'Montreal';
-  if (lower.includes('brampton')) return 'Brampton';
-  if (lower.includes('hamilton')) return 'Hamilton';
-  if (lower.includes('london')) return 'London';
-  if (lower.includes('canada')) return 'Canada';
-
-  // Other US cities
-  if (lower.includes('charlotte')) return 'Charlotte';
-  if (lower.includes('harrisburg')) return 'Harrisburg';
-  if (lower.includes('buffalo')) return 'Buffalo';
-  if (lower.includes('columbia')) return 'Columbia';
-  if (lower.includes('jackson')) return 'Jackson';
-  if (lower.includes('miami')) return 'Miami';
-  if (lower.includes('usa') || lower.includes('united states')) return 'USA';
-
-  return 'Other';
 };
 
 // Parse the minimum years of experience from a job's experience text (and role as fallback):
@@ -1129,10 +1085,11 @@ const JobCard: React.FC<{
             }}>
               {jobAge}
             </span>
-            {job.location && <>
-              <span>•</span>
-              <span className="truncate">{formatLocationLabel(job.location)}</span>
-            </>}
+            <span>•</span>
+            <span className="truncate flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+              {formatCardCityCountry(job)}
+            </span>
             {job.jobId && job.jobId !== 'N/A' && job.jobId !== 'n/a' && <>
               <span>•</span>
               <button
@@ -1175,10 +1132,11 @@ const JobCard: React.FC<{
             }}>
               {jobAge}
             </span>
-            {job.location && <>
-              <span>•</span>
-              <span className="truncate">{formatLocationLabel(job.location)}</span>
-            </>}
+            <span>•</span>
+            <span className="truncate flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+              {formatCardCityCountry(job)}
+            </span>
             {job.jobId && job.jobId !== 'N/A' && job.jobId !== 'n/a' && <>
               <span>•</span>
               <button
@@ -2344,7 +2302,7 @@ const JobAlertsPage: React.FC = () => {
                             <span className="line-clamp-2">{job.role}</span>
                           </TableCell>
                           <TableCell className="text-white whitespace-nowrap">{job.company}</TableCell>
-                          <TableCell className="text-white/80 whitespace-nowrap max-w-[150px] truncate">{formatLocationLabel(job.location)}</TableCell>
+                          <TableCell className="text-white/80 whitespace-nowrap max-w-[150px] truncate">{formatCardCityCountry(job)}</TableCell>
                           <TableCell className="whitespace-nowrap">
                             <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
                               {job.term}

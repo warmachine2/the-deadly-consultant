@@ -87,6 +87,101 @@ export const normalizeCountry = (rawLocation?: string, source?: string): string 
   return trimmed;
 };
 
+const asText = (value: unknown): string =>
+  typeof value === 'string' ? value : value == null ? '' : String(value);
+
+/**
+ * Map known cities to filter labels from the work-type/location description
+ * string. Shared by the City filter dropdown and the job-card/table city
+ * display so they always agree on one city label.
+ */
+export const extractCity = (workType: string, location: string = '', comments: string = ''): string => {
+  const combined = `${asText(workType)} ${asText(location)} ${asText(comments)}`.trim();
+  if (!combined) return 'Unknown';
+  const lower = combined.toLowerCase();
+
+  // 7 Target Cities (KAN-227)
+  if (lower.includes('toronto')) return 'Toronto';
+  if (lower.includes('new york city') || lower.includes('new york') || lower.includes('jersey city') || lower.includes('white plains')) return 'New York';
+  if (lower.includes('chicago')) return 'Chicago';
+  if (lower.includes('san francisco') || lower.includes('bay area') || lower.includes('san jose') || lower.includes('santa clara') || lower.includes('oakland') || lower.includes('sunnyvale')) return 'San Francisco';
+  if (lower.includes('boston') || lower.includes('massachusetts')) return 'Boston';
+  if (lower.includes('dallas') || lower.includes('dfw') || lower.includes('fort worth') || lower.includes('plano') || lower.includes('irving') || lower.includes('el paso')) return 'Dallas';
+  if (lower.includes('austin')) return 'Austin';
+
+  // Remote-only roles
+  if (lower === 'true' || (lower.includes('remote') && !lower.includes('onsite') && !lower.includes('in-office') && !lower.includes('in person') && !lower.includes('in-person'))) {
+    return 'Remote';
+  }
+
+  // Canadian cities
+  if (lower.includes('mississauga')) return 'Mississauga';
+  if (lower.includes('vancouver')) return 'Vancouver';
+  if (lower.includes('calgary')) return 'Calgary';
+  if (lower.includes('winnipeg')) return 'Winnipeg';
+  if (lower.includes('ottawa')) return 'Ottawa';
+  if (lower.includes('montreal')) return 'Montreal';
+  if (lower.includes('brampton')) return 'Brampton';
+  if (lower.includes('hamilton')) return 'Hamilton';
+  if (lower.includes('london')) return 'London';
+  if (lower.includes('canada')) return 'Canada';
+
+  // Other US cities
+  if (lower.includes('charlotte')) return 'Charlotte';
+  if (lower.includes('harrisburg')) return 'Harrisburg';
+  if (lower.includes('buffalo')) return 'Buffalo';
+  if (lower.includes('columbia')) return 'Columbia';
+  if (lower.includes('jackson')) return 'Jackson';
+  if (lower.includes('miami')) return 'Miami';
+  if (lower.includes('usa') || lower.includes('united states')) return 'USA';
+
+  return 'Other';
+};
+
+/** Minimal job shape needed for the card/table city label. */
+export interface CardCityJob {
+  workType?: string;
+  location?: string;
+  comments?: string;
+}
+
+export const CITY_NOT_LISTED = 'City not listed';
+
+/**
+ * City label for job card headers and the table Location column, built on the
+ * exact same extraction the City filter dropdown uses so card and filter
+ * always match. Bare country buckets and unknowns become "City not listed".
+ */
+export const formatCardCity = (job: CardCityJob): string => {
+  const city = extractCity(job.workType ?? '', job.location ?? '', job.comments ?? '');
+  const country = formatLocationLabel(job.location);
+  if (
+    !city ||
+    city === 'Unknown' ||
+    city === 'Other' ||
+    city === 'Canada' ||
+    city === 'USA' ||
+    (country !== '' && city === country)
+  ) {
+    return CITY_NOT_LISTED;
+  }
+  if (city === 'Remote') return 'Remote';
+  return city;
+};
+
+/**
+ * Full "City • Country" label for card headers and the table Location column.
+ * Never duplicates the city when the country string already starts with it,
+ * and never returns a blank string.
+ */
+export const formatCardCityCountry = (job: CardCityJob): string => {
+  const city = formatCardCity(job);
+  const country = formatLocationLabel(job.location);
+  if (!country) return city;
+  if (country === city || country.startsWith(city)) return country;
+  return `${city} • ${country}`;
+};
+
 export const extractChartCountry = (location: string, source?: string): 'Canada' | 'USA' | 'Other' => {
   const c = normalizeCountry(location, source);
   if (c === 'Canada' || c === 'USA') return c;
