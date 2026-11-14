@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Keep timestamp-based Kit unlock expiry in `jobBoardGate` and the pre-React HTML loader aligned; subscribe contract links to expiry changes so stale link attributes cannot bypass the signup prompt, while route-level popup suppression stays independent.
+
 - Keep job source aliases, qualifier cleanup, and source/company matching in `src/lib/jobSourceMatching.ts`; use its resolver for both dropdown membership and filtering, accepting new Sources-column values but only known agency aliases from Company so end-client names never pollute Sources and recruiter attribution remains preserved.
 
 - Keep Student Intake validation and password-digest verification in a focused library module so submission requirements can be tested independently of rendering.

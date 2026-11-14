@@ -1432,7 +1432,7 @@ const JobAlertsPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // KAN-432 Phase 2: visitors who reach the board are unlocked for 48h; never auto-open Kit here.
+  // Preserve a valid 24h unlock on mount; never auto-open Kit on the board.
   useEffect(() => {
     markJobBoardUnlocked();
   }, []);

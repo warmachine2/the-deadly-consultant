@@ -1,5 +1,10 @@
 # Quiz ten-question diagnostic
 
+# KAN-491 Signup unlock expiration
+
+- [x] Replace permanent unlock flags with 24h timestamps in the HTML loader and React helpers, retaining board-route suppression and native Kit submission.
+- [x] All 222 tests pass; desktop/mobile preview verifies expiry and legacy cleanup restore signup triggers, and board reloads preserve timestamps without loading Kit. Native submission is not intercepted; external Kit submission remains subject to the existing verification blocker below.
+
 # Sources dropdown cleanup
 
 - [x] Remove arbitrary Company fallback; preserve official agencies, Tanisha aliases, and dynamic Sources-column values.

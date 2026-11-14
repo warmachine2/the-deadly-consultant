@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { isJobBoardUnlocked, JOB_BOARD_PATH } from "@/lib/jobBoardGate";
+import { JOB_BOARD_PATH } from "@/lib/jobBoardGate";
+import { useJobBoardUnlocked } from "@/hooks/useJobBoardUnlocked";
 
 const DESKTOP_KIT_UID = "63221ca346";
 const MOBILE_KIT_UID = "28fef2dc22";
 
 const HeroSection = () => {
   // Unlocked visitors never load Kit, so link them straight to the board.
-  const [unlocked] = useState(isJobBoardUnlocked);
+  const unlocked = useJobBoardUnlocked();
   const [kitUid, setKitUid] = useState(
     () => (typeof window !== "undefined" && window.innerWidth < 768 ? MOBILE_KIT_UID : DESKTOP_KIT_UID)
   );

@@ -2,6 +2,7 @@ import { Search, Menu } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { isJobBoardUnlocked, JOB_BOARD_PATH } from "@/lib/jobBoardGate";
+import { useJobBoardUnlocked } from "@/hooks/useJobBoardUnlocked";
 import {
   Sheet,
   SheetContent,
@@ -40,12 +41,11 @@ const TopNav = ({ onSearchChange, onToggleSidebar }: TopNavProps) => {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const navigate = useNavigate();
   // When unlocked, drop the Kit toggle attribute so Kit's own listener never opens the popup.
-  const [boardUnlocked, setBoardUnlocked] = useState(isJobBoardUnlocked);
+  const boardUnlocked = useJobBoardUnlocked();
   const handleContractsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (isJobBoardUnlocked()) {
       e.preventDefault();
       e.stopPropagation();
-      setBoardUnlocked(true);
       navigate(JOB_BOARD_PATH);
     }
   };

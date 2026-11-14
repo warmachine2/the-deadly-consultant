@@ -107,12 +107,34 @@
     <script>
       (function () {
         var loaded = {};
+        var UNLOCK_TTL_MS = 24 * 60 * 60 * 1000;
+        var UNLOCK_KEY = 'ztopm_job_board_unlocked';
+        var unlockTimer;
+        function getUnlockTimestamp() {
+          var values = [];
+          ['localStorage', 'sessionStorage'].forEach(function (name) {
+            try { values.push(window[name].getItem(UNLOCK_KEY)); } catch (e) {}
+          });
+          var cookie = document.cookie.split(';').map(function (part) { return part.trim(); })
+            .find(function (part) { return part.indexOf(UNLOCK_KEY + '=') === 0; });
+          values.push(cookie ? cookie.slice(UNLOCK_KEY.length + 1) : null);
+          var now = Date.now();
+          var timestamps = values.map(Number).filter(function (timestamp) {
+            return Number.isFinite(timestamp) && timestamp > 0 && now >= timestamp && now - timestamp < UNLOCK_TTL_MS;
+          });
+          if (timestamps.length) return Math.max.apply(Math, timestamps);
+          ['localStorage', 'sessionStorage'].forEach(function (name) {
+            try { window[name].removeItem(UNLOCK_KEY); } catch (e) {}
+          });
+          document.cookie = UNLOCK_KEY + '=; path=/; max-age=0; SameSite=Lax';
+          if (!isJobBoardPath()) {
+            document.documentElement.classList.remove('job-board-unlocked');
+            document.body.classList.remove('job-board-unlocked');
+          }
+          return null;
+        }
         function isUnlocked() {
-          try {
-            if (sessionStorage.getItem('ztopm_job_board_unlocked') === 'true') return true;
-            if (localStorage.getItem('ztopm_job_board_unlocked') === 'true') return true;
-          } catch (e) {}
-          return document.cookie.indexOf('ztopm_job_board_unlocked=true') !== -1;
+          return getUnlockTimestamp() !== null;
         }
         function isJobBoardPath() {
           var p = (window.location.pathname || '').toLowerCase();
@@ -151,17 +173,32 @@
         }
         syncKitForViewport();
         window.addEventListener('resize', syncKitForViewport);
+        function syncUnlockExpiry() {
+          clearTimeout(unlockTimer);
+          var timestamp = getUnlockTimestamp();
+          if (timestamp !== null) {
+            unlockTimer = setTimeout(syncUnlockExpiry, Math.max(1, timestamp + UNLOCK_TTL_MS - Date.now()));
+          } else {
+            syncKitForViewport();
+          }
+        }
+        syncUnlockExpiry();
+        window.addEventListener('focus', syncUnlockExpiry);
+        window.addEventListener('storage', syncUnlockExpiry);
+        window.addEventListener('job-board-unlock-change', syncUnlockExpiry);
 
         // Unlock immediately when a Kit form is submitted (from any page).
         document.addEventListener('submit', function (e) {
           var form = e.target;
           if (form && (form.classList.contains('formkit-form') || form.getAttribute('data-sv-form'))) {
-            try {
-              sessionStorage.setItem('ztopm_job_board_unlocked', 'true');
-              localStorage.setItem('ztopm_job_board_unlocked', 'true');
-            } catch (err) {}
-            document.cookie = 'ztopm_job_board_unlocked=true; path=/; max-age=172800; SameSite=Lax';
+            var timestamp = String(Date.now());
+            ['localStorage', 'sessionStorage'].forEach(function (name) {
+              try { window[name].setItem(UNLOCK_KEY, timestamp); } catch (err) {}
+            });
+            document.cookie = UNLOCK_KEY + '=' + timestamp + '; path=/; max-age=86400; SameSite=Lax';
             document.documentElement.classList.add('job-board-unlocked');
+            document.body.classList.add('job-board-unlocked');
+            window.dispatchEvent(new Event('job-board-unlock-change'));
             var modals = document.querySelectorAll('.formkit-modal, [data-uid="63221ca346"], [data-uid="28fef2dc22"]');
             modals.forEach(function (m) { m.style.display = 'none'; });
           }
