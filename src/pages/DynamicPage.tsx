@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { rebrandHtml } from "@/lib/rebrandHtml";
 
+// Retired article: never fetch, cache-read, or render this slug.
+const BLOCKED_SLUGS = new Set([
+  "i-train-3-year-pros-into-10k-mo-data-ai-pm-consultants-full-walkthrough",
+]);
+
 const DynamicPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [content, setContent] = useState<GhostPost | null>(null);
@@ -17,6 +22,13 @@ const DynamicPage = () => {
   useEffect(() => {
     const fetchContent = async () => {
       if (!slug) return;
+
+      if (BLOCKED_SLUGS.has(slug)) {
+        setContent(null);
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
       setNotFound(false);

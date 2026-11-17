@@ -15,13 +15,6 @@ const CRITICAL_VIDEOS: CriticalVideo[] = [
     articleHref: "/my-18k-mo-fintech-data-ai-pm-consultant-story",
   },
   {
-    title:
-      "I Train 3+ Year Pros Into $10k/mo Data & AI PM Consultants (Full Walkthrough)",
-    embedSrc: "https://www.youtube.com/embed/RALM8vDXrk4",
-    articleHref:
-      "/i-train-3-year-pros-into-10k-mo-data-ai-pm-consultants-full-walkthrough",
-  },
-  {
     title: "PM Consulting Secrets - How to make $10k/mo+",
     embedSrc: "https://www.youtube.com/embed/HvAX-kLqfx0",
     articleHref: "/pm-consulting-secrets-how-to-make-10kmo",
@@ -42,15 +35,8 @@ const CriticalResourcesSection = () => {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        {CRITICAL_VIDEOS.map((video, index) => (
-          <article
-            key={video.embedSrc}
-            className={
-              index === 2
-                ? "flex flex-col gap-3 md:col-span-2 md:max-w-md md:mx-auto md:w-full"
-                : "flex flex-col gap-3"
-            }
-          >
+        {CRITICAL_VIDEOS.map((video) => (
+          <article key={video.embedSrc} className="flex flex-col gap-3">
             <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10">
               <iframe
                 className="absolute inset-0 w-full h-full"
