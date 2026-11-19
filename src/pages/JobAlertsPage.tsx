@@ -6,6 +6,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { Filter, Loader2, RefreshCw, Search, ChevronDown, ChevronUp, Calendar, BarChart3, ChevronLeft, ChevronRight, CalendarCheck, X, Clock, Clock4, Clock8, Plane, Car, Home, DollarSign, LayoutGrid, TableIcon, Briefcase, Users, Play, Check, Globe, MapPin, Info, ArrowUpRight, Linkedin, Mail, Phone } from 'lucide-react';
 import JobFreshnessGraph from '@/components/JobFreshnessGraph';
 import NetworkHealthPanel from '@/components/NetworkHealthPanel';
+import AcademyBannerCard from '@/components/AcademyBannerCard';
 import { format, isWithinInterval, parse } from 'date-fns';
 import { normalizeSourceName, getUniqueJobSources, matchesJobSources } from '@/lib/jobSourceMatching';
 import { INITIAL_JOB_FILTERS, clearedJobFilters, countActiveJobFilters } from '@/lib/jobFilterState';
@@ -1713,6 +1714,8 @@ const JobAlertsPage: React.FC = () => {
       <TopNav />
       
       <main className="flex-1 px-4 md:px-6 pb-6 pt-16">
+        <AcademyBannerCard className="job-board-navy-card mb-6" />
+
         {/* Network Health Control Panel */}
         <NetworkHealthPanel jobs={data} />
 

@@ -6,6 +6,7 @@ import { isJobBoardUnlocked, getKitUid } from "@/lib/jobBoardGate";
 import debounce from "lodash/debounce";
 import TopNav from "@/components/TopNav";
 import HeroSection from "@/components/HeroSection";
+import AcademyBannerCard from "@/components/AcademyBannerCard";
 import BlogCard, { BlogPost } from "@/components/BlogCard";
 import PostModal from "@/components/PostModal";
 import Sidebar from "@/components/Sidebar";
@@ -141,6 +142,8 @@ const Index = () => {
       <div className="px-0 md:px-6 pb-12 pt-20 lg:pt-20">
         {/* Hidden visually but kept in DOM for thumbnail/preview generation */}
         <HeroSection />
+
+        <AcademyBannerCard className="mx-2 md:mx-0 mt-4 md:mt-6 mb-2 md:mb-6" />
 
         {/* Mobile filter button */}
         <div className="md:hidden px-4 mb-4 mt-4">
