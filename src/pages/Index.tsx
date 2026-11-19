@@ -143,7 +143,9 @@ const Index = () => {
         {/* Hidden visually but kept in DOM for thumbnail/preview generation */}
         <HeroSection />
 
-        <AcademyBannerCard className="mx-2 md:mx-0 mt-4 md:mt-6 mb-2 md:mb-6" />
+        <div className="px-2 md:px-0 mt-4 md:mt-6 mb-2 md:mb-6">
+          <AcademyBannerCard />
+        </div>
 
         {/* Mobile filter button */}
         <div className="md:hidden px-4 mb-4 mt-4">
