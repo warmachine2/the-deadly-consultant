@@ -45,12 +45,12 @@ const HeroSection = () => {
       </p>
 
         {/* Gift strip */}
-        <div className="w-full max-w-2xl mt-2 rounded-xl border border-[#F4C903]/30 bg-black/40 px-4 py-3 md:px-5 md:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-2">
-          <div className="min-w-0">
-            <p className="text-sm md:text-base font-semibold text-[#F4C903]">Open PM Consulting Contracts</p>
-            <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
+        <div className="w-full max-w-2xl mt-2 rounded-xl border border-[#F4C903]/30 bg-black/40 px-3 py-3 sm:px-4 md:px-5 md:py-4 flex flex-row items-center justify-between gap-2.5 sm:gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs sm:text-sm md:text-base font-semibold text-[#F4C903]">Open PM Consulting Contracts</p>
+            <p className="text-[11px] sm:text-xs md:text-sm text-white/70 leading-snug">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
           </div>
-          <div className="flex flex-col items-start sm:items-end gap-1 sm:gap-1.5 shrink-0">
+          <div className="flex flex-col items-end gap-1 sm:gap-1.5 shrink-0">
             <svg
               className="h-[26px] w-[74px] sm:h-[34px] sm:w-24 rounded-[6px] sm:rounded-md border border-[#F4C903]/30 bg-[#14161A] shadow-sm"
               viewBox="0 0 96 34"
@@ -109,9 +109,9 @@ const HeroSection = () => {
             <a
               data-formkit-toggle={unlocked ? undefined : kitUid}
               href={unlocked ? JOB_BOARD_PATH : `https://bi-fintech-consultant-academy.kit.com/${kitUid}`}
-              className="flex items-center gap-1 text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
+              className="flex items-center gap-1 text-xs sm:text-sm md:text-base font-semibold text-white hover:text-[#F4C903] whitespace-nowrap"
             >
-              Browse open contracts <ArrowRight className="w-4 h-4" />
+              Browse open contracts <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </a>
           </div>
         </div>
