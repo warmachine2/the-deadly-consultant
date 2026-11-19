@@ -142,7 +142,7 @@ const writeJobCache = (jobs: JobData[]) => {
 
 // Skeleton placeholder matching the Job Card shape for cold visits
 const JobCardSkeleton: React.FC = () => (
-  <div className="volumetric-glass rounded-2xl p-5 sm:p-6 animate-pulse">
+  <div className="volumetric-glass job-board-navy-card rounded-2xl p-5 sm:p-6 animate-pulse">
     <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-4 mb-4">
       <div className="h-4 w-28 rounded bg-white/10" />
       <div className="justify-self-center h-9 w-40 rounded-full bg-white/10" />
@@ -966,8 +966,8 @@ const JobCard: React.FC<{
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const { toast } = useToast();
   const jobAge = calculateJobAge(job.date);
-  return <div className={`volumetric-glass rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-[#FFDD40]/30 w-full ${isDesktop ? '' : 'mb-5'}`} style={{
-    background: 'linear-gradient(145deg, rgba(20, 20, 30, 0.9), rgba(10, 10, 20, 0.95))',
+  return <div className={`volumetric-glass job-board-navy-card rounded-2xl p-6 md:p-8 transition-all duration-300 hover:border-[#FFDD40]/30 w-full ${isDesktop ? '' : 'mb-5'}`} style={{
+    background: 'linear-gradient(145deg, rgba(24, 52, 78, 0.94), rgba(20, 42, 63, 0.97))',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
   }}>
       {/* Mobile header: strictly stacked 3 rows (< md) */}
@@ -1339,7 +1339,7 @@ const DateRangePicker: React.FC<{
             {startDate ? format(startDate, "MMM d") : "Start"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-gray-900 border border-[#FFDD40]/30 z-[100]" align="start">
+        <PopoverContent className="w-auto p-0 bg-[#0F2336] border border-[#FFDD40]/30 z-[100]" align="start">
           <CalendarComponent mode="single" selected={startDate} onSelect={onStartChange} initialFocus className="p-3 pointer-events-auto" />
         </PopoverContent>
       </Popover>
@@ -1351,7 +1351,7 @@ const DateRangePicker: React.FC<{
             {endDate ? format(endDate, "MMM d") : "End"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 bg-gray-900 border border-[#FFDD40]/30 z-[100]" align="start">
+        <PopoverContent className="w-auto p-0 bg-[#0F2336] border border-[#FFDD40]/30 z-[100]" align="start">
           <CalendarComponent mode="single" selected={endDate} onSelect={onEndChange} initialFocus className="p-3 pointer-events-auto" />
         </PopoverContent>
       </Popover>
@@ -1435,6 +1435,12 @@ const JobAlertsPage: React.FC = () => {
   // Preserve a valid 24h unlock on mount; never auto-open Kit on the board.
   useEffect(() => {
     markJobBoardUnlocked();
+  }, []);
+
+  // KAN-514: navy logo theme applies to the Job Board page only.
+  useEffect(() => {
+    document.body.classList.add('job-board-theme');
+    return () => document.body.classList.remove('job-board-theme');
   }, []);
   const handleSort = (property: keyof JobData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -1821,7 +1827,7 @@ const JobAlertsPage: React.FC = () => {
         {/* Filters Section - Collapsible (Below Analytics, Above Job List) */}
         {!loading && data.length > 0 && (
           <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="mb-6">
-            <div className="volumetric-glass rounded-2xl overflow-hidden shadow-lg">
+            <div className="volumetric-glass job-board-navy-card rounded-2xl overflow-hidden shadow-lg">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-5 md:p-6 hover:bg-white/5 transition-colors">
                   <div className="flex items-center gap-3">
@@ -1862,7 +1868,7 @@ const JobAlertsPage: React.FC = () => {
                           <Button 
                             variant="outline" 
                             className={cn(
-                              "w-full justify-between px-4 py-3 h-11 rounded-xl bg-gray-900 border-white/20 hover:bg-gray-800 hover:border-[#FFDD40]/50 text-sm transition-colors",
+                              "w-full justify-between px-4 py-3 h-11 rounded-xl bg-[#0F2336] border-white/20 hover:bg-[#17334F] hover:border-[#FFDD40]/50 text-sm transition-colors",
                               selectedSources.length > 0 
                                 ? "border-[#FFDD40]/40 text-white" 
                                 : "text-white"
@@ -1887,7 +1893,7 @@ const JobAlertsPage: React.FC = () => {
                             )} />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[320px] p-0 bg-gray-900 border border-white/20 z-[100]" align="start">
+                        <PopoverContent className="w-[320px] p-0 bg-[#0F2336] border border-white/20 z-[100]" align="start">
                           <Command className="bg-transparent">
                             <CommandInput placeholder="Search sources..." className="border-b border-white/10" />
                             <CommandList>
@@ -1969,10 +1975,10 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedCountry} 
                         onChange={e => setSelectedCountry(e.target.value)} 
-                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-[#0F2336] border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
                       {countryOptions.map(option => (
-                        <option key={option.value} value={option.value} className="bg-gray-900 text-white">{option.label}</option>
+                        <option key={option.value} value={option.value} className="bg-[#0F2336] text-white">{option.label}</option>
                       ))}
                       </select>
                     </div>
@@ -1986,11 +1992,11 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedLocation} 
                         onChange={e => setSelectedLocation(e.target.value)} 
-                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-[#0F2336] border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Cities</option>
+                        <option value="all" className="bg-[#0F2336] text-white">All Cities</option>
                         {availableCities.map(city => (
-                          <option key={city} value={city} className="bg-gray-900 text-white">{city}</option>
+                          <option key={city} value={city} className="bg-[#0F2336] text-white">{city}</option>
                         ))}
                       </select>
                     </div>
@@ -2004,11 +2010,11 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={experienceFilter} 
                         onChange={e => setExperienceFilter(e.target.value)} 
-                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-[#0F2336] border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Experience</option>
-                        <option value="less5" className="bg-gray-900 text-white">&lt; 5 Years</option>
-                        <option value="more5" className="bg-gray-900 text-white">≥ 5 Years</option>
+                        <option value="all" className="bg-[#0F2336] text-white">All Experience</option>
+                        <option value="less5" className="bg-[#0F2336] text-white">&lt; 5 Years</option>
+                        <option value="more5" className="bg-[#0F2336] text-white">≥ 5 Years</option>
                       </select>
                     </div>
                     
@@ -2021,12 +2027,12 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={salaryFilter} 
                         onChange={e => setSalaryFilter(e.target.value)} 
-                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-[#0F2336] border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Salaries</option>
-                        <option value="less15" className="bg-gray-900 text-white">≤ $15k/mo</option>
-                        <option value="15to18" className="bg-gray-900 text-white">$15k - $18k/mo</option>
-                        <option value="more18" className="bg-gray-900 text-white">≥ $18k/mo</option>
+                        <option value="all" className="bg-[#0F2336] text-white">All Salaries</option>
+                        <option value="less15" className="bg-[#0F2336] text-white">≤ $15k/mo</option>
+                        <option value="15to18" className="bg-[#0F2336] text-white">$15k - $18k/mo</option>
+                        <option value="more18" className="bg-[#0F2336] text-white">≥ $18k/mo</option>
                       </select>
                     </div>
                     
@@ -2039,12 +2045,12 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={workTypeFilter} 
                         onChange={e => setWorkTypeFilter(e.target.value)} 
-                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-[#0F2336] border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Types</option>
-                        <option value="remote" className="bg-gray-900 text-white">Remote</option>
-                        <option value="hybrid" className="bg-gray-900 text-white">Hybrid</option>
-                        <option value="onsite" className="bg-gray-900 text-white">On-site</option>
+                        <option value="all" className="bg-[#0F2336] text-white">All Types</option>
+                        <option value="remote" className="bg-[#0F2336] text-white">Remote</option>
+                        <option value="hybrid" className="bg-[#0F2336] text-white">Hybrid</option>
+                        <option value="onsite" className="bg-[#0F2336] text-white">On-site</option>
                       </select>
                     </div>
                     
@@ -2057,11 +2063,11 @@ const JobAlertsPage: React.FC = () => {
                       <select 
                         value={selectedRoleType} 
                         onChange={e => setSelectedRoleType(e.target.value)} 
-                        className="px-4 py-3 h-11 rounded-xl bg-gray-900 border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
+                        className="px-4 py-3 h-11 rounded-xl bg-[#0F2336] border border-white/20 text-white text-sm focus:outline-none focus:border-[#FFDD40]/50 transition-colors cursor-pointer"
                       >
-                        <option value="all" className="bg-gray-900 text-white">All Roles</option>
+                        <option value="all" className="bg-[#0F2336] text-white">All Roles</option>
                         {uniqueRoleTypes.map(role => (
-                          <option key={role} value={role} className="bg-gray-900 text-white">{role}</option>
+                          <option key={role} value={role} className="bg-[#0F2336] text-white">{role}</option>
                         ))}
                       </select>
                     </div>
@@ -2109,7 +2115,7 @@ const JobAlertsPage: React.FC = () => {
                       <div className="flex rounded-xl overflow-hidden border border-white/20">
                         <button 
                           onClick={() => setViewMode('card')}
-                          className={`px-4 py-2.5 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'card' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+                          className={`px-4 py-2.5 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'card' ? 'text-black' : 'bg-[#0F2336] text-white hover:bg-[#17334F]'}`}
                           style={viewMode === 'card' ? { backgroundColor: '#FFDD40' } : {}}
                         >
                           <LayoutGrid className="w-4 h-4" />
@@ -2117,7 +2123,7 @@ const JobAlertsPage: React.FC = () => {
                         </button>
                         <button 
                           onClick={() => setViewMode('table')}
-                          className={`px-4 py-2.5 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'table' ? 'text-black' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+                          className={`px-4 py-2.5 flex items-center gap-2 text-sm font-medium transition-all ${viewMode === 'table' ? 'text-black' : 'bg-[#0F2336] text-white hover:bg-[#17334F]'}`}
                           style={viewMode === 'table' ? { backgroundColor: '#FFDD40' } : {}}
                         >
                           <TableIcon className="w-4 h-4" />
@@ -2177,7 +2183,7 @@ const JobAlertsPage: React.FC = () => {
             <p className="text-red-400">{error}</p>
           </div> : viewMode === 'table' ? (
           // Table View
-          <div className="volumetric-glass rounded-2xl overflow-hidden">
+          <div className="volumetric-glass job-board-navy-card rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
