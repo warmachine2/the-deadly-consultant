@@ -45,14 +45,14 @@ const HeroSection = () => {
       </p>
 
         {/* Gift strip */}
-        <div className="w-full max-w-2xl mt-2 rounded-xl border border-[#F4C903]/30 bg-black/40 px-4 py-3 md:px-5 md:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="w-full max-w-2xl mt-2 rounded-xl border border-[#F4C903]/30 bg-black/40 px-4 py-3 md:px-5 md:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-2">
           <div className="min-w-0">
             <p className="text-sm md:text-base font-semibold text-[#F4C903]">Open PM Consulting Contracts</p>
             <p className="text-xs md:text-sm text-white/70">Live recruiter-sourced Data &amp; AI Orchestration PM contracts.</p>
           </div>
-          <div className="flex flex-col items-start sm:items-end gap-1.5 shrink-0">
+          <div className="flex flex-col items-start sm:items-end gap-1 sm:gap-1.5 shrink-0">
             <svg
-              className="h-[34px] w-24 rounded-md border border-[#F4C903]/30 bg-[#14161A] shadow-sm"
+              className="h-[26px] w-[74px] sm:h-[34px] sm:w-24 rounded-[6px] sm:rounded-md border border-[#F4C903]/30 bg-[#14161A] shadow-sm"
               viewBox="0 0 96 34"
               aria-hidden="true"
             >
