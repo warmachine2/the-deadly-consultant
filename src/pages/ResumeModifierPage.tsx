@@ -166,12 +166,26 @@ const ResumeModifierPage = () => {
             </form>
           ) : (
             <>
-              <div className="volumetric-glass rounded-2xl p-6 md:p-8 relative">
-                <Button type="button" variant="outline" size="sm" onClick={handleLock} className="absolute top-4 right-4 border-white/20 bg-black/30 text-white">
-                  <Unlock className="w-4 h-4 mr-1" /> Lock
-                </Button>
-                <h1 className="text-2xl md:text-3xl font-bold text-[#FFE361] pr-20">PM Consultant Resume Modifier</h1>
-                <p className="text-white/80 mt-2">Upload your base resume, tell us the target job, and get a tailored Word (.docx) resume.</p>
+              <div className="volumetric-glass rounded-2xl p-6 md:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-[#FFE361]">
+                      PM Consultant Resume Modifier
+                    </h1>
+                    <p className="text-white/80 mt-2">
+                      Upload your base resume, tell us the target job, and get a tailored Word (.docx) resume.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLock}
+                    className="self-start sm:self-center shrink-0 border-white/25 bg-black/40 hover:bg-white/10 text-white px-4 py-2"
+                  >
+                    <Lock className="w-4 h-4 mr-1.5" /> Lock Page
+                  </Button>
+                </div>
               </div>
 
               <form onSubmit={handleSubmit} className="volumetric-glass rounded-2xl p-6 md:p-8 space-y-6">
