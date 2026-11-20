@@ -52,7 +52,7 @@ const JobBoardKitGuard = () => {
   const location = useLocation();
   useEffect(() => {
     const path = location.pathname.toLowerCase();
-    const onBoard = JOB_BOARD_PATHS.some((p) => path.includes(p));
+    const onBoard = JOB_BOARD_PATHS.some((p) => path.includes(p)) || path === "/seat" || path.startsWith("/seat/");
     const targets = [document.documentElement, document.body];
     if (!onBoard) {
       targets.forEach((el) => el.classList.remove("job-board-page"));

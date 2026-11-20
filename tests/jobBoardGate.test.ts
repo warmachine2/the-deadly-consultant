@@ -83,7 +83,7 @@ for (const runtime of ["React", "HTML"] as const) {
           env.document.cookie ? env.document.cookie.split("=")[1] : null]).toEqual(values);
       });
     }
-    for (const path of ["/ai-bi-fintech-pm-job-alerts-repo", "/pm-job-board-canada"]) {
+    for (const path of ["/ai-bi-fintech-pm-job-alerts-repo", "/pm-job-board-canada", "/seat", "/seat/thank-you"]) {
       test(`preserves popup suppression on ${path}`, () => {
         const env = setup(["true", "true", "true"], path);
         if (runtime === "React") expect(isJobBoardUnlocked()).toBe(false);

@@ -141,7 +141,9 @@
           return p.indexOf('/ai-bi-fintech-pm-job-alerts-repo') !== -1 ||
                  p.indexOf('/pm-job-board-canada') !== -1 ||
                  p.indexOf('/job-board') !== -1 ||
-                 p.indexOf('/jobs') !== -1;
+                 p.indexOf('/jobs') !== -1 ||
+                 p === '/seat' ||
+                 p.indexOf('/seat/') === 0;
         }
         function shouldSkipKit() {
           return isUnlocked() || isJobBoardPath();

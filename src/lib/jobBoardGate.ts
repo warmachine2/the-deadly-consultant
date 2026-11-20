@@ -4,8 +4,11 @@ export const UNLOCKED_CLASS = "job-board-unlocked";
 export const UNLOCK_TTL_MS = 24 * 60 * 60 * 1000;
 export const UNLOCK_CHANGE_EVENT = "job-board-unlock-change";
 
-const onJobBoardPath = () => [JOB_BOARD_PATH, "/pm-job-board-canada", "/job-board", "/jobs"]
-  .some(path => window.location.pathname.toLowerCase().includes(path));
+const onJobBoardPath = () => {
+  const p = window.location.pathname.toLowerCase();
+  return [JOB_BOARD_PATH, "/pm-job-board-canada", "/job-board", "/jobs"].some(path => p.includes(path)) ||
+    p === "/seat" || p.startsWith("/seat/");
+};
 
 export const getJobBoardUnlockTimestamp = (): number | null => {
   if (typeof window === "undefined") return null;
