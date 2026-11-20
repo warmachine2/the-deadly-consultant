@@ -40,7 +40,7 @@ export function docXmlToText(xml: string) {
 }
 
 async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
-  const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  const stream = new Blob([data as BlobPart]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 
@@ -94,7 +94,7 @@ export async function extractPdfText(buf: ArrayBuffer): Promise<string> {
     let content = latin.slice(start, end);
     if (/FlateDecode/.test(head)) {
       try {
-        const s = new Blob([bytes.subarray(start, end)]).stream().pipeThrough(new DecompressionStream("deflate"));
+        const s = new Blob([bytes.subarray(start, end) as BlobPart]).stream().pipeThrough(new DecompressionStream("deflate"));
         content = new TextDecoder("latin1").decode(await new Response(s).arrayBuffer());
       } catch { continue; }
     }
