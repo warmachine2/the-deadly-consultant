@@ -16,6 +16,7 @@ import BookSessionThankYou from "./pages/BookSessionThankYou";
 import AreYouReadyToPivotPage from "./pages/AreYouReadyToPivotPage";
 import FreeWorkshopPage from "./pages/FreeWorkshopPage";
 import SeatIntakePage from "./pages/SeatIntakePage";
+import ResumeModifierPage from "./pages/ResumeModifierPage";
 import FreeWorkshopThankYouPage from "./pages/FreeWorkshopThankYouPage";
 import FreeWorkshopJoinPage from "./pages/FreeWorkshopJoinPage";
 import FreeWorkshopReplayPage from "./pages/FreeWorkshopReplayPage";
@@ -105,6 +106,8 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/proof" element={<ProofPage />} />
             <Route path="/seat" element={<SeatIntakePage />} />
+            <Route path="/pm-resume-modifier" element={<ResumeModifierPage />} />
+            <Route path="/resume-modifier" element={<Navigate to="/pm-resume-modifier" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="/:slug" element={<DynamicPage />} />
             <Route path="*" element={<NotFound />} />
