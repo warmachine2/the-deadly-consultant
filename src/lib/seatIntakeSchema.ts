@@ -7,8 +7,23 @@ export const formSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(255),
   whatsapp: z.string().trim().min(7, "WhatsApp number is required").max(30)
     .regex(/^\+?[0-9\s\-()]+$/, "Include country code, digits only (e.g. +1 416 555 0123)"),
-  linkedin: z.string().trim().url("Enter a valid URL").max(500)
-    .refine((v) => /linkedin\.com\//i.test(v), "Must be a LinkedIn profile URL"),
+  // Optional: blank or omitted normalizes to "". A filled-in value must still be a real LinkedIn URL.
+  linkedin: z
+    .string()
+    .trim()
+    .max(500, "Must be 500 characters or fewer")
+    .optional()
+    .transform((v) => v ?? "")
+    .superRefine((v, ctx) => {
+      if (v === "") return;
+      if (!z.string().url().safeParse(v).success) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Enter a valid URL" });
+        return;
+      }
+      if (!/linkedin\.com\//i.test(v)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Must be a LinkedIn profile URL" });
+      }
+    }),
   resume: z.custom<File>((v) => v instanceof File, "Resume file is required")
     .refine((f) => f instanceof File && /\.(pdf|docx)$/i.test(f.name), "Only PDF or DOCX files are accepted")
     .refine((f) => f instanceof File && f.size <= 10 * 1024 * 1024, "File must be 10MB or smaller"),

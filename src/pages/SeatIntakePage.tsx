@@ -95,11 +95,13 @@ const SeatIntakePage = () => {
     try {
       const fileName = buildResumeFileName(data.fullName, data.resume.name);
       const submittedAt = new Date().toISOString();
+      // Optional field: blank or omitted stays an empty string everywhere downstream.
+      const linkedinValue = data.linkedin?.trim() ?? "";
       const pdf = await generateIntakePdf({
         fullName: data.fullName,
         email: data.email,
         whatsapp: data.whatsapp,
-        linkedin: data.linkedin,
+        linkedin: linkedinValue,
         currentRole: data.currentRole,
         contractLocation: data.contractLocation,
         resumeFileName: fileName,
@@ -125,7 +127,7 @@ const SeatIntakePage = () => {
         full_name: data.fullName,
         email: data.email,
         whatsapp_number: data.whatsapp,
-        linkedin_url: data.linkedin,
+        linkedin_url: linkedinValue,
         resume_file_path: path,
         current_title_employer: data.currentRole,
         contract_location: data.contractLocation,
@@ -139,7 +141,7 @@ const SeatIntakePage = () => {
         body.append("fullName", data.fullName);
         body.append("email", data.email);
         body.append("whatsapp", data.whatsapp);
-        body.append("linkedin", data.linkedin);
+        body.append("linkedin", linkedinValue);
         body.append("currentRole", data.currentRole);
         body.append("contractLocation", data.contractLocation);
         body.append("resumeFilePath", path);
@@ -277,7 +279,7 @@ const SeatIntakePage = () => {
                       name="linkedin"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className={labelCls}>LinkedIn Profile URL</FormLabel>
+                          <FormLabel className={labelCls}>LinkedIn Profile URL (Optional)</FormLabel>
                           <FormControl>
                             <Input
                               type="url"

@@ -5,7 +5,7 @@ export interface StudentIntakePdfParams {
   fullName: string;
   email: string;
   whatsapp: string;
-  linkedin: string;
+  linkedin?: string;
   currentRole: string;
   contractLocation: string;
   resumeFileName: string;
@@ -65,7 +65,7 @@ export async function generateIntakePdf(
 
     const p = {
       fullName: esc(params.fullName), email: esc(params.email), whatsapp: esc(params.whatsapp),
-      linkedin: esc(params.linkedin), currentRole: esc(params.currentRole),
+      linkedin: esc(params.linkedin ?? ""), currentRole: esc(params.currentRole),
       contractLocation: esc(params.contractLocation), resume: esc(params.resumeFileName),
     };
     const linkedinShort = p.linkedin.replace(/^https?:\/\/(www\.)?/i, "");
@@ -116,7 +116,9 @@ export async function generateIntakePdf(
     ${card("Full Name", p.fullName)}
     ${card("Email Used at Checkout", p.email, `<span style="margin-left:6px;padding:0 6px 4px;line-height:12px;border-radius:4px;background:#FEF3C7;color:${GOLD};font-size:8.5px;">MATCH EMAIL TO PAYMENT</span>`)}
     ${card("WhatsApp Number", p.whatsapp)}
-    ${card("LinkedIn Profile", `<span style="color:#1D4ED8;text-decoration:underline;">${linkedinShort}</span>`)}
+    ${card("LinkedIn Profile", p.linkedin
+      ? `<span style="color:#1D4ED8;text-decoration:underline;">${linkedinShort}</span>`
+      : `<span style="color:${MUTED};font-weight:500;">Not provided</span>`)}
   </div>
 
   ${section("02", "Professional &amp; Placement Details")}
