@@ -292,9 +292,11 @@ All colors MUST be HSL.
 }
 @container academy-banner (min-width: 768px) {
   .academy-banner-artwork {
-    grid-template-columns: calc(clamp(142px, 15.2cqw, 204px) + clamp(12px, 2cqw, 36px)) minmax(0, 1fr);
+    --badge-w: clamp(142px, 15.2cqw, 204px);
+    --badge-ml: clamp(12px, 2cqw, 36px);
+    grid-template-columns: calc(var(--badge-w) + var(--badge-ml)) minmax(0, 1fr);
     /* Reserve the natural image height before applying the 4px height guard. */
-    grid-template-rows: minmax(calc(clamp(142px, 15.2cqw, 204px) * 1026 / 986 + 4px), auto);
+    grid-template-rows: minmax(calc(var(--badge-w) * 1026 / 986 + 4px), auto);
     align-items: center;
     min-height: clamp(192px, 17.5cqw, 238px);
     height: auto;
@@ -304,17 +306,17 @@ All colors MUST be HSL.
   .academy-banner-artwork::before {
     content: "";
     position: absolute;
-    inset: clamp(10px, 1.1cqw, 16px) 0 clamp(10px, 1.1cqw, 16px) 12%;
+    inset: clamp(10px, 1cqw, 14px) 0 clamp(10px, 1cqw, 14px) calc(var(--badge-ml) + var(--badge-w) * 0.55);
     background: var(--academy-band);
   }
   .academy-banner-badge {
-    width: clamp(142px, 15.2cqw, 204px);
+    width: var(--badge-w);
     height: auto;
     max-height: calc(100% - 4px);
-    margin-left: clamp(12px, 2cqw, 36px);
+    margin-left: var(--badge-ml);
     margin-bottom: 0;
   }
-  .academy-banner-content { padding: 8px clamp(12px, 1.6cqw, 26px); background: none; }
+  .academy-banner-content { padding: 8px clamp(16px, 2cqw, 32px) 8px clamp(16px, 2cqw, 28px); background: none; }
   .academy-banner-title { font-size: clamp(15px, 2cqw, 30px); }
   .academy-banner-subtitle { font-size: clamp(11px, 1.12cqw, 16.5px); margin-top: clamp(6px, .6cqw, 10px); }
   .academy-banner-benefits { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 1.1cqw, 18px); margin-top: clamp(12px, 1.4cqw, 20px); }
