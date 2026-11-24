@@ -1,5 +1,10 @@
 # Quiz ten-question diagnostic
 
+# KAN-527 Academy banner
+
+- [x] Replace the stretched image with container-scaled HTML/vector artwork; preserve the wrapper and booking footer.
+- [x] All 251 tests pass and the automatic preview build is clean; all eight requested widths have equal badge dimensions and no text clipping, overlap, or horizontal overflow. Booking footer opens `/book-session`; home placement also checked. Preview only.
+
 # KAN-522 Resume tools
 
 - [x] Add unlocked options and a repeatable scratch-resume dialog without changing the Modify form or password gate.

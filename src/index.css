@@ -17,6 +17,18 @@ All colors MUST be HSL.
     --quiz-emerging: 38 92% 50%;
     --quiz-foundation: 199 89% 48%;
 
+    /* Academy artwork palette — scoped to the vector/HTML banner. */
+    --academy-paper: 210 60% 98%;
+    --academy-grid: 200 55% 78%;
+    --academy-navy: 210 67% 19%;
+    --academy-navy-light: 209 63% 25%;
+    --academy-ink: 210 78% 10%;
+    --academy-cyan: 188 100% 65%;
+    --academy-gold: 50 97% 48%;
+    --academy-check: 145 55% 43%;
+    --academy-band: linear-gradient(115deg, hsl(var(--academy-navy)), hsl(var(--academy-navy-light)));
+    --academy-badge-shadow: 0 0 0 4px hsl(var(--academy-paper)), 0 0 0 7px hsl(var(--academy-cyan) / .65), 0 0 24px hsl(var(--academy-cyan) / .8), inset 0 0 24px hsl(var(--academy-ink) / .7);
+
     /* Glass card with charcoal tint */
     --card: 0 0% 18%;
     --card-foreground: 214 14% 91%;
@@ -195,6 +207,143 @@ All colors MUST be HSL.
       transform: translate(30px, 20px) rotate(5deg);
     }
   }
+}
+
+/* KAN-527: only the Academy artwork responds to its available container width. */
+.academy-banner-container {
+  container: academy-banner / inline-size;
+  color: hsl(var(--article-body));
+  letter-spacing: 0;
+}
+.academy-banner-artwork {
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  padding: 24px 0 14px;
+  background-color: hsl(var(--academy-paper));
+  background-image:
+    linear-gradient(90deg, hsl(var(--academy-grid) / .4) 1px, transparent 1px),
+    linear-gradient(hsl(var(--academy-grid) / .4) 1px, transparent 1px),
+    linear-gradient(135deg, hsl(var(--academy-cyan) / .3), transparent 45%);
+  background-size: 20px 20px, 20px 20px, 100% 100%;
+}
+.academy-banner-badge {
+  container-type: inline-size;
+  position: relative;
+  width: clamp(180px, 58cqw, 210px);
+  height: auto;
+  min-width: 0;
+  align-self: center;
+  border: 2px solid hsl(var(--academy-gold) / .8);
+  background: var(--academy-band);
+  box-shadow: var(--academy-badge-shadow);
+}
+.academy-banner-circuit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  stroke: hsl(var(--academy-gold) / .35);
+  stroke-width: 1;
+  border-radius: inherit;
+}
+.academy-banner-badge-copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2cqw;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.academy-banner-ribbon {
+  width: 88%;
+  padding: 2cqw 1cqw;
+  transform: rotate(8deg);
+  border: 1px solid hsl(var(--academy-gold));
+  border-radius: 4px;
+  background: hsl(var(--academy-ink));
+  font-size: 7cqw;
+}
+.academy-banner-badge-name { font-size: 16cqw; margin-top: 7cqw; line-height: 1.25; }
+.academy-banner-badge-name span,
+.academy-banner-income strong { color: hsl(var(--academy-gold)); }
+.academy-banner-badge-role { font-size: 10cqw; }
+.academy-banner-income {
+  width: 91%;
+  margin-top: 3cqw;
+  padding: 2cqw 1cqw;
+  border: 1px solid hsl(var(--academy-gold) / .6);
+  border-radius: 999px;
+  background: hsl(var(--academy-ink));
+  font-size: 7cqw;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.academy-banner-income > span { display: block; }
+.academy-banner-content {
+  min-width: 0;
+  width: 100%;
+  padding: 22px 18px;
+  background: var(--academy-band);
+}
+.academy-banner-header { text-align: center; }
+.academy-banner-title {
+  color: hsl(var(--article-body));
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-shadow: none;
+  margin: 0;
+}
+.academy-banner-subtitle {
+  margin-top: 10px;
+  color: hsl(var(--academy-gold));
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.academy-banner-benefits { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; margin-top: 24px; }
+.academy-banner-benefit { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
+.academy-banner-check {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 20px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: hsl(var(--academy-check));
+}
+.academy-banner-check svg { width: 75%; height: 75%; stroke-width: 3; }
+.academy-banner-benefit-copy { min-width: 0; }
+.academy-banner-benefit-title { color: hsl(var(--academy-gold)); font-size: 15px; font-weight: 700; line-height: 1.35; }
+.academy-banner-benefit-description { margin-top: 6px; font-size: 13px; line-height: 1.5; }
+.academy-banner-booking,
+.academy-banner-booking:hover {
+  background: hsl(var(--academy-gold));
+  color: hsl(var(--academy-ink));
+  border: 0;
+}
+@container academy-banner (min-width: 640px) {
+  .academy-banner-artwork {
+    grid-template-columns: 26% minmax(0, 1fr);
+    gap: 2cqw;
+    padding: 2.2cqw 0 2.2cqw 2cqw;
+    background-size: 1.5cqw 1.5cqw, 1.5cqw 1.5cqw, 100% 100%;
+  }
+  .academy-banner-badge { width: 100%; }
+  .academy-banner-content { padding: 1.8cqw 2cqw 2cqw; }
+  .academy-banner-title { font-size: clamp(18px, 2.5cqw, 68px); }
+  .academy-banner-subtitle { font-size: clamp(12px, 1.4cqw, 38px); margin-top: .7cqw; }
+  .academy-banner-benefits { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2cqw; margin-top: 2cqw; }
+  .academy-banner-benefit { gap: .6cqw; }
+  .academy-banner-check { width: clamp(14px, 1.4cqw, 38px); }
+  .academy-banner-benefit-title { font-size: clamp(12px, 1.3cqw, 35px); }
+  .academy-banner-benefit-description { font-size: clamp(12px, 1.1cqw, 30px); margin-top: .5cqw; }
 }
 
 @layer utilities {
