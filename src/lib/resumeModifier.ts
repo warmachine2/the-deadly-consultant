@@ -6,6 +6,32 @@ export const MAX_RESUME_BYTES = 10 * 1024 * 1024;
 
 export type JobInputType = "paste" | "screenshot" | "url";
 
+export type ScratchEmployer = { startDate: string; endDate: string; companyName: string; position: string };
+export type ScratchEducation = { title: string; dateRange: string };
+export type ScratchSubmission = {
+  firstName: string; lastName: string; address: string; phone: string; email: string;
+  employers: ScratchEmployer[]; education: ScratchEducation[]; accolades: string; idealPosition: string;
+};
+
+export function validateScratchSubmission(i: ScratchSubmission): string | null {
+  const profileFields = [
+    ["firstName", "first name"], ["lastName", "last name"], ["address", "address"],
+    ["phone", "phone number"], ["email", "email address"],
+  ] as const;
+  for (const [key, label] of profileFields) {
+    if (!i[key]?.trim()) return `Please enter your ${label}.`;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.email.trim())) return "Please enter a valid email address.";
+  if (!i.employers?.length) return "Please add at least one employer.";
+  for (const employer of i.employers) {
+    if (![employer.startDate, employer.endDate, employer.companyName, employer.position].every((value) => value?.trim())) {
+      return "Please complete the start date, end date, company name, and position for every employer.";
+    }
+  }
+  if (!i.idealPosition?.trim()) return "Please describe your ideal project management position.";
+  return null;
+}
+
 export async function sha256Hex(val: string): Promise<string> {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(val.trim()));
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");

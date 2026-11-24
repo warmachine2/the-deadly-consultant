@@ -3,26 +3,50 @@ import TopNav from "@/components/TopNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Download, FileText, Image as ImageIcon, Link2, Loader2, Lock, Unlock } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ArrowLeft, Download, FilePlus2, FileText, Image as ImageIcon, Link2, Loader2, Lock, Trash2 } from "lucide-react";
 import {
   RESUME_MODIFIER_STORAGE_KEY, RESUME_MODIFIER_WEBHOOK, MAX_RESUME_BYTES, type JobInputType,
   matchesResumeModifierPassword, validateSubmission, extractDocxText, extractPdfText,
   fileToBase64, fileToDataUrl, base64ToBlob, downloadBlob,
+  validateScratchSubmission, type ScratchSubmission, type ScratchEmployer, type ScratchEducation,
 } from "@/lib/resumeModifier";
 
 type MatchedJob = { title?: string; company?: string; score?: number | string; url?: string } | string;
 type ExperienceItem = { title?: string; company?: string; dates?: string; bullets?: string[] } | string;
+type CredentialItem = { title?: string; name?: string; dateRange?: string; dates?: string } | string;
+type ResumePreview = {
+  summary?: string; experience?: ExperienceItem[]; skills?: string[] | string;
+  certifications?: CredentialItem[] | string; education?: CredentialItem[] | string; accolades?: CredentialItem[] | string;
+};
 type ResultData = {
-  status?: string; docxBase64?: string; fileName?: string;
+  status?: string; docxBase64?: string; fileName?: string; modelUsed?: string;
   targetJobTitle?: string; jobTitle?: string; targetCompany?: string; company?: string;
   matchSummary?: string; matchedJobs?: MatchedJob[];
-  rewrittenResume?: { summary?: string; experience?: ExperienceItem[]; skills?: string[] | string };
+  rewrittenResume?: ResumePreview;
+  summary?: string; experience?: ExperienceItem[]; skills?: string[] | string;
+  certifications?: CredentialItem[] | string; education?: CredentialItem[] | string; accolades?: CredentialItem[] | string;
   message?: string;
 };
 
 const labelCls = "block text-white text-base font-medium mb-1.5";
 const fieldCls = "bg-black/30 border-white/15 text-white";
 const PDF_FALLBACK = "We couldn't extract readable text from this PDF. Please paste your resume text here (the original PDF is still sent).";
+const goldCls = "text-[hsl(var(--quiz-highlight))]";
+const scratchLabelCls = "block text-[hsl(var(--article-body))] text-base font-medium mb-1.5";
+const scratchFieldCls = "bg-background/60 border-border/20 text-[hsl(var(--article-body))]";
+const choiceCls = "bg-[hsl(var(--quiz-highlight))] text-accent-foreground hover:text-accent-foreground hover:bg-[hsl(var(--quiz-highlight))] font-bold whitespace-normal";
+const emptyEmployer = (): ScratchEmployer => ({ startDate: "", endDate: "", companyName: "", position: "" });
+const emptyEducation = (): ScratchEducation => ({ title: "", dateRange: "" });
+const credentialLabels = (items?: CredentialItem[] | string): string[] => typeof items === "string" ? (items.trim() ? [items] : []) :
+  (items || []).map((item) => typeof item === "string" ? item : [item.title || item.name, item.dateRange || item.dates].filter(Boolean).join(" — ")).filter(Boolean);
+
+function ScratchField({ id, label, value, onChange, placeholder, type = "text", required = false }: {
+  id: string; label: string; value: string; onChange: (value: string) => void; placeholder?: string; type?: string; required?: boolean;
+}) {
+  return <div><label htmlFor={id} className={scratchLabelCls}>{label}</label>
+    <Input id={id} type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} required={required} className={scratchFieldCls} /></div>;
+}
 
 const ResumeModifierPage = () => {
   const [checking, setChecking] = useState(true);
@@ -50,6 +74,23 @@ const ResumeModifierPage = () => {
   const [result, setResult] = useState<ResultData | null>(null);
   const [docxBlob, setDocxBlob] = useState<Blob | null>(null);
   const [docxName, setDocxName] = useState("Tailored-PM-Resume.docx");
+  const [docxUrl, setDocxUrl] = useState("");
+  const [view, setView] = useState<"options" | "modify">("options");
+  const [scratchOpen, setScratchOpen] = useState(false);
+  const [scratchSubmitting, setScratchSubmitting] = useState(false);
+  const [scratchError, setScratchError] = useState("");
+  const [resultMode, setResultMode] = useState<"modify" | "create_from_scratch">("modify");
+  const [scratch, setScratch] = useState<ScratchSubmission>({
+    firstName: "", lastName: "", address: "", phone: "", email: "",
+    employers: [emptyEmployer()], education: [emptyEducation()], accolades: "", idealPosition: "",
+  });
+
+  useEffect(() => {
+    if (!docxBlob) { setDocxUrl(""); return; }
+    const url = URL.createObjectURL(docxBlob);
+    setDocxUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [docxBlob]);
 
   useEffect(() => {
     const prevTitle = document.title;
@@ -79,7 +120,7 @@ const ResumeModifierPage = () => {
     } else setPassError("Invalid password. Please try again.");
   };
 
-  const handleLock = () => { sessionStorage.removeItem(RESUME_MODIFIER_STORAGE_KEY); setPassword(null); setResult(null); setDocxBlob(null); };
+  const handleLock = () => { sessionStorage.removeItem(RESUME_MODIFIER_STORAGE_KEY); setPassword(null); setResult(null); setDocxBlob(null); setView("options"); setScratchOpen(false); };
 
   const handleResumeFile = async (file: File | undefined) => {
     setError("");
@@ -114,7 +155,7 @@ const ResumeModifierPage = () => {
     if (v) { setError(v); return; }
     const notes = jobNotes.trim();
     const body = {
-      password, clientName: clientName.trim(), clientEmail: clientEmail.trim(),
+      password, mode: "modify", clientName: clientName.trim(), clientEmail: clientEmail.trim(),
       baseResumeFileName: resumeFile?.name || "", baseResumeText, baseResumeBase64,
       jobInputType,
       jobText: jobInputType === "paste" ? jobText : notes,
@@ -122,8 +163,15 @@ const ResumeModifierPage = () => {
       jobScreenshotDataUrl: jobInputType === "screenshot" ? jobScreenshotDataUrl : "",
       jobScreenshotFileName: jobInputType === "screenshot" ? jobScreenshotFileName : "",
     };
-    setSubmitting(true); setResult(null); setDocxBlob(null);
+    setSubmitting(true); setResultMode("modify"); setResult(null); setDocxBlob(null);
     try {
+      await requestResume(body, "Tailored-PM-Resume.docx");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally { setSubmitting(false); }
+  };
+
+  const requestResume = async (body: object, fallbackName: string) => {
       const res = await fetch(RESUME_MODIFIER_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const raw = await res.json().catch(() => null);
       const data: ResultData | null = Array.isArray(raw) ? raw[0] : raw;
@@ -131,12 +179,40 @@ const ResumeModifierPage = () => {
         throw new Error(data?.message || `The resume service returned an error (${res.status}).`);
       }
       const blob = base64ToBlob(data.docxBase64);
-      const name = data.fileName || "Tailored-PM-Resume.docx";
+      const name = data.fileName || fallbackName;
       setDocxBlob(blob); setDocxName(name); setResult(data);
       downloadBlob(blob, name);
+  };
+
+  const handleScratchSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const validationError = validateScratchSubmission(scratch);
+    if (validationError) { setScratchError(validationError); return; }
+    if (!password) return;
+    const body = {
+      password, mode: "create_from_scratch",
+      firstName: scratch.firstName.trim(), lastName: scratch.lastName.trim(), address: scratch.address.trim(),
+      phone: scratch.phone.trim(), email: scratch.email.trim(),
+      employers: scratch.employers.map((employer) => ({
+        startDate: employer.startDate.trim(), endDate: employer.endDate.trim(), companyName: employer.companyName.trim(), position: employer.position.trim(),
+      })),
+      education: scratch.education.filter((entry) => entry.title.trim() || entry.dateRange.trim()).map((entry) => ({ title: entry.title.trim(), dateRange: entry.dateRange.trim() })),
+      accolades: scratch.accolades.trim(), idealPosition: scratch.idealPosition.trim(),
+    };
+    setScratchSubmitting(true); setScratchError(""); setResultMode("create_from_scratch"); setResult(null); setDocxBlob(null);
+    try {
+      await requestResume(body, "PM-Resume.docx");
+      setScratchOpen(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-    } finally { setSubmitting(false); }
+      setScratchError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally { setScratchSubmitting(false); }
+  };
+
+  const updateEmployer = (index: number, key: keyof ScratchEmployer, value: string) => {
+    setScratch((current) => ({ ...current, employers: current.employers.map((entry, i) => i === index ? { ...entry, [key]: value } : entry) }));
+  };
+  const updateEducation = (index: number, key: keyof ScratchEducation, value: string) => {
+    setScratch((current) => ({ ...current, education: current.education.map((entry, i) => i === index ? { ...entry, [key]: value } : entry) }));
   };
 
   const tabs: { id: JobInputType; label: string; Icon: typeof FileText }[] = [
@@ -145,8 +221,13 @@ const ResumeModifierPage = () => {
     { id: "url", label: "Enter Job URL", Icon: Link2 },
   ];
 
-  const skills = result?.rewrittenResume?.skills;
+  const skills = result?.rewrittenResume?.skills ?? result?.skills;
   const skillList = Array.isArray(skills) ? skills : skills ? String(skills).split(/,\s*/) : [];
+  const certifications = Array.from(new Set(["PMP", "PSM", "CPMAI", ...credentialLabels(result?.rewrittenResume?.certifications ?? result?.certifications)]));
+  const education = credentialLabels(result?.rewrittenResume?.education ?? result?.education);
+  const accolades = credentialLabels(result?.rewrittenResume?.accolades ?? result?.accolades);
+  const summary = result?.rewrittenResume?.summary ?? result?.summary;
+  const experience = result?.rewrittenResume?.experience ?? result?.experience;
 
   return (
     <div className="min-h-screen">
@@ -172,15 +253,16 @@ const ResumeModifierPage = () => {
                     <h1 className="text-2xl md:text-3xl font-bold text-[#FFE361]">
                       PM Consultant Resume Modifier
                     </h1>
-                    <p className="text-white/80 mt-2">
+                    {view === "modify" && <p className="text-white/80 mt-2">
                       Upload your base resume, tell us the target job, and get a tailored Word (.docx) resume.
-                    </p>
+                    </p>}
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={handleLock}
+                    disabled={submitting || scratchSubmitting}
                     className="self-start sm:self-center shrink-0 border-white/25 bg-black/40 hover:bg-white/10 text-white px-4 py-2"
                   >
                     <Lock className="w-4 h-4 mr-1.5" /> Lock Page
@@ -188,6 +270,21 @@ const ResumeModifierPage = () => {
                 </div>
               </div>
 
+              {view === "options" && (
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Button className={`${choiceCls} min-h-24 h-auto text-lg px-6 py-5 gap-3`} onClick={() => { setView("modify"); setResult(null); setDocxBlob(null); }}>
+                    <FileText className="w-6 h-6 shrink-0" /> Modify my resume
+                  </Button>
+                  <Button variant="outline" className="min-h-24 h-auto text-lg px-6 py-5 gap-3 whitespace-normal border-border/40 bg-background/60 text-[hsl(var(--article-body))]" onClick={() => { setScratchError(""); setScratchOpen(true); }}>
+                    <FilePlus2 className={`w-6 h-6 shrink-0 ${goldCls}`} /> Create resume from scratch
+                  </Button>
+                </div>
+              )}
+
+              <div hidden={view !== "modify"} className="space-y-4">
+              <Button type="button" variant="ghost" disabled={submitting} onClick={() => setView("options")} className="text-[hsl(var(--article-body))]">
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to options
+              </Button>
               <form onSubmit={handleSubmit} className="volumetric-glass rounded-2xl p-6 md:p-8 space-y-6">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div><label className={labelCls} htmlFor="rm-name">Your Name</label>
@@ -247,46 +344,110 @@ const ResumeModifierPage = () => {
                   <p className="text-sm text-white/80 text-center">Grok is matching the Google Drive Job Database &amp; rewriting your resume into a tailored Word .docx (approx. 20–40s)...</p>
                 )}
               </form>
+              </div>
+
+              <Dialog open={scratchOpen} onOpenChange={(open) => { if (!scratchSubmitting) setScratchOpen(open); }}>
+                <DialogContent aria-describedby={undefined} className="volumetric-glass !fixed !bg-background/95 w-[calc(100%-2rem)] max-w-3xl max-h-[90dvh] overflow-y-auto touch-scroll rounded-[8px] p-5 sm:p-8 [&>button]:!absolute">
+                  <DialogHeader className="pr-6"><DialogTitle className={`text-2xl font-bold leading-tight ${goldCls}`}>Create Resume From Scratch</DialogTitle></DialogHeader>
+                  <form onSubmit={handleScratchSubmit} className="space-y-7">
+                    <fieldset disabled={scratchSubmitting} className="space-y-7 min-w-0">
+                      <section className="space-y-4">
+                        <h2 className={`text-xl font-bold ${goldCls}`}>Tell me about yourself</h2>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          {([
+                            ["firstName", "First name", "text"], ["lastName", "Last name", "text"], ["address", "Address", "text"],
+                            ["phone", "Phone number", "tel"], ["email", "Email address", "email"],
+                          ] as const).map(([key, label, type]) => <ScratchField key={key} id={`scratch-${key}`} label={label} type={type} required value={scratch[key]} onChange={(value) => setScratch((current) => ({ ...current, [key]: value }))} />)}
+                        </div>
+                      </section>
+                      <section className="space-y-4">
+                        <h2 className={`text-xl font-bold ${goldCls}`}>Employment</h2>
+                        {scratch.employers.map((employer, index) => (
+                          <div key={index} className="space-y-3 border-b border-border/15 pb-5">
+                            <div className="flex items-center justify-between gap-3">
+                              <h3 className={`font-semibold ${goldCls}`}>Employer {index + 1}</h3>
+                              {scratch.employers.length > 1 && <Button type="button" variant="ghost" size="icon" title={`Remove employer ${index + 1}`} aria-label={`Remove employer ${index + 1}`} onClick={() => setScratch((current) => ({ ...current, employers: current.employers.filter((_, i) => i !== index) }))}><Trash2 className="w-4 h-4" /></Button>}
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              <ScratchField id={`employer-${index}-start`} label="Start date" placeholder="Jan 2022" required value={employer.startDate} onChange={(value) => updateEmployer(index, "startDate", value)} />
+                              <ScratchField id={`employer-${index}-end`} label="End date" placeholder="Present or Dec 2024" required value={employer.endDate} onChange={(value) => updateEmployer(index, "endDate", value)} />
+                              <ScratchField id={`employer-${index}-company`} label="Company name" required value={employer.companyName} onChange={(value) => updateEmployer(index, "companyName", value)} />
+                              <ScratchField id={`employer-${index}-position`} label="Position" required value={employer.position} onChange={(value) => updateEmployer(index, "position", value)} />
+                            </div>
+                          </div>
+                        ))}
+                        <Button type="button" className={`${choiceCls} h-auto min-h-11 py-3`} onClick={() => setScratch((current) => ({ ...current, employers: [...current.employers, emptyEmployer()] }))}>++ Add Employer</Button>
+                      </section>
+                      <section className="space-y-4">
+                        <h2 className={`text-xl font-bold ${goldCls}`}>Education &amp; certifications</h2>
+                        <p className="text-sm text-[hsl(var(--article-body))] border-l-2 border-[hsl(var(--quiz-highlight))] pl-3">Note: PMP, PSM, and CPMAI certifications are added automatically.</p>
+                        {scratch.education.map((entry, index) => (
+                          <div key={index} className="space-y-3 border-b border-border/15 pb-5">
+                            <div className="flex items-center justify-between gap-3">
+                              <h3 className={`font-semibold ${goldCls}`}>Education / Certification {index + 1}</h3>
+                              {scratch.education.length > 1 && <Button type="button" variant="ghost" size="icon" title={`Remove education ${index + 1}`} aria-label={`Remove education ${index + 1}`} onClick={() => setScratch((current) => ({ ...current, education: current.education.filter((_, i) => i !== index) }))}><Trash2 className="w-4 h-4" /></Button>}
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              <ScratchField id={`education-${index}-title`} label="Education / Certification title" value={entry.title} onChange={(value) => updateEducation(index, "title", value)} />
+                              <ScratchField id={`education-${index}-dates`} label="Date range" placeholder="2016 – 2020" value={entry.dateRange} onChange={(value) => updateEducation(index, "dateRange", value)} />
+                            </div>
+                          </div>
+                        ))}
+                        <Button type="button" className={`${choiceCls} h-auto min-h-11 py-3 max-w-full`} onClick={() => setScratch((current) => ({ ...current, education: [...current.education, emptyEducation()] }))}>++ Add Education / Certification</Button>
+                        <div><label htmlFor="scratch-accolades" className={scratchLabelCls}>Any other accolades</label><Textarea id="scratch-accolades" value={scratch.accolades} onChange={(e) => setScratch((current) => ({ ...current, accolades: e.target.value }))} className={scratchFieldCls} rows={3} /></div>
+                      </section>
+                      <div><label htmlFor="scratch-ideal" className={scratchLabelCls}>Describe your ideal project management position</label><Textarea id="scratch-ideal" required value={scratch.idealPosition} onChange={(e) => setScratch((current) => ({ ...current, idealPosition: e.target.value }))} placeholder="Describe the target PM role, industry, tools, or cloud/AI/data focus you want..." className={scratchFieldCls} rows={5} /></div>
+                    </fieldset>
+                    {scratchError && <p role="alert" className="text-sm text-destructive">{scratchError}</p>}
+                    <Button type="submit" disabled={scratchSubmitting} className={`${choiceCls} w-full h-auto min-h-12 py-3`}>
+                      {scratchSubmitting ? <><Loader2 className="w-4 h-4 mr-2 shrink-0 animate-spin" /> Generating with Grok 4.7 (may take ~60s)...</> : "Create My Resume"}
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
 
               {result && docxBlob && (
                 <div className="volumetric-glass rounded-2xl p-6 md:p-8 space-y-5 border-2 border-[#FFE361]/60">
-                  <h2 className="text-2xl font-bold text-[#FFE361]">Your Tailored Resume Is Ready</h2>
+                  <h2 className={`text-2xl font-bold ${goldCls}`}>{resultMode === "modify" ? "Your Tailored Resume Is Ready" : "Your Resume Is Ready"}</h2>
+                  <span className="inline-flex max-w-full break-all border border-[hsl(var(--quiz-highlight))]/60 bg-background/60 rounded-[6px] px-3 py-2 text-[hsl(var(--article-body))] font-semibold">AI Model: {result.modelUsed || "grok-4.7"}</span>
                   <Button type="button" onClick={() => downloadBlob(docxBlob, docxName)}
-                    className="w-full h-12 font-bold text-black bg-gradient-to-r from-red-500 to-[#FFE361] hover:opacity-90">
-                    <Download className="w-5 h-5 mr-2" /> Download Word (.docx) Resume
+                    className={`${choiceCls} w-full h-auto min-h-12 py-3`}>
+                    <Download className="w-5 h-5 mr-2 shrink-0" /> Open / Download Word (.docx) Resume
                   </Button>
+                  {docxUrl && <a href={docxUrl} target="_blank" rel="noopener noreferrer" className="block underline break-all text-[hsl(var(--article-body))]">Open {docxName}</a>}
                   <div className="grid sm:grid-cols-2 gap-3 text-white">
                     <div><span className="text-white/60 text-sm">Target Job</span><p className="font-semibold">{result.targetJobTitle || result.jobTitle || "—"}</p></div>
                     <div><span className="text-white/60 text-sm">Company</span><p className="font-semibold">{result.targetCompany || result.company || "—"}</p></div>
                   </div>
                   {result.matchSummary && <div><h3 className="text-lg font-bold text-[#FFE361]">Tailoring Summary</h3><p className="text-white/90 whitespace-pre-line">{result.matchSummary}</p></div>}
-                  {!!result.matchedJobs?.length && (
-                    <div><h3 className="text-lg font-bold text-[#FFE361]">Matched Google Drive Database Jobs</h3>
+                  <div><h3 className={`text-lg font-bold ${goldCls}`}>Matched Job Board Roles</h3>
+                    {!!result.matchedJobs?.length ? (
                       <ul className="list-disc pl-5 text-white/90 space-y-1">
                         {result.matchedJobs.map((j, i) => (
-                          <li key={i}>{typeof j === "string" ? j : <>{j.title}{j.company ? ` — ${j.company}` : ""}{j.score != null ? ` (${j.score})` : ""}</>}</li>
+                          <li key={i}>{typeof j === "string" ? j : <>{j.url && /^https?:\/\//i.test(j.url) ? <a href={j.url} target="_blank" rel="noopener noreferrer" className="underline">{j.title}</a> : j.title}{j.company ? ` — ${j.company}` : ""}{j.score != null ? ` (${j.score})` : ""}</>}</li>
                         ))}
-                      </ul></div>
-                  )}
-                  {result.rewrittenResume && (
-                    <div className="rounded-xl bg-black/30 border border-white/10 p-4 space-y-4">
-                      <h3 className="text-lg font-bold text-[#FFE361]">Rewritten Resume Preview</h3>
-                      {result.rewrittenResume.summary && <p className="text-white/90 whitespace-pre-line">{result.rewrittenResume.summary}</p>}
-                      {!!result.rewrittenResume.experience?.length && (
+                      </ul>
+                    ) : <p className="text-[hsl(var(--article-body))]">No matched roles returned.</p>}
+                  </div>
+                    <div className="space-y-4 text-[hsl(var(--article-body))]">
+                      <div><h3 className={`text-lg font-bold ${goldCls}`}>Certifications</h3><ul className="list-disc pl-5">{certifications.map((item, i) => <li key={i}>{item}</li>)}</ul></div>
+                      <div><h3 className={`text-lg font-bold ${goldCls}`}>Education</h3>{education.length ? <ul className="list-disc pl-5">{education.map((item, i) => <li key={i}>{item}</li>)}</ul> : <p>No education returned.</p>}</div>
+                      {!!accolades.length && <div><h3 className={`text-lg font-bold ${goldCls}`}>Accolades</h3><ul className="list-disc pl-5">{accolades.map((item, i) => <li key={i}>{item}</li>)}</ul></div>}
+                      <div><h3 className={`text-lg font-bold ${goldCls}`}>Summary</h3><p className="whitespace-pre-line">{summary || "No summary returned."}</p></div>
+                      <h3 className={`text-lg font-bold ${goldCls}`}>Experience</h3>
+                      {experience?.length ? (
                         <div className="space-y-3">
-                          {result.rewrittenResume.experience.map((x, i) => typeof x === "string" ? <p key={i} className="text-white/90">{x}</p> : (
+                          {experience.map((x, i) => typeof x === "string" ? <p key={i} className="text-white/90">{x}</p> : (
                             <div key={i}>
                               <p className="font-semibold text-white">{[x.title, x.company].filter(Boolean).join(" — ")}{x.dates ? <span className="text-white/60 font-normal"> · {x.dates}</span> : null}</p>
                               {!!x.bullets?.length && <ul className="list-disc pl-5 text-white/85 text-sm space-y-0.5">{x.bullets.map((b, k) => <li key={k}>{b}</li>)}</ul>}
                             </div>
                           ))}
                         </div>
-                      )}
-                      {!!skillList.length && (
-                        <div className="flex flex-wrap gap-2">{skillList.map((s, i) => <span key={i} className="text-xs px-2 py-1 rounded-[6px] bg-[#06b6d4]/15 text-white border border-[#06b6d4]/40">{s}</span>)}</div>
-                      )}
+                      ) : <p>No experience returned.</p>}
+                      <h3 className={`text-lg font-bold ${goldCls}`}>Skills</h3>
+                      {skillList.length ? <div className="flex flex-wrap gap-2">{skillList.map((s, i) => <span key={i} className="text-xs px-2 py-1 rounded-[6px] bg-secondary border border-border/20">{s}</span>)}</div> : <p>No skills returned.</p>}
                     </div>
-                  )}
                 </div>
               )}
             </>

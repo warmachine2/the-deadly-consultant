@@ -1,5 +1,12 @@
 # Quiz ten-question diagnostic
 
+# KAN-522 Resume tools
+
+- [x] Add unlocked options and a repeatable scratch-resume dialog without changing the Modify form or password gate.
+- [x] Validate scratch submissions and share model, download, and complete resume previews across both tools.
+- [x] All 248 tests pass and preview build is clean; desktop/mobile simulated submissions, downloads, repeatable fields, back navigation and lock verified. Not published.
+- [ ] Verify real n8n generation for both tools: blocked by unavailable access password; browser checks used isolated test doubles, not live webhook calls.
+
 # KAN-491 Signup unlock expiration
 
 - [x] Replace permanent unlock flags with 24h timestamps in the HTML loader and React helpers, retaining board-route suppression and native Kit submission.
