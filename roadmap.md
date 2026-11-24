@@ -2,6 +2,8 @@
 
 # KAN-531 Academy banner polish
 
+- [x] Pixel polish: tightened the badge cutout and verified it on a light background; mobile gap is 12px, desktop top/bottom clearance is 14–16px with natural proportions. Both placements pass explicit bounds checks at 390, 768, 1280, 1440, and 1920px without text overlap or overflow; 251 tests pass and automatic build is clean. Preview only.
+
 - [x] Extract the original badge on transparency and restore compact overlapping-band proportions with coded copy and mobile stacking.
 - [x] All 251 tests pass; automatic build is clean. Both placements verified at 390, 768, 1280, 1440, and 1920px: desktop artwork 221–245px, natural badge proportions, no text clipping/overlap/overflow, and booking link verified. At 768px viewport the 716px container correctly uses the stacked layout. Preview only.
 

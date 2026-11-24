@@ -238,6 +238,7 @@ All colors MUST be HSL.
   aspect-ratio: 986 / 1026;
   object-fit: contain;
   align-self: center;
+  margin-bottom: 12px;
 }
 .academy-banner-content {
   position: relative;
@@ -291,10 +292,13 @@ All colors MUST be HSL.
 }
 @container academy-banner (min-width: 768px) {
   .academy-banner-artwork {
-    grid-template-columns: calc(clamp(148px, 16.5cqw, 225px) + clamp(12px, 2cqw, 36px)) minmax(0, 1fr);
+    grid-template-columns: calc(clamp(142px, 15.2cqw, 204px) + clamp(12px, 2cqw, 36px)) minmax(0, 1fr);
+    /* Reserve the natural image height before applying the 4px height guard. */
+    grid-template-rows: minmax(calc(clamp(142px, 15.2cqw, 204px) * 1026 / 986 + 4px), auto);
     align-items: center;
-    height: clamp(190px, 18cqw, 245px);
-    padding: clamp(10px, 1.1cqw, 16px) 0;
+    min-height: clamp(192px, 17.5cqw, 238px);
+    height: auto;
+    padding: clamp(10px, 1cqw, 14px) 0;
     background-size: 20px 20px, 20px 20px, 100% 100%;
   }
   .academy-banner-artwork::before {
@@ -303,7 +307,13 @@ All colors MUST be HSL.
     inset: clamp(10px, 1.1cqw, 16px) 0 clamp(10px, 1.1cqw, 16px) 12%;
     background: var(--academy-band);
   }
-  .academy-banner-badge { width: clamp(148px, 16.5cqw, 225px); margin-left: clamp(12px, 2cqw, 36px); }
+  .academy-banner-badge {
+    width: clamp(142px, 15.2cqw, 204px);
+    height: auto;
+    max-height: calc(100% - 4px);
+    margin-left: clamp(12px, 2cqw, 36px);
+    margin-bottom: 0;
+  }
   .academy-banner-content { padding: 8px clamp(12px, 1.6cqw, 26px); background: none; }
   .academy-banner-title { font-size: clamp(15px, 2cqw, 30px); }
   .academy-banner-subtitle { font-size: clamp(11px, 1.12cqw, 16.5px); margin-top: clamp(6px, .6cqw, 10px); }
