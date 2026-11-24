@@ -180,7 +180,7 @@ ${nav([
 </section>
 <section>
 <h2>PM Consulting Readiness Quiz</h2>
-<p>Free 3-minute PM consulting readiness audit: check PMP &amp; enterprise contract eligibility (3+ years experience benchmark), audit your resume &amp; portfolio against live $85&ndash;$120/hr GTA &amp; North American specs, and unlock a custom 0&ndash;100 readiness score plus the V4 90-day pivot roadmap PDF.</p>
+<p>Free 3-minute PM consulting readiness audit: check PMP &amp; enterprise contract eligibility (3+ years experience benchmark), audit your resume &amp; portfolio against live $85&ndash;$120/hr GTA &amp; North American specs, and unlock a custom 0&ndash;100 readiness score plus the V5 90-day pivot roadmap PDF.</p>
 <p><a href="/are-you-ready-to-pivot-to-pm-consulting">Take the PM Consulting Readiness Quiz</a></p>
 </section>
 </main>
@@ -238,7 +238,7 @@ const QUIZ_BODY = `<main class="container mx-auto px-4 pt-24">
 <ul>
 <li>Check Your PMP &amp; Enterprise Contract Eligibility (3+ Years Experience Benchmark)</li>
 <li>Audit Your Resume &amp; Portfolio Against Live $85&ndash;$120/Hr GTA &amp; North American Specs</li>
-<li>Unlock Your Custom 0&ndash;100 Readiness Score + The V4 90-Day Pivot Roadmap PDF</li>
+<li>Unlock Your Custom 0&ndash;100 Readiness Score + The V5 90-Day Pivot Roadmap PDF</li>
 </ul>
 </section>
 <section>
@@ -336,7 +336,7 @@ export const SEO_PAGES: SeoPage[] = [
     file: "are-you-ready-to-pivot-to-pm-consulting.html",
     title: `PM Consulting Readiness Quiz &mdash; Free 3-Minute Audit | ${BRAND}`,
     description:
-      "Free 10-question PM consulting diagnostic: check PMP &amp; enterprise contract eligibility (3+ years benchmark), audit your resume against live $85&ndash;$120/hr GTA specs, and unlock a 0&ndash;100 readiness score plus the V4 90-day pivot roadmap PDF.",
+      "Free 10-question PM consulting diagnostic: check PMP &amp; enterprise contract eligibility (3+ years benchmark), audit your resume against live $85&ndash;$120/hr GTA specs, and unlock a 0&ndash;100 readiness score plus the V5 90-day pivot roadmap PDF.",
     canonical: origin("/are-you-ready-to-pivot-to-pm-consulting"),
     body: QUIZ_BODY,
   },

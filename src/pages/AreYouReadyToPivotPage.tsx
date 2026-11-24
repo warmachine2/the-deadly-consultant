@@ -46,7 +46,7 @@ import {
 const LANDING_CHECKMARKS = [
   "Check Your PMP & Enterprise Contract Eligibility (3+ Years Experience Benchmark)",
   "Audit Your Resume & Portfolio Against Live $85–$120/Hr GTA & North American Specs",
-  "Unlock Your Custom 0–100 Readiness Score + The V4 90-Day Pivot Roadmap PDF",
+  "Unlock Your Custom 0–100 Readiness Score + The V5 90-Day Pivot Roadmap PDF",
 ];
 
 const AreYouReadyToPivotPage = () => {

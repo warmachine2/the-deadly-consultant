@@ -99,7 +99,7 @@ const FreeWorkshopJoinPage = () => {
             </h2>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <a
-                href="https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf"
+                href="/V5_Roadmap_2026.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
               >

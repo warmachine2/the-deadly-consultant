@@ -15,7 +15,7 @@ const TIER_ACCENTS = {
   emerging: "border-[hsl(var(--quiz-emerging))] bg-[hsl(var(--quiz-emerging)/0.1)]",
   foundation: "border-[hsl(var(--quiz-foundation))] bg-[hsl(var(--quiz-foundation)/0.1)]",
 };
-const PDF_URL = "/V4_Roadmap_2026.pdf";
+const PDF_URL = "/V5_Roadmap_2026.pdf";
 const actionClass = "h-auto min-h-14 whitespace-normal px-5 py-4 text-base font-semibold rounded-[8px] border-border/30 text-foreground";
 
 const QuizResults = ({ score, mqlQualified, rolePond }: { score: number; mqlQualified: boolean; rolePond: string }) => {
@@ -59,7 +59,7 @@ const QuizResults = ({ score, mqlQualified, rolePond }: { score: number; mqlQual
             <CalendlyInlineWidget />
           </section>
           <div className="grid sm:grid-cols-2 gap-3">
-            <Button asChild variant="outline" className={actionClass}><a href={PDF_URL} target="_blank" rel="noopener noreferrer"><Download className="w-5 h-5 shrink-0" /> Download V4 90-Day Pivot Roadmap (PDF) ↓</a></Button>
+            <Button asChild variant="outline" className={actionClass}><a href={PDF_URL} target="_blank" rel="noopener noreferrer"><Download className="w-5 h-5 shrink-0" /> Download V5 90-Day Pivot Roadmap (PDF) ↓</a></Button>
             <Button asChild variant="outline" className={actionClass}><Link to="/ai-bi-fintech-pm-job-alerts-repo">Browse Live $85–$120/hr Contract Roles <ArrowRight className="w-5 h-5 shrink-0" /></Link></Button>
           </div>
         </>
@@ -73,7 +73,7 @@ const QuizResults = ({ score, mqlQualified, rolePond }: { score: number; mqlQual
               <h3 className="text-xl font-semibold text-[hsl(var(--quiz-highlight))]">Join the Next Live Free PM Consulting Workshop</h3>
               <Button asChild className={`highlight-glow-button ${actionClass}`}><Link to="/free-workshop">Register for Free Masterclass <ArrowRight className="w-5 h-5 shrink-0" /></Link></Button>
             </div>
-            <Button asChild variant="outline" className={actionClass}><a href={PDF_URL} target="_blank" rel="noopener noreferrer"><Download className="w-5 h-5 shrink-0" /> Download The V4 90-Day Foundation Roadmap (PDF) ↓</a></Button>
+            <Button asChild variant="outline" className={actionClass}><a href={PDF_URL} target="_blank" rel="noopener noreferrer"><Download className="w-5 h-5 shrink-0" /> Download The V5 90-Day Foundation Roadmap (PDF) ↓</a></Button>
           </section>
           <CriticalResourcesSection />
         </>

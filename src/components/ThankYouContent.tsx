@@ -71,14 +71,14 @@ const ThankYouContent = () => {
           Grab the full roadmap guide and start planning your pivot today.
         </p>
         <a
-          href="https://www.zerotopmconsultant.com/V4_Roadmap_2026.pdf"
+          href="/V5_Roadmap_2026.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="flex justify-center"
         >
           <button className="highlight-glow-button inline-flex items-center justify-center gap-2 px-6 py-3.5 font-bold text-white text-base md:text-lg tracking-wide shadow-none">
             <FileText className="w-5 h-5" />
-            Download the 2026 BI-FinTech Consulting Roadmap PDF
+            Download the 2026 Data & AI Orchestration PM Consulting Roadmap PDF
           </button>
         </a>
       </div>
