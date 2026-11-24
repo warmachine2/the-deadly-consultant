@@ -45,8 +45,8 @@ export default function PostModal({
 
           <div className={`p-4 sm:p-8 prose prose-invert max-w-none [&_iframe]:w-full [&_iframe]:h-auto [&_iframe]:max-w-full [&_iframe]:rounded-lg [&_iframe]:shadow-lg [&_figure]:glass-effect [&_figure]:rounded-3xl [&_figure]:overflow-hidden [&_div[class*='kg-embed']]:glass-effect [&_div[class*='kg-embed']]:rounded-3xl [&_div[class*='kg-embed']]:overflow-hidden ${
             isVertical
-              ? "[&_iframe]:aspect-[9/16] [&_iframe]:max-w-[380px] md:[&_iframe]:max-w-[440px] [&_iframe]:mx-auto"
-              : "[&_iframe]:aspect-video"
+              ? "[&_iframe[src*='youtube']]:aspect-[9/16] [&_iframe[src*='youtube']]:max-w-[380px] md:[&_iframe[src*='youtube']]:max-w-[440px] [&_iframe]:mx-auto"
+              : "[&_iframe[src*='youtube']]:aspect-video"
           }`}>
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
@@ -56,10 +56,8 @@ export default function PostModal({
             ) : (
               <div className="dynamic-page-content">
               <style>{`
-                .dynamic-page-content.vertical-embed iframe,
-                .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
-                .dynamic-page-content .vertical-embed iframe,
-                .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
+                                .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
+                                .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
                   display: block !important;
                   width: 100% !important;
                   max-width: 380px !important;
@@ -67,6 +65,37 @@ export default function PostModal({
                   height: auto !important;
                   margin: 0 auto !important;
                   border-radius: 1rem !important;
+                }
+              
+                /* Per-iframe orientation from the embed's own attributes */
+                .dynamic-page-content iframe[src*="youtube.com/embed"][width="200"][height="113"],
+                .dynamic-page-content iframe[src*="youtube.com/embed"][width="560"][height="315"] {
+                  display: block !important;
+                  width: 100% !important;
+                  max-width: 800px !important;
+                  aspect-ratio: 16 / 9 !important;
+                  height: auto !important;
+                  margin: 0 auto !important;
+                }
+                .dynamic-page-content iframe[src*="youtube.com/embed"][width="113"][height="200"],
+                .dynamic-page-content iframe[src*="youtube.com/embed/shorts"] {
+                  display: block !important;
+                  width: 100% !important;
+                  max-width: 380px !important;
+                  aspect-ratio: 9 / 16 !important;
+                  height: auto !important;
+                  margin: 0 auto !important;
+                }
+                @media (min-width: 768px) {
+                  .dynamic-page-content iframe[src*="youtube.com/embed"][width="113"][height="200"],
+                  .dynamic-page-content iframe[src*="youtube.com/embed/shorts"] {
+                    max-width: 440px !important;
+                  }
+                }
+                .dynamic-page-content iframe[src*="linkedin.com"] {
+                  aspect-ratio: auto !important;
+                  max-width: 504px !important;
+                  margin: 0 auto !important;
                 }
               `}</style>
               <div

@@ -1,4 +1,14 @@
-import { sortBlogPosts } from "@/lib/blogOrdering";
+import { sortBlogPosts, PINNED_POST_SLUGS } from "@/lib/blogOrdering";
+
+const dedupePosts = <T extends { id: string; slug: string }>(list: T[]): T[] => {
+  const seen = new Set<string>();
+  return list.filter((p) => {
+    if (seen.has(p.slug) || seen.has(p.id)) return false;
+    seen.add(p.slug);
+    seen.add(p.id);
+    return true;
+  });
+};
 // Index page - Main blog home
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -52,8 +62,12 @@ const Index = () => {
       } catch {}
       setLoading(true);
       try {
-        const response = await fetchPosts(1, 20);
-        const transformedPosts = response.posts.map(transformGhostPost);
+        const [response, pinned] = await Promise.all([
+          fetchPosts(1, 20),
+          Promise.all(PINNED_POST_SLUGS.map((slug) => fetchPostBySlug(slug).catch(() => null))),
+        ]);
+        const pinnedPosts = pinned.filter((p): p is NonNullable<typeof p> => p !== null).map(transformGhostPost);
+        const transformedPosts = dedupePosts([...pinnedPosts, ...response.posts.map(transformGhostPost)]);
         setPosts(transformedPosts);
         setFilteredPosts(transformedPosts);
         setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
@@ -107,7 +121,7 @@ const Index = () => {
       const nextPage = page + 1;
       const response = await fetchPosts(nextPage, 20);
       const transformedPosts = response.posts.map(transformGhostPost);
-      setPosts((prev) => [...prev, ...transformedPosts]);
+      setPosts((prev) => dedupePosts([...prev, ...transformedPosts]));
       setPage(nextPage);
       setHasMore(response.meta.pagination.page < response.meta.pagination.pages);
     } catch (error) {

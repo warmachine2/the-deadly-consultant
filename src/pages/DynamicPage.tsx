@@ -197,7 +197,38 @@ const DynamicPage = () => {
                   .roadmap-thank-you-content a {
                     color: #FCDC49 !important;
                   }
-                `}</style>
+                
+                /* Per-iframe orientation from the embed's own attributes */
+                .dynamic-page-content iframe[src*="youtube.com/embed"][width="200"][height="113"],
+                .dynamic-page-content iframe[src*="youtube.com/embed"][width="560"][height="315"] {
+                  display: block !important;
+                  width: 100% !important;
+                  max-width: 800px !important;
+                  aspect-ratio: 16 / 9 !important;
+                  height: auto !important;
+                  margin: 0 auto !important;
+                }
+                .dynamic-page-content iframe[src*="youtube.com/embed"][width="113"][height="200"],
+                .dynamic-page-content iframe[src*="youtube.com/embed/shorts"] {
+                  display: block !important;
+                  width: 100% !important;
+                  max-width: 380px !important;
+                  aspect-ratio: 9 / 16 !important;
+                  height: auto !important;
+                  margin: 0 auto !important;
+                }
+                @media (min-width: 768px) {
+                  .dynamic-page-content iframe[src*="youtube.com/embed"][width="113"][height="200"],
+                  .dynamic-page-content iframe[src*="youtube.com/embed/shorts"] {
+                    max-width: 440px !important;
+                  }
+                }
+                .dynamic-page-content iframe[src*="linkedin.com"] {
+                  aspect-ratio: auto !important;
+                  max-width: 504px !important;
+                  margin: 0 auto !important;
+                }
+              `}</style>
               )}
 
               <style>{`
@@ -265,10 +296,8 @@ const DynamicPage = () => {
                 }
 
                 /* Vertical (Shorts-style) embeds - forced 9:16, centered */
-                .dynamic-page-content.vertical-embed iframe,
-                .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
-                .dynamic-page-content .vertical-embed iframe,
-                .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
+                                .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
+                                .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
                   display: block !important;
                   width: 100% !important;
                   max-width: 380px !important;
@@ -279,10 +308,8 @@ const DynamicPage = () => {
                 }
 
                 @media (min-width: 768px) {
-                  .dynamic-page-content.vertical-embed iframe,
-                  .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
-                  .dynamic-page-content .vertical-embed iframe,
-                  .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
+                                    .dynamic-page-content.vertical-embed iframe[src*="youtube.com/embed"],
+                                    .dynamic-page-content .vertical-embed iframe[src*="youtube.com/embed"] {
                     max-width: 440px !important;
                   }
                 }
