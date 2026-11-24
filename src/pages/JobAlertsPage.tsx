@@ -1830,7 +1830,7 @@ const JobAlertsPage: React.FC = () => {
         {/* Filters Section - Collapsible (Below Analytics, Above Job List) */}
         {!loading && data.length > 0 && (
           <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="mb-6">
-            <div className="volumetric-glass job-board-navy-card rounded-2xl overflow-hidden shadow-lg">
+            <div className="volumetric-glass job-board-navy-glass-filter rounded-2xl overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-5 md:p-6 hover:bg-white/5 transition-colors">
                   <div className="flex items-center gap-3">

@@ -305,6 +305,13 @@ All colors MUST be HSL.
     background: radial-gradient(ellipse at center, transparent 55%, rgba(10, 22, 34, 0.14) 100%);
   }
 
+  /* KAN-524: Filters panel only — lighter logo-navy tint at glass opacity on top of .volumetric-glass.
+     Only adjusts the background fill; .volumetric-glass keeps its backdrop-filter, border,
+     4-tier cyan glow box-shadow, ::before diagonal sheen + micro-stripes, and ::after vignette. */
+  .job-board-navy-glass-filter {
+    background: linear-gradient(145deg, rgba(24, 52, 78, 0.55), rgba(20, 42, 63, 0.58));
+  }
+
   /* KAN-514: Lighten Job Board page background image behind cards by ~20% toward logo navy (#142A3F) */
   body.job-board-theme::before {
     filter: brightness(1.22) contrast(0.94) saturate(1.12);
