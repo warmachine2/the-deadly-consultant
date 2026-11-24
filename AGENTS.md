@@ -1,6 +1,6 @@
 # Architecture rules
 
-- Keep Academy banner sizing in its named inline-size container with a square badge and scoped container-query rules, so both placements scale to their available width without raster stretching or page-level overrides.
+- Keep Academy banner sizing in its named inline-size container with the extracted badge's natural aspect ratio, a compact overlapping desktop band, and scoped container-query rules, so both placements scale without stretching or page-level overrides.
 
 - Keep timestamp-based Kit unlock expiry in `jobBoardGate` and the pre-React HTML loader aligned; subscribe contract links to expiry changes so stale link attributes cannot bypass the signup prompt, while route-level popup suppression stays independent.
 

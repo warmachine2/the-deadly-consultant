@@ -18,21 +18,13 @@ const AcademyBannerCard = ({ className }: AcademyBannerCardProps) => {
     <div className={`volumetric-glass rounded-2xl overflow-hidden shadow-lg w-full ${className || ""}`}>
       <div className="academy-banner-container">
         <div className="academy-banner-artwork">
-          <div className="academy-banner-badge aspect-square rounded-full" aria-label="Data & AI Orchestration PM Accelerator">
-            <svg className="academy-banner-circuit" viewBox="0 0 240 240" fill="none" aria-hidden="true">
-              <path d="M0 65h45l18 18v40H35v35H0M240 65h-40l-20 20v45h30v30h30M45 240v-42l22-22h40v-25M195 240v-45l-25-25h-30v-20M75 0v35l20 20h55l20-20V0M0 195h25l15-15M240 195h-25l-15-15" />
-              <path d="M0 52h51l24 24v34H23v61H0M240 52h-46l-26 26v65h30v30h42M58 240v-35l17-17h44v-30M183 240v-38l-19-19h-35v-26" />
-              <circle cx="95" cy="55" r="4" /><circle cx="150" cy="55" r="4" />
-              <circle cx="35" cy="123" r="4" /><circle cx="210" cy="130" r="4" />
-              <circle cx="107" cy="151" r="4" /><circle cx="140" cy="150" r="4" />
-            </svg>
-            <div className="academy-banner-badge-copy">
-              <p className="academy-banner-ribbon">Your 90d Enterprise Pivot</p>
-              <p className="academy-banner-badge-name">Data &amp; <span>AI</span></p>
-              <p className="academy-banner-badge-role">Orchestration PM<br />Accelerator</p>
-              <p className="academy-banner-income"><span>Roadmap to </span><strong>$10k-$18k</strong>/mo Net</p>
-            </div>
-          </div>
+          <img
+            className="academy-banner-badge"
+            src="/academy-badge.png"
+            width={986}
+            height={1026}
+            alt="Your 90d Enterprise Pivot — Data & AI Orchestration PM Accelerator — Roadmap to $10k-$18k/mo Net"
+          />
           <div className="academy-banner-content">
             <header className="academy-banner-header">
               <h2 className="academy-banner-title">DATA &amp; AI ORCHESTRATION PM ACADEMY</h2>

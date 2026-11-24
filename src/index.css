@@ -24,9 +24,9 @@ All colors MUST be HSL.
     --academy-navy-light: 209 63% 25%;
     --academy-ink: 210 78% 10%;
     --academy-cyan: 188 100% 65%;
-    --academy-gold: 50 97% 48%;
+    --academy-gold: 49.29461 97.57085% 48.43137%;
     --academy-check: 145 55% 43%;
-    --academy-band: linear-gradient(115deg, hsl(var(--academy-navy)), hsl(var(--academy-navy-light)));
+    --academy-band: linear-gradient(90deg, hsl(210.38961 63.63636% 23.72549%) 0%, hsl(210.47619 64.94845% 19.01961%) 45%, hsl(211.25 66.66667% 14.11765%) 100%);
     --academy-badge-shadow: 0 0 0 4px hsl(var(--academy-paper)), 0 0 0 7px hsl(var(--academy-cyan) / .65), 0 0 24px hsl(var(--academy-cyan) / .8), inset 0 0 24px hsl(var(--academy-ink) / .7);
 
     /* Glass card with charcoal tint */
@@ -209,17 +209,19 @@ All colors MUST be HSL.
   }
 }
 
-/* KAN-527: only the Academy artwork responds to its available container width. */
+/* Academy artwork responds only to its available container width. */
 .academy-banner-container {
   container: academy-banner / inline-size;
   color: hsl(var(--article-body));
   letter-spacing: 0;
 }
 .academy-banner-artwork {
+  position: relative;
+  isolation: isolate;
   display: grid;
   justify-items: center;
-  gap: 24px;
-  padding: 24px 0 14px;
+  gap: 0;
+  padding: 16px 0 0;
   background-color: hsl(var(--academy-paper));
   background-image:
     linear-gradient(90deg, hsl(var(--academy-grid) / .4) 1px, transparent 1px),
@@ -228,63 +230,18 @@ All colors MUST be HSL.
   background-size: 20px 20px, 20px 20px, 100% 100%;
 }
 .academy-banner-badge {
-  container-type: inline-size;
+  display: block;
   position: relative;
-  width: clamp(180px, 58cqw, 210px);
+  z-index: 2;
+  width: clamp(175px, 52cqw, 220px);
   height: auto;
-  min-width: 0;
+  aspect-ratio: 986 / 1026;
+  object-fit: contain;
   align-self: center;
-  border: 2px solid hsl(var(--academy-gold) / .8);
-  background: var(--academy-band);
-  box-shadow: var(--academy-badge-shadow);
 }
-.academy-banner-circuit {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  stroke: hsl(var(--academy-gold) / .35);
-  stroke-width: 1;
-  border-radius: inherit;
-}
-.academy-banner-badge-copy {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2cqw;
-  text-align: center;
-  font-weight: 700;
-  line-height: 1.1;
-}
-.academy-banner-ribbon {
-  width: 88%;
-  padding: 2cqw 1cqw;
-  transform: rotate(8deg);
-  border: 1px solid hsl(var(--academy-gold));
-  border-radius: 4px;
-  background: hsl(var(--academy-ink));
-  font-size: 7cqw;
-}
-.academy-banner-badge-name { font-size: 16cqw; margin-top: 7cqw; line-height: 1.25; }
-.academy-banner-badge-name span,
-.academy-banner-income strong { color: hsl(var(--academy-gold)); }
-.academy-banner-badge-role { font-size: 10cqw; }
-.academy-banner-income {
-  width: 91%;
-  margin-top: 3cqw;
-  padding: 2cqw 1cqw;
-  border: 1px solid hsl(var(--academy-gold) / .6);
-  border-radius: 999px;
-  background: hsl(var(--academy-ink));
-  font-size: 7cqw;
-  line-height: 1.25;
-  white-space: nowrap;
-}
-.academy-banner-income > span { display: block; }
 .academy-banner-content {
+  position: relative;
+  z-index: 1;
   min-width: 0;
   width: 100%;
   padding: 22px 18px;
@@ -307,7 +264,7 @@ All colors MUST be HSL.
   font-weight: 700;
   line-height: 1.4;
 }
-.academy-banner-benefits { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; margin-top: 24px; }
+.academy-banner-benefits { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 20px; }
 .academy-banner-benefit { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
 .academy-banner-check {
   display: grid;
@@ -317,6 +274,7 @@ All colors MUST be HSL.
   aspect-ratio: 1;
   border-radius: 50%;
   background: hsl(var(--academy-check));
+  box-shadow: 0 0 10px hsl(var(--academy-check) / .65);
 }
 .academy-banner-check svg { width: 75%; height: 75%; stroke-width: 3; }
 .academy-banner-benefit-copy { min-width: 0; }
@@ -328,22 +286,32 @@ All colors MUST be HSL.
   color: hsl(var(--academy-ink));
   border: 0;
 }
-@container academy-banner (min-width: 640px) {
+@container academy-banner (min-width: 480px) and (max-width: 767.99px) {
+  .academy-banner-benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container academy-banner (min-width: 768px) {
   .academy-banner-artwork {
-    grid-template-columns: 26% minmax(0, 1fr);
-    gap: 2cqw;
-    padding: 2.2cqw 0 2.2cqw 2cqw;
-    background-size: 1.5cqw 1.5cqw, 1.5cqw 1.5cqw, 100% 100%;
+    grid-template-columns: calc(clamp(148px, 16.5cqw, 225px) + clamp(12px, 2cqw, 36px)) minmax(0, 1fr);
+    align-items: center;
+    height: clamp(190px, 18cqw, 245px);
+    padding: clamp(10px, 1.1cqw, 16px) 0;
+    background-size: 20px 20px, 20px 20px, 100% 100%;
   }
-  .academy-banner-badge { width: 100%; }
-  .academy-banner-content { padding: 1.8cqw 2cqw 2cqw; }
-  .academy-banner-title { font-size: clamp(18px, 2.5cqw, 68px); }
-  .academy-banner-subtitle { font-size: clamp(12px, 1.4cqw, 38px); margin-top: .7cqw; }
-  .academy-banner-benefits { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2cqw; margin-top: 2cqw; }
-  .academy-banner-benefit { gap: .6cqw; }
-  .academy-banner-check { width: clamp(14px, 1.4cqw, 38px); }
-  .academy-banner-benefit-title { font-size: clamp(12px, 1.3cqw, 35px); }
-  .academy-banner-benefit-description { font-size: clamp(12px, 1.1cqw, 30px); margin-top: .5cqw; }
+  .academy-banner-artwork::before {
+    content: "";
+    position: absolute;
+    inset: clamp(10px, 1.1cqw, 16px) 0 clamp(10px, 1.1cqw, 16px) 12%;
+    background: var(--academy-band);
+  }
+  .academy-banner-badge { width: clamp(148px, 16.5cqw, 225px); margin-left: clamp(12px, 2cqw, 36px); }
+  .academy-banner-content { padding: 8px clamp(12px, 1.6cqw, 26px); background: none; }
+  .academy-banner-title { font-size: clamp(15px, 2cqw, 30px); }
+  .academy-banner-subtitle { font-size: clamp(11px, 1.12cqw, 16.5px); margin-top: clamp(6px, .6cqw, 10px); }
+  .academy-banner-benefits { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 1.1cqw, 18px); margin-top: clamp(12px, 1.4cqw, 20px); }
+  .academy-banner-benefit { gap: clamp(5px, .5cqw, 8px); }
+  .academy-banner-check { width: clamp(14px, 1.25cqw, 20px); }
+  .academy-banner-benefit-title { font-size: clamp(10.5px, .98cqw, 14px); }
+  .academy-banner-benefit-description { font-size: clamp(9.5px, .85cqw, 12.5px); margin-top: 5px; line-height: 1.4; }
 }
 
 @layer utilities {

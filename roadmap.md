@@ -1,5 +1,10 @@
 # Quiz ten-question diagnostic
 
+# KAN-531 Academy banner polish
+
+- [x] Extract the original badge on transparency and restore compact overlapping-band proportions with coded copy and mobile stacking.
+- [x] All 251 tests pass; automatic build is clean. Both placements verified at 390, 768, 1280, 1440, and 1920px: desktop artwork 221–245px, natural badge proportions, no text clipping/overlap/overflow, and booking link verified. At 768px viewport the 716px container correctly uses the stacked layout. Preview only.
+
 # KAN-527 Academy banner
 
 - [x] Replace the stretched image with container-scaled HTML/vector artwork; preserve the wrapper and booking footer.
